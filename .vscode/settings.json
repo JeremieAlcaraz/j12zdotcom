@@ -1,0 +1,25 @@
+{
+  // 1) Activer le formatage automatique au moment de l'enregistrement
+  "editor.formatOnSave": true,
+
+  // 2) Définir Prettier comme formateur par défaut pour les fichiers .astro
+  "[astro]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+
+  // 3) Et aussi pour les langages courants (JS, TS, CSS...) si vous le souhaitez
+  "[javascript]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[typescript]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[css]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+
+  // 4) (Optionnel) Appliquer automatiquement tous les correctifs "fixAll" à l'enregistrement
+  "editor.codeActionsOnSave": {
+    "source.fixAll": true
+  }
+}
