@@ -1,0 +1,9 @@
+@import "tailwindcss";
+@plugin "daisyui";
+
+
+@theme {
+  --font-family-sans: system-ui, sans-serif;
+}
+/* Ici vous pourrez ajouter vos styles globaux personnalisés */
+

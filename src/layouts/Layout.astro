@@ -1,3 +1,15 @@
+---
+// src/layouts/default.astro
+
+import '../styles/global.css'; // Import crucial
+import astroLogo from '../assets/astro.svg';
+import background from '../assets/background.svg';
+
+const { title = "Mon Site" } = Astro.props;
+
+
+---
+
 <!doctype html>
 <html lang="en">
 	<head>
@@ -5,10 +17,19 @@
 		<meta name="viewport" content="width=device-width" />
 		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
 		<meta name="generator" content={Astro.generator} />
-		<title>Astro Basics</title>
+		<title>{title}</title>				    
 	</head>
 	<body>
-		<slot />
+		<div id="container">
+		
+		<img
+		id="background"
+		src={background.src}
+		alt=""
+		class="fixed inset-0 -z-10 w-full h-full object-cover blur-[100px]" />
+
+			<slot />
+		</div>
 	</body>
 </html>
 
