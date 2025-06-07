@@ -106,7 +106,7 @@ importers:
         specifier: ^2.41.0
         version: 2.46.1(eslint@9.28.0(jiti@2.4.2))(svelte@5.33.14)
       prettier:
-        specifier: ^3.3.2
+        specifier: ^3.5.3
         version: 3.5.3
       prettier-plugin-astro:
         specifier: ^0.14.1
