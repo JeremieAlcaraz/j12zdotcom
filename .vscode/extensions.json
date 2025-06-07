@@ -1,4 +1,7 @@
 {
-  "recommendations": ["astro-build.astro-vscode"],
+  "recommendations": [
+    "esbenp.prettier-vscode",      // Prettier – Code formatter
+    "astro-build.astro-vscode"     // Extension officielle Astro (coloration & support .astro)
+  ],
   "unwantedRecommendations": []
 }
