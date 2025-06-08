@@ -20,6 +20,6 @@
 
   // 4) (Optionnel) Appliquer automatiquement tous les correctifs "fixAll" à l'enregistrement
   "editor.codeActionsOnSave": {
-    "source.fixAll": true
+    "source.fixAll": "explicit"
   }
 }
