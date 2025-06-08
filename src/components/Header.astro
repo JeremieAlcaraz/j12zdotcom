@@ -1,4 +1,5 @@
 ---
+// src/components/Header.astro
 import astroLogo from '../assets/astro.svg';
 
 const {
@@ -34,7 +35,7 @@ const {
   </div>
 
   <div class="navbar-end">
-    <!-- Bouton de thème simplifié -->
+    <!-- Bouton de thème simplifié pour un contrôle total -->
     <button id="theme-toggle" class="btn btn-ghost btn-circle">
       <svg
         id="sun-icon"
@@ -46,7 +47,6 @@ const {
           d="M5.64,17l-.71.71a1,1,0,0,0,0,1.41,1,1,0,0,0,1.41,0l.71-.71A1,1,0,0,0,5.64,17ZM5,12a1,1,0,0,0-1-1H3a1,1,0,0,0,0,2H4A1,1,0,0,0,5,12Zm7-7a1,1,0,0,0,1-1V3a1,1,0,0,0-2,0V4A1,1,0,0,0,12,5ZM5.64,7.05a1,1,0,0,0,.7.29,1,1,0,0,0,.71-.29,1,1,0,0,0,0-1.41l-.71-.71A1,1,0,0,0,4.93,6.34Zm12,.29a1,1,0,0,0,.7-.29l.71-.71a1,1,0,1,0-1.41-1.41L17,5.64a1,1,0,0,0,0,1.41A1,1,0,0,0,17.66,7.34ZM21,11H20a1,1,0,0,0,0,2h1a1,1,0,0,0,0-2Zm-9,8a1,1,0,0,0-1,1v1a1,1,0,0,0,2,0V20A1,1,0,0,0,12,19ZM18.36,17A1,1,0,0,0,17,18.36l.71.71a1,1,0,0,0,1.41,0,1,1,0,0,0,0-1.41ZM12,6.5A5.5,5.5,0,1,0,17.5,12,5.51,5.51,0,0,0,12,6.5Zm0,9A3.5,3.5,0,1,1,15.5,12,3.5,3.5,0,0,1,12,15.5Z"
         ></path>
       </svg>
-
       <svg
         id="moon-icon"
         class="w-5 h-5 fill-current hidden"
@@ -68,13 +68,12 @@ const {
           fill="none"
           viewBox="0 0 24 24"
           stroke="currentColor"
-        >
-          <path
+          ><path
             stroke-linecap="round"
             stroke-linejoin="round"
             stroke-width="2"
-            d="M4 6h16M4 12h8m-8 6h16"></path>
-        </svg>
+            d="M4 6h16M4 12h8m-8 6h16"></path></svg
+        >
       </label>
       <ul
         tabindex="0"
@@ -92,162 +91,86 @@ const {
   </div>
 </nav>
 
-<style>
-  /* CSS pour les transitions View Transition API */
+<!-- Le style est la clé. On désactive l'animation par défaut pour un contrôle total. -->
+<style is:global>
   ::view-transition-old(root),
   ::view-transition-new(root) {
     animation: none;
     mix-blend-mode: normal;
   }
-
-  ::view-transition-old(root) {
-    z-index: 1;
-  }
-
-  ::view-transition-new(root) {
-    z-index: 999;
-  }
-
-  html {
-    color-scheme: light;
-  }
-
-  html[data-theme='dark'] {
-    color-scheme: dark;
-  }
 </style>
 
 <script>
-  // Variables globales
-  let isAnimating = false;
+  const THEME_STORAGE_KEY = 'theme';
 
-  // Fonctions utilitaires
   const isDark = () => document.documentElement.getAttribute('data-theme') === 'dark';
 
-  const updateIcons = (dark: boolean) => {
+  const updateTheme = (isDarkValue: boolean) => {
+    document.documentElement.setAttribute('data-theme', isDarkValue ? 'dark' : 'light');
+
     const sunIcon = document.getElementById('sun-icon');
     const moonIcon = document.getElementById('moon-icon');
-
     if (sunIcon && moonIcon) {
-      if (dark) {
-        sunIcon.classList.add('hidden');
-        moonIcon.classList.remove('hidden');
-      } else {
-        sunIcon.classList.remove('hidden');
-        moonIcon.classList.add('hidden');
-      }
+      sunIcon.classList.toggle('hidden', isDarkValue);
+      moonIcon.classList.toggle('hidden', !isDarkValue);
     }
   };
 
-  const applyTheme = (dark: boolean) => {
-    document.documentElement.setAttribute('data-theme', dark ? 'dark' : 'light');
-    localStorage.setItem('theme', dark ? 'dark' : 'light');
-    updateIcons(dark);
+  const setupTheme = () => {
+    const savedTheme = localStorage.getItem(THEME_STORAGE_KEY);
+    const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+    const initialThemeIsDark = savedTheme ? savedTheme === 'dark' : prefersDark;
+    updateTheme(initialThemeIsDark);
   };
 
-  // Animation principale
-  async function toggleThemeWithAnimation(event: MouseEvent) {
-    // Empêcher les clics multiples pendant l'animation
-    if (isAnimating) return;
+  const toggleTheme = (event: MouseEvent) => {
+    const isAppearanceTransition =
+      // @ts-expect-error: L'API est expérimentale
+      document.startViewTransition &&
+      !window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-    // Vérification du support View Transition
-    if (!(document as any).startViewTransition) {
-      applyTheme(!isDark());
+    if (!isAppearanceTransition) {
+      const newThemeIsDark = !isDark();
+      updateTheme(newThemeIsDark);
+      localStorage.setItem(THEME_STORAGE_KEY, newThemeIsDark ? 'dark' : 'light');
       return;
     }
 
-    // Vérification des préférences d'animation
-    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
-      applyTheme(!isDark());
-      return;
-    }
+    const x = event.clientX;
+    const y = event.clientY;
 
-    isAnimating = true;
-
-    // Coordonnées du clic
-    const { clientX: x, clientY: y } = event;
-
-    // Calcul du rayon pour couvrir l'écran entier
     const endRadius = Math.hypot(
       Math.max(x, window.innerWidth - x),
       Math.max(y, window.innerHeight - y)
     );
 
-    console.log(`Animation démarrée - Position: (${x}, ${y}), Rayon: ${endRadius}`);
+    // @ts-expect-error: L'API est expérimentale
+    const transition = document.startViewTransition(() => {
+      const newThemeIsDark = !isDark();
+      updateTheme(newThemeIsDark);
+      localStorage.setItem(THEME_STORAGE_KEY, newThemeIsDark ? 'dark' : 'light');
+    });
 
-    try {
-      // Démarrage de la transition
-      const transition = (document as any).startViewTransition(async () => {
-        applyTheme(!isDark());
-      });
-
-      // Attendre que la transition soit prête
-      await transition.ready;
-
-      // Configuration de l'animation
+    transition.ready.then(() => {
       const clipPath = [`circle(0px at ${x}px ${y}px)`, `circle(${endRadius}px at ${x}px ${y}px)`];
 
-      const isDarkNow = isDark();
-
-      // Lancement de l'animation
-      const animation = document.documentElement.animate(
+      // On anime TOUJOURS la nouvelle vue avec un cercle qui grandit.
+      // C'est la méthode la plus simple, la plus directe et la plus fiable.
+      document.documentElement.animate(
         {
-          clipPath: isDarkNow ? clipPath.slice().reverse() : clipPath,
+          clipPath: clipPath, // Toujours une expansion, pas de .reverse()
         },
         {
           duration: 500,
-          easing: 'ease-out',
-          pseudoElement: isDarkNow ? '::view-transition-old(root)' : '::view-transition-new(root)',
+          easing: 'ease-in-out',
+          // On cible toujours la nouvelle vue qui apparaît.
+          pseudoElement: '::view-transition-new(root)',
         }
       );
-
-      // Attendre la fin de l'animation
-      await animation.finished;
-    } catch (error) {
-      console.error("Erreur pendant l'animation:", error);
-      // Fallback en cas d'erreur
-      applyTheme(!isDark());
-    } finally {
-      isAnimating = false;
-    }
-  }
-
-  // Initialisation du thème
-  function initTheme() {
-    const savedTheme = localStorage.getItem('theme');
-    const systemPrefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-    const shouldBeDark = savedTheme ? savedTheme === 'dark' : systemPrefersDark;
-
-    applyTheme(shouldBeDark);
-  }
-
-  // Configuration des événements
-  function setupEventListeners() {
-    const themeButton = document.getElementById('theme-toggle');
-
-    if (themeButton) {
-      themeButton.addEventListener('click', (event) => {
-        event.stopPropagation();
-        toggleThemeWithAnimation(event as MouseEvent);
-      });
-    }
-
-    // Écoute des changements de préférence système
-    window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', (e) => {
-      if (!localStorage.getItem('theme')) {
-        applyTheme(e.matches);
-      }
     });
-  }
+  };
 
-  // Initialisation
-  if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', () => {
-      initTheme();
-      setupEventListeners();
-    });
-  } else {
-    initTheme();
-    setupEventListeners();
-  }
+  // Initialisation au chargement du script
+  setupTheme();
+  document.getElementById('theme-toggle')?.addEventListener('click', toggleTheme);
 </script>
