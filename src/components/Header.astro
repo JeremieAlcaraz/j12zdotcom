@@ -12,7 +12,6 @@ const {
 ---
 
 <nav class="navbar bg-base-100 shadow-md">
-  <!-- Section gauche : logo -->
   <div class="navbar-start">
     <a href="/" class="btn btn-ghost text-xl normal-case">
       <img src={logo} alt="Logo" class="h-8 w-8" />
@@ -20,7 +19,6 @@ const {
     </a>
   </div>
 
-  <!-- Section centre : menu desktop -->
   <div class="navbar-center hidden lg:flex">
     <ul class="menu menu-horizontal px-1">
       {
@@ -35,15 +33,12 @@ const {
     </ul>
   </div>
 
-  <!-- Section droite : thème + burger mobile -->
   <div class="navbar-end">
-    <!-- Sélecteur de thème -->
-    <label class="swap swap-rotate btn btn-ghost btn-circle">
-      <input type="checkbox" class="theme-controller" value="dark" />
-
-      <!-- Icône soleil (thème clair) -->
+    <!-- Bouton de thème simplifié -->
+    <button id="theme-toggle" class="btn btn-ghost btn-circle">
       <svg
-        class="swap-off fill-current w-5 h-5"
+        id="sun-icon"
+        class="w-5 h-5 fill-current"
         xmlns="http://www.w3.org/2000/svg"
         viewBox="0 0 24 24"
       >
@@ -52,9 +47,9 @@ const {
         ></path>
       </svg>
 
-      <!-- Icône lune (thème sombre) -->
       <svg
-        class="swap-on fill-current w-5 h-5"
+        id="moon-icon"
+        class="w-5 h-5 fill-current hidden"
         xmlns="http://www.w3.org/2000/svg"
         viewBox="0 0 24 24"
       >
@@ -62,9 +57,9 @@ const {
           d="M21.64,13a1,1,0,0,0-1.05-.14,8.05,8.05,0,0,1-3.37.73A8.15,8.15,0,0,1,9.08,5.49a8.59,8.59,0,0,1,.25-2A1,1,0,0,0,8,2.36,10.14,10.14,0,1,0,22,14.05,1,1,0,0,0,21.64,13Zm-9.5,6.69A8.14,8.14,0,0,1,7.08,5.22v.27A10.15,10.15,0,0,0,17.22,15.63a9.79,9.79,0,0,0,2.1-.22A8.11,8.11,0,0,1,12.14,19.73Z"
         ></path>
       </svg>
-    </label>
+    </button>
 
-    <!-- Burger mobile -->
+    <!-- Menu mobile -->
     <div class="dropdown dropdown-end lg:hidden">
       <label tabindex="0" class="btn btn-ghost btn-circle">
         <svg
@@ -96,3 +91,163 @@ const {
     </div>
   </div>
 </nav>
+
+<style>
+  /* CSS pour les transitions View Transition API */
+  ::view-transition-old(root),
+  ::view-transition-new(root) {
+    animation: none;
+    mix-blend-mode: normal;
+  }
+
+  ::view-transition-old(root) {
+    z-index: 1;
+  }
+
+  ::view-transition-new(root) {
+    z-index: 999;
+  }
+
+  html {
+    color-scheme: light;
+  }
+
+  html[data-theme='dark'] {
+    color-scheme: dark;
+  }
+</style>
+
+<script>
+  // Variables globales
+  let isAnimating = false;
+
+  // Fonctions utilitaires
+  const isDark = () => document.documentElement.getAttribute('data-theme') === 'dark';
+
+  const updateIcons = (dark: boolean) => {
+    const sunIcon = document.getElementById('sun-icon');
+    const moonIcon = document.getElementById('moon-icon');
+
+    if (sunIcon && moonIcon) {
+      if (dark) {
+        sunIcon.classList.add('hidden');
+        moonIcon.classList.remove('hidden');
+      } else {
+        sunIcon.classList.remove('hidden');
+        moonIcon.classList.add('hidden');
+      }
+    }
+  };
+
+  const applyTheme = (dark: boolean) => {
+    document.documentElement.setAttribute('data-theme', dark ? 'dark' : 'light');
+    localStorage.setItem('theme', dark ? 'dark' : 'light');
+    updateIcons(dark);
+  };
+
+  // Animation principale
+  async function toggleThemeWithAnimation(event: MouseEvent) {
+    // Empêcher les clics multiples pendant l'animation
+    if (isAnimating) return;
+
+    // Vérification du support View Transition
+    if (!(document as any).startViewTransition) {
+      applyTheme(!isDark());
+      return;
+    }
+
+    // Vérification des préférences d'animation
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      applyTheme(!isDark());
+      return;
+    }
+
+    isAnimating = true;
+
+    // Coordonnées du clic
+    const { clientX: x, clientY: y } = event;
+
+    // Calcul du rayon pour couvrir l'écran entier
+    const endRadius = Math.hypot(
+      Math.max(x, window.innerWidth - x),
+      Math.max(y, window.innerHeight - y)
+    );
+
+    console.log(`Animation démarrée - Position: (${x}, ${y}), Rayon: ${endRadius}`);
+
+    try {
+      // Démarrage de la transition
+      const transition = (document as any).startViewTransition(async () => {
+        applyTheme(!isDark());
+      });
+
+      // Attendre que la transition soit prête
+      await transition.ready;
+
+      // Configuration de l'animation
+      const clipPath = [`circle(0px at ${x}px ${y}px)`, `circle(${endRadius}px at ${x}px ${y}px)`];
+
+      const isDarkNow = isDark();
+
+      // Lancement de l'animation
+      const animation = document.documentElement.animate(
+        {
+          clipPath: isDarkNow ? clipPath.slice().reverse() : clipPath,
+        },
+        {
+          duration: 500,
+          easing: 'ease-out',
+          pseudoElement: isDarkNow ? '::view-transition-old(root)' : '::view-transition-new(root)',
+        }
+      );
+
+      // Attendre la fin de l'animation
+      await animation.finished;
+    } catch (error) {
+      console.error("Erreur pendant l'animation:", error);
+      // Fallback en cas d'erreur
+      applyTheme(!isDark());
+    } finally {
+      isAnimating = false;
+    }
+  }
+
+  // Initialisation du thème
+  function initTheme() {
+    const savedTheme = localStorage.getItem('theme');
+    const systemPrefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+    const shouldBeDark = savedTheme ? savedTheme === 'dark' : systemPrefersDark;
+
+    applyTheme(shouldBeDark);
+  }
+
+  // Configuration des événements
+  function setupEventListeners() {
+    const themeButton = document.getElementById('theme-toggle');
+
+    if (themeButton) {
+      themeButton.addEventListener('click', (event) => {
+        event.stopPropagation();
+        toggleThemeWithAnimation(event as MouseEvent);
+      });
+    }
+
+    // Écoute des changements de préférence système
+    window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', (e) => {
+      if (!localStorage.getItem('theme')) {
+        applyTheme(e.matches);
+      }
+    });
+  }
+
+  // Initialisation
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', () => {
+      initTheme();
+      setupEventListeners();
+    });
+  } else {
+    initTheme();
+    setupEventListeners();
+  }
+</script>
