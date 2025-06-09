@@ -1,7 +1,13 @@
 ---
-// src/components/Header.astro
+// ======================================
+// 1) FRONTMATTER : imports et props
+// ======================================
+// Import du logo par défaut et récupération des props passées au composant
 import astroLogo from '../assets/astro.svg';
 
+// Déstructuration des props avec valeurs par défaut :
+// • logo : URL du logo à afficher
+// • links : tableau d'objets { href, label } pour la navigation
 const {
   logo = astroLogo.src,
   links = [
@@ -12,7 +18,11 @@ const {
 } = Astro.props;
 ---
 
+<!-- ======================================
+     2) MARKUP HTML : structure de la navbar
+     ====================================== -->
 <nav class="navbar bg-base-100 shadow-md">
+  <!-- 2.1) Section gauche : logo et titre du site -->
   <div class="navbar-start">
     <a href="/" class="btn btn-ghost text-xl normal-case">
       <img src={logo} alt="Logo" class="h-8 w-8" />
@@ -20,6 +30,7 @@ const {
     </a>
   </div>
 
+  <!-- 2.2) Section centrale : liens de navigation (desktop) -->
   <div class="navbar-center hidden lg:flex">
     <ul class="menu menu-horizontal px-1">
       {
@@ -34,9 +45,11 @@ const {
     </ul>
   </div>
 
+  <!-- 2.3) Section droite : contrôle du thème et menu mobile -->
   <div class="navbar-end">
-    <!-- Bouton de thème simplifié pour un contrôle total -->
+    <!-- Bouton de thème sombre/clair -->
     <button id="theme-toggle" class="btn btn-ghost btn-circle">
+      <!-- Icône soleil (visible en mode clair) -->
       <svg
         id="sun-icon"
         class="w-5 h-5 fill-current"
@@ -47,6 +60,7 @@ const {
           d="M5.64,17l-.71.71a1,1,0,0,0,0,1.41,1,1,0,0,0,1.41,0l.71-.71A1,1,0,0,0,5.64,17ZM5,12a1,1,0,0,0-1-1H3a1,1,0,0,0,0,2H4A1,1,0,0,0,5,12Zm7-7a1,1,0,0,0,1-1V3a1,1,0,0,0-2,0V4A1,1,0,0,0,12,5ZM5.64,7.05a1,1,0,0,0,.7.29,1,1,0,0,0,.71-.29,1,1,0,0,0,0-1.41l-.71-.71A1,1,0,0,0,4.93,6.34Zm12,.29a1,1,0,0,0,.7-.29l.71-.71a1,1,0,1,0-1.41-1.41L17,5.64a1,1,0,0,0,0,1.41A1,1,0,0,0,17.66,7.34ZM21,11H20a1,1,0,0,0,0,2h1a1,1,0,0,0,0-2Zm-9,8a1,1,0,0,0-1,1v1a1,1,0,0,0,2,0V20A1,1,0,0,0,12,19ZM18.36,17A1,1,0,0,0,17,18.36l.71.71a1,1,0,0,0,1.41,0,1,1,0,0,0,0-1.41ZM12,6.5A5.5,5.5,0,1,0,17.5,12,5.51,5.51,0,0,0,12,6.5Zm0,9A3.5,3.5,0,1,1,15.5,12,3.5,3.5,0,0,1,12,15.5Z"
         ></path>
       </svg>
+      <!-- Icône lune (visible en mode sombre) -->
       <svg
         id="moon-icon"
         class="w-5 h-5 fill-current hidden"
@@ -59,7 +73,7 @@ const {
       </svg>
     </button>
 
-    <!-- Menu mobile -->
+    <!-- Menu mobile (visible sur petits écrans) -->
     <div class="dropdown dropdown-end lg:hidden">
       <label tabindex="0" class="btn btn-ghost btn-circle">
         <svg
@@ -68,12 +82,13 @@ const {
           fill="none"
           viewBox="0 0 24 24"
           stroke="currentColor"
-          ><path
+        >
+          <path
             stroke-linecap="round"
             stroke-linejoin="round"
             stroke-width="2"
-            d="M4 6h16M4 12h8m-8 6h16"></path></svg
-        >
+            d="M4 6h16M4 12h8m-8 6h16"></path>
+        </svg>
       </label>
       <ul
         tabindex="0"
@@ -91,8 +106,11 @@ const {
   </div>
 </nav>
 
-<!-- Le style est la clé. On désactive l'animation par défaut pour un contrôle total. -->
+<!-- ======================================
+     3) STYLES GLOBALES : désactivation de l'animation view-transition
+     ====================================== -->
 <style is:global>
+  /* On désactive les animations view-transition pour un contrôle total */
   ::view-transition-old(root),
   ::view-transition-new(root) {
     animation: none;
@@ -100,13 +118,18 @@ const {
   }
 </style>
 
+<!-- ======================================
+     4) SCRIPT JS : gestion dynamique du thème
+     ====================================== -->
 <script>
-  // Inspiré d'UNOCSS
+  // Clé de stockage dans localStorage
   const THEME_STORAGE_KEY = 'theme';
 
+  // Vérifie si le thème actuel est sombre
   const isDark = () => document.documentElement.getAttribute('data-theme') === 'dark';
 
-  const updateTheme = (isDarkValue: boolean) => {
+  // Met à jour le thème et les icônes
+  const updateTheme = (isDarkValue) => {
     document.documentElement.setAttribute('data-theme', isDarkValue ? 'dark' : 'douceurLight');
 
     const sunIcon = document.getElementById('sun-icon');
@@ -117,6 +140,7 @@ const {
     }
   };
 
+  // Initialise le thème au chargement
   const setupTheme = () => {
     const savedTheme = localStorage.getItem(THEME_STORAGE_KEY);
     const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
@@ -124,9 +148,9 @@ const {
     updateTheme(initialThemeIsDark);
   };
 
-  const toggleTheme = (event: MouseEvent) => {
+  // Bascule le thème avec transition si supportée
+  const toggleTheme = (event) => {
     const isAppearanceTransition =
-      // @ts-expect-error: L'API est expérimentale
       document.startViewTransition &&
       !window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
@@ -145,7 +169,6 @@ const {
       Math.max(y, window.innerHeight - y)
     );
 
-    // @ts-expect-error: L'API est expérimentale
     const transition = document.startViewTransition(() => {
       const newThemeIsDark = !isDark();
       updateTheme(newThemeIsDark);
@@ -155,23 +178,18 @@ const {
     transition.ready.then(() => {
       const clipPath = [`circle(0px at ${x}px ${y}px)`, `circle(${endRadius}px at ${x}px ${y}px)`];
 
-      // On anime TOUJOURS la nouvelle vue avec un cercle qui grandit.
-      // C'est la méthode la plus simple, la plus directe et la plus fiable.
       document.documentElement.animate(
-        {
-          clipPath: clipPath, // Toujours une expansion, pas de .reverse()
-        },
+        { clipPath },
         {
           duration: 500,
           easing: 'ease-in-out',
-          // On cible toujours la nouvelle vue qui apparaît.
           pseudoElement: '::view-transition-new(root)',
         }
       );
     });
   };
 
-  // Initialisation au chargement du script
+  // Exécution au chargement
   setupTheme();
   document.getElementById('theme-toggle')?.addEventListener('click', toggleTheme);
 </script>
