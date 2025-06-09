@@ -1,15 +1,33 @@
 ---
-import Header from '../components/Header.astro';
-import Welcome from '../components/Welcome.astro';
-import Layout from '../layouts/Layout.astro';
+// src/pages/index.astro
 
-// Welcome to Astro! Wondering what to do next? Check out the Astro documentation at https://docs.astro.build
-// Don't want to use any of this? Delete everything in this file, the `assets`, `components`, and `layouts` directories, and start fresh.
+import Layout from '../layouts/Layout.astro';
+import Hero from '../components/Hero.astro';
 ---
 
 <Layout title="Accueil - Mon Site">
-  <Header />
-  <main>
-    <Welcome />
-  </main>
+  <!-- ====================================== -->
+  <!-- 1) HERO : full-width via slot="hero" -->
+  <!-- ====================================== -->
+  <!-- on passe le nav via slot nommé -->
+  <Hero slot="hero" />
+
+  <!-- ====================================== -->
+  <!-- 2) CONTENU : centré dans container     -->
+  <!--    Section principale de la page      -->
+  <!-- ====================================== -->
+  <section class="py-16">
+    <h2 class="text-3xl font-semibold mb-4">Box Office News!</h2>
+    <p class="mb-6">Provident cupiditate voluptatem et in. Quaerat fugiat ut assumenda…</p>
+    <button class="btn btn-primary">Get Started</button>
+  </section>
+
+  <!-- ====================================== -->
+  <!-- 3) AUTRE SECTION : centré             -->
+  <!--      Exemple d'une section supplémentaire -->
+  <!-- ====================================== -->
+  <section class="py-16">
+    <h2 class="text-2xl font-semibold mb-4">Une autre section</h2>
+    <p>…ton contenu centré ici…</p>
+  </section>
 </Layout>

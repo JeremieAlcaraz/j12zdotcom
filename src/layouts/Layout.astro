@@ -1,36 +1,47 @@
 ---
-// src/layouts/default.astro
-
-import '../styles/global.css'; // Import crucial
-import astroLogo from '../assets/astro.svg';
-import background from '../assets/background.svg';
-
+// src/layouts/Layout.astro
+import '../styles/global.css';
+import Header from '../components/Header.astro';
 const { title = 'Mon Site' } = Astro.props;
 ---
 
 <!doctype html>
-<html lang="en">
+<html lang="fr">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-    <meta name="generator" content={Astro.generator} />
     <title>{title}</title>
   </head>
-  <body>
-    <div id="container">
-      <img
-        id="background"
-        src={background.src}
-        alt=""
-        class="fixed inset-0 -z-10 w-full h-full object-cover blur-[100px]"
-      />
-      <slot />
-    </div>
+
+  <body class="min-h-screen flex flex-col">
+    <!-- ====================================== -->
+    <!-- 1) HEADER : full-width (pas de container) -->
+    <!-- ====================================== -->
+    <header class="fixed inset-x-0 top-0 z-50
+        bg-transparent">
+      <Header />
+    </header>
+
+    <!-- ====================================== -->
+    <!-- 2) MAIN :                          -->
+    <!--    a) slot hero full-width        -->
+    <!--    b) slot par défaut centré      -->
+    <!-- ====================================== -->
+    <main class="flex-1 pt-16">
+      <!-- a) HERO en full-width -->
+      <slot name="hero" />
+
+      <!-- b) CONTENU centré dans container -->
+      <div class="container mx-auto px-4">
+        <slot />
+      </div>
+    </main>
   </body>
 </html>
 
 <style>
+  /* reset minimal */
   html,
   body {
     margin: 0;
