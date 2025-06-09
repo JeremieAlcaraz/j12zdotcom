@@ -107,7 +107,7 @@ const {
   const isDark = () => document.documentElement.getAttribute('data-theme') === 'dark';
 
   const updateTheme = (isDarkValue: boolean) => {
-    document.documentElement.setAttribute('data-theme', isDarkValue ? 'dark' : 'light');
+    document.documentElement.setAttribute('data-theme', isDarkValue ? 'dark' : 'douceurLight');
 
     const sunIcon = document.getElementById('sun-icon');
     const moonIcon = document.getElementById('moon-icon');
@@ -133,7 +133,7 @@ const {
     if (!isAppearanceTransition) {
       const newThemeIsDark = !isDark();
       updateTheme(newThemeIsDark);
-      localStorage.setItem(THEME_STORAGE_KEY, newThemeIsDark ? 'dark' : 'light');
+      localStorage.setItem(THEME_STORAGE_KEY, newThemeIsDark ? 'dark' : 'douceurLight');
       return;
     }
 
@@ -149,7 +149,7 @@ const {
     const transition = document.startViewTransition(() => {
       const newThemeIsDark = !isDark();
       updateTheme(newThemeIsDark);
-      localStorage.setItem(THEME_STORAGE_KEY, newThemeIsDark ? 'dark' : 'light');
+      localStorage.setItem(THEME_STORAGE_KEY, newThemeIsDark ? 'dark' : 'douceurLight');
     });
 
     transition.ready.then(() => {
