@@ -1,7 +1,7 @@
 ---
 // src/layouts/Layout.astro
-import '../styles/global.css';
-import Header from '../components/Header.astro';
+import '@styles/global.css';
+import Navbar from '@components/Navbar.astro';
 const { title = 'Mon Site' } = Astro.props;
 ---
 
@@ -20,7 +20,7 @@ const { title = 'Mon Site' } = Astro.props;
     <!-- ====================================== -->
     <header class="fixed inset-x-0 top-0 z-50
         bg-transparent">
-      <Header />
+      <Navbar />
     </header>
 
     <!-- ====================================== -->
