@@ -1,0 +1,22 @@
+---
+// Hero.astro: composant Hero utilisant DaisyUI, full-height sous la navbar
+---
+
+<!-- Hauteur : viewport - navbar (4rem) -->
+<div class="hero bg-base-200 h-[calc(100vh-4rem)] p-25">
+  <div class="hero-content flex-col lg:flex-row max-w-full px-0 gap-12">
+    <img
+      src="https://img.daisyui.com/images/stock/photo-1635805737707-575885ab0820.webp"
+      alt="Hero spider"
+      class="max-w-lg lg:max-w-xl rounded-lg shadow-2xl"
+    />
+    <div class="px-4 lg:px-8">
+      <h1 class="text-6xl font-bold mb-4">Box Office News!</h1>
+      <p class="py-6 text-lg leading-relaxed">
+        Provident cupiditate voluptatem et in. Quaerat fugiat ut assumenda excepturi exercitationem
+        quasi. In deleniti eaque aut repudiandae et a id nisi.
+      </p>
+      <button class="btn btn-primary btn-lg px-8 py-3">Get Started</button>
+    </div>
+  </div>
+</div>
