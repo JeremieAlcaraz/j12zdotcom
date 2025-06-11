@@ -2,12 +2,20 @@
 // ======================================
 // 1) FRONTMATTER : imports et props
 // ======================================
-// Import du logo par défaut et récupération des props passées au composant
 import astroLogo from '@assets/astro.svg';
 
-// Déstructuration des props avec valeurs par défaut :
-// • logo : URL du logo à afficher
-// • links : tableau d'objets { href, label } pour la navigation
+/** Un lien de navigation */
+interface NavLink {
+  href: string;
+  label: string;
+}
+/** Props du composant Navbar */
+interface NavbarProps {
+  logo?: string;
+  links?: NavLink[];
+}
+
+/** Récupération et typage des props avec valeurs par défaut */
 const {
   logo = astroLogo.src,
   links = [
@@ -15,7 +23,7 @@ const {
     { href: '/about', label: 'À propos' },
     { href: '/blog', label: 'Blog' },
   ],
-} = Astro.props;
+} = Astro.props as NavbarProps;
 ---
 
 <!-- ======================================
@@ -34,10 +42,10 @@ const {
   <div class="navbar-center hidden lg:flex">
     <ul class="menu menu-horizontal px-1">
       {
-        links.map(({ href, label }) => (
+        links.map((link: NavLink /* ← on donne explicitement le type */) => (
           <li>
-            <a href={href} class="hover:bg-primary hover:text-primary-content rounded-lg">
-              {label}
+            <a href={link.href} class="hover:bg-primary hover:text-primary-content rounded-lg">
+              {link.label}
             </a>
           </li>
         ))
@@ -90,14 +98,11 @@ const {
             d="M4 6h16M4 12h8m-8 6h16"></path>
         </svg>
       </label>
-      <ul
-        tabindex="0"
-        class="menu menu-sm dropdown-content mt-3 z-[1] p-2 shadow bg-base-100 rounded-box w-52"
-      >
+      <ul class="menu menu-sm dropdown-content mt-3 z-[1] p-2 shadow bg-base-100 rounded-box w-52">
         {
-          links.map(({ href, label }) => (
+          links.map((link: NavLink /* pareil ici */) => (
             <li>
-              <a href={href}>{label}</a>
+              <a href={link.href}>{link.label}</a>
             </li>
           ))
         }
@@ -129,7 +134,7 @@ const {
   const isDark = () => document.documentElement.getAttribute('data-theme') === 'dark';
 
   // Met à jour le thème et les icônes
-  const updateTheme = (isDarkValue) => {
+  const updateTheme = (isDarkValue: boolean | undefined) => {
     document.documentElement.setAttribute('data-theme', isDarkValue ? 'dark' : 'douceurLight');
 
     const sunIcon = document.getElementById('sun-icon');
@@ -149,9 +154,9 @@ const {
   };
 
   // Bascule le thème avec transition si supportée
-  const toggleTheme = (event) => {
+  const toggleTheme = (event: { clientX: any; clientY: any }) => {
     const isAppearanceTransition =
-      document.startViewTransition &&
+      document.startViewTransition() &&
       !window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
     if (!isAppearanceTransition) {
