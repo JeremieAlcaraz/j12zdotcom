@@ -1,0 +1,56 @@
+/* 1) Tailwind et daisyUI */
+@import 'tailwindcss';
+@plugin "daisyui";
+
+/* 2) Ton thème DaisyUI perso */
+@plugin "daisyui/theme" {
+  name: 'douceurLight';
+  default: true; /* laisse à false si tu préfères l’activer à la main */
+  prefersdark: false;
+  color-scheme: light; /* chaînes sans guillemets OK aussi */
+
+  /* Palette OKLCH ---------------------------------------------------- */
+  --color-base-100: oklch(96.96% 0.01 60.5);
+  --color-base-200: oklch(94% 0.01 60.5);
+  --color-base-300: oklch(91% 0.01 60.5);
+  --color-base-content: oklch(40.2% 0.03 252.1);
+
+  --color-primary: oklch(67.76% 0.12 355.76);
+  --color-primary-content: oklch(23.4% 0.04 355.7);
+  --color-secondary: oklch(75.46% 0.08 221.25);
+  --color-secondary-content: oklch(22.6% 0.03 221.2);
+  --color-accent: oklch(87.89% 0.09 95.8);
+  --color-accent-content: oklch(33.15% 0.04 95.8);
+
+  --color-neutral: oklch(40.2% 0.03 252.1);
+  --color-neutral-content: oklch(96.96% 0.01 60.5);
+
+  --color-info: oklch(59.91% 0.17 262.7);
+  --color-info-content: oklch(20% 0.06 262.7);
+  --color-success: oklch(80.08% 0.17 148.2);
+  --color-success-content: oklch(25% 0.07 148.2);
+  --color-warning: oklch(80.4% 0.16 93);
+  --color-warning-content: oklch(30% 0.08 93);
+  --color-error: oklch(69.83% 0.19 22.5);
+  --color-error-content: oklch(22% 0.09 22.5);
+
+  /* Tokens de radii/border/ … --------------------------------------- */
+  --radius-selector: 1rem;
+  --radius-field: 0.5rem;
+  --radius-box: 1rem;
+  --size-selector: 0.25rem;
+  --size-field: 0.25rem;
+  --border: 1px;
+  --depth: 0;
+  --noise: 0;
+}
+
+/* 3) Variables ou styles globaux hors-daisyUI */
+@theme {
+  --font-family-sans: system-ui, sans-serif;
+}
+
+/* 4) Tes règles CSS perso (optionnel) */
+body {
+  font-family: var(--font-family-sans);
+}
