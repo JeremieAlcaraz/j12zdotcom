@@ -1,0 +1,45 @@
+<!-- src/components/ui/ThemeToggle.astro
+     ------------------------------------------------------------------
+     - Bouton rond DaisyUI
+     - Soleil visible en mode clair, Lune en mode sombre
+     - Logique dark/light importée côté navigateur uniquement
+     ------------------------------------------------------------------ -->
+<button id="theme-toggle" class="btn btn-ghost btn-circle">
+  <!-- Soleil -->
+  <svg
+    id="sun-icon"
+    class="w-5 h-5 fill-current"
+    xmlns="http://www.w3.org/2000/svg"
+    viewBox="0 0 24 24"
+  >
+    <path
+      d="M5.64 17l-.71.71a1 1 0 000 1.41 1 1 0 001.41 0l.71-.71A1 1 0 005.64 17zM5 12a1 1 0 00-1-1H3a1 1 0 000 2h1a1 1 0 001-1zm7-7a1 1 0 001-1V3a1 1 0 10-2 0v1a1 1 0 001 1zm-1.36 2.05a1 1 0 001.41 0 1 1 0 000-1.41l-.71-.71a1 1 0 00-1.41 1.41zM17.66 7.34a1 1 0 00.7-.29l.71-.71a1 1 0 00-1.41-1.41l-.71.71a1 1 0 00.71 1.7zM21 11h-1a1 1 0 000 2h1a1 1 0 000-2zm-9 8a1 1 0 00-1 1v1a1 1 0 002 0v-1a1 1 0 00-1-1zm6.36-2a1 1 0 00-1.41 1.41l.71.71a1 1 0 001.41-1.41zM12 6.5A5.5 5.5 0 1017.5 12 5.5 5.5 0 0012 6.5zm0 9A3.5 3.5 0 1115.5 12 3.5 3.5 0 0112 15.5z"
+    ></path>
+  </svg>
+
+  <!-- Lune -->
+  <svg
+    id="moon-icon"
+    class="w-5 h-5 fill-current hidden"
+    xmlns="http://www.w3.org/2000/svg"
+    viewBox="0 0 24 24"
+  >
+    <path
+      d="M21.64 13a1 1 0 00-1.05-.14 8.05 8.05 0 01-3.37.73 8.15 8.15 0 01-8.14-8.1 8.59 8.59 0 01.25-2A1 1 0 008 2.36 10.14 10.14 0 1022 14.05a1 1 0 00-.36-1.05zm-9.5 6.69A8.14 8.14 0 017.08 5.22v.27A10.15 10.15 0 0017.22 15.63a9.79 9.79 0 002.1-.22 8.11 8.11 0 01-7.18 4.28z"
+    ></path>
+  </svg>
+</button>
+
+<script type="module">
+  import { isDark, updateTheme, THEME_STORAGE_KEY } from '@utils/theme';
+
+  const saved = localStorage.getItem(THEME_STORAGE_KEY);
+  const prefers = matchMedia('(prefers-color-scheme: dark)').matches;
+  updateTheme(saved === 'dark' || (!saved && prefers));
+
+  document.getElementById('theme-toggle')?.addEventListener('click', () => {
+    const next = !isDark();
+    updateTheme(next);
+    localStorage.setItem(THEME_STORAGE_KEY, next ? 'dark' : 'douceurLight');
+  });
+</script>

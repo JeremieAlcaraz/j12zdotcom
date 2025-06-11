@@ -1,0 +1,35 @@
+---
+/* ------------------------------------------------------------------
+   NavLinks.astro
+   ------------------------------------------------------------------
+   Props
+   -----
+   - links  : tableau de NavLink (obligatoire)
+   - layout : 'desktop' | 'mobile'  (défaut 'desktop')
+   ------------------------------------------------------------------ */
+import type { NavLink } from '@layouts/navbar/Navbar.types';
+
+interface Props {
+  links: NavLink[];
+  layout?: 'desktop' | 'mobile';
+}
+
+const { links, layout = 'desktop' } = Astro.props as Props;
+
+// Classes utilitaires : on change de style selon le layout
+const ulClass = layout === 'desktop' ? 'menu menu-horizontal px-1' : '';
+const liClass =
+  layout === 'desktop' ? 'hover:bg-primary hover:text-primary-content rounded-lg' : '';
+---
+
+<ul class={ulClass}>
+  {
+    links.map((link) => (
+      <li>
+        <a href={link.href} class={liClass}>
+          {link.label}
+        </a>
+      </li>
+    ))
+  }
+</ul>
