@@ -1,15 +1,11 @@
 ---
 // src/components/Navbar.astro
-import astroLogo from '@assets/astro.svg';
+// ✅ Imports
+import type { NavbarProps } from './Navbar.types';
+import { defaultLogo, defaultLinks } from '@config/navigation';
 
-const {
-  logo = astroLogo.src,
-  links = [
-    { href: '/', label: 'Accueil' },
-    { href: '/about', label: 'À propos' },
-    { href: '/blog', label: 'Blog' },
-  ],
-} = Astro.props;
+// ✅ Props typées
+const { logo = defaultLogo, links = defaultLinks } = Astro.props as NavbarProps;
 ---
 
 <nav class="navbar bg-base-100 shadow-md">
