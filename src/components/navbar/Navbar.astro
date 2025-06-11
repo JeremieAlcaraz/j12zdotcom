@@ -141,7 +141,6 @@ const { logo = defaultLogo, links = defaultLinks } = Astro.props as NavbarProps;
       Math.max(y, window.innerHeight - y)
     );
 
-    // @ts-expect-error: L'API est expérimentale
     const transition = document.startViewTransition(() => {
       const newThemeIsDark = !isDark();
       updateTheme(newThemeIsDark);
