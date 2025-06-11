@@ -11,7 +11,8 @@
     "paths": {
       "@assets/*":      ["src/assets/*"],      // import "@assets/logo.svg"
       "@components/*":  ["src/components/*"],  // import "@components/Navbar.astro"
-      "@composables/*": ["src/composables/*"], // import "@composables/useAuth.ts"
+      "@utils/*":       ["src/utils/*"],      // import "@composables/useAuth.ts"
+      "@config/*":       ["src/config/*"],      // import "@composables/useAuth.ts"
       "@layouts/*":     ["src/layouts/*"],     // import "@layouts/Layout.astro"
       "@styles/*":      ["src/styles/*"]       // import "@styles/global.css"
     }
