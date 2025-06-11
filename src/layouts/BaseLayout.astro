@@ -1,0 +1,51 @@
+---
+// src/layouts/Layout.astro
+import '@styles/global.css';
+import Navbar from '@components/navbar/Navbar.astro';
+const { title = 'Mon Site' } = Astro.props;
+---
+
+<!doctype html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <title>{title}</title>
+  </head>
+
+  <body class="min-h-screen flex flex-col">
+    <!-- ====================================== -->
+    <!-- 1) HEADER : full-width (pas de container) -->
+    <!-- ====================================== -->
+    <header class="fixed inset-x-0 top-0 z-50
+        bg-transparent">
+      <Navbar />
+    </header>
+
+    <!-- ====================================== -->
+    <!-- 2) MAIN :                          -->
+    <!--    a) slot hero full-width        -->
+    <!--    b) slot par défaut centré      -->
+    <!-- ====================================== -->
+    <main class="flex-1 pt-16">
+      <!-- a) HERO en full-width -->
+      <slot name="hero" />
+
+      <!-- b) CONTENU centré dans container -->
+      <div class="container mx-auto px-4">
+        <slot />
+      </div>
+    </main>
+  </body>
+</html>
+
+<style>
+  /* reset minimal */
+  html,
+  body {
+    margin: 0;
+    width: 100%;
+    height: 100%;
+  }
+</style>

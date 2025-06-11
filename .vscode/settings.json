@@ -1,25 +1,74 @@
 {
-  // 1) Activer le formatage automatique au moment de l'enregistrement
+  // ————————————————————————————————————
+  // 1. Confort d’édition et formatage
+  // ————————————————————————————————————
   "editor.formatOnSave": true,
+  "editor.codeActionsOnSave": { "source.fixAll": "explicit" },
 
-  // 2) Définir Prettier comme formateur par défaut pour les fichiers .astro
-  "[astro]": {
-    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  "[astro]":        { "editor.defaultFormatter": "esbenp.prettier-vscode" },
+  "[javascript]":   { "editor.defaultFormatter": "esbenp.prettier-vscode" },
+  "[typescript]":   { "editor.defaultFormatter": "esbenp.prettier-vscode" },
+  "[css]":          { "editor.defaultFormatter": "esbenp.prettier-vscode" },
+
+  // ————————————————————————————————————
+  // 2. Améliorations Astro
+  // ————————————————————————————————————
+  //"files.associations": { "*.astro": "typescriptreact" },
+  "astro.updateImportsOnFileMove.enabled": true,
+  "typescript.updateImportsOnFileMove.enabled": "always",
+  "javascript.updateImportsOnFileMove.enabled": "always",
+
+  // ————————————————————————————————————
+  // 3. Couleurs personnalisées
+  // ————————————————————————————————————
+  "editor.tokenColorCustomizations": {
+    // a) Raccourci global : s’il est pris en compte par ton thème.
+    "comments": "#6A9955",
+
+    // b) Règles TextMate « infaillibles » (commentaires + ponctuation)
+    "textMateRules": [
+      {
+        "scope": [
+          "comment",
+          "comment.block",
+          "comment.block.documentation",
+          "comment.line",
+          "comment.line.double-dash",
+          "punctuation.definition.comment"      // <-- chevrons & tirets
+        ],
+        "settings": {
+          "foreground": "#6A9955",               // vert
+        }
+      }
+    ]
   },
 
-  // 3) Et aussi pour les langages courants (JS, TS, CSS...) si vous le souhaitez
-  "[javascript]": {
-    "editor.defaultFormatter": "esbenp.prettier-vscode"
-  },
-  "[typescript]": {
-    "editor.defaultFormatter": "esbenp.prettier-vscode"
-  },
-  "[css]": {
-    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  // c) Couleur des commentaires pour les semantic tokens
+  "editor.semanticTokenColorCustomizations": {
+    "enabled": true,
+    "rules": {
+      // texte du commentaire
+      "comment": { "foreground": "#6A9955" },
+      // ponctuation comment (VS Code ≥ 1.90)
+      "punctuation": { "foreground": "#6A9955" }
+    }
   },
 
-  // 4) (Optionnel) Appliquer automatiquement tous les correctifs "fixAll" à l'enregistrement
-  "editor.codeActionsOnSave": {
-    "source.fixAll": "explicit"
-  }
+  // ————————————————————————————————————
+  // 4. Spell-Checker (on l’exclut des .astro)
+  // ————————————————————————————————————
+  "cSpell.enableFiletypes": [
+    "javascript",
+    "typescript",
+    "css",
+    "markdown",
+    "json"
+  ],
+  "cSpell.enabledLanguageIds": [
+    "javascript",
+    "typescript",
+    "css",
+    "markdown",
+    "json"
+  ]
 }

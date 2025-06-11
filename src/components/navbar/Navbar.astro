@@ -1,22 +1,18 @@
 ---
-// src/components/Header.astro
-import astroLogo from '../assets/astro.svg';
+// src/components/Navbar.astro
+// ✅ Imports
+import type { NavbarProps } from './Navbar.types';
+import { defaultLogo, defaultLinks } from '@config/navigation';
 
-const {
-  logo = astroLogo.src,
-  links = [
-    { href: '/', label: 'Accueil' },
-    { href: '/about', label: 'À propos' },
-    { href: '/blog', label: 'Blog' },
-  ],
-} = Astro.props;
+// ✅ Props typées
+const { logo = defaultLogo, links = defaultLinks } = Astro.props as NavbarProps;
 ---
 
 <nav class="navbar bg-base-100 shadow-md">
   <div class="navbar-start">
     <a href="/" class="btn btn-ghost text-xl normal-case">
       <img src={logo} alt="Logo" class="h-8 w-8" />
-      <span class="hidden sm:inline ml-2">MonSite</span>
+      <span class="hidden sm:inline ml-2">Jérémie Alcaraz</span>
     </a>
   </div>
 
@@ -145,7 +141,6 @@ const {
       Math.max(y, window.innerHeight - y)
     );
 
-    // @ts-expect-error: L'API est expérimentale
     const transition = document.startViewTransition(() => {
       const newThemeIsDark = !isDark();
       updateTheme(newThemeIsDark);
