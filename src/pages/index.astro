@@ -3,6 +3,7 @@
 
 import Layout from '@layouts/BaseLayout.astro';
 import Hero from '@components/hero/Hero.astro';
+import Halo from 'src/playground/Halo.astro';
 ---
 
 <Layout title="Accueil - Mon Site">
@@ -11,6 +12,7 @@ import Hero from '@components/hero/Hero.astro';
   <!-- ====================================== -->
   <!-- on passe le nav via slot nommé -->
   <Hero slot="hero" />
+  <Halo />
 
   <!-- ====================================== -->
   <!-- 2) CONTENU : centré dans container     -->
