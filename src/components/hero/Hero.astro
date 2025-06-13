@@ -25,7 +25,7 @@ import heroPng from '@assets/img_opt/jeremie-hero.png';
       - AVIF puis WebP, sinon fallback PNG  
       - classes Tailwind pour style (coins arrondis, ombre, découpe overflow)  
     -->
-    <picture class="max-w-lg lg:max-w-xl rounded-lg shadow-2xl overflow-hidden">
+    <picture class="max-w-lg lg:max-w-xl rounded-lg overflow-hidden">
       <!-- Source AVIF (meilleur ratio compression) -->
       <source srcset={heroAvif.src} type="image/avif" />
       <!-- Source WebP (fallback si AVIF non supporté) -->
