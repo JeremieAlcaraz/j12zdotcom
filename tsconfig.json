@@ -1,36 +1,23 @@
-// tsconfig.json
 {
-  // Héritage de la config TS “strict” optimisée pour Astro
   "extends": "astro/tsconfigs/strict",
-
   "compilerOptions": {
-    // Définit la racine de résolution des modules (chemins relatifs)
     "baseUrl": ".",
-
-    // Correspondance des alias TS/IDE vers tes dossiers réels
     "paths": {
-      "@assets/*":      ["src/assets/*"],      // import "@assets/logo.svg"
-      "@components/*":  ["src/components/*"],  // import "@components/Navbar.astro"
-      "@utils/*":       ["src/utils/*"],      // import "@composables/useAuth.ts"
-      "@config/*":       ["src/config/*"],      // import "@composables/useAuth.ts"
-      "@layouts/*":     ["src/layouts/*"],     // import "@layouts/Layout.astro"
-      "@playground/*":     ["src/playground/*"],     // import "@layouts/Layout.astro"
-      "@styles/*":      ["src/styles/*"]       // import "@styles/global.css"
+      "@assets/*": ["src/assets/*"],
+      "@components/*": ["src/components/*"],
+      "@utils/*": ["src/utils/*"],
+      "@config/*": ["src/config/*"],
+      "@layouts/*": ["src/layouts/*"],
+      "@playground/*": ["src/playground/*"],
+      "@styles/*": ["src/styles/*"]
     }
-
-    // (Optionnel) Ajoute d’autres options TS ici si nécessaire,
-    // par ex. "strictNullChecks": true, etc.
   },
-
-  // Fichiers à inclure dans la compilation TS
   "include": [
-    ".astro/types.d.ts", // Types internes générés par Astro
-    "**/*"               // Tous les fichiers .ts, .astro, .jsx, .mdx…
+    ".astro/types.d.ts",
+    "**/*"
   ],
-
-  // Fichiers/dossiers à exclure
   "exclude": [
-    "dist",         // Dossier de build final
-    "node_modules"  // Modules externes (parfois déjà géré)
+    "dist",
+    "node_modules"
   ]
 }
