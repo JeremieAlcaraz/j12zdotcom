@@ -2,6 +2,7 @@
 // src/layouts/Layout.astro
 import '@styles/global.css';
 import Navbar from '@components/navbar/Navbar.astro';
+import Footer from '@components/footer/Footer.astro';
 const { title = 'Mon Site' } = Astro.props;
 ---
 
@@ -37,6 +38,12 @@ const { title = 'Mon Site' } = Astro.props;
         <slot />
       </div>
     </main>
+    <!-- ====================================== -->
+    <!-- 3) FOOTER : en bas de page -->
+    <!-- ====================================== -->
+    <footer>
+      <Footer />
+    </footer>
   </body>
 </html>
 
