@@ -6,24 +6,22 @@
 // Elle permet d'importer des modules et de traiter les props
 
 // ✅ IMPORTS - Importation des types et configurations
-import type { NavbarProps } from '@components/navbar';  // Type TypeScript pour les props du composant
-import { defaultLogo, defaultLinks } from '@config/navigation';  // Valeurs par défaut pour logo et liens
+import type { NavbarProps } from '@components/header'; // Type TypeScript pour les props du composant
+import { defaultLogo, defaultLinks } from '@config/navigation'; // Valeurs par défaut pour logo et liens
 
 // ✅ DESTRUCTURATION DES PROPS avec valeurs par défaut
 // Astro.props contient toutes les propriétés passées au composant
 // On utilise la destructuration avec des valeurs par défaut si rien n'est fourni
 const { logo = defaultLogo, links = defaultLinks } = Astro.props as NavbarProps;
+
+
+
 ---
 
 <!-- ==========================================
      SECTION TEMPLATE (HTML + COMPOSANTS)
-     ========================================== -->
-<!-- Cette section définit la structure HTML du composant -->
-
-<!-- CONTENEUR PRINCIPAL DE LA NAVBAR -->
-<!-- Utilise les classes DaisyUI pour le styling (navbar, bg-base-100, shadow-md) -->
+     ========================================== --><!-- Cette section définit la structure HTML du composant --><!-- CONTENEUR PRINCIPAL DE LA NAVBAR --><!-- Utilise les classes DaisyUI pour le styling (navbar, bg-base-100, shadow-md) -->
 <nav class="navbar bg-base-100 shadow-md">
-  
   <!-- PARTIE GAUCHE DE LA NAVBAR (logo + nom) -->
   <div class="navbar-start">
     <!-- LIEN LOGO - Retour à l'accueil -->
@@ -62,11 +60,9 @@ const { logo = defaultLogo, links = defaultLinks } = Astro.props as NavbarProps;
 
   <!-- PARTIE DROITE DE LA NAVBAR (bouton thème + menu mobile) -->
   <div class="navbar-end">
-    
     <!-- BOUTON DE CHANGEMENT DE THÈME -->
     <!-- btn-circle = bouton rond, id pour le ciblage JavaScript -->
     <button id="theme-toggle" class="btn btn-ghost btn-circle">
-      
       <!-- ICÔNE SOLEIL (thème clair) -->
       <!-- SVG avec path défini pour dessiner un soleil -->
       <svg
@@ -79,7 +75,7 @@ const { logo = defaultLogo, links = defaultLinks } = Astro.props as NavbarProps;
           d="M5.64,17l-.71.71a1,1,0,0,0,0,1.41,1,1,0,0,0,1.41,0l.71-.71A1,1,0,0,0,5.64,17ZM5,12a1,1,0,0,0-1-1H3a1,1,0,0,0,0,2H4A1,1,0,0,0,5,12Zm7-7a1,1,0,0,0,1-1V3a1,1,0,0,0-2,0V4A1,1,0,0,0,12,5ZM5.64,7.05a1,1,0,0,0,.7.29,1,1,0,0,0,.71-.29,1,1,0,0,0,0-1.41l-.71-.71A1,1,0,0,0,4.93,6.34Zm12,.29a1,1,0,0,0,.7-.29l.71-.71a1,1,0,1,0-1.41-1.41L17,5.64a1,1,0,0,0,0,1.41A1,1,0,0,0,17.66,7.34ZM21,11H20a1,1,0,0,0,0,2h1a1,1,0,0,0,0-2Zm-9,8a1,1,0,0,0-1,1v1a1,1,0,0,0,2,0V20A1,1,0,0,0,12,19ZM18.36,17A1,1,0,0,0,17,18.36l.71.71a1,1,0,0,0,1.41,0,1,1,0,0,0,0-1.41ZM12,6.5A5.5,5.5,0,1,0,17.5,12,5.51,5.51,0,0,0,12,6.5Zm0,9A3.5,3.5,0,1,1,15.5,12,3.5,3.5,0,0,1,12,15.5Z"
         ></path>
       </svg>
-      
+
       <!-- ICÔNE LUNE (thème sombre) -->
       <!-- hidden par défaut, sera affichée/cachée via JavaScript -->
       <svg
@@ -97,7 +93,6 @@ const { logo = defaultLogo, links = defaultLinks } = Astro.props as NavbarProps;
     <!-- MENU MOBILE (hamburger menu) -->
     <!-- dropdown-end = alignement à droite, lg:hidden = caché sur grands écrans -->
     <div class="dropdown dropdown-end lg:hidden">
-      
       <!-- BOUTON HAMBURGER (3 lignes) -->
       <!-- tabindex="0" = rend l'élément focusable au clavier -->
       <label tabindex="0" class="btn btn-ghost btn-circle">
@@ -108,17 +103,18 @@ const { logo = defaultLogo, links = defaultLinks } = Astro.props as NavbarProps;
           fill="none"
           viewBox="0 0 24 24"
           stroke="currentColor"
-          >
+        >
           <!-- Path SVG pour dessiner les 3 lignes du menu hamburger -->
           <path
             stroke-linecap="round"
             stroke-linejoin="round"
             stroke-width="2"
-            d="M4 6h16M4 12h8m-8 6h16">
+            d="M4 6h16M4 12h8m-8 6h16"
+          >
           </path>
         </svg>
       </label>
-      
+
       <!-- CONTENU DU DROPDOWN (menu déroulant mobile) -->
       <!-- menu-sm = petite taille, dropdown-content = contenu du dropdown -->
       <!-- mt-3 = marge top, z-[1] = z-index pour être au-dessus, p-2 = padding -->
@@ -151,8 +147,8 @@ const { logo = defaultLogo, links = defaultLinks } = Astro.props as NavbarProps;
   /* ::view-transition-new(root) = nouvelle vue lors de la transition */
   ::view-transition-old(root),
   ::view-transition-new(root) {
-    animation: none;           /* Supprime l'animation par défaut */
-    mix-blend-mode: normal;    /* Mode de mélange normal (pas de fusion de couleurs) */
+    animation: none; /* Supprime l'animation par défaut */
+    mix-blend-mode: normal; /* Mode de mélange normal (pas de fusion de couleurs) */
   }
 </style>
 
@@ -163,7 +159,7 @@ const { logo = defaultLogo, links = defaultLinks } = Astro.props as NavbarProps;
   // ==========================================
   // CONSTANTES ET UTILITAIRES
   // ==========================================
-  
+
   // CLÉ pour stocker le thème dans localStorage du navigateur
   const THEME_STORAGE_KEY = 'theme';
 
@@ -174,7 +170,7 @@ const { logo = defaultLogo, links = defaultLinks } = Astro.props as NavbarProps;
   // ==========================================
   // FONCTION DE MISE À JOUR DU THÈME
   // ==========================================
-  
+
   // APPLIQUE le thème (sombre ou clair) à la page
   const updateTheme = (isDarkValue: boolean) => {
     // CHANGE l'attribut data-theme sur <html> pour appliquer le thème
@@ -184,33 +180,33 @@ const { logo = defaultLogo, links = defaultLinks } = Astro.props as NavbarProps;
     // RÉCUPÈRE les éléments des icônes soleil et lune
     const sunIcon = document.getElementById('sun-icon');
     const moonIcon = document.getElementById('moon-icon');
-    
+
     // AFFICHE/CACHE les icônes selon le thème
     if (sunIcon && moonIcon) {
       // Si thème sombre : cache soleil, montre lune
       // Si thème clair : montre soleil, cache lune
-      sunIcon.classList.toggle('hidden', isDarkValue);      // Cache si sombre
-      moonIcon.classList.toggle('hidden', !isDarkValue);    // Cache si clair
+      sunIcon.classList.toggle('hidden', isDarkValue); // Cache si sombre
+      moonIcon.classList.toggle('hidden', !isDarkValue); // Cache si clair
     }
   };
 
   // ==========================================
   // FONCTION D'INITIALISATION DU THÈME
   // ==========================================
-  
+
   // CONFIGURE le thème initial au chargement de la page
   const setupTheme = () => {
     // RÉCUPÈRE le thème sauvegardé depuis localStorage
     const savedTheme = localStorage.getItem(THEME_STORAGE_KEY);
-    
+
     // DÉTECTE la préférence système de l'utilisateur (sombre/clair)
     const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-    
+
     // DÉTERMINE le thème initial :
     // 1. Si thème sauvegardé : utilise celui-ci
     // 2. Sinon : utilise la préférence système
     const initialThemeIsDark = savedTheme ? savedTheme === 'dark' : prefersDark;
-    
+
     // APPLIQUE le thème déterminé
     updateTheme(initialThemeIsDark);
   };
@@ -218,7 +214,7 @@ const { logo = defaultLogo, links = defaultLinks } = Astro.props as NavbarProps;
   // ==========================================
   // FONCTION DE BASCULEMENT DU THÈME
   // ==========================================
-  
+
   // GÈRE le clic sur le bouton de changement de thème
   const toggleTheme = (event: MouseEvent) => {
     // VÉRIFIE si les transitions visuelles sont supportées et activées
@@ -231,8 +227,8 @@ const { logo = defaultLogo, links = defaultLinks } = Astro.props as NavbarProps;
 
     // CAS SIMPLE : pas de transition animée
     if (!isAppearanceTransition) {
-      const newThemeIsDark = !isDark();  // Inverse le thème actuel
-      updateTheme(newThemeIsDark);       // Applique le nouveau thème
+      const newThemeIsDark = !isDark(); // Inverse le thème actuel
+      updateTheme(newThemeIsDark); // Applique le nouveau thème
       // SAUVEGARDE dans localStorage pour persistance
       localStorage.setItem(THEME_STORAGE_KEY, newThemeIsDark ? 'dark' : 'douceurLight');
       return;
@@ -241,7 +237,7 @@ const { logo = defaultLogo, links = defaultLinks } = Astro.props as NavbarProps;
     // ==========================================
     // TRANSITION ANIMÉE (cercle qui s'agrandit)
     // ==========================================
-    
+
     // RÉCUPÈRE les coordonnées du clic de souris
     const x = event.clientX;
     const y = event.clientY;
@@ -250,14 +246,14 @@ const { logo = defaultLogo, links = defaultLinks } = Astro.props as NavbarProps;
     // Math.hypot = calcule la distance euclidienne
     // On prend la plus grande distance depuis le point de clic jusqu'aux coins
     const endRadius = Math.hypot(
-      Math.max(x, window.innerWidth - x),   // Distance horizontale max
-      Math.max(y, window.innerHeight - y)   // Distance verticale max
+      Math.max(x, window.innerWidth - x), // Distance horizontale max
+      Math.max(y, window.innerHeight - y) // Distance verticale max
     );
 
     // DÉMARRE la transition avec l'API View Transitions
     const transition = document.startViewTransition(() => {
-      const newThemeIsDark = !isDark();  // Inverse le thème
-      updateTheme(newThemeIsDark);       // Applique le changement
+      const newThemeIsDark = !isDark(); // Inverse le thème
+      updateTheme(newThemeIsDark); // Applique le changement
       // SAUVEGARDE le nouveau thème
       localStorage.setItem(THEME_STORAGE_KEY, newThemeIsDark ? 'dark' : 'douceurLight');
     });
@@ -273,9 +269,9 @@ const { logo = defaultLogo, links = defaultLinks } = Astro.props as NavbarProps;
           clipPath: clipPath, // Animation du cercle qui s'agrandit
         },
         {
-          duration: 500,                                    // Durée : 500ms
-          easing: 'ease-in-out',                           // Courbe d'animation
-          pseudoElement: '::view-transition-new(root)',    // Cible la nouvelle vue
+          duration: 500, // Durée : 500ms
+          easing: 'ease-in-out', // Courbe d'animation
+          pseudoElement: '::view-transition-new(root)', // Cible la nouvelle vue
         }
       );
     });
@@ -284,10 +280,10 @@ const { logo = defaultLogo, links = defaultLinks } = Astro.props as NavbarProps;
   // ==========================================
   // INITIALISATION AU CHARGEMENT
   // ==========================================
-  
+
   // CONFIGURE le thème dès que le script se charge
   setupTheme();
-  
+
   // ATTACHE l'événement de clic au bouton de changement de thème
   // ?. = optional chaining (évite l'erreur si l'élément n'existe pas)
   document.getElementById('theme-toggle')?.addEventListener('click', toggleTheme);
