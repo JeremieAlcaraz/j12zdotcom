@@ -36,27 +36,57 @@ const { logo = defaultLogo, links = defaultLinks } = Astro.props as NavbarProps;
     </a>
   </div>
 
-  <!-- PARTIE CENTRALE DE LA NAVBAR (navigation principale) -->
-  <!-- hidden lg:flex = caché sur mobile/tablet, visible sur écrans >= lg -->
-  <div class="navbar-center hidden lg:flex">
+    <!-- PARTIE CENTRALE DE LA NAVBAR (navigation principale) -->
+  <!-- hidden lg:flex = caché sur mobile/tablet, visible sur écrans ≥ lg -->
+  <div class="navbar-center hidden lg:flex overflow-visible">
     <!-- LISTE DE NAVIGATION HORIZONTALE -->
-    <ul class="menu menu-horizontal px-1">
+    <!-- overflow-visible pour que le dropdown ne soit pas coupé -->
+    <ul class="menu menu-horizontal px-1 overflow-visible">
       {
         /* BOUCLE JAVASCRIPT pour générer les liens de navigation */
-        /* map() parcourt le tableau 'links' et génère un <li> pour chaque élément */
-        /* Destructuration : { href, label } extrait ces propriétés de chaque objet link */
         links.map(({ href, label }) => (
-          <li>
-            <!-- LIEN DE NAVIGATION -->
-            <!-- Classes hover pour l'effet au survol (bg-primary, text-primary-content) -->
-            <a href={href} class="hover:bg-primary hover:text-primary-content rounded-lg">
-              {label} {/* Affichage du texte du lien */}
-            </a>
-          </li>
+          label !== 'Formations' ? (
+            <li>
+              <!-- LIEN DE NAVIGATION SIMPLE -->
+              <a href={href}
+                 class="hover:bg-primary hover:text-primary-content rounded-lg">
+                {label}
+              </a>
+            </li>
+          ) : (
+            /* Dropdown “Formations” */
+            <li
+              class="relative dropdown dropdown-hover"  
+              tabindex="0"
+            >
+              <a class="hover:bg-primary hover:text-primary-content rounded-lg flex items-center">
+                Formations
+                <!-- flèche vers le bas -->
+                <svg class="ml-1 w-4 h-4 inline-block" xmlns="http://www.w3.org/2000/svg" fill="none"
+                     viewBox="0 0 24 24" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M19 9l-7 7-7-7" />
+                </svg>
+              </a>
+              <!--
+                mt-0         → pas de gap top
+                -mt-1        → décale le menu de 0.25rem vers le haut pour supprimer tout trou
+                z-50         → au-dessus de tout
+              -->
+              <ul class="dropdown-content menu p-2 bg-base-100 rounded-box w-52 shadow-lg mt-0 z-50">
+                <li><a class="hover:bg-secondary hover:text-primary-content rounded-lg" href="/formations/formation-1">Formation 1</a></li>
+                <li><a class="hover:bg-primary hover:text-primary-content rounded-lg" href="/formations/formation-2">Formation 2</a></li>
+                <li><a class="hover:bg-secondary hover:text-primary-content rounded-lg" href="/formations/formation-3">Formation 3</a></li>
+              </ul>
+            </li>
+          )
         ))
       }
     </ul>
   </div>
+
+
+
 
   <!-- PARTIE DROITE DE LA NAVBAR (bouton thème + menu mobile) -->
   <div class="navbar-end">
@@ -136,21 +166,7 @@ const { logo = defaultLogo, links = defaultLinks } = Astro.props as NavbarProps;
   </div>
 </nav>
 
-<!-- ==========================================
-     SECTION STYLES GLOBAUX
-     ========================================== -->
-<!-- is:global = applique les styles globalement (pas seulement à ce composant) -->
-<style is:global>
-  /* DÉSACTIVATION DES ANIMATIONS DE TRANSITION PAR DÉFAUT */
-  /* Ces règles CSS ciblent les pseudo-éléments de l'API View Transitions */
-  /* ::view-transition-old(root) = ancienne vue lors de la transition */
-  /* ::view-transition-new(root) = nouvelle vue lors de la transition */
-  ::view-transition-old(root),
-  ::view-transition-new(root) {
-    animation: none; /* Supprime l'animation par défaut */
-    mix-blend-mode: normal; /* Mode de mélange normal (pas de fusion de couleurs) */
-  }
-</style>
+
 
 <!-- ==========================================
      SECTION SCRIPT JAVASCRIPT CLIENT
@@ -288,3 +304,28 @@ const { logo = defaultLogo, links = defaultLinks } = Astro.props as NavbarProps;
   // ?. = optional chaining (évite l'erreur si l'élément n'existe pas)
   document.getElementById('theme-toggle')?.addEventListener('click', toggleTheme);
 </script>
+
+
+<!-- ==========================================
+     SECTION STYLES GLOBAUX
+     ========================================== -->
+<!-- is:global = applique les styles globalement (pas seulement à ce composant) -->
+<style is:global>
+  /* DÉSACTIVATION DES ANIMATIONS DE TRANSITION PAR DÉFAUT */
+  /* Ces règles CSS ciblent les pseudo-éléments de l'API View Transitions */
+  /* ::view-transition-old(root) = ancienne vue lors de la transition */
+  /* ::view-transition-new(root) = nouvelle vue lors de la transition */
+  ::view-transition-old(root),
+  ::view-transition-new(root) {
+    animation: none; /* Supprime l'animation par défaut */
+    mix-blend-mode: normal; /* Mode de mélange normal (pas de fusion de couleurs) */
+  }
+
+     /* --- FIX GAP DES DROPDOWNS NAVBAR -------------------------- */
+  /* On enlève 1 px au margin-top auto-généré par DaisyUI        */
+  /* pour que le sous-menu touche exactement le lien parent      */
+    nav.navbar .dropdown > .dropdown-content {
+    margin-top: -0.5px; /* colle le menu, plus aucun trou */
+  }
+
+</style>
