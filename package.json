@@ -8,15 +8,21 @@
   "scripts": {
     "dev": "astro dev",
     "start": "astro dev",
-    "build": "astro check && astro build",
-    "preview": "astro preview",
-    "check": "astro check",
     "sync": "astro sync",
     "lint": "eslint . --ext .js,.jsx,.ts,.tsx,.astro,.svelte",
     "lint:fix": "eslint . --ext .js,.jsx,.ts,.tsx,.astro,.svelte --fix",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
-    "type-check": "tsc --noEmit"
+    "type-check": "tsc --noEmit",
+
+    "img:avif": "mkdir -p src/assets/img_opt && pnpm exec sharp -i 'src/assets/raw/*.{png,jpg,jpeg}' -o 'src/assets/img_opt/{name}.avif' -f avif -q 75 resize 1500",
+    "img:webp": "mkdir -p src/assets/img_opt && pnpm exec sharp -i 'src/assets/raw/*.{png,jpg,jpeg}' -o 'src/assets/img_opt/{name}.webp' -f webp -q 75 resize 1500",
+    "img:png":  "mkdir -p src/assets/img_opt && pnpm exec sharp -i 'src/assets/raw/*.{png,jpg,jpeg}' -o 'src/assets/img_opt/{name}.png'  -f png  -q 80 resize 1500",
+    "img:opt":  "pnpm run img:avif && pnpm run img:webp && pnpm run img:png",
+
+    "build": "pnpm run img:opt && astro check && astro build",
+    "preview": "astro preview",
+    "check": "astro check"
   },
   "dependencies": {
     "@astrojs/mdx": "^4.3.0",
@@ -59,6 +65,7 @@
     "prettier-plugin-svelte": "^3.2.5",
     "prettier-plugin-tailwindcss": "^0.6.5",
     "sass": "^1.77.6",
+    "sharp-cli": "^5.1.0",
     "typescript": "^5.5.3",
     "vite-tsconfig-paths": "^5.1.4",
     "vitest": "^3.2.3"
