@@ -1,0 +1,101 @@
+---
+// src/components/contact/ContactForm.astro
+// ------------------------------------------------------------------
+// Ce composant affiche un formulaire de contact entièrement statique :
+//  • pas de JS additionnel côté client (progressive enhancement) ;
+//  • stylé avec Tailwind CSS + Daisy UI ;
+//  • l’URL de soumission est centralisée dans le fichier `siteConfig.ts`.
+//
+// Bon à savoir :
+//  • Astro 5 autorise l’export de types directement depuis un composant `.astro`.
+//  • Les props `title` & `description` sont facultatives pour garder le composant flexible.
+// ------------------------------------------------------------------
+
+import siteConfig from '@config/siteConfig';
+
+// Type Script : les pages peuvent importer ce type si besoin.
+export interface ContactFormProps {
+  /** Titre H2 au-dessus du formulaire. */
+  title?: string;
+  /** Court texte d’intro / call-to-action. */
+  description?: string;
+}
+
+const { contactFormAction } = siteConfig.params;
+
+const { title = 'Contactez-moi', description = 'Je réponds généralement sous 24 h.' } =
+  Astro.props as ContactFormProps;
+---
+
+<section id="contact" class="py-16">
+  <div class="container mx-auto max-w-2xl">
+    <h2 class="text-3xl font-bold mb-4 text-center">
+      {title}
+    </h2>
+
+    <p class="mb-8 text-center text-base-content/80">
+      {description}
+    </p>
+
+    <!--
+      ✉️  Formulaire :
+      - action : provient de votre config -> facile à changer depuis un seul endroit ;
+      - méthode POST pour une intégration rapide (n8n, Netlify Forms, etc.) ;
+      - champs basiques + honeypot anti-spam.
+    -->
+    <form action={contactFormAction} method="POST" class="grid gap-6">
+      <!-- Champ : Nom -->
+      <div class="form-control">
+        <label class="label" for="name">
+          <span class="label-text">Nom</span>
+        </label>
+        <input
+          id="name"
+          name="name"
+          type="text"
+          placeholder="Votre nom"
+          class="input input-bordered"
+          required
+        />
+      </div>
+
+      <!-- Champ : Email -->
+      <div class="form-control">
+        <label class="label" for="email">
+          <span class="label-text">E-mail</span>
+        </label>
+        <input
+          id="email"
+          name="email"
+          type="email"
+          placeholder="vous@example.com"
+          class="input input-bordered"
+          required
+        />
+      </div>
+
+      <!-- Champ : Message -->
+      <div class="form-control">
+        <label class="label" for="message">
+          <span class="label-text">Message</span>
+        </label>
+        <textarea
+          id="message"
+          name="message"
+          rows="5"
+          placeholder="Dites-moi tout !"
+          class="textarea textarea-bordered"
+          required></textarea>
+      </div>
+
+      <!-- Bouton -->
+      <div class="form-control">
+        <button type="submit" class="btn btn-primary w-full sm:w-auto"> Envoyer </button>
+      </div>
+
+      <!-- Anti-spam : champ caché + sujet par défaut -->
+      <input type="hidden" name="_subject" value="Nouveau message via le site" />
+      <input type="text" name="_gotcha" class="hidden" />
+    </form>
+  </div>
+</section>

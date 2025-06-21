@@ -19,5 +19,5 @@ export const defaultLinks: NavLink[] = [
   { href: '/formations', label: 'Formations' },
   { href: '/blog', label: 'Blog' },
   { href: '/about', label: 'À propos' },
-  { href: '/Contact', label: 'Contact' },
+  { href: '/contact', label: 'Contact' },
 ] satisfies NavLink[];
