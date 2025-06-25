@@ -27,75 +27,88 @@ const { title = 'Contactez-moi', description = 'Je réponds généralement sous 
   Astro.props as ContactFormProps;
 ---
 
-<section id="contact" class="py-16">
-  <div class="container mx-auto max-w-2xl">
-    <h2 class="text-3xl font-bold mb-4 text-center">
-      {title}
-    </h2>
+<section id="contact" class="py-16 md:py-24 bg-base-200/30">
+  <div class="container mx-auto px-4">
+    <div class="max-w-2xl mx-auto text-center">
+      <h2 class="text-3xl md:text-4xl font-bold mb-4">{title}</h2>
+      <p class="mb-8 text-base-content/80">
+        {description}
+      </p>
+    </div>
 
-    <p class="mb-8 text-center text-base-content/80">
-      {description}
-    </p>
-
-    <!--
-      ✉️  Formulaire :
-      - action : provient de votre config -> facile à changer depuis un seul endroit ;
-      - méthode POST pour une intégration rapide (n8n, Netlify Forms, etc.) ;
-      - champs basiques + honeypot anti-spam.
-    -->
-    <form action={contactFormAction} method="POST" class="grid gap-6">
-      <!-- Champ : Nom -->
-      <div class="form-control">
-        <label class="label" for="name">
-          <span class="label-text">Nom</span>
-        </label>
+    <div class="max-w-2xl mx-auto card bg-base-100 shadow-xl p-6 md:p-8">
+      <!--
+        ✉️  Formulaire :
+        - action : provient de votre config -> facile à changer depuis un seul endroit ;
+        - méthode POST pour une intégration rapide (n8n, Netlify Forms, etc.) ;
+        - champs basiques + honeypot anti-spam.
+      -->
+      <form action={contactFormAction} method="POST" class="grid gap-6">
+        <!-- Anti-spam : champ caché + sujet par défaut -->
         <input
-          id="name"
-          name="name"
-          type="text"
-          placeholder="Votre nom"
-          class="input input-bordered"
-          required
+          type="hidden"
+          name="_subject"
+          value={`Nouveau message de ${title}`}
         />
-      </div>
+        <input type="text" name="_gotcha" class="hidden" />
 
-      <!-- Champ : Email -->
-      <div class="form-control">
-        <label class="label" for="email">
-          <span class="label-text">E-mail</span>
-        </label>
-        <input
-          id="email"
-          name="email"
-          type="email"
-          placeholder="vous@example.com"
-          class="input input-bordered"
-          required
-        />
-      </div>
+        <!-- Champ : Nom -->
+        <div class="form-control">
+          <label class="label" for="name">
+            <span class="label-text">Votre nom</span>
+          </label>
+          <input
+            id="name"
+            name="name"
+            type="text"
+            placeholder="John Doe"
+            class="input input-bordered w-full"
+            required
+            autocomplete="name"
+          />
+        </div>
 
-      <!-- Champ : Message -->
-      <div class="form-control">
-        <label class="label" for="message">
-          <span class="label-text">Message</span>
-        </label>
-        <textarea
-          id="message"
-          name="message"
-          rows="5"
-          placeholder="Dites-moi tout !"
-          class="textarea textarea-bordered"
-          required></textarea>
-      </div>
+        <!-- Champ : Email -->
+        <div class="form-control">
+          <label class="label" for="email">
+            <span class="label-text">Votre e-mail</span>
+          </label>
+          <input
+            id="email"
+            name="email"
+            type="email"
+            placeholder="john.doe@example.com"
+            class="input input-bordered w-full"
+            required
+            autocomplete="email"
+          />
+        </div>
 
-      <!-- Bouton -->
-      <div class="form-control">
-        <button type="submit" class="btn btn-primary w-full sm:w-auto"> Envoyer </button>
-      </div>
+        <!-- Champ : Message -->
+        <div class="form-control">
+          <label class="label" for="message">
+            <span class="label-text">Votre message</span>
+          </label>
+          <textarea
+            id="message"
+            name="message"
+            rows="5"
+            placeholder="Bonjour, je vous contacte pour..."
+            class="textarea textarea-bordered w-full"
+            required
+          ></textarea>
+        </div>
 
-      <!-- Anti-spam : champ caché + sujet par défaut -->
-      <input type="hidden" name="_subject" value="Nouveau message via le site" />
-      <input type="text" name="_gotcha" class="hidden" />
-    </form>
+        <!-- Bouton -->
+        <div class="mt-6 flex justify-center">
+          <button
+            type="submit"
+            class="btn btn-primary shadow-lg shadow-primary/40 transition-shadow duration-300 hover:shadow-primary/60"
+          >
+            Envoyer le message
+          </button>
+        </div>
+      </form>
+    </div>
   </div>
 </section>
