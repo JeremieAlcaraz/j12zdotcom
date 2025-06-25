@@ -1,42 +1,61 @@
 ---
-import { Image } from 'astro:assets';
-import heroAvif from '@assets/img_opt/jeremie-hero.avif';
-import heroWebp from '@assets/img_opt/jeremie-hero.webp';
-import heroPng from '@assets/img_opt/jeremie-hero.png';
 import Halo from '@layouts/components/Halo.astro';
+import ImageMod from '@layouts/components/ImageMod.astro';
+import { markdownify } from '@/utils/textConverter';
+import type { Button, Feature } from '@/types';
+import type { CollectionEntry } from 'astro:content';
+import { getEntry } from 'astro:content';
+
+interface Homepage {
+  banner: { title: string; content: string; image: string; button: Button };
+  features: Feature[];
+}
+
+const homepage = (await getEntry('homepage', '-index')) as CollectionEntry<'homepage'>;
+const { banner } = homepage.data as Homepage;
 ---
 
-<div class="hero bg-base-200 h-[calc(100vh-4rem)] p-25">
-  <div class="hero-content flex-col lg:flex-row max-w-full px-0 gap-12">
-    <!-- Container avec l'effet halo en arrière-plan -->
-    <div class="relative max-w-lg lg:max-w-xl">
-      <!-- Halo en arrière-plan -->
-      <div class="absolute inset-0 z-0 flex items-center justify-center">
-        <Halo />
-      </div>
-
-      <!-- Photo de profil au premier plan -->
-      <picture class="relative z-10 block rounded-lg overflow-hidden mask mask-circle">
-        <source srcset={heroAvif.src} type="image/avif" />
-        <source srcset={heroWebp.src} type="image/webp" />
-        <Image
-          src={heroPng}
-          alt="Portrait de Jérémie"
-          width={600}
-          height={600}
-          loading="eager"
-          class="rounded-lg"
-        />
-      </picture>
+<div class="hero min-h-screen flex items-center justify-center">
+  <div
+    class="flex flex-col lg:flex-row items-center max-w-full gap-12 px-4 transform -translate-y-16 lg:-translate-y-20"
+  >
+    <!-- COLONNE IMAGE avec Halo -->
+    <div class="relative w-96 h-96 flex-shrink-0">
+      <Halo />
+      {
+        banner.image && (
+          <div class="absolute inset-0 flex items-center justify-center z-10">
+            <div class="w-full h-full rounded-full overflow-hidden shadow-2xl">
+              <ImageMod
+                src={banner.image}
+                width={600}
+                height={600}
+                alt="Portrait de Jérémie"
+                format="webp"
+                class="object-cover w-full h-full"
+              />
+            </div>
+          </div>
+        )
+      }
     </div>
 
-    <div class="px-4 lg:px-8">
-      <h1 class="text-6xl font-bold mb-4">Box Office News!</h1>
-      <p class="py-6 text-lg leading-relaxed">
-        Provident cupiditate voluptatem et in. Quaerat fugiat ut assumenda excepturi exercitationem
-        quasi. In deleniti eaque aut repudiandae et a id nisi.
-      </p>
-      <button class="btn btn-primary btn-lg px-8 py-3"> Get Started </button>
+    <!-- COLONNE TEXTE -->
+    <div class="text-center lg:text-left max-w-2xl">
+      <h1 set:html={markdownify(banner.title)} class="text-5xl font-bold mb-4" />
+      <p set:html={markdownify(banner.content)} class="py-6 text-lg" />
+      {
+        banner.button.enable && (
+          <a
+            href={banner.button.link}
+            target={banner.button.link.startsWith('http') ? '_blank' : '_self'}
+            rel="noopener"
+            class="btn btn-primary btn-lg"
+          >
+            {banner.button.label}
+          </a>
+        )
+      }
     </div>
   </div>
 </div>
