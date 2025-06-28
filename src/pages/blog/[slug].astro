@@ -1,0 +1,41 @@
+--- 
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import PostSingle from '@/components/PostSingle.astro';
+import { getCollection } from 'astro:content';
+import { getEntry } from 'astro:content';
+
+export async function getStaticPaths() {
+  const posts = await getCollection('blog');
+  const paths = posts.map(post => ({
+    params: {
+      slug: post.slug,
+    },
+  }));
+  return paths;
+}
+
+const { slug } = Astro.params;
+const post = await getEntry('blog', slug!);
+
+if (!post) {
+    return Astro.redirect('/404');
+}
+
+const posts = await getCollection('blog');
+
+const similarPosts = posts.filter(
+  (p) =>
+    p.data.categories.some((category) => post.data.categories.includes(category)) &&
+    p.slug !== post.slug
+).slice(0, 3);
+
+---
+
+<BaseLayout
+  title={post.data.title}
+  meta_title={post.data.meta_title}
+  description={post.data.description}
+  image={post.data.image}
+>
+  <PostSingle post={post} similarPosts={similarPosts} />
+</BaseLayout>

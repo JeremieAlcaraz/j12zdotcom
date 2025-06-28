@@ -1,0 +1,66 @@
+---
+import type { CollectionEntry } from 'astro:content';
+import BlogCard from '@/components/BlogCard.astro';
+
+interface Props {
+  post: CollectionEntry<'blog'>;
+  similarPosts: CollectionEntry<'blog'>[];
+}
+
+const { post, similarPosts } = Astro.props;
+const { Content } = await post.render();
+---
+
+<section class="section">
+  <div class="container">
+    <div class="row justify-center">
+      <article class="col-12 max-w-4xl">
+        <div class="mb-8 text-center">
+          <h1 class="h2 mb-4">{post.data.title}</h1>
+          <ul class="mb-4">
+            <li class="mr-4 inline-block">
+              <a href={`/authors/${post.data.author}`}>
+                <i class="fa-regular fa-user mr-2"></i>{post.data.author}
+              </a>
+            </li>
+            <li class="mr-4 inline-block">
+              <i class="fa-regular fa-folder mr-2"></i>
+              {post.data.categories.map((category, i) => (
+                <a href={`/categories/${category}`} class="mr-2 capitalize">
+                  {category}{i !== post.data.categories.length - 1 && ','}
+                </a>
+              ))}
+            </li>
+            <li class="mr-4 inline-block">
+                <i class="fa-regular fa-clock mr-2"></i>
+                {new Date(post.data.date).toLocaleDateString('fr-FR', { year: 'numeric', month: 'long', day: 'numeric' })}
+            </li>
+          </ul>
+        </div>
+        {post.data.image && (
+          <div class="mb-8">
+            <img src={post.data.image} alt={post.data.title} class="w-full rounded-lg" />
+          </div>
+        )}
+        <div class="prose max-w-none">
+          <Content />
+        </div>
+      </article>
+    </div>
+  </div>
+</section>
+
+{similarPosts.length > 0 &&
+<section class="section">
+    <div class="container">
+        <h2 class="h3 mb-8 text-center">Articles similaires</h2>
+        <div class="row justify-center">
+            {similarPosts.map(post => (
+                <div class="col-12 mb-8 sm:col-6 lg:col-4">
+                    <BlogCard data={post} />
+                </div>
+            ))}
+        </div>
+    </div>
+</section>
+}
