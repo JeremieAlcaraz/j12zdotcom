@@ -3,12 +3,14 @@ import type { CollectionEntry } from 'astro:content';
 
 interface Props {
   data: CollectionEntry<'blog'>;
+  index?: number;
 }
 
-const { data } = Astro.props;
+const { data, index = 0 } = Astro.props;
+const isEven = index % 2 === 0;
 ---
 
-<div class="card card-compact w-full bg-base-100 shadow-xl transition-all duration-300 hover:shadow-2xl">
+<div class={`card card-compact w-full bg-base-100 shadow-xl transition-all duration-300 hover:shadow-2xl border-2 border-gray-200 dark:border-white/30 dark:shadow-[0_0_15px_rgba(255,255,255,0.2)] ${isEven ? 'hover:dark:border-primary hover:dark:shadow-[0_0_25px_rgba(229,82,133,0.7)] hover:border-primary' : 'hover:dark:border-secondary hover:dark:shadow-[0_0_25px_rgba(129,140,248,0.7)] hover:border-secondary'}`}
   <a href={`/blog/${data.slug}`}>
     <figure class="relative">
       {data.data.image && <img src={data.data.image} alt={data.data.title} class="w-full object-cover h-24" />}
