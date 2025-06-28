@@ -207,24 +207,19 @@ const { logo = defaultLogo, links = defaultLinks } = Astro.props as NavbarProps;
   };
 
   // ==========================================
-  // FONCTION D'INITIALISATION DU THÈME
+  // FONCTION D'INITIALISATION DES ICÔNES
   // ==========================================
 
-  // CONFIGURE le thème initial au chargement de la page
-  const setupTheme = () => {
-    // RÉCUPÈRE le thème sauvegardé depuis localStorage
-    const savedTheme = localStorage.getItem(THEME_STORAGE_KEY);
+  // CONFIGURE l'affichage initial des icônes selon le thème
+  const setupIcons = () => {
+    const currentThemeIsDark = isDark();
+    const sunIcon = document.getElementById('sun-icon');
+    const moonIcon = document.getElementById('moon-icon');
 
-    // DÉTECTE la préférence système de l'utilisateur (sombre/clair)
-    const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-
-    // DÉTERMINE le thème initial :
-    // 1. Si thème sauvegardé : utilise celui-ci
-    // 2. Sinon : utilise la préférence système
-    const initialThemeIsDark = savedTheme ? savedTheme === 'dark' : prefersDark;
-
-    // APPLIQUE le thème déterminé
-    updateTheme(initialThemeIsDark);
+    if (sunIcon && moonIcon) {
+      sunIcon.classList.toggle('hidden', currentThemeIsDark);
+      moonIcon.classList.toggle('hidden', !currentThemeIsDark);
+    }
   };
 
   // ==========================================
@@ -297,8 +292,8 @@ const { logo = defaultLogo, links = defaultLinks } = Astro.props as NavbarProps;
   // INITIALISATION AU CHARGEMENT
   // ==========================================
 
-  // CONFIGURE le thème dès que le script se charge
-  setupTheme();
+  // CONFIGURE l'affichage des icônes selon le thème actuel
+  setupIcons();
 
   // ATTACHE l'événement de clic au bouton de changement de thème
   // ?. = optional chaining (évite l'erreur si l'élément n'existe pas)

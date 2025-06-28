@@ -13,6 +13,18 @@ const { title = 'Mon Site' } = Astro.props;
     <meta name="viewport" content="width=device-width" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <title>{title}</title>
+    
+    <!-- Script bloquant pour éviter le flash de thème -->
+    <script is:inline>
+      (function() {
+        const THEME_STORAGE_KEY = 'theme';
+        const savedTheme = localStorage.getItem(THEME_STORAGE_KEY);
+        const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+        const initialThemeIsDark = savedTheme ? savedTheme === 'dark' : prefersDark;
+        
+        document.documentElement.setAttribute('data-theme', initialThemeIsDark ? 'dark' : 'douceurLight');
+      })();
+    </script>
   </head>
 
   <body class="min-h-screen flex flex-col">
