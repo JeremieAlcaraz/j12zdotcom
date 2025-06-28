@@ -14,6 +14,18 @@ const totalPages = Math.ceil(posts.length / postsPerPage);
 const currentPosts = posts.slice(0, postsPerPage);
 ---
 
+<style>
+  [data-theme="dark"] .sidebar-categories {
+    border-color: transparent !important;
+    box-shadow: 0 0 15px rgba(255,255,255,0.2);
+  }
+  
+  [data-theme="dark"] .sidebar-categories:hover {
+    border-color: oklch(67.76% 0.12 355.76) !important;
+    box-shadow: 0 0 25px rgba(229,82,133,0.7);
+  }
+</style>
+
 <BaseLayout title="Blog">
   <section class="section pt-24 pb-32">
     <div class="container max-w-7xl mx-auto">
@@ -28,7 +40,7 @@ const currentPosts = posts.slice(0, postsPerPage);
         </div>
         <div class="col-span-1">
           <aside class="w-full">
-            <div class="bg-base-100 rounded-lg shadow-lg p-6 border-2 border-gray-200 dark:border-white/30 dark:shadow-[0_0_15px_rgba(255,255,255,0.2)] hover:dark:border-primary hover:dark:shadow-[0_0_25px_rgba(229,82,133,0.7)] hover:border-primary transition-all duration-300">
+            <div class="sidebar-categories bg-base-100 rounded-lg shadow-lg p-6 border-2 border-gray-200 hover:border-primary transition-all duration-300">
               <h3 class="text-lg font-semibold mb-4">Catégories</h3>
               <ul class="space-y-2">
                 {categories.map(category => {
