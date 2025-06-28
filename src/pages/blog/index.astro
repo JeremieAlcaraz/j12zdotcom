@@ -1,0 +1,51 @@
+--- 
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import BlogCard from '@/components/BlogCard.astro';
+import Pagination from '@/components/Pagination.astro';
+import PostSidebar from '@/components/PostSidebar.astro';
+import { getCollection } from 'astro:content';
+
+const posts = await getCollection('blog');
+const allCategories = posts.flatMap(post => post.data.categories);
+const categories = [...new Set(allCategories)];
+
+const postsPerPage = 5;
+const totalPages = Math.ceil(posts.length / postsPerPage);
+const currentPosts = posts.slice(0, postsPerPage);
+---
+
+<BaseLayout title="Blog">
+  <section class="section pt-24 pb-32">
+    <div class="container max-w-7xl mx-auto">
+      <div class="grid grid-cols-4 gap-8">
+        <div class="col-span-3">
+          <div class="grid grid-cols-3 gap-8 mb-16">
+            {currentPosts.map(post => (
+              <BlogCard data={post} />
+            ))}
+          </div>
+          <Pagination section="blog" currentPage={1} totalPages={totalPages} />
+        </div>
+        <div class="col-span-1">
+          <aside class="w-full">
+            <div class="bg-base-100 rounded-lg shadow-lg p-6">
+              <h3 class="text-lg font-semibold mb-4">Catégories</h3>
+              <ul class="space-y-2">
+                {categories.map(category => {
+                  const count = allCategories.filter(c => c === category).length;
+                  return (
+                    <li>
+                      <a href={`/categories/${category}`} class="flex justify-between rounded bg-base-200 px-3 py-2 text-sm font-medium capitalize text-base-content hover:bg-base-300 transition-colors">
+                        {category} <span class="text-base-content/60">({count})</span>
+                      </a>
+                    </li>
+                  )
+                })}
+              </ul>
+            </div>
+          </aside>
+        </div>
+      </div>
+    </div>
+  </section>
+</BaseLayout>
