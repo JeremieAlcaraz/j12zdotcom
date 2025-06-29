@@ -25,7 +25,7 @@ const isEven = index % 2 === 0;
   <div class="card-body p-4">
     <div class="flex flex-wrap items-center gap-1 mb-3">
       {
-        data.data.categories.map((category) => (
+        data.data.categories.map((category: unknown) => (
           <a href={`/categories/${category}`} class="badge badge-secondary badge-sm capitalize">
             {category}
           </a>

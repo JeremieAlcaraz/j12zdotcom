@@ -18,7 +18,7 @@ const homepageCollection = defineCollection({
   }),
 });
 
-"""const blogCollection = defineCollection({
+const blogCollection = defineCollection({
   loader: glob({ pattern: '**/*.{md,mdx}', base: 'src/content/blog' }),
   schema: z.object({
     title: z.string(),
@@ -37,4 +37,4 @@ const homepageCollection = defineCollection({
 export const collections = {
   homepage: homepageCollection,
   blog: blogCollection,
-};""
+};

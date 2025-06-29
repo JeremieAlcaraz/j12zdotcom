@@ -7,7 +7,7 @@
        2) defaultLinks  → tableau de liens réutilisable
 -------------------------------------------------------------------- */
 
-import type { NavLink } from '@components/header/Header.types';
+import type { NavLink } from '@components/Header.types';
 import astroLogo from '@assets/astro.svg';
 
 /** Logo par défaut – peut être surchargé via la prop `logo` de <Navbar /> */
