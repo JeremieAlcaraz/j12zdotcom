@@ -85,7 +85,7 @@ export const siteConfig: SiteConfig = {
   params: {
     contactFormAction:
       'https://n8n.jeremiealcaraz.com/webhook-test/5f0abd46-180d-4a51-9f27-93ef7c7b8224',
-    copyright: 'Designed And Developed by [Zeon Studio](https://zeon.studio)',
+    copyright: 'Designed And Developed by Jeremie Alcaraz with 💜',
   },
   navigationButton: {
     enable: true,
