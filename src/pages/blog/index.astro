@@ -1,12 +1,12 @@
---- 
+---
 import BaseLayout from '@/layouts/BaseLayout.astro';
-import BlogCard from '@/components/BlogCard.astro';
-import Pagination from '@/components/Pagination.astro';
-import PostSidebar from '@/components/PostSidebar.astro';
+import BlogCard from '@components/blog/BlogCard.astro';
+import Pagination from '@components/blog/Pagination.astro';
+import PostSidebar from '@components/blog/PostSidebar.astro';
 import { getCollection } from 'astro:content';
 
 const posts = await getCollection('blog');
-const allCategories = posts.flatMap(post => post.data.categories);
+const allCategories = posts.flatMap((post) => post.data.categories);
 const categories = [...new Set(allCategories)];
 
 const postsPerPage = 5;
@@ -15,14 +15,14 @@ const currentPosts = posts.slice(0, postsPerPage);
 ---
 
 <style>
-  [data-theme="dark"] .sidebar-categories {
+  [data-theme='dark'] .sidebar-categories {
     border-color: transparent !important;
-    box-shadow: 0 0 15px rgba(255,255,255,0.2);
+    box-shadow: 0 0 15px rgba(255, 255, 255, 0.2);
   }
-  
-  [data-theme="dark"] .sidebar-categories:hover {
+
+  [data-theme='dark'] .sidebar-categories:hover {
     border-color: oklch(67.76% 0.12 355.76) !important;
-    box-shadow: 0 0 25px rgba(229,82,133,0.7);
+    box-shadow: 0 0 25px rgba(229, 82, 133, 0.7);
   }
 </style>
 
@@ -32,27 +32,32 @@ const currentPosts = posts.slice(0, postsPerPage);
       <div class="grid grid-cols-4 gap-8">
         <div class="col-span-3">
           <div class="grid grid-cols-3 gap-8 mb-16">
-            {currentPosts.map((post, index) => (
-              <BlogCard data={post} index={index} />
-            ))}
+            {currentPosts.map((post, index) => <BlogCard data={post} index={index} />)}
           </div>
           <Pagination section="blog" currentPage={1} totalPages={totalPages} />
         </div>
         <div class="col-span-1">
           <aside class="w-full">
-            <div class="sidebar-categories bg-base-100 rounded-lg shadow-lg p-6 border-2 border-gray-200 hover:border-primary transition-all duration-300">
+            <div
+              class="sidebar-categories bg-base-100 rounded-lg shadow-lg p-6 border-2 border-gray-200 hover:border-primary transition-all duration-300"
+            >
               <h3 class="text-lg font-semibold mb-4">Catégories</h3>
               <ul class="space-y-2">
-                {categories.map(category => {
-                  const count = allCategories.filter(c => c === category).length;
-                  return (
-                    <li>
-                      <a href={`/categories/${category}`} class="flex justify-between rounded bg-base-200 px-3 py-2 text-sm font-medium capitalize text-base-content hover:bg-base-300 transition-colors">
-                        {category} <span class="text-base-content/60">({count})</span>
-                      </a>
-                    </li>
-                  )
-                })}
+                {
+                  categories.map((category) => {
+                    const count = allCategories.filter((c) => c === category).length;
+                    return (
+                      <li>
+                        <a
+                          href={`/categories/${category}`}
+                          class="flex justify-between rounded bg-base-200 px-3 py-2 text-sm font-medium capitalize text-base-content hover:bg-base-300 transition-colors"
+                        >
+                          {category} <span class="text-base-content/60">({count})</span>
+                        </a>
+                      </li>
+                    );
+                  })
+                }
               </ul>
             </div>
           </aside>
