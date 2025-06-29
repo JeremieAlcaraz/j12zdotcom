@@ -1,6 +1,6 @@
 ---
-import Halo from '@layouts/components/Halo.astro';
-import ImageMod from '@layouts/components/ImageMod.astro';
+import Halo from '@components/Halo.astro';
+import ImageMod from '@components/ImageMod.astro';
 import { markdownify } from '@/utils/textConverter';
 import type { Button, Feature } from '@/types';
 import type { CollectionEntry } from 'astro:content';
@@ -11,7 +11,7 @@ interface Homepage {
   features: Feature[];
 }
 
-const homepage = (await getEntry('homepage', '-index')) as CollectionEntry<'homepage'>;
+const homepage = (await getEntry('homepage', 'index')) as CollectionEntry<'homepage'>;
 const { banner } = homepage.data as Homepage;
 ---
 
