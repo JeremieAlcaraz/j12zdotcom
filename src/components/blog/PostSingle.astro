@@ -1,6 +1,6 @@
 ---
 import type { CollectionEntry } from 'astro:content';
-import BlogCard from '@/components/BlogCard.astro';
+import BlogCard from '@components/blog/BlogCard.astro';
 
 interface Props {
   post: CollectionEntry<'blog'>;
@@ -50,7 +50,8 @@ const { Content } = await post.render();
     font-size: 1.1rem;
   }
 
-  .article-content ul, .article-content ol {
+  .article-content ul,
+  .article-content ol {
     margin: 1.5rem 0;
     padding-left: 1.5rem;
   }
@@ -61,7 +62,11 @@ const { Content } = await post.render();
 
   /* Styles pour les callouts/blockquotes */
   .article-content blockquote {
-    background: linear-gradient(135deg, oklch(67.76% 0.12 355.76 / 0.1), oklch(75.46% 0.08 221.25 / 0.1));
+    background: linear-gradient(
+      135deg,
+      oklch(67.76% 0.12 355.76 / 0.1),
+      oklch(75.46% 0.08 221.25 / 0.1)
+    );
     border-left: 4px solid oklch(67.76% 0.12 355.76);
     margin: 2rem 0;
     padding: 1.5rem;
@@ -141,28 +146,32 @@ const { Content } = await post.render();
   }
 
   /* Styles pour le mode sombre */
-  [data-theme="dark"] .article-content {
+  [data-theme='dark'] .article-content {
     color: oklch(85% 0.01 60.5);
   }
 
-  [data-theme="dark"] .article-content h2,
-  [data-theme="dark"] .article-content h3,
-  [data-theme="dark"] .article-content h4 {
+  [data-theme='dark'] .article-content h2,
+  [data-theme='dark'] .article-content h3,
+  [data-theme='dark'] .article-content h4 {
     color: oklch(90% 0.01 60.5);
   }
 
-  [data-theme="dark"] .article-content code {
+  [data-theme='dark'] .article-content code {
     background: oklch(20% 0.02 252.1);
     color: oklch(80% 0.01 60.5);
     border-color: oklch(25% 0.02 252.1);
   }
 
-  [data-theme="dark"] .article-content strong {
+  [data-theme='dark'] .article-content strong {
     color: oklch(90% 0.01 60.5);
   }
 
-  [data-theme="dark"] .article-content blockquote {
-    background: linear-gradient(135deg, oklch(67.76% 0.12 355.76 / 0.15), oklch(75.46% 0.08 221.25 / 0.15));
+  [data-theme='dark'] .article-content blockquote {
+    background: linear-gradient(
+      135deg,
+      oklch(67.76% 0.12 355.76 / 0.15),
+      oklch(75.46% 0.08 221.25 / 0.15)
+    );
     border-left-color: oklch(67.76% 0.12 355.76);
   }
 </style>
@@ -171,17 +180,19 @@ const { Content } = await post.render();
 <section class="pt-24 pb-16 bg-base-200">
   <div class="container max-w-4xl mx-auto px-6 text-center">
     <div class="flex flex-wrap justify-center gap-2 mb-6">
-      {post.data.categories.map((category) => (
-        <a href={`/categories/${category}`} class="badge badge-primary badge-lg capitalize">
-          {category}
-        </a>
-      ))}
+      {
+        post.data.categories.map((category) => (
+          <a href={`/categories/${category}`} class="badge badge-primary badge-lg capitalize">
+            {category}
+          </a>
+        ))
+      }
     </div>
-    
+
     <h1 class="text-4xl font-bold mb-6 text-base-content leading-tight">
       {post.data.title}
     </h1>
-    
+
     <div class="flex flex-wrap items-center justify-center gap-6 text-base-content/70">
       <div class="flex items-center gap-2">
         <div class="avatar">
@@ -191,17 +202,22 @@ const { Content } = await post.render();
         </div>
         <span class="font-medium">{post.data.author}</span>
       </div>
-      
+
       <div class="flex items-center gap-2">
         <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
-          <path fill-rule="evenodd" d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z" clip-rule="evenodd"></path>
+          <path
+            fill-rule="evenodd"
+            d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z"
+            clip-rule="evenodd"></path>
         </svg>
         <time datetime={post.data.date}>
-          {new Date(post.data.date).toLocaleDateString('fr-FR', { 
-            year: 'numeric', 
-            month: 'long', 
-            day: 'numeric' 
-          })}
+          {
+            new Date(post.data.date).toLocaleDateString('fr-FR', {
+              year: 'numeric',
+              month: 'long',
+              day: 'numeric',
+            })
+          }
         </time>
       </div>
     </div>
@@ -213,15 +229,17 @@ const { Content } = await post.render();
   <div class="container max-w-4xl mx-auto px-6">
     <article>
       <!-- Image principale -->
-      {post.data.image && (
-        <div class="mb-12">
-          <img 
-            src={post.data.image} 
-            alt={post.data.title} 
-            class="w-full rounded-lg shadow-lg aspect-video object-cover"
-          />
-        </div>
-      )}
+      {
+        post.data.image && (
+          <div class="mb-12">
+            <img
+              src={post.data.image}
+              alt={post.data.title}
+              class="w-full rounded-lg shadow-lg aspect-video object-cover"
+            />
+          </div>
+        )
+      }
 
       <!-- Contenu de l'article -->
       <div class="article-content max-w-none">
@@ -231,17 +249,17 @@ const { Content } = await post.render();
   </div>
 </section>
 
-{similarPosts.length > 0 && (
-<section class="section py-16 bg-base-200/50">
-    <div class="container max-w-6xl mx-auto px-6">
-        <h2 class="text-3xl font-bold text-center mb-12 text-base-content">
-          Articles similaires
-        </h2>
+{
+  similarPosts.length > 0 && (
+    <section class="section py-16 bg-base-200/50">
+      <div class="container max-w-6xl mx-auto px-6">
+        <h2 class="text-3xl font-bold text-center mb-12 text-base-content">Articles similaires</h2>
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {similarPosts.map((post, index) => (
-                <BlogCard data={post} index={index} />
-            ))}
+          {similarPosts.map((post, index) => (
+            <BlogCard data={post} index={index} />
+          ))}
         </div>
-    </div>
-</section>
-)}
+      </div>
+    </section>
+  )
+}

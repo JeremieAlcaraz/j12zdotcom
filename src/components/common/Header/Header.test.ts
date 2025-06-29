@@ -1,7 +1,7 @@
 import { experimental_AstroContainer as AstroContainer } from 'astro/container';
 import { expect, describe, it } from 'vitest';
 
-import Navbar from '@components/Header.astro';
+import Navbar from '@components/common/Header/Header.astro';
 
 const links = [
   { href: '/foo', label: 'Foo' },
