@@ -11,56 +11,237 @@ const { post, similarPosts } = Astro.props;
 const { Content } = await post.render();
 ---
 
-<section class="section">
-  <div class="container">
-    <div class="row justify-center">
-      <article class="col-12 max-w-4xl">
-        <div class="mb-8 text-center">
-          <h1 class="h2 mb-4">{post.data.title}</h1>
-          <ul class="mb-4">
-            <li class="mr-4 inline-block">
-              <a href={`/authors/${post.data.author}`}>
-                <i class="fa-regular fa-user mr-2"></i>{post.data.author}
-              </a>
-            </li>
-            <li class="mr-4 inline-block">
-              <i class="fa-regular fa-folder mr-2"></i>
-              {post.data.categories.map((category, i) => (
-                <a href={`/categories/${category}`} class="mr-2 capitalize">
-                  {category}{i !== post.data.categories.length - 1 && ','}
-                </a>
-              ))}
-            </li>
-            <li class="mr-4 inline-block">
-                <i class="fa-regular fa-clock mr-2"></i>
-                {new Date(post.data.date).toLocaleDateString('fr-FR', { year: 'numeric', month: 'long', day: 'numeric' })}
-            </li>
-          </ul>
-        </div>
-        {post.data.image && (
-          <div class="mb-8">
-            <img src={post.data.image} alt={post.data.title} class="w-full rounded-lg" />
+<style>
+  /* Styles personnalisés pour l'article */
+  .article-content {
+    font-family: 'Inter', system-ui, sans-serif;
+    line-height: 1.7;
+    color: oklch(40.2% 0.03 252.1);
+  }
+
+  .article-content h2 {
+    font-size: 2rem;
+    font-weight: 700;
+    margin-top: 3rem;
+    margin-bottom: 1.5rem;
+    color: oklch(40.2% 0.03 252.1);
+    border-bottom: 3px solid oklch(67.76% 0.12 355.76);
+    padding-bottom: 0.5rem;
+  }
+
+  .article-content h3 {
+    font-size: 1.5rem;
+    font-weight: 600;
+    margin-top: 2.5rem;
+    margin-bottom: 1rem;
+    color: oklch(40.2% 0.03 252.1);
+  }
+
+  .article-content h4 {
+    font-size: 1.25rem;
+    font-weight: 600;
+    margin-top: 2rem;
+    margin-bottom: 0.75rem;
+    color: oklch(40.2% 0.03 252.1);
+  }
+
+  .article-content p {
+    margin-bottom: 1.5rem;
+    font-size: 1.1rem;
+  }
+
+  .article-content ul, .article-content ol {
+    margin: 1.5rem 0;
+    padding-left: 1.5rem;
+  }
+
+  .article-content li {
+    margin-bottom: 0.5rem;
+  }
+
+  /* Styles pour les callouts/blockquotes */
+  .article-content blockquote {
+    background: linear-gradient(135deg, oklch(67.76% 0.12 355.76 / 0.1), oklch(75.46% 0.08 221.25 / 0.1));
+    border-left: 4px solid oklch(67.76% 0.12 355.76);
+    margin: 2rem 0;
+    padding: 1.5rem;
+    border-radius: 0.5rem;
+    font-style: normal;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+  }
+
+  .article-content blockquote p {
+    margin-bottom: 0.5rem;
+    font-weight: 500;
+  }
+
+  .article-content blockquote p:last-child {
+    margin-bottom: 0;
+  }
+
+  /* Styles pour les blocs de code */
+  .article-content pre {
+    background: oklch(25% 0.02 252.1) !important;
+    border-radius: 0.75rem;
+    padding: 1.5rem;
+    margin: 2rem 0;
+    overflow-x: auto;
+    border: 1px solid oklch(30% 0.02 252.1);
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+  }
+
+  .article-content code {
+    background: oklch(94% 0.01 60.5);
+    padding: 0.25rem 0.5rem;
+    border-radius: 0.25rem;
+    font-size: 0.9rem;
+    color: oklch(30% 0.02 252.1);
+    border: 1px solid oklch(91% 0.01 60.5);
+  }
+
+  .article-content pre code {
+    background: transparent;
+    padding: 0;
+    border: none;
+    color: #e5e7eb;
+  }
+
+  /* Styles pour les liens */
+  .article-content a {
+    color: oklch(67.76% 0.12 355.76);
+    text-decoration: underline;
+    text-decoration-color: oklch(67.76% 0.12 355.76 / 0.3);
+    text-underline-offset: 3px;
+    font-weight: 500;
+    transition: all 0.2s ease;
+  }
+
+  .article-content a:hover {
+    color: oklch(60% 0.15 355.76);
+    text-decoration-color: oklch(60% 0.15 355.76);
+  }
+
+  /* Styles pour les éléments strong */
+  .article-content strong {
+    font-weight: 700;
+    color: oklch(35% 0.03 252.1);
+  }
+
+  /* Espacements entre sections */
+  .article-content > * + * {
+    margin-top: 1.5rem;
+  }
+
+  .article-content > h2 + * {
+    margin-top: 1.5rem;
+  }
+
+  .article-content > h3 + * {
+    margin-top: 1rem;
+  }
+
+  /* Styles pour le mode sombre */
+  [data-theme="dark"] .article-content {
+    color: oklch(85% 0.01 60.5);
+  }
+
+  [data-theme="dark"] .article-content h2,
+  [data-theme="dark"] .article-content h3,
+  [data-theme="dark"] .article-content h4 {
+    color: oklch(90% 0.01 60.5);
+  }
+
+  [data-theme="dark"] .article-content code {
+    background: oklch(20% 0.02 252.1);
+    color: oklch(80% 0.01 60.5);
+    border-color: oklch(25% 0.02 252.1);
+  }
+
+  [data-theme="dark"] .article-content strong {
+    color: oklch(90% 0.01 60.5);
+  }
+
+  [data-theme="dark"] .article-content blockquote {
+    background: linear-gradient(135deg, oklch(67.76% 0.12 355.76 / 0.15), oklch(75.46% 0.08 221.25 / 0.15));
+    border-left-color: oklch(67.76% 0.12 355.76);
+  }
+</style>
+
+<!-- Banner avec titre et métadonnées -->
+<section class="pt-24 pb-16 bg-base-200">
+  <div class="container max-w-4xl mx-auto px-6 text-center">
+    <div class="flex flex-wrap justify-center gap-2 mb-6">
+      {post.data.categories.map((category) => (
+        <a href={`/categories/${category}`} class="badge badge-primary badge-lg capitalize">
+          {category}
+        </a>
+      ))}
+    </div>
+    
+    <h1 class="text-4xl font-bold mb-6 text-base-content leading-tight">
+      {post.data.title}
+    </h1>
+    
+    <div class="flex flex-wrap items-center justify-center gap-6 text-base-content/70">
+      <div class="flex items-center gap-2">
+        <div class="avatar">
+          <div class="w-10 rounded-full">
+            <img src={`https://i.pravatar.cc/40?u=${post.data.author}`} alt={post.data.author} />
           </div>
-        )}
-        <div class="prose max-w-none">
-          <Content />
         </div>
-      </article>
+        <span class="font-medium">{post.data.author}</span>
+      </div>
+      
+      <div class="flex items-center gap-2">
+        <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+          <path fill-rule="evenodd" d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z" clip-rule="evenodd"></path>
+        </svg>
+        <time datetime={post.data.date}>
+          {new Date(post.data.date).toLocaleDateString('fr-FR', { 
+            year: 'numeric', 
+            month: 'long', 
+            day: 'numeric' 
+          })}
+        </time>
+      </div>
     </div>
   </div>
 </section>
 
-{similarPosts.length > 0 &&
-<section class="section">
-    <div class="container">
-        <h2 class="h3 mb-8 text-center">Articles similaires</h2>
-        <div class="row justify-center">
-            {similarPosts.map(post => (
-                <div class="col-12 mb-8 sm:col-6 lg:col-4">
-                    <BlogCard data={post} />
-                </div>
+<!-- Contenu principal -->
+<section class="py-16 bg-base-100">
+  <div class="container max-w-4xl mx-auto px-6">
+    <article>
+      <!-- Image principale -->
+      {post.data.image && (
+        <div class="mb-12">
+          <img 
+            src={post.data.image} 
+            alt={post.data.title} 
+            class="w-full rounded-lg shadow-lg aspect-video object-cover"
+          />
+        </div>
+      )}
+
+      <!-- Contenu de l'article -->
+      <div class="article-content max-w-none">
+        <Content />
+      </div>
+    </article>
+  </div>
+</section>
+
+{similarPosts.length > 0 && (
+<section class="section py-16 bg-base-200/50">
+    <div class="container max-w-6xl mx-auto px-6">
+        <h2 class="text-3xl font-bold text-center mb-12 text-base-content">
+          Articles similaires
+        </h2>
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {similarPosts.map((post, index) => (
+                <BlogCard data={post} index={index} />
             ))}
         </div>
     </div>
 </section>
-}
+)}
