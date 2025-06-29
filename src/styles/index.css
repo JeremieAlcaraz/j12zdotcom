@@ -1,0 +1,6 @@
+/* Imports Tailwind et DaisyUI */
+@import 'tailwindcss';
+@plugin "daisyui";
+
+/* Thèmes */
+@import './themes/douceur.css';
