@@ -11,7 +11,17 @@ interface Homepage {
   features: Feature[];
 }
 
-const homepage = (await getEntry('homepage', 'index')) as CollectionEntry<'homepage'>;
+
+
+// 🔍 DEBUG: Voir ce qui se passe
+const homepage = await getEntry('homepage', 'index');
+console.log('Homepage result:', homepage);
+
+if (!homepage) {
+  throw new Error('Homepage entry not found! Check src/content/homepage/index.md');
+}
+
+
 const { banner } = homepage.data as Homepage;
 ---
 
