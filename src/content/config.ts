@@ -3,7 +3,7 @@ import { defineCollection, z } from 'astro:content';
 
 // Homepage collection schema
 const homepageCollection = defineCollection({
-  loader: glob({ pattern: '**/-*.{md,mdx}', base: 'src/content/homepage' }),
+  loader: glob({ pattern: '**/*.{md,mdx}', base: 'src/content/homepage' }),
   schema: z.object({
     banner: z.object({
       title: z.string(),
