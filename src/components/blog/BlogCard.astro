@@ -1,15 +1,21 @@
 ---
-import type { CollectionEntry } from 'astro:content';
+import config from "@/config/siteConfig.ts";
+import dateFormat from "@/lib/utils/dateFormat";
+import { humanize, plainify, slugify } from "@/lib/utils/textConverter";
+import { FaRegFolder, FaRegUserCircle } from "react-icons/fa";
+import ImageMod from "./ImageMod.astro";
 
-interface Props {
-  data: CollectionEntry<'blog'>;
-  index?: number;
-}
+const {
+  summary_length,
+  blog_folder,
+}: { summary_length: number; blog_folder: string } = config.settings;
 
-const { data, index = 0 } = Astro.props;
-const isEven = index % 2 === 0;
+const { data } = Astro.props;
+const { title, image, date, author, categories } = data.data;
+
 ---
 
+TODO: Tested to replace with the astrotemplate JSX, but be carreful with bg class and other ?
 <div
   class={`blog-card card card-compact w-full bg-base-100 shadow-xl transition-all duration-300 hover:shadow-2xl border-2 border-gray-200 ${isEven ? 'primary-hover hover:border-primary' : 'secondary-hover hover:border-secondary'}`}
 >
