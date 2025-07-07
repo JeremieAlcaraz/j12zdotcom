@@ -5,8 +5,8 @@ import BaseLayout from '@layouts/BaseLayout.astro';
 import BlogCard from '@components/blog/BlogCard.astro';
 import Hero from '@components/ui/Hero.astro';
 
-// Données fictives pour tester le BlogCard
-const mockBlogData = {
+// Données fictives pour tester les BlogCards
+const mockBlogData1 = {
   data: {
     title: "Comment créer un site web moderne avec Astro",
     image: "/images/blog/astro-tutorial.jpg",
@@ -15,8 +15,36 @@ const mockBlogData = {
     categories: ["Web Development", "Astro", "JavaScript"]
   }
 };
+
+const mockBlogData2 = {
+  data: {
+    title: "Les meilleures pratiques CSS en 2024",
+    image: "/images/blog/css-practices.jpg",
+    date: "2024-12-10",
+    author: "Marie Martin",
+    categories: ["CSS", "Design", "Frontend"]
+  }
+};
+
+const mockBlogData3 = {
+  data: {
+    title: "Optimisation des performances web",
+    image: "/images/blog/performance.jpg",
+    date: "2024-12-05",
+    author: "Paul Durand",
+    categories: ["Performance", "Web", "Optimisation"]
+  }
+};
 ---
 
 <BaseLayout title="elements">
-  <BlogCard data={mockBlogData} />
+  <!-- Section Blog Cards -->
+  <section class="mt-16 mb-12">
+    <h2 class="text-3xl font-bold text-center mb-8">Les cartes de blog</h2>
+    <div class="flex flex-wrap justify-center gap-6">
+      <BlogCard data={mockBlogData1} />
+      <BlogCard data={mockBlogData2} />
+      <BlogCard data={mockBlogData3} />
+    </div>
+  </section>
 </BaseLayout>
