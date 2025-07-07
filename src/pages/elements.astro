@@ -5,8 +5,18 @@ import BaseLayout from '@layouts/BaseLayout.astro';
 import BlogCard from '@components/blog/BlogCard.astro';
 import Hero from '@components/ui/Hero.astro';
 
+// Données fictives pour tester le BlogCard
+const mockBlogData = {
+  data: {
+    title: "Comment créer un site web moderne avec Astro",
+    image: "/images/blog/astro-tutorial.jpg",
+    date: "2024-12-15",
+    author: "Jean Dupont",
+    categories: ["Web Development", "Astro", "JavaScript"]
+  }
+};
 ---
 
 <BaseLayout title="elements">
-  <BlogCard/>
+  <BlogCard data={mockBlogData} />
 </BaseLayout>
