@@ -11,50 +11,28 @@ const {
 }: { summary_length: number; blog_folder: string } = config.settings;
 
 const { data } = Astro.props;
-const { title, image, date, author, categories } = data.data;
 
+// Vérification que data existe et qu'il contient bien une propriété data
+if (!data || !data.data) {
+  throw new Error("BlogCard: Les données du blog sont manquantes. Vérifiez que vous passez bien une prop 'data' au composant.");
+}
+
+const { title, image, date, author, categories } = data.data;
 ---
 
-TODO: Tested to replace with the astrotemplate JSX, but be carreful with bg class and other ?
-<div
-  class={`blog-card card card-compact w-full bg-base-100 shadow-xl transition-all duration-300 hover:shadow-2xl border-2 border-gray-200 ${isEven ? 'primary-hover hover:border-primary' : 'secondary-hover hover:border-secondary'}`}
->
-  <a href={`/blog/${data.id}`}>
-    <figure class="relative">
-      {
-        data.data.image && (
-          <img src={data.data.image} alt={data.data.title} class="w-full object-cover h-24" />
-        )
-      }
-    </figure>
-  </a>
-  <div class="card-body p-4">
-    <div class="flex flex-wrap items-center gap-1 mb-3">
-      {
-        data.data.categories.map((category: unknown) => (
-          <a href={`/categories/${category}`} class="badge badge-secondary badge-sm capitalize">
-            {category}
-          </a>
-        ))
-      }
-    </div>
-    <h2 class="card-title text-base">
-      <a href={`/blog/${data.id}`}>{data.data.title}</a>
-    </h2>
-    {data.data.description && <p class="text-base-content/80">{data.data.description}</p>}
-    <div
-      class="footer-actions mt-4"
-      style="display: flex; align-items: center; justify-content: space-between; width: 100%;"
-    >
-      <div style="display: flex; align-items: center; gap: 8px;">
-        <div class="avatar">
-          <div class="w-8 rounded-full">
-            <img src={`https://i.pravatar.cc/40?u=${data.data.author}`} alt={data.data.author} />
-          </div>
-        </div>
-        <span class="text-sm font-medium">{data.data.author}</span>
-      </div>
-      <a href={`/blog/${data.id}`} class="btn btn-primary btn-sm">Lire la suite</a>
+<!-- TODO: ajouter du contenu ici -->
+<!-- FIX: corriger la structure -->
+<div class="card bg-base-100 w-96 shadow-sm">
+  <figure>
+    <img
+      src="https://img.daisyui.com/images/stock/photo-1606107557195-0e29a4b5b4aa.webp"
+      alt="Shoes" />
+  </figure>
+  <div class="card-body">
+    <h2 class="card-title">Card Title</h2>
+    <p>A card component has a figure, a body part, and inside body there are title and actions parts</p>
+    <div class="card-actions justify-end">
+      <button class="btn btn-primary">Buy Now</button>
     </div>
   </div>
 </div>
