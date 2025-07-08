@@ -3,7 +3,7 @@ title: "Optimiser les performances de votre site Astro"
 meta_title: "Performances Astro"
 description: "Techniques et astuces pour un site Astro ultra-rapide."
 date: 2025-05-20
-image: "/images/service-2.png"
+image: "/img_opt/image-placeholder.png"
 author: "Alexandre Martin"
 categories: ["Astro", "Performance"]
 tags: ["Web Vitals", "Optimisation"]
