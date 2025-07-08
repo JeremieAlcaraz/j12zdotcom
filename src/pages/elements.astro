@@ -4,37 +4,29 @@
 import BaseLayout from '@layouts/BaseLayout.astro';
 import BlogCard from '@components/blog/BlogCard.astro';
 import Hero from '@components/ui/Hero.astro';
+import config from '@config/siteConfig';
+import { getSinglePage } from "@/utils/contentParser.astro";
+import { getAllTaxonomy, getTaxonomy } from "@/utils/taxonomyParser.astro";
+import { sortByDate } from "@/utils/sortFunctions";
+import PageHeader from "@/partials/PageHeader.astro";
+import PostSidebar from "@/partials/PostSidebar.astro";
+import type { CollectionEntry } from "astro:content";
+import { getEntry } from "astro:content";
 
-// Données fictives pour tester les BlogCards
-const mockBlogData1 = {
-  data: {
-    title: "Comment créer un site web moderne avec Astro",
-    image: "/images/blog/astro-tutorial.jpg",
-    date: "2024-12-15",
-    author: "Jean Dupont",
-    categories: ["Web Development", "Astro", "JavaScript"]
-  }
-};
+const BLOG_FOLDER = "blog";
 
-const mockBlogData2 = {
-  data: {
-    title: "Les meilleures pratiques CSS en 2024",
-    image: "/images/blog/css-practices.jpg",
-    date: "2024-12-10",
-    author: "Marie Martin",
-    categories: ["CSS", "Design", "Frontend"]
-  }
-};
+const postIndex = (await getEntry(
+  BLOG_FOLDER,
+  "-index"
+)) as CollectionEntry<"blog">;
+const posts = await getSinglePage(BLOG_FOLDER);
+const allCategories = await getAllTaxonomy(BLOG_FOLDER, "categories");
+const categories = await getTaxonomy(BLOG_FOLDER, "categories");
+const tags = await getTaxonomy(BLOG_FOLDER, "tags");
+const sortedPosts = sortByDate(posts);
+const totalPages: number = Math.ceil(posts.length / config.settings.pagination);
+const currentPosts = sortedPosts.slice(0, config.settings.pagination);
 
-const mockBlogData3 = {
-  data: {
-    title: "Optimisation des performances web",
-    image: "/images/blog/performance.jpg",
-    date: "2024-12-05",
-    author: "Paul Durand",
-    categories: ["Performance", "Web", "Optimisation"]
-  }
-};
 ---
 
 <BaseLayout title="elements">
@@ -42,9 +34,13 @@ const mockBlogData3 = {
   <section class="mt-16 mb-12">
     <h2 class="text-3xl font-bold text-center mb-8">Les cartes de blog</h2>
     <div class="flex flex-wrap justify-center gap-6">
-      <BlogCard data={mockBlogData1} />
-      <BlogCard data={mockBlogData2} />
-      <BlogCard data={mockBlogData3} />
+      {
+        currentPosts.map((post) => (
+          <div class="mb-14 md:col-6">
+              <BlogCard data={post} />
+          </div>
+        ))
+      }
     </div>
   </section>
 </BaseLayout>
