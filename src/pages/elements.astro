@@ -37,15 +37,16 @@ const paginationNumbers = generatePaginationNumbers(32);
   <!-- Section Blog Cards -->
   <section class="mt-16 mb-12">
     <h2 class="text-3xl font-bold text-center mb-8">Les cartes de blog</h2>
-    <div class="flex flex-wrap justify-center gap-6">
-      {
-        currentPosts.map((post) => (
-          <div class="mb-14 md:col-6">
-              <BlogCard data={post} />
+    <div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-4 sm:gap-6 mb-8">
+            {
+              currentPosts.map((post) => (
+                <div class="w-full">
+                  <BlogCard data={post} />
+                </div>
+              ))
+            }
           </div>
-        ))
-      }
-    </div>
+
   </section> 
   <!-- Section Pagination -->
   <section class="mt-16 mb-12">
