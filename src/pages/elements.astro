@@ -3,13 +3,10 @@
 // cette page servira à tester tous les components
 import BaseLayout from '@layouts/BaseLayout.astro';
 import BlogCard from '@components/blog/BlogCard.astro';
-import Hero from '@components/ui/Hero.astro';
 import config from '@config/siteConfig';
 import { getSinglePage } from "@/utils/contentParser.astro";
 import { getAllTaxonomy, getTaxonomy } from "@/utils/taxonomyParser.astro";
 import { sortByDate } from "@/utils/sortFunctions";
-import PageHeader from "@/partials/PageHeader.astro";
-import PostSidebar from "@/partials/PostSidebar.astro";
 import type { CollectionEntry } from "astro:content";
 import { getEntry } from "astro:content";
 
@@ -27,6 +24,13 @@ const sortedPosts = sortByDate(posts);
 const totalPages: number = Math.ceil(posts.length / config.settings.pagination);
 const currentPosts = sortedPosts.slice(0, config.settings.pagination);
 
+
+// Fonction pour générer les numéros de pagination
+const generatePaginationNumbers = (max: number = 32): number[] => {
+  return Array.from({ length: max }, (_, i) => i + 1);
+};
+
+const paginationNumbers = generatePaginationNumbers(32);
 ---
 
 <BaseLayout title="elements">
@@ -42,5 +46,22 @@ const currentPosts = sortedPosts.slice(0, config.settings.pagination);
         ))
       }
     </div>
+  </section> 
+  <!-- Section Pagination -->
+  <section class="mt-16 mb-12">
+    <h2 class="text-3xl font-bold text-center mb-8">La Pagination</h2>
+    <div class="join">
+      {
+        paginationNumbers.map((num, index) => (
+          <input
+            class="join-item btn btn-square"
+            type="radio"
+            name="options"
+            aria-label={num.toString()}
+            checked={index === 0 ? "checked" : undefined}
+          />
+        ))
+      }
+    </div>  
   </section>
 </BaseLayout>
