@@ -5,10 +5,12 @@ import { humanize, plainify, slugify } from "@/utils/textConverter";
 import { FaRegFolder, FaRegUserCircle } from "react-icons/fa";
 import ImageMod from "@/components/common/ImageMod/ImageMod.astro";
 
+
 const {
-  summary_length,
-  blog_folder,
-}: { summary_length: number; blog_folder: string } = config.settings;
+  summaryLength,
+  blogFolder,
+}: { summaryLength: number; blogFolder: string } = config.settings;
+
 
 const { data } = Astro.props;
 
@@ -20,8 +22,6 @@ if (!data || !data.data) {
 const { title, image, date, author, categories } = data.data;
 ---
 
-<!-- TODO: ajouter du contenu ici -->
-<!-- FIX: corriger la structure -->
 <div class="card bg-base-100 w-96 shadow-sm">
  <figure>
   {image && (
@@ -34,12 +34,62 @@ const { title, image, date, author, categories } = data.data;
       format="webp"
     />
   )}
-  </figure>  
+  </figure>
+
+<!-- TODO: add author and tag -->
+
   <div class="card-body">
-    <h2 class="card-title">Card Title</h2>
-    <p>A card component has a figure, a body part, and inside body there are title and actions parts</p>
+    <!-- Titre avec lien -->
+    <h2 class="card-title">
+      <a href={`/${blogFolder}/${data.id}`} class="link link-hover">
+        {title}
+      </a>
+    </h2>
+
+    <!-- Métadonnées -->
+    <div class="flex flex-wrap items-center gap-4 text-sm opacity-70 mb-4">
+      <!-- Auteur -->
+      <div class="flex items-center gap-2">
+        <FaRegUserCircle className="shrink-0" />
+        <a href={`/authors/${slugify(author)}`} class="link link-hover">
+          {humanize(author)}
+        </a>
+      </div>
+      
+      <!-- Catégories -->
+      <!-- <div class="flex items-center gap-2"> -->
+      <!--   <FaRegFolder className="shrink-0" /> -->
+      <!--   <div class="flex flex-wrap gap-1"> -->
+      <!--     {categories.map((category: string, index: number) => ( -->
+      <!--       <> -->
+      <!--         <a href={`/categories/${slugify(category)}`} class="link link-hover"> -->
+      <!--           {humanize(category)} -->
+      <!--         </a> -->
+      <!--         {index !== categories.length - 1 && <span>,</span>} -->
+      <!--       </> -->
+      <!--     ))} -->
+      <!--   </div> -->
+      <!-- </div> -->
+
+
+      <!-- Date -->
+      {date && (
+        <time datetime={date} class="flex items-center">
+          {dateFormat(date)}
+        </time>
+      )}
+    </div>
+
+    <!-- Résumé -->
+    <p class="text-base-content/80 mb-4">
+      {plainify(data.body?.slice(0, Number(summaryLength)))}
+    </p>
+
+    <!-- Actions -->
     <div class="card-actions justify-end">
-      <button class="btn btn-primary">Buy Now</button>
+      <a href={`/${blogFolder}/${data.id}`} class="btn btn-primary">
+        Lire la suite
+      </a>
     </div>
   </div>
 </div>
