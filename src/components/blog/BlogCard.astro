@@ -1,7 +1,7 @@
 ---
 import config from "@/config/siteConfig.ts";
 import dateFormat from "@/utils/dateFormat";
-import { humanize, plainify, slugify } from "@/utils/textConverter";
+import { humanize, plainify, slugify, smartTruncate } from "@/utils/textConverter";
 import { FaRegFolder, FaRegUserCircle } from "react-icons/fa";
 import ImageMod from "@/components/common/ImageMod/ImageMod.astro";
 
@@ -80,9 +80,9 @@ const { title, image, date, author, categories } = data.data;
       )}
     </div>
 
-    <!-- Résumé -->
-    <p class="text-base-content/80 mb-4">
-      {plainify(data.body?.slice(0, Number(summaryLength)))}
+     <!-- Résumé -->
+    <p class="text-base-content/70 mb-4 line-clamp-3 leading-relaxed">
+      {smartTruncate(data.body || "", summaryLength || 150)}
     </p>
 
     <!-- Actions -->
