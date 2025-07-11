@@ -1,73 +1,63 @@
 ---
-// src/layouts/Layout.astro
 import '@styles/index.css';
 import { Header } from '@components/common/index';
 import { Footer } from '@components/common/index';
+
 const { title = 'Mon Site' } = Astro.props;
 ---
 
 <!doctype html>
 <html lang="fr">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width" />
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-    <title>{title}</title>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width" />
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+  <title>{title}</title>
+  
+  <script is:inline>
+    (function () {
+      const THEME_STORAGE_KEY = 'theme';
+      const savedTheme = localStorage.getItem(THEME_STORAGE_KEY);
+      const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+      const initialThemeIsDark = savedTheme ? savedTheme === 'dark' : prefersDark;
+      document.documentElement.setAttribute(
+        'data-theme',
+        initialThemeIsDark ? 'dark' : 'douceurLight'
+      );
+    })();
+  </script>
+</head>
 
-    <!-- Script bloquant pour éviter le flash de thème -->
-    <script is:inline>
-      (function () {
-        const THEME_STORAGE_KEY = 'theme';
-        const savedTheme = localStorage.getItem(THEME_STORAGE_KEY);
-        const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-        const initialThemeIsDark = savedTheme ? savedTheme === 'dark' : prefersDark;
-
-        document.documentElement.setAttribute(
-          'data-theme',
-          initialThemeIsDark ? 'dark' : 'douceurLight'
-        );
-      })();
-    </script>
-  </head>
-
-  <body class="min-h-screen flex flex-col">
-    <!-- ====================================== -->
-    <!-- 1) HEADER : full-width (pas de container) -->
-    <!-- ====================================== -->
-    <header class="fixed inset-x-0 top-0 z-50
-        bg-transparent">
+<body class="min-h-screen">
+  <!-- Layout principal avec Grid Tailwind -->
+  <div class="min-h-screen grid grid-rows-[auto_1fr_auto]">
+    
+    <!-- HEADER fixe -->
+    <header class="fixed top-0 left-0 right-0 z-50 bg-transparent">
       <Header />
     </header>
 
-    <!-- ====================================== -->
-    <!-- 2) MAIN :                          -->
-    <!--    a) slot hero full-width        -->
-    <!--    b) slot par défaut centré      -->
-    <!-- ====================================== -->
-    <main class="flex-1 pt-16">
-      <!-- a) HERO en full-width -->
+    <!-- MAIN avec Hero full-width -->
+    <main class="pt-16">
+      <!-- Hero full-width -->
       <slot name="hero" />
-
-      <!-- b) CONTENU centré dans container -->
-      <div class="container mx-auto px-4">
+      
+      <!-- Contenu centré pour les autres sections -->
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <slot />
       </div>
     </main>
-    <!-- ====================================== -->
-    <!-- 3) FOOTER : en bas de page -->
-    <!-- ====================================== -->
-    <footer>
+
+    <!-- FOOTER -->
+    <footer class="mt-auto">
       <Footer />
     </footer>
-  </body>
+  </div>
+</body>
 </html>
 
+<!-- CSS minimal - seulement pour les spécificités impossibles avec Tailwind -->
 <style>
-  /* reset minimal */
-  html,
-  body {
-    margin: 0;
-    width: 100%;
-    height: 100%;
-  }
+  /* Tailwind CSS v4 gère automatiquement le reset via @import "tailwindcss" */
+  /* Plus besoin de reset manual ni de CSS custom pour le layout */
 </style>

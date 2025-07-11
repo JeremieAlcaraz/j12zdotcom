@@ -1,3 +1,4 @@
+
 ---
 import Halo from '@components/ui/Halo.astro';
 import ImageMod from '@components/common/ImageMod/ImageMod.astro';
@@ -11,9 +12,7 @@ interface Homepage {
   features: Feature[];
 }
 
-
-
-// 🔍 DEBUG: Voir ce qui se passe
+// Récupération des données
 const homepage = await getEntry('homepage', 'index');
 console.log('Homepage result:', homepage);
 
@@ -21,19 +20,18 @@ if (!homepage) {
   throw new Error('Homepage entry not found! Check src/content/homepage/index.md');
 }
 
-
 const { banner } = homepage.data as Homepage;
 ---
 
-<div class="hero min-h-screen flex items-center justify-center">
-  <div
-    class="flex flex-col lg:flex-row items-center max-w-full gap-12 px-4 transform -translate-y-16 lg:-translate-y-20"
-  >
+<!-- Hero optimisé avec Tailwind CSS v4 + DaisyUI v5 -->
+<section class="min-h-[max(85vh,500px)] flex items-center justify-center px-4 py-8 lg:px-8 lg:py-16">
+  <div class="grid grid-cols-1 lg:grid-cols-[2fr_3fr] gap-8 lg:gap-16 items-stretch max-w-7xl w-full min-h-[400px]">
+    
     <!-- COLONNE IMAGE avec Halo -->
-    <div class="relative w-96 h-96 flex-shrink-0">
-      <Halo />
-      {
-        banner.image && (
+    <div class="flex justify-center items-center p-4 lg:p-8 order-1 lg:order-1">
+      <div class="relative w-64 h-64 md:w-80 md:h-80 lg:w-96 lg:h-96 flex-shrink-0">
+        <Halo />
+        {banner.image && (
           <div class="absolute inset-0 flex items-center justify-center z-10">
             <div class="w-full h-full rounded-full overflow-hidden shadow-2xl">
               <ImageMod
@@ -46,26 +44,45 @@ const { banner } = homepage.data as Homepage;
               />
             </div>
           </div>
-        )
-      }
+        )}
+      </div>
     </div>
 
     <!-- COLONNE TEXTE -->
-    <div class="text-center lg:text-left max-w-2xl">
-      <h1 set:html={markdownify(banner.title)} class="text-5xl font-bold mb-4" />
-      <p set:html={markdownify(banner.content)} class="py-6 text-lg" />
-      {
-        banner.button.enable && (
-          <a
-            href={banner.button.link}
-            target={banner.button.link.startsWith('http') ? '_blank' : '_self'}
-            rel="noopener"
-            class="btn btn-primary btn-lg"
-          >
-            {banner.button.label}
-          </a>
-        )
-      }
+    <div class="flex items-center justify-center lg:justify-start p-4 lg:p-8 order-2 lg:order-2">
+      <div class="flex flex-col gap-6 lg:gap-8 w-full h-full justify-center text-center lg:text-left pr-0 lg:pr-4">
+        <h1 
+          set:html={markdownify(banner.title)} 
+          class="text-4xl md:text-5xl lg:text-6xl font-bold leading-tight m-0" 
+        />
+        <p 
+          set:html={markdownify(banner.content)} 
+          class="text-base md:text-lg lg:text-xl leading-relaxed m-0" 
+        />
+        
+        {banner.button.enable && (
+          <div class="flex justify-center lg:justify-start mt-4">
+            <a
+              href={banner.button.link}
+              target={banner.button.link.startsWith('http') ? '_blank' : '_self'}
+              rel="noopener"
+              class="btn btn-primary btn-lg"
+            >
+              {banner.button.label}
+            </a>
+          </div>
+        )}
+      </div>
     </div>
   </div>
-</div>
+</section>
+
+<style>
+  /* CSS minimal - seulement pour les spécificités impossibles avec Tailwind */
+  @media (max-width: 1023px) {
+    .grid-cols-\[2fr_3fr\] {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>
+
