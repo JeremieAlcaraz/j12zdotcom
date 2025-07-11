@@ -78,7 +78,7 @@ export const siteConfig: SiteConfig = {
     stickyHeader: true,
     themeSwitcher: true,
     defaultTheme: 'system',
-    pagination: 4,
+    pagination: 3,
     summaryLength: 200,
     blogFolder: 'blog',
   },

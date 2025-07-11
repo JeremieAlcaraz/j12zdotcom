@@ -2,6 +2,7 @@
 import BaseLayout from '@/layouts/BaseLayout.astro';
 import BlogCard from '@components/blog/BlogCard.astro';
 import Pagination from '@components/blog/Pagination.astro';
+import config from "@/config/siteConfig.ts";
 import PostSidebar from '@components/blog/PostSidebar.astro';
 import { getCollection } from 'astro:content';
 import type { CollectionEntry } from "astro:content";
@@ -15,9 +16,8 @@ const postIndex = (await getEntry(
 const posts = await getCollection('blog');
 const allCategories = posts.flatMap((post) => post.data.categories);
 const categories = [...new Set(allCategories)];
-const postsPerPage = 5;
-const totalPages = Math.ceil(posts.length / postsPerPage);
-const currentPosts = posts.slice(0, postsPerPage);
+const totalPages = Math.ceil(posts.length / config.settings.pagination);
+const currentPosts = posts.slice(0, config.settings.pagination);
 ---
 
 <BaseLayout title="Blog">
@@ -38,7 +38,7 @@ const currentPosts = posts.slice(0, postsPerPage);
               ))
             }
           </div>
-          
+          <!-- TODO: Add a true Pagination --> 
           <!-- Pagination -->
           <div class="flex justify-center mt-12">
             <Pagination
