@@ -10,6 +10,7 @@ import { getAllTaxonomy, getTaxonomy } from "@/utils/taxonomyParser.astro";
 import { sortByDate } from "@/utils/sortFunctions";
 import type { CollectionEntry } from "astro:content";
 import { getEntry } from "astro:content";
+import Hero from '@components/ui/Hero.astro';
 
 const BLOG_FOLDER = "blog";
 const postIndex = (await getEntry(
@@ -33,6 +34,13 @@ console.log('Config object:', config);
 ---
 
 <BaseLayout title="elements">
+  <!-- Section Hero -->
+  <section class="mt-16 mb-12">
+    <h2 class="text-3xl font-bold text-center mb-8">Hero Section</h2>
+    <div class="flex justify-center">
+      <Hero/>
+    </div>
+  </section>
   <!-- Section Blog Cards -->
   <section class="mt-16 mb-12">
     <h2 class="text-3xl font-bold text-center mb-8">Les cartes de blog</h2>
