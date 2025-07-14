@@ -8,14 +8,14 @@ export async function getStaticPaths() {
   const posts = await getCollection('blog');
   const paths = posts.map((post) => ({
     params: {
-      slug: post.slug,
+      number: post.number,
     },
   }));
   return paths;
 }
 
-const { slug } = Astro.params;
-const post = await getEntry('blog', slug!);
+const { number } = Astro.params;
+const post = await getEntry('blog', number!);
 
 if (!post) {
   return Astro.redirect('/404');
@@ -27,7 +27,7 @@ const similarPosts = posts
   .filter(
     (p) =>
       p.data.categories.some((category) => post.data.categories.includes(category)) &&
-      p.slug !== post.slug
+      p.number !== post.number
   )
   .slice(0, 3);
 ---
