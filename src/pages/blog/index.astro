@@ -5,6 +5,7 @@ import Pagination from '@components/blog/Pagination.astro';
 import config from "@/config/siteConfig.ts";
 import { sortByDate } from '@utils/sortFunctions';
 import PostSidebar from '@components/blog/PostSidebar.astro';
+import { getSinglePage } from "@/utils/contentParser.astro";
 import { getCollection } from 'astro:content';
 import type { CollectionEntry } from "astro:content";
 import { getEntry } from "astro:content";
@@ -14,10 +15,10 @@ const postIndex = (await getEntry(
   BLOG_FOLDER,
   "-index"
 )) as CollectionEntry<"blog">;
-const posts = await getCollection('blog');
-const allCategories = posts.flatMap((post) => post.data.categories);
-const sortedPosts = sortByDate(posts);
-const categories = [...new Set(allCategories)];
+const posts = await getSinglePage(BLOG_FOLDER);
+// const allCategories = posts.flatMap((post) => post.data.categories);
+// const sortedPosts = sortByDate(posts);
+// const categories = [...new Set(allCategories)];
 const totalPages = Math.ceil(posts.length / config.settings.pagination);
 const currentPosts = posts.slice(0, config.settings.pagination);
 ---
