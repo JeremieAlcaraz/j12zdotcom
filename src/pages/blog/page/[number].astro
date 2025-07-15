@@ -10,14 +10,14 @@ import { getCollection } from 'astro:content';
 import type { CollectionEntry } from "astro:content";
 import { getEntry } from "astro:content";
 
-const BLOG_FOLDER = "blog";
+const COLLECTION_FOLDER = "blog";
 const { number } = Astro.params;
 
 const postIndex = (await getEntry(
-  BLOG_FOLDER,
+  COLLECTION_FOLDER,
   "-index"
 )) as CollectionEntry<"blog">;
-const posts = await getSinglePage(BLOG_FOLDER);
+const posts = await getSinglePage(COLLECTION_FOLDER);
 // const allCategories = posts.flatMap((post) => post.data.categories);
 const sortedPosts = sortByDate(posts);
 // const categories = [...new Set(allCategories)];
@@ -31,8 +31,8 @@ const indexOfFirstPost = indexOfLastPost - config.settings.pagination;
 const currentPosts = sortedPosts.slice(indexOfFirstPost, indexOfLastPost);
 
 export async function getStaticPaths() {
-  const BLOG_FOLDER = "blog";
-  const posts = await getSinglePage(BLOG_FOLDER);
+  const COLLECTION_FOLDER = "blog";
+  const posts = await getSinglePage(COLLECTION_FOLDER);
   const totalPages = Math.ceil(posts.length / config.settings.pagination);
   const paths = [];
 
@@ -69,7 +69,7 @@ export async function getStaticPaths() {
           <!-- Pagination -->
           <div class="flex justify-center mt-12">
             <Pagination
-              section={BLOG_FOLDER}
+              section={COLLECTION_FOLDER}
               currentPage={currentPage}
               totalPages={totalPages}
             />
