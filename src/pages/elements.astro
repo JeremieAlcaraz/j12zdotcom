@@ -26,11 +26,10 @@ const totalPages: number = Math.ceil(posts.length / config.settings.pagination);
 const currentPosts = sortedPosts.slice(0, config.settings.pagination);
 const currentPage = 1; // Pour l'exemple, on peut aussi récupérer depuis l'URL
 
-// Debug - à supprimer après
-console.log('Posts length:', posts.length);
-console.log('Pagination setting:', config.settings.pagination);
-console.log('Total pages:', totalPages);
-console.log('Config object:', config);
+
+
+
+
 ---
 
 <BaseLayout title="elements">
@@ -66,5 +65,5 @@ console.log('Config object:', config);
         currentPage={currentPage}
       />
     </div>
-  </section>
+ </section>
 </BaseLayout>
