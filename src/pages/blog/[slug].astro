@@ -1,42 +1,42 @@
 ---
-import BaseLayout from '@/layouts/BaseLayout.astro';
-import PostSingle from '@components/blog/PostSingle.astro';
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import PostSingle from "@/layouts/PostSingle.astro";
 import { getCollection } from 'astro:content';
-import { getEntry } from 'astro:content';
+import { getSinglePage } from "@/utils/contentParser.astro";
+
 
 export async function getStaticPaths() {
-  const posts = await getCollection('blog');
+  const BLOG_FOLDER = "blog";
+  const posts = await getSinglePage(BLOG_FOLDER);
+  
+  // console.log('Posts found:', posts.length);
+  // console.log('Sample post:', posts[0]);
+  
   const paths = posts.map((post) => ({
     params: {
-      number: post.number,
+      slug: post.id,
     },
+    props: { post },
   }));
+  
   return paths;
 }
 
-const { number } = Astro.params;
-const post = await getEntry('blog', number!);
 
-if (!post) {
-  return Astro.redirect('/404');
-}
-
-const posts = await getCollection('blog');
-
-const similarPosts = posts
-  .filter(
-    (p) =>
-      p.data.categories.some((category) => post.data.categories.includes(category)) &&
-      p.number !== post.number
-  )
-  .slice(0, 3);
+const { post } = Astro.props;
+console.log('=== DEBUG [slug].astro ===');
+console.log('Post exists:', !!post);
+console.log('Post data:', post?.data);
+console.log('Post id:', post?.id);
+// console.log('Post slug:', post?.slug);
+const { title, meta_title, description, image } = post.data;
 ---
 
 <BaseLayout
-  title={post.data.title}
-  meta_title={post.data.meta_title}
-  description={post.data.description}
-  image={post.data.image}
+  title={title}
+  meta_title={meta_title}
+  description={description}
+  image={image}
 >
-  <PostSingle post={post} similarPosts={similarPosts} />
+  <PostSingle post={post} />
 </BaseLayout>

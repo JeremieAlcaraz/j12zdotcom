@@ -1,5 +1,5 @@
 ---
-title: "Découvrez les nouveautés de JavaScript ES2025"
+title: "Découvrez les nouveautés de JCCJavaScript ES2025"
 meta_title: "Tout sur JavaScript ES2025"
 description: "Un aperçu complet des nouvelles fonctionnalités de JavaScript ES2025."
 date: 2025-06-15
