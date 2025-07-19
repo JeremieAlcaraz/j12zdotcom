@@ -3,7 +3,7 @@ import '@styles/index.css';
 import { Header } from '@components/common/index';
 import { Footer } from '@components/common/index';
 import TwSizeIndicator  from '@components/ui/TwSizeIndicator.astro';
-import { ViewTransitions } from 'astro:transitions';
+import { ClientRouter } from 'astro:transitions';
 const { title = 'Mon Site' } = Astro.props;
 ---
 
@@ -14,7 +14,7 @@ const { title = 'Mon Site' } = Astro.props;
   <meta name="viewport" content="width=device-width" />
   <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
   <title>{title}</title>
-  <ViewTransitions />
+  <ClientRouter />
   
   <script is:inline>
     function initTheme() {
