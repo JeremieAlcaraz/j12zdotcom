@@ -2,7 +2,7 @@
 import '@styles/index.css';
 import { Header } from '@components/common/index';
 import { Footer } from '@components/common/index';
-
+import TwSizeIndicator  from '@components/ui/TwSizeIndicator.astro';
 const { title = 'Mon Site' } = Astro.props;
 ---
 
@@ -32,6 +32,7 @@ const { title = 'Mon Site' } = Astro.props;
   <!-- Layout principal avec Grid Tailwind -->
   <div class="min-h-screen grid grid-rows-[auto_1fr_auto]">
     
+    <TwSizeIndicator />
     <!-- HEADER fixe -->
     <header class="fixed top-0 left-0 right-0 z-50 bg-transparent">
       <Header />
@@ -40,8 +41,7 @@ const { title = 'Mon Site' } = Astro.props;
     <!-- MAIN avec Hero full-width -->
     <main class="pt-16">
       <!-- Hero full-width -->
-      <slot name="hero" />
-      
+      <slot name="hero" />  
       <!-- Contenu centré pour les autres sections -->
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <slot />
