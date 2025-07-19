@@ -3,6 +3,7 @@ import '@styles/index.css';
 import { Header } from '@components/common/index';
 import { Footer } from '@components/common/index';
 import TwSizeIndicator  from '@components/ui/TwSizeIndicator.astro';
+import { ViewTransitions } from 'astro:transitions';
 const { title = 'Mon Site' } = Astro.props;
 ---
 
@@ -13,9 +14,10 @@ const { title = 'Mon Site' } = Astro.props;
   <meta name="viewport" content="width=device-width" />
   <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
   <title>{title}</title>
+  <ViewTransitions />
   
   <script is:inline>
-    (function () {
+    function initTheme() {
       const THEME_STORAGE_KEY = 'theme';
       const savedTheme = localStorage.getItem(THEME_STORAGE_KEY);
       const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
@@ -24,7 +26,13 @@ const { title = 'Mon Site' } = Astro.props;
         'data-theme',
         initialThemeIsDark ? 'dark' : 'douceurLight'
       );
-    })();
+    }
+
+    // Initialisation au chargement
+    initTheme();
+
+    // Réinitialisation après chaque navigation ViewTransition
+    document.addEventListener('astro:after-swap', initTheme);
   </script>
 </head>
 
@@ -60,4 +68,29 @@ const { title = 'Mon Site' } = Astro.props;
 <style>
   /* Tailwind CSS v4 gère automatiquement le reset via @import "tailwindcss" */
   /* Plus besoin de reset manual ni de CSS custom pour le layout */
+  
+  /* Transition douce et fluide pour ViewTransitions */
+  ::view-transition-old(root),
+  ::view-transition-new(root) {
+    animation-duration: 0.6s;
+    animation-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  }
+  
+  ::view-transition-old(root) {
+    animation-name: fade-out-smooth;
+  }
+  
+  ::view-transition-new(root) {
+    animation-name: fade-in-smooth;
+  }
+  
+  @keyframes fade-out-smooth {
+    0% { opacity: 1; }
+    100% { opacity: 0; }
+  }
+  
+  @keyframes fade-in-smooth {
+    0% { opacity: 0; }
+    100% { opacity: 1; }
+  }
 </style>
