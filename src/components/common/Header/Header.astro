@@ -292,12 +292,18 @@ const { logo = defaultLogo, links = defaultLinks } = Astro.props as NavbarProps;
   // INITIALISATION AU CHARGEMENT
   // ==========================================
 
-  // CONFIGURE l'affichage des icônes selon le thème actuel
-  setupIcons();
-
   // ATTACHE l'événement de clic au bouton de changement de thème
   // ?. = optional chaining (évite l'erreur si l'élément n'existe pas)
-  document.getElementById('theme-toggle')?.addEventListener('click', toggleTheme);
+  function initThemeButton() {
+    setupIcons();
+    document.getElementById('theme-toggle')?.addEventListener('click', toggleTheme);
+  }
+  
+  // Initialisation au chargement
+  initThemeButton();
+  
+  // Réinitialisation après chaque navigation ViewTransition
+  document.addEventListener('astro:after-swap', initThemeButton);
 </script>
 
 
