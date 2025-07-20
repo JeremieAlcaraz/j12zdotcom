@@ -261,6 +261,18 @@ const { logo = defaultLogo, links = defaultLinks } = Astro.props as NavbarProps;
       Math.max(y, window.innerHeight - y) // Distance verticale max
     );
 
+    // DÉSACTIVE temporairement les animations ClientRouter via JavaScript
+    const style = document.createElement('style');
+    style.id = 'temp-disable-transitions';
+    style.textContent = `
+      ::view-transition-old(root),
+      ::view-transition-new(root) {
+        animation: none !important;
+        mix-blend-mode: normal !important;
+      }
+    `;
+    document.head.appendChild(style);
+
     // DÉMARRE la transition avec l'API View Transitions
     const transition = document.startViewTransition(() => {
       const newThemeIsDark = !isDark(); // Inverse le thème
@@ -275,7 +287,7 @@ const { logo = defaultLogo, links = defaultLinks } = Astro.props as NavbarProps;
       const clipPath = [`circle(0px at ${x}px ${y}px)`, `circle(${endRadius}px at ${x}px ${y}px)`];
 
       // LANCE l'animation sur la nouvelle vue qui apparaît
-      document.documentElement.animate(
+      const animation = document.documentElement.animate(
         {
           clipPath: clipPath, // Animation du cercle qui s'agrandit
         },
@@ -285,6 +297,13 @@ const { logo = defaultLogo, links = defaultLinks } = Astro.props as NavbarProps;
           pseudoElement: '::view-transition-new(root)', // Cible la nouvelle vue
         }
       );
+
+      // RÉACTIVE les transitions ClientRouter avec un petit délai pour éviter le flash
+      animation.addEventListener('finish', () => {
+        setTimeout(() => {
+          document.getElementById('temp-disable-transitions')?.remove();
+        }, 50); // Délai de 50ms pour stabiliser
+      });
     });
   };
 
@@ -312,15 +331,6 @@ const { logo = defaultLogo, links = defaultLinks } = Astro.props as NavbarProps;
      ========================================== -->
 <!-- is:global = applique les styles globalement (pas seulement à ce composant) -->
 <style is:global>
-  /* DÉSACTIVATION DES ANIMATIONS DE TRANSITION PAR DÉFAUT */
-  /* Ces règles CSS ciblent les pseudo-éléments de l'API View Transitions */
-  /* ::view-transition-old(root) = ancienne vue lors de la transition */
-  /* ::view-transition-new(root) = nouvelle vue lors de la transition */
-  ::view-transition-old(root),
-  ::view-transition-new(root) {
-    animation: none; /* Supprime l'animation par défaut */
-    mix-blend-mode: normal; /* Mode de mélange normal (pas de fusion de couleurs) */
-  }
 
      /* --- FIX GAP DES DROPDOWNS NAVBAR -------------------------- */
   /* On enlève 1 px au margin-top auto-généré par DaisyUI        */
