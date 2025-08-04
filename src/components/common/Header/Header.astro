@@ -1,17 +1,7 @@
 ---
-// ==========================================
-// SECTION FRONTMATTER (CÔTÉ SERVEUR)
-// ==========================================
-// Cette section s'exécute côté serveur lors du build
-// Elle permet d'importer des modules et de traiter les props
-
-// ✅ IMPORTS - Importation des types et configurations
 import type { NavbarProps } from '@components/common/index';
 import { defaultLogo, defaultLinks } from '@config/navigation'; // Valeurs par défaut pour logo et liens
-
 // ✅ DESTRUCTURATION DES PROPS avec valeurs par défaut
-// Astro.props contient toutes les propriétés passées au composant
-// On utilise la destructuration avec des valeurs par défaut si rien n'est fourni
 const { logo = defaultLogo, links = defaultLinks } = Astro.props as NavbarProps;
 
 
@@ -25,22 +15,15 @@ const { logo = defaultLogo, links = defaultLinks } = Astro.props as NavbarProps;
   <!-- PARTIE GAUCHE DE LA NAVBAR (logo + nom) -->
   <div class="navbar-start">
     <!-- LIEN LOGO - Retour à l'accueil -->
-    <!-- btn-ghost = bouton transparent, text-xl = taille de texte, normal-case = pas de transformation de casse -->
     <a href="/" class="btn btn-ghost text-xl normal-case">
       <!-- IMAGE DU LOGO -->
-      <!-- {logo} = variable JavaScript injectée dans l'HTML -->
       <img src={logo} alt="Logo" class="h-8 w-8" />
-      <!-- TEXTE DU LOGO -->
-      <!-- hidden sm:inline = caché sur mobile, visible sur écrans >= sm, ml-2 = marge gauche -->
-      <span class="hidden sm:inline ml-2">Jérémie Alcaraz</span>
     </a>
   </div>
 
     <!-- PARTIE CENTRALE DE LA NAVBAR (navigation principale) -->
-  <!-- hidden lg:flex = caché sur mobile/tablet, visible sur écrans ≥ lg -->
   <div class="navbar-center hidden lg:flex overflow-visible">
     <!-- LISTE DE NAVIGATION HORIZONTALE -->
-    <!-- overflow-visible pour que le dropdown ne soit pas coupé -->
     <ul class="menu menu-horizontal px-1 overflow-visible">
       {
         /* BOUCLE JAVASCRIPT pour générer les liens de navigation */
