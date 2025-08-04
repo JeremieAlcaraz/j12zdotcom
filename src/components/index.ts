@@ -1,1 +1,2 @@
-// Exports centralisés
+export * from './common';
+export * from './ui/icons';
