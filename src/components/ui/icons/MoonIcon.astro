@@ -1,0 +1,19 @@
+---
+/// <reference types="astro/client" />
+import Raw from '@/assets/icons/moon-icon.svg';
+
+export interface Props extends astroHTML.JSX.SVGAttributes {
+  class?: string;
+  title?: string;
+}
+
+const { class: className = 'w-5 h-5 fill-current', title, ...rest } = Astro.props;
+---
+
+<Raw
+  class={className}
+  aria-hidden={title ? undefined : 'true'}
+  role="img"
+  {...(title && { title })}
+  {...rest}
+/>
