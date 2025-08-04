@@ -8,10 +8,10 @@
 -------------------------------------------------------------------- */
 
 import type { NavLink } from '@components/common/Header/Header.types';
-import astroLogo from '@assets/astro.svg';
+import logo from '@assets/logo.svg';
 
 /** Logo par défaut – peut être surchargé via la prop `logo` de <Navbar /> */
-export const defaultLogo: string = astroLogo.src;
+export const defaultLogo: string = logo.src;
 
 /** Liens par défaut – peuvent être overridés via la prop `links` */
 export const defaultLinks: NavLink[] = [
