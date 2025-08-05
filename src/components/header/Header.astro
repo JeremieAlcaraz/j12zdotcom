@@ -29,7 +29,8 @@ const { logo = defaultLogo, links = defaultLinks } = Astro.props as NavbarProps;
     <a href="/" class="btn btn-ghost text-xl normal-case">
       <!-- IMAGE DU LOGO -->
       <!-- {logo} = variable JavaScript injectée dans l'HTML -->
-      <img src={logo} alt="Logo" class="h-8 w-8" />
+      <!-- h-12 pour augmenter la hauteur, w-auto pour conserver le ratio -->
+      <img src={logo} alt="Logo" class="h-12 w-auto" />
       <!-- TEXTE DU LOGO -->
       <!-- hidden sm:inline = caché sur mobile, visible sur écrans >= sm, ml-2 = marge gauche -->
       <span class="hidden sm:inline ml-2">Jérémie Alcaraz</span>
