@@ -7,11 +7,12 @@ export interface Props extends astroHTML.JSX.SVGAttributes {
   title?: string;
 }
 
-const { class: className = 'w-5 h-5 fill-current', title, ...rest } = Astro.props;
+const { class: className = '', title, ...rest } = Astro.props;
+const classes = `w-4 h-4 fill-current ${className}`.trim();
 ---
 
 <Raw
-  class={className}
+  class={classes}
   aria-hidden={title ? undefined : 'true'}
   role="img"
   {...(title && { title })}

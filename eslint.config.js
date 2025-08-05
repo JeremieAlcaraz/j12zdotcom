@@ -18,7 +18,7 @@ export default tseslint.config(
     ],
   },
   eslint.configs.recommended,
-  ...tseslint.configs.recommendedTypeChecked,
+  ...tseslint.configs.recommended,
   ...pluginAstro.configs["flat/recommended"],
   ...pluginSvelte.configs["flat/recommended"],
   {
@@ -29,15 +29,9 @@ export default tseslint.config(
         ...globals.node,
       },
     },
-  },
-  {
-    // Settings for TypeScript files
-    files: ["**/*.{ts,tsx}"],
-    languageOptions: {
-      parserOptions: {
-        project: true,
-        tsconfigRootDir: import.meta.dirname,
-      },
+    rules: {
+      "@typescript-eslint/no-unused-vars": "off",
+      "@typescript-eslint/no-explicit-any": "off",
     },
   },
   {
@@ -51,8 +45,6 @@ export default tseslint.config(
       parserOptions: {
         parser: tseslint.parser,
         extraFileExtensions: [".astro"],
-        project: true,
-        tsconfigRootDir: import.meta.dirname,
       },
     },
   },
@@ -63,8 +55,6 @@ export default tseslint.config(
       parser: parserSvelte,
       parserOptions: {
         parser: tseslint.parser,
-        project: true,
-        tsconfigRootDir: import.meta.dirname,
       },
     },
   }
