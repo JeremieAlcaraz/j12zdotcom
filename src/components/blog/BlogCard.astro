@@ -1,20 +1,20 @@
 ---
-import config from "@/config/siteConfig.ts";
-import dateFormat from "@/utils/dateFormat";
-import { humanize, plainify, slugify, smartTruncate } from "@/utils/textConverter";
-import { FaRegFolder, FaRegUserCircle } from "react-icons/fa";
-import ImageMod from "@/components/common/ImageMod/ImageMod.astro";
+import config from '@/config/siteConfig.ts';
+import dateFormat from '@/utils/dateFormat';
+import { humanize, plainify, slugify, smartTruncate } from '@/utils/textConverter';
+import { FaRegFolder, FaRegUserCircle } from 'react-icons/fa';
+import ImageMod from '@/components/common/ImageMod/ImageMod.astro';
 
-const {
-  summaryLength,
-  blogFolder,
-}: { summaryLength: number; blogFolder: string } = config.settings;
+const { summaryLength, blogFolder }: { summaryLength: number; blogFolder: string } =
+  config.settings;
 
 const { data } = Astro.props;
 
 // Vérification que data existe et qu'il contient bien une propriété data
 if (!data || !data.data) {
-  throw new Error("BlogCard: Les données du blog sont manquantes. Vérifiez que vous passez bien une prop 'data' au composant.");
+  throw new Error(
+    "BlogCard: Les données du blog sont manquantes. Vérifiez que vous passez bien une prop 'data' au composant."
+  );
 }
 
 const { title, image, date, author, categories } = data.data;
@@ -23,18 +23,20 @@ const { title, image, date, author, categories } = data.data;
 <!-- Carte responsive avec hauteur uniforme -->
 <div class="card bg-base-100 shadow-sm h-full flex flex-col">
   <figure class="flex-shrink-0">
-    {image && (
-      <ImageMod
-        class="w-full h-48 object-cover"
-        src={image}
-        alt={title}
-        width={445}
-        height={230}
-        format="webp"
-      />
-    )}
+    {
+      image && (
+        <ImageMod
+          class="w-full h-48 object-cover"
+          src={image}
+          alt={title}
+          width={445}
+          height={230}
+          format="webp"
+        />
+      )
+    }
   </figure>
-  
+
   <!-- Corps de la carte avec flex-grow pour prendre l'espace restant -->
   <div class="card-body flex-grow flex flex-col">
     <!-- Titre avec lien -->
@@ -43,7 +45,7 @@ const { title, image, date, author, categories } = data.data;
         {title}
       </a>
     </h2>
-    
+
     <!-- Métadonnées -->
     <div class="flex flex-wrap items-center gap-3 text-sm opacity-70 mb-3">
       <!-- Auteur -->
@@ -53,28 +55,27 @@ const { title, image, date, author, categories } = data.data;
           {humanize(author)}
         </a>
       </div>
-      
+
       <!-- Date -->
-      {date && (
-        <time datetime={date} class="text-xs">
-          {dateFormat(date)}
-        </time>
-      )}
+      {
+        date && (
+          <time datetime={date} class="text-xs">
+            {dateFormat(date)}
+          </time>
+        )
+      }
     </div>
-    
+
     <!-- Résumé - prend l'espace restant -->
     <div class="flex-grow">
       <p class="text-base-content/70 text-sm line-clamp-3 leading-relaxed">
-        {smartTruncate(data.body || "", summaryLength || 150)}
+        {smartTruncate(data.body || '', summaryLength || 150)}
       </p>
     </div>
-    
+
     <!-- Actions - toujours en bas -->
     <div class="card-actions justify-end mt-4 pt-3">
-      <a href={`/${blogFolder}/${data.id}`} class="btn btn-primary btn-sm">
-
-        Lire la suite
-      </a>
+      <a href={`/${blogFolder}/${data.id}`} class="btn btn-primary btn-sm"> Lire la suite </a>
     </div>
   </div>
 </div>

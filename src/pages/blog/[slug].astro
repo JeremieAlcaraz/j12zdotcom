@@ -1,27 +1,25 @@
 ---
-import BaseLayout from "@/layouts/BaseLayout.astro";
-import PostSingle from "@/layouts/PostSingle.astro";
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import PostSingle from '@/layouts/PostSingle.astro';
 import { getCollection } from 'astro:content';
-import { getSinglePage } from "@/utils/contentParser.astro";
-
+import { getSinglePage } from '@/utils/contentParser.astro';
 
 export async function getStaticPaths() {
-  const BLOG_FOLDER = "blog";
+  const BLOG_FOLDER = 'blog';
   const posts = await getSinglePage(BLOG_FOLDER);
-  
+
   // console.log('Posts found:', posts.length);
   // console.log('Sample post:', posts[0]);
-  
+
   const paths = posts.map((post) => ({
     params: {
       slug: post.id,
     },
     props: { post },
   }));
-  
+
   return paths;
 }
-
 
 const { post } = Astro.props;
 console.log('=== DEBUG [slug].astro ===');
@@ -32,11 +30,6 @@ console.log('Post id:', post?.id);
 const { title, meta_title, description, image } = post.data;
 ---
 
-<BaseLayout
-  title={title}
-  meta_title={meta_title}
-  description={description}
-  image={image}
->
+<BaseLayout title={title} meta_title={meta_title} description={description} image={image}>
   <PostSingle post={post} />
 </BaseLayout>

@@ -1,12 +1,12 @@
 ---
-title: "Optimiser les performances de votre site Astro"
-meta_title: "Performances Astro"
-description: "Techniques et astuces pour un site Astro ultra-rapide."
+title: 'Optimiser les performances de votre site Astro'
+meta_title: 'Performances Astro'
+description: 'Techniques et astuces pour un site Astro ultra-rapide.'
 date: 2025-05-20
-image: "/img_opt/image-placeholder.png"
-author: "Alexandre Martin"
-categories: ["Astro", "Performance"]
-tags: ["Web Vitals", "Optimisation"]
+image: '/img_opt/image-placeholder.png'
+author: 'Alexandre Martin'
+categories: ['Astro', 'Performance']
+tags: ['Web Vitals', 'Optimisation']
 draft: false
 ---
 
@@ -14,7 +14,7 @@ draft: false
 
 Astro est déjà reconnu pour ses **performances exceptionnelles** grâce à son architecture unique et son approche "islands". Cependant, même avec un framework performant, il existe toujours des moyens d'optimiser davantage votre site pour offrir une expérience utilisateur incomparable.
 
-> **💡 Le saviez-vous ?** 
+> **💡 Le saviez-vous ?**
 > Astro génère par défaut des sites avec **0 JavaScript côté client**, sauf si vous en avez explicitement besoin !
 
 Dans ce guide complet, nous explorerons les techniques avancées pour maximiser les performances de votre site Astro et atteindre des scores parfaits sur les Core Web Vitals.
@@ -29,14 +29,14 @@ graph TD
     B --> C[Static HTML]
     B --> D[Optimized Assets]
     B --> E[Island Components]
-    
+
     C --> F[CDN]
     D --> F
     E --> G[Hydration on Demand]
-    
+
     F --> H[Browser]
     G --> H
-    
+
     H --> I[Ultra-fast Load Time]
 ```
 
@@ -47,11 +47,10 @@ graph TD
 // components/InteractiveWidget.astro
 // Ce composant sera hydraté côté client
 ---
+
 <div class="widget">
   <button id="toggle">Cliquez-moi</button>
-  <div id="content" class="hidden">
-    Contenu dynamique !
-  </div>
+  <div id="content" class="hidden">Contenu dynamique !</div>
 </div>
 
 <script>
@@ -94,14 +93,16 @@ import { defineConfig } from 'astro/config';
 export default defineConfig({
   image: {
     domains: ['images.unsplash.com', 'cdn.example.com'],
-    remotePatterns: [{
-      protocol: 'https',
-      hostname: '**.amazonaws.com',
-    }],
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: '**.amazonaws.com',
+      },
+    ],
   },
   experimental: {
-    assets: true
-  }
+    assets: true,
+  },
 });
 ```
 
@@ -115,7 +116,7 @@ export default defineConfig({
 ```astro
 ---
 // components/LazyComponent.astro
-const { threshold = 0.1, rootMargin = "100px" } = Astro.props;
+const { threshold = 0.1, rootMargin = '100px' } = Astro.props;
 ---
 
 <div class="lazy-container" data-threshold={threshold} data-root-margin={rootMargin}>
@@ -126,11 +127,11 @@ const { threshold = 0.1, rootMargin = "100px" } = Astro.props;
   const observerOptions = {
     root: null,
     rootMargin: document.currentScript?.dataset.rootMargin || '100px',
-    threshold: parseFloat(document.currentScript?.dataset.threshold || '0.1')
+    threshold: parseFloat(document.currentScript?.dataset.threshold || '0.1'),
   };
 
   const observer = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
+    entries.forEach((entry) => {
       if (entry.isIntersecting) {
         // Charger le contenu
         entry.target.classList.add('loaded');
@@ -139,7 +140,7 @@ const { threshold = 0.1, rootMargin = "100px" } = Astro.props;
     });
   }, observerOptions);
 
-  document.querySelectorAll('.lazy-container').forEach(el => {
+  document.querySelectorAll('.lazy-container').forEach((el) => {
     observer.observe(el);
   });
 </script>
@@ -151,17 +152,18 @@ const { threshold = 0.1, rootMargin = "100px" } = Astro.props;
 ---
 // layouts/BaseLayout.astro
 ---
+
 <head>
   <!-- Précharger les ressources critiques -->
-  <link rel="preload" href="/fonts/inter-var.woff2" as="font" type="font/woff2" crossorigin>
-  <link rel="preload" href="/css/critical.css" as="style">
-  
+  <link rel="preload" href="/fonts/inter-var.woff2" as="font" type="font/woff2" crossorigin />
+  <link rel="preload" href="/css/critical.css" as="style" />
+
   <!-- DNS prefetch pour les domaines externes -->
-  <link rel="dns-prefetch" href="//fonts.googleapis.com">
-  <link rel="dns-prefetch" href="//analytics.google.com">
-  
+  <link rel="dns-prefetch" href="//fonts.googleapis.com" />
+  <link rel="dns-prefetch" href="//analytics.google.com" />
+
   <!-- Preconnect pour les ressources critiques -->
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 </head>
 ```
 
@@ -194,12 +196,12 @@ npm run build -- --analyze
     // Import dynamique pour réduire le bundle initial
     const { DashboardWidget } = await import('../components/DashboardWidget.js');
     const { ChartLibrary } = await import('../lib/charts.js');
-    
+
     const container = document.getElementById('dashboard-container');
     if (container) {
       // Initialiser le dashboard
       new DashboardWidget(container, {
-        charts: ChartLibrary
+        charts: ChartLibrary,
       });
     }
   }
@@ -218,23 +220,29 @@ npm run build -- --analyze
 ---
 // layouts/BaseLayout.astro
 ---
+
 <head>
   <style>
     /* CSS critique inline */
-    body { 
-      font-family: system-ui, sans-serif; 
-      line-height: 1.6; 
+    body {
+      font-family: system-ui, sans-serif;
+      line-height: 1.6;
     }
-    .hero { 
-      height: 100vh; 
-      display: flex; 
-      align-items: center; 
+    .hero {
+      height: 100vh;
+      display: flex;
+      align-items: center;
     }
   </style>
-  
+
   <!-- CSS non-critique chargé de manière asynchrone -->
-  <link rel="preload" href="/css/main.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
-  <noscript><link rel="stylesheet" href="/css/main.css"></noscript>
+  <link
+    rel="preload"
+    href="/css/main.css"
+    as="style"
+    onload="this.onload=null;this.rel='stylesheet'"
+  />
+  <noscript><link rel="stylesheet" href="/css/main.css" /></noscript>
 </head>
 ```
 
@@ -252,7 +260,7 @@ export class PerformanceMonitor {
 
   async initWebVitals() {
     const { getCLS, getFID, getFCP, getLCP, getTTFB } = await import('web-vitals');
-    
+
     getCLS(this.onCLS.bind(this));
     getFID(this.onFID.bind(this));
     getFCP(this.onFCP.bind(this));
@@ -277,7 +285,7 @@ export class PerformanceMonitor {
     if (typeof gtag !== 'undefined') {
       gtag('event', name, {
         custom_parameter_1: metric.value,
-        custom_parameter_2: metric.rating
+        custom_parameter_2: metric.rating,
       });
     }
   }
@@ -299,18 +307,16 @@ export default {
       path: '/**',
       resourceSizes: [
         { resourceType: 'script', budget: 150 }, // 150kb max
-        { resourceType: 'total', budget: 500 },   // 500kb max total
+        { resourceType: 'total', budget: 500 }, // 500kb max total
       ],
-      resourceCounts: [
-        { resourceType: 'third-party', budget: 10 }
-      ]
-    }
+      resourceCounts: [{ resourceType: 'third-party', budget: 10 }],
+    },
   ],
   assertions: {
     'first-contentful-paint': ['warn', { maxNumericValue: 2000 }],
     'largest-contentful-paint': ['error', { maxNumericValue: 2500 }],
-    'cumulative-layout-shift': ['error', { maxNumericValue: 0.1 }]
-  }
+    'cumulative-layout-shift': ['error', { maxNumericValue: 0.1 }],
+  },
 };
 ```
 
@@ -326,13 +332,13 @@ import compress from 'astro-compress';
 
 export default defineConfig({
   site: 'https://votre-site.com',
-  
+
   // Optimisations de build
   build: {
     inlineStylesheets: 'always',
-    assets: 'assets/[name].[hash][extname]'
+    assets: 'assets/[name].[hash][extname]',
   },
-  
+
   // Intégrations pour les performances
   integrations: [
     sitemap(),
@@ -341,14 +347,14 @@ export default defineConfig({
       html: {
         removeAttributeQuotes: false,
         collapseWhitespace: true,
-        removeComments: true
+        removeComments: true,
       },
       img: false, // Laissons Astro gérer les images
       js: true,
-      svg: true
-    })
+      svg: true,
+    }),
   ],
-  
+
   // Configuration Vite pour l'optimisation
   vite: {
     build: {
@@ -357,15 +363,15 @@ export default defineConfig({
         output: {
           manualChunks: {
             vendor: ['react', 'react-dom'],
-            utils: ['lodash', 'date-fns']
-          }
-        }
-      }
+            utils: ['lodash', 'date-fns'],
+          },
+        },
+      },
     },
     ssr: {
-      noExternal: ['@fontsource/inter']
-    }
-  }
+      noExternal: ['@fontsource/inter'],
+    },
+  },
 });
 ```
 
@@ -376,27 +382,18 @@ export default defineConfig({
 ```js
 // public/sw.js
 const CACHE_NAME = 'astro-site-v1';
-const urlsToCache = [
-  '/',
-  '/css/main.css',
-  '/js/main.js',
-  '/images/logo.png'
-];
+const urlsToCache = ['/', '/css/main.css', '/js/main.js', '/images/logo.png'];
 
-self.addEventListener('install', event => {
-  event.waitUntil(
-    caches.open(CACHE_NAME)
-      .then(cache => cache.addAll(urlsToCache))
-  );
+self.addEventListener('install', (event) => {
+  event.waitUntil(caches.open(CACHE_NAME).then((cache) => cache.addAll(urlsToCache)));
 });
 
-self.addEventListener('fetch', event => {
+self.addEventListener('fetch', (event) => {
   event.respondWith(
-    caches.match(event.request)
-      .then(response => {
-        // Retourner le cache si disponible, sinon fetch
-        return response || fetch(event.request);
-      })
+    caches.match(event.request).then((response) => {
+      // Retourner le cache si disponible, sinon fetch
+      return response || fetch(event.request);
+    })
   );
 });
 ```
@@ -405,15 +402,17 @@ self.addEventListener('fetch', event => {
 ---
 // layouts/BaseLayout.astro
 ---
+
 <script>
   // Enregistrer le service worker
   if ('serviceWorker' in navigator) {
     window.addEventListener('load', () => {
-      navigator.serviceWorker.register('/sw.js')
-        .then(registration => {
+      navigator.serviceWorker
+        .register('/sw.js')
+        .then((registration) => {
           console.log('SW registered: ', registration);
         })
-        .catch(registrationError => {
+        .catch((registrationError) => {
           console.log('SW registration failed: ', registrationError);
         });
     });
@@ -431,19 +430,19 @@ graph LR
     A --> C[LCP < 2.5s]
     A --> D[FID < 100ms]
     A --> E[CLS < 0.1]
-    
+
     B --> F{Performance Budget}
     C --> F
     D --> F
     E --> F
-    
+
     F -->|✅ Pass| G[Deploy]
     F -->|❌ Fail| H[Optimize]
-    
+
     H --> I[Review Code]
     H --> J[Compress Assets]
     H --> K[Optimize Images]
-    
+
     I --> A
     J --> A
     K --> A
@@ -496,6 +495,7 @@ L'optimisation des performances avec Astro est un processus itératif qui néces
 > **🎉 Résultats attendus**
 >
 > Avec ces optimisations, vous devriez obtenir :
+>
 > - **Score Lighthouse** : 95-100
 > - **First Contentful Paint** : < 1.8s
 > - **Largest Contentful Paint** : < 2.5s
