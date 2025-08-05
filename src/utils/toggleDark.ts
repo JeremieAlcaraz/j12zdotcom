@@ -30,6 +30,16 @@ const updateTheme = (isDarkValue: boolean) => {
     sunIcon.classList.toggle('hidden', isDarkValue); // Cache si sombre
     moonIcon.classList.toggle('hidden', !isDarkValue); // Cache si clair
   }
+
+  // MET À JOUR LE LOGO PRINCIPAL
+  const mainLogo = document.getElementById('main-logo') as HTMLImageElement | null;
+  if (mainLogo) {
+    const lightSrc = mainLogo.dataset.logoLight;
+    const darkSrc = mainLogo.dataset.logoDark;
+    if (lightSrc && darkSrc) {
+      mainLogo.src = isDarkValue ? darkSrc : lightSrc;
+    }
+  }
 };
 
 // ==========================================
@@ -45,6 +55,15 @@ const setupIcons = () => {
   if (sunIcon && moonIcon) {
     sunIcon.classList.toggle('hidden', currentThemeIsDark);
     moonIcon.classList.toggle('hidden', !currentThemeIsDark);
+  }
+
+  const mainLogo = document.getElementById('main-logo') as HTMLImageElement | null;
+  if (mainLogo) {
+    const lightSrc = mainLogo.dataset.logoLight;
+    const darkSrc = mainLogo.dataset.logoDark;
+    if (lightSrc && darkSrc) {
+      mainLogo.src = currentThemeIsDark ? darkSrc : lightSrc;
+    }
   }
 };
 
