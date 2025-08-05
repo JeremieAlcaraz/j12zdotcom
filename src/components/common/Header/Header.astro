@@ -1,7 +1,7 @@
 ---
 import type { NavbarProps } from './Header.types';
 import { SunIcon, MoonIcon } from '@/components';
-import { defaultLogo, defaultLinks } from '@config/navigation'; // Valeurs par défaut pour logo et liens
+import { defaultLogo, defaultLogoDark, defaultLinks } from '@config/navigation'; // Valeurs par défaut pour logo et liens
 // ✅ DESTRUCTURATION DES PROPS avec valeurs par défaut
 const { logo = defaultLogo, links = defaultLinks } = Astro.props as NavbarProps;
 ---
@@ -15,7 +15,14 @@ const { logo = defaultLogo, links = defaultLinks } = Astro.props as NavbarProps;
     <!-- LIEN LOGO - Retour à l'accueil -->
     <a href="/" class="btn btn-ghost text-xl normal-case">
       <!-- IMAGE DU LOGO -->
-      <img src={logo} alt="Logo" class="h-12 w-auto" />
+      <img
+        id="main-logo"
+        src={logo}
+        data-logo-light={logo}
+        data-logo-dark={defaultLogoDark}
+        alt="Logo"
+        class="h-12 w-auto"
+      />
     </a>
   </div>
 

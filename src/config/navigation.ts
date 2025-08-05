@@ -8,10 +8,14 @@
 -------------------------------------------------------------------- */
 
 import type { NavLink } from '@components/common/Header/Header.types';
-import logo from '@assets/logo.svg';
+import logoDark from '@assets/logos/logo-dark.svg';
+import logoWhite from '@assets/logos/logo-white.svg';
 
-/** Logo par défaut – peut être surchargé via la prop `logo` de <Navbar /> */
-export const defaultLogo: string = logo.src;
+/** Logo par défaut pour le thème clair */
+export const defaultLogo: string = logoDark.src;
+
+/** Variante utilisée automatiquement en mode sombre */
+export const defaultLogoDark: string = logoWhite.src;
 
 /** Liens par défaut – peuvent être overridés via la prop `links` */
 export const defaultLinks: NavLink[] = [
