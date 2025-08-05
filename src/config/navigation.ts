@@ -16,9 +16,7 @@ export const defaultLogo: string = logo.src;
 /** Liens par défaut – peuvent être overridés via la prop `links` */
 export const defaultLinks: NavLink[] = [
   { href: '/', label: 'Accueil' },
-  { href: '/formations', label: 'Formations' },
   { href: '/blog', label: 'Blog' },
   { href: '/about', label: 'À propos' },
   { href: '/contact', label: 'Contact' },
-  { href: '/elements', label: 'Elements' },
 ] satisfies NavLink[];
