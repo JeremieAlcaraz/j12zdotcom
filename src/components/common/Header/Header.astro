@@ -1,17 +1,14 @@
 ---
-import type { NavbarProps } from "./Header.types";
-import { SunIcon, MoonIcon } from "@/components";
-import { defaultLogo, defaultLinks } from "@config/navigation"; // Valeurs par défaut pour logo et liens
+import type { NavbarProps } from './Header.types';
+import { SunIcon, MoonIcon } from '@/components';
+import { defaultLogo, defaultLinks } from '@config/navigation'; // Valeurs par défaut pour logo et liens
 // ✅ DESTRUCTURATION DES PROPS avec valeurs par défaut
 const { logo = defaultLogo, links = defaultLinks } = Astro.props as NavbarProps;
 ---
 
 <!-- ==========================================
      SECTION TEMPLATE (HTML + COMPOSANTS)
-     ========================================== -->
-<!-- Cette section définit la structure HTML du composant -->
-<!-- CONTENEUR PRINCIPAL DE LA NAVBAR -->
-<!-- Utilise les classes DaisyUI pour le styling (navbar, bg-base-100, shadow-md) -->
+     ========================================== --><!-- Cette section définit la structure HTML du composant --><!-- CONTENEUR PRINCIPAL DE LA NAVBAR --><!-- Utilise les classes DaisyUI pour le styling (navbar, bg-base-100, shadow-md) -->
 <nav class="navbar bg-base-100 shadow-md">
   <!-- PARTIE GAUCHE DE LA NAVBAR (logo + nom) -->
   <div class="navbar-start">
@@ -28,72 +25,13 @@ const { logo = defaultLogo, links = defaultLinks } = Astro.props as NavbarProps;
     <ul class="menu menu-horizontal px-1 overflow-visible">
       {
         /* BOUCLE JAVASCRIPT pour générer les liens de navigation */
-        links.map(({ href, label }) =>
-          label !== "Formations" ? (
-            <li>
-              <!-- LIEN DE NAVIGATION SIMPLE -->
-              <a
-                href={href}
-                class="hover:bg-primary hover:text-primary-content rounded-lg"
-              >
-                {label}
-              </a>
-            </li>
-          ) : (
-            /* Dropdown “Formations” */
-            <li class="relative dropdown dropdown-hover" tabindex="0">
-              <a class="hover:bg-primary hover:text-primary-content rounded-lg flex items-center">
-                Formations
-                <!-- flèche vers le bas -->
-                <svg
-                  class="ml-1 w-4 h-4 inline-block"
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                >
-                  <path
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    stroke-width="2"
-                    d="M19 9l-7 7-7-7"
-                  />
-                </svg>
-              </a>
-              <!--
-                mt-0         → pas de gap top
-                -mt-1        → décale le menu de 0.25rem vers le haut pour supprimer tout trou
-                z-50         → au-dessus de tout
-              -->
-              <ul class="dropdown-content menu p-2 bg-base-100 rounded-box w-52 shadow-lg mt-0 z-50">
-                <li>
-                  <a
-                    class="hover:bg-secondary hover:text-primary-content rounded-lg"
-                    href="/formations/formation-1"
-                  >
-                    Formation 1
-                  </a>
-                </li>
-                <li>
-                  <a
-                    class="hover:bg-primary hover:text-primary-content rounded-lg"
-                    href="/formations/formation-2"
-                  >
-                    Formation 2
-                  </a>
-                </li>
-                <li>
-                  <a
-                    class="hover:bg-secondary hover:text-primary-content rounded-lg"
-                    href="/formations/formation-3"
-                  >
-                    Formation 3
-                  </a>
-                </li>
-              </ul>
-            </li>
-          ),
-        )
+        links.map(({ href, label }) => (
+          <li>
+            <a href={href} class="hover:bg-primary hover:text-primary-content rounded-lg">
+              {label}
+            </a>
+          </li>
+        ))
       }
     </ul>
   </div>
@@ -129,8 +67,7 @@ const { logo = defaultLogo, links = defaultLinks } = Astro.props as NavbarProps;
             stroke-linecap="round"
             stroke-linejoin="round"
             stroke-width="2"
-            d="M4 6h16M4 12h8m-8 6h16"
-          ></path>
+            d="M4 6h16M4 12h8m-8 6h16"></path>
         </svg>
       </label>
 
@@ -164,12 +101,11 @@ const { logo = defaultLogo, links = defaultLinks } = Astro.props as NavbarProps;
   // ==========================================
 
   // CLÉ pour stocker le thème dans localStorage du navigateur
-  const THEME_STORAGE_KEY = "theme";
+  const THEME_STORAGE_KEY = 'theme';
 
   // FONCTION UTILITAIRE : vérifie si le thème actuel est sombre
   // Lit l'attribut 'data-theme' sur l'élément <html>
-  const isDark = () =>
-    document.documentElement.getAttribute("data-theme") === "dark";
+  const isDark = () => document.documentElement.getAttribute('data-theme') === 'dark';
 
   // ==========================================
   // FONCTION DE MISE À JOUR DU THÈME
@@ -179,21 +115,18 @@ const { logo = defaultLogo, links = defaultLinks } = Astro.props as NavbarProps;
   const updateTheme = (isDarkValue: boolean) => {
     // CHANGE l'attribut data-theme sur <html> pour appliquer le thème
     // 'dark' ou 'douceurLight' (thème personnalisé clair)
-    document.documentElement.setAttribute(
-      "data-theme",
-      isDarkValue ? "dark" : "douceurLight",
-    );
+    document.documentElement.setAttribute('data-theme', isDarkValue ? 'dark' : 'douceurLight');
 
     // RÉCUPÈRE les éléments des icônes soleil et lune
-    const sunIcon = document.getElementById("sun-icon");
-    const moonIcon = document.getElementById("moon-icon");
+    const sunIcon = document.getElementById('sun-icon');
+    const moonIcon = document.getElementById('moon-icon');
 
     // AFFICHE/CACHE les icônes selon le thème
     if (sunIcon && moonIcon) {
       // Si thème sombre : cache soleil, montre lune
       // Si thème clair : montre soleil, cache lune
-      sunIcon.classList.toggle("hidden", isDarkValue); // Cache si sombre
-      moonIcon.classList.toggle("hidden", !isDarkValue); // Cache si clair
+      sunIcon.classList.toggle('hidden', isDarkValue); // Cache si sombre
+      moonIcon.classList.toggle('hidden', !isDarkValue); // Cache si clair
     }
   };
 
@@ -204,12 +137,12 @@ const { logo = defaultLogo, links = defaultLinks } = Astro.props as NavbarProps;
   // CONFIGURE l'affichage initial des icônes selon le thème
   const setupIcons = () => {
     const currentThemeIsDark = isDark();
-    const sunIcon = document.getElementById("sun-icon");
-    const moonIcon = document.getElementById("moon-icon");
+    const sunIcon = document.getElementById('sun-icon');
+    const moonIcon = document.getElementById('moon-icon');
 
     if (sunIcon && moonIcon) {
-      sunIcon.classList.toggle("hidden", currentThemeIsDark);
-      moonIcon.classList.toggle("hidden", !currentThemeIsDark);
+      sunIcon.classList.toggle('hidden', currentThemeIsDark);
+      moonIcon.classList.toggle('hidden', !currentThemeIsDark);
     }
   };
 
@@ -225,17 +158,14 @@ const { logo = defaultLogo, links = defaultLinks } = Astro.props as NavbarProps;
     const isAppearanceTransition =
       // @ts-expect-error: L'API View Transitions est expérimentale
       document.startViewTransition &&
-      !window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+      !window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
     // CAS SIMPLE : pas de transition animée
     if (!isAppearanceTransition) {
       const newThemeIsDark = !isDark(); // Inverse le thème actuel
       updateTheme(newThemeIsDark); // Applique le nouveau thème
       // SAUVEGARDE dans localStorage pour persistance
-      localStorage.setItem(
-        THEME_STORAGE_KEY,
-        newThemeIsDark ? "dark" : "douceurLight",
-      );
+      localStorage.setItem(THEME_STORAGE_KEY, newThemeIsDark ? 'dark' : 'douceurLight');
       return;
     }
 
@@ -252,12 +182,12 @@ const { logo = defaultLogo, links = defaultLinks } = Astro.props as NavbarProps;
     // On prend la plus grande distance depuis le point de clic jusqu'aux coins
     const endRadius = Math.hypot(
       Math.max(x, window.innerWidth - x), // Distance horizontale max
-      Math.max(y, window.innerHeight - y), // Distance verticale max
+      Math.max(y, window.innerHeight - y) // Distance verticale max
     );
 
     // DÉSACTIVE temporairement les animations ClientRouter via JavaScript
-    const style = document.createElement("style");
-    style.id = "temp-disable-transitions";
+    const style = document.createElement('style');
+    style.id = 'temp-disable-transitions';
     style.textContent = `
       ::view-transition-old(root),
       ::view-transition-new(root) {
@@ -272,19 +202,13 @@ const { logo = defaultLogo, links = defaultLinks } = Astro.props as NavbarProps;
       const newThemeIsDark = !isDark(); // Inverse le thème
       updateTheme(newThemeIsDark); // Applique le changement
       // SAUVEGARDE le nouveau thème
-      localStorage.setItem(
-        THEME_STORAGE_KEY,
-        newThemeIsDark ? "dark" : "douceurLight",
-      );
+      localStorage.setItem(THEME_STORAGE_KEY, newThemeIsDark ? 'dark' : 'douceurLight');
     });
 
     // ANIME la transition une fois qu'elle est prête
     transition.ready.then(() => {
       // DÉFINIT les keyframes de l'animation : cercle qui grandit
-      const clipPath = [
-        `circle(0px at ${x}px ${y}px)`,
-        `circle(${endRadius}px at ${x}px ${y}px)`,
-      ];
+      const clipPath = [`circle(0px at ${x}px ${y}px)`, `circle(${endRadius}px at ${x}px ${y}px)`];
 
       // LANCE l'animation sur la nouvelle vue qui apparaît
       const animation = document.documentElement.animate(
@@ -293,15 +217,15 @@ const { logo = defaultLogo, links = defaultLinks } = Astro.props as NavbarProps;
         },
         {
           duration: 500, // Durée : 500ms
-          easing: "ease-in-out", // Courbe d'animation
-          pseudoElement: "::view-transition-new(root)", // Cible la nouvelle vue
-        },
+          easing: 'ease-in-out', // Courbe d'animation
+          pseudoElement: '::view-transition-new(root)', // Cible la nouvelle vue
+        }
       );
 
       // RÉACTIVE les transitions ClientRouter avec un petit délai pour éviter le flash
-      animation.addEventListener("finish", () => {
+      animation.addEventListener('finish', () => {
         setTimeout(() => {
-          document.getElementById("temp-disable-transitions")?.remove();
+          document.getElementById('temp-disable-transitions')?.remove();
         }, 50); // Délai de 50ms pour stabiliser
       });
     });
@@ -315,27 +239,12 @@ const { logo = defaultLogo, links = defaultLinks } = Astro.props as NavbarProps;
   // ?. = optional chaining (évite l'erreur si l'élément n'existe pas)
   function initThemeButton() {
     setupIcons();
-    document
-      .getElementById("theme-toggle")
-      ?.addEventListener("click", toggleTheme);
+    document.getElementById('theme-toggle')?.addEventListener('click', toggleTheme);
   }
 
   // Initialisation au chargement
   initThemeButton();
 
   // Réinitialisation après chaque navigation ViewTransition
-  document.addEventListener("astro:after-swap", initThemeButton);
+  document.addEventListener('astro:after-swap', initThemeButton);
 </script>
-
-<!-- ==========================================
-     SECTION STYLES GLOBAUX
-     ========================================== -->
-<!-- is:global = applique les styles globalement (pas seulement à ce composant) -->
-<style is:global>
-  /* --- FIX GAP DES DROPDOWNS NAVBAR -------------------------- */
-  /* On enlève 1 px au margin-top auto-généré par DaisyUI        */
-  /* pour que le sous-menu touche exactement le lien parent      */
-  nav.navbar .dropdown > .dropdown-content {
-    margin-top: -0.5px; /* colle le menu, plus aucun trou */
-  }
-</style>
