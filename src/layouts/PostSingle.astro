@@ -1,10 +1,9 @@
-
 ---
-import dateFormat from "@/utils/dateFormat";
-import { humanize, markdownify, slugify } from "@/utils/textConverter";
-import { render } from "astro:content";
-import { FaRegClock, FaRegFolder, FaRegUserCircle } from "react-icons/fa";
-import ImageMod from "@components/common/ImageMod/ImageMod.astro";
+import dateFormat from '@/utils/dateFormat';
+import { humanize, markdownify, slugify } from '@/utils/textConverter';
+import { render } from 'astro:content';
+import { FaRegClock, FaRegFolder, FaRegUserCircle } from 'react-icons/fa';
+import ImageMod from '@components/common/ImageMod/ImageMod.astro';
 
 const { post } = Astro.props;
 
@@ -18,15 +17,14 @@ console.log('Title from PostSingle:', post?.data?.title);
 
 const { Content } = await render(post);
 
-
 const { title, description, author, categories, image, date, tags } = post.data;
-console.log('Destructured values:', { 
-  title, 
-  author, 
+console.log('Destructured values:', {
+  title,
+  author,
   categories: categories?.length,
   image,
   date,
-  tags: tags?.length 
+  tags: tags?.length,
 });
 ---
 
@@ -41,7 +39,7 @@ console.log('Destructured values:', {
       <p><strong>Categories:</strong> {post?.data?.categories?.join(', ')}</p>
       <p><strong>Image:</strong> {post?.data?.image}</p>
     </div>
-    
+
     <div class="row justify-center">
       <article class="lg:col-10">
         {
@@ -62,27 +60,27 @@ console.log('Destructured values:', {
         <ul class="mb-4">
           <li class="mr-4 inline-block">
             <a href={`/authors/${slugify(author)}`}>
-              <FaRegUserCircle className={"mr-2 -mt-1 inline-block"} />
+              <FaRegUserCircle className={'mr-2 -mt-1 inline-block'} />
               {humanize(author)}
             </a>
           </li>
           <li class="mr-4 inline-block">
-            <FaRegFolder className={"mr-2 -mt-1 inline-block"} />
+            <FaRegFolder className={'mr-2 -mt-1 inline-block'} />
             {
               categories.map((category: string, index: number) => (
                 <a href={`/categories/${slugify(category)}`}>
                   {humanize(category)}
-                  {index !== categories.length - 1 && ","}
+                  {index !== categories.length - 1 && ','}
                 </a>
               ))
             }
           </li>
           <li class="mr-4 inline-block">
-            <FaRegClock className={"mr-2 -mt-1 inline-block"} />
+            <FaRegClock className={'mr-2 -mt-1 inline-block'} />
             {dateFormat(date)}
           </li>
         </ul>
-        
+
         <!-- TEST DU CONTENU -->
         <div style="border: 2px solid blue; padding: 10px; margin: 10px 0;">
           <h3>🔍 DEBUG: Contenu markdown</h3>
@@ -90,23 +88,24 @@ console.log('Destructured values:', {
             <Content />
           </div>
         </div>
-        
+
         <!-- Tags section -->
         <div class="row items-start justify-between">
           <div class="mb-10 flex items-center lg:col-5 lg:mb-0">
             <h5 class="mr-3">Tags :</h5>
             <ul>
               {
-                tags && tags.map((tag: string) => (
-                  <li class="inline-block">
-                    <a
-                      class="m-1 block rounded bg-light px-3 py-1 hover:bg-primary hover:text-white dark:bg-darkmode-light dark:hover:bg-darkmode-primary dark:hover:text-text-dark"
-                      href={`/tags/${slugify(tag)}`}
-                    >
-                      {humanize(tag)}
-                    </a>
-                  </li>
-                ))
+                tags &&
+                  tags.map((tag: string) => (
+                    <li class="inline-block">
+                      <a
+                        class="m-1 block rounded bg-light px-3 py-1 hover:bg-primary hover:text-white dark:bg-darkmode-light dark:hover:bg-darkmode-primary dark:hover:text-text-dark"
+                        href={`/tags/${slugify(tag)}`}
+                      >
+                        {humanize(tag)}
+                      </a>
+                    </li>
+                  ))
               }
             </ul>
           </div>
@@ -115,4 +114,3 @@ console.log('Destructured values:', {
     </div>
   </div>
 </section>
-

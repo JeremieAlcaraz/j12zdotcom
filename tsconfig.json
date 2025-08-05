@@ -12,12 +12,8 @@
       "@playground/*": ["src/playground/*"],
       "@styles/*": ["src/styles/*"],
       "@/*": ["./src/*"]
- 
     }
   },
- "include": [".astro/types.d.ts", "**/*.ts", "**/*.tsx", "**/*.astro"],
-  "exclude": [
-    "dist",
-    "node_modules"
-  ]
+  "include": [".astro/types.d.ts", "**/*.ts", "**/*.tsx", "**/*.astro"],
+  "exclude": ["dist", "node_modules"]
 }

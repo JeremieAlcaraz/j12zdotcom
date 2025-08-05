@@ -2,95 +2,102 @@
 import '@styles/index.css';
 import { Header } from '@components/common/index';
 import { Footer } from '@components/common/index';
-import TwSizeIndicator  from '@components/ui/TwSizeIndicator.astro';
+import TwSizeIndicator from '@components/ui/TwSizeIndicator.astro';
 import { ClientRouter } from 'astro:transitions';
 const { title = 'Mon Site' } = Astro.props;
 ---
 
 <!doctype html>
 <html lang="fr">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width" />
-  <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-  <title>{title}</title>
-  <ClientRouter />
-  
-  <script is:inline>
-    function initTheme() {
-      const THEME_STORAGE_KEY = 'theme';
-      const savedTheme = localStorage.getItem(THEME_STORAGE_KEY);
-      const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-      const initialThemeIsDark = savedTheme ? savedTheme === 'dark' : prefersDark;
-      document.documentElement.setAttribute(
-        'data-theme',
-        initialThemeIsDark ? 'dark' : 'douceurLight'
-      );
-    }
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <title>{title}</title>
+    <ClientRouter />
 
-    // Initialisation au chargement
-    initTheme();
+    <script is:inline>
+      function initTheme() {
+        const THEME_STORAGE_KEY = 'theme';
+        const savedTheme = localStorage.getItem(THEME_STORAGE_KEY);
+        const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+        const initialThemeIsDark = savedTheme ? savedTheme === 'dark' : prefersDark;
+        document.documentElement.setAttribute(
+          'data-theme',
+          initialThemeIsDark ? 'dark' : 'douceurLight'
+        );
+      }
 
-    // Réinitialisation après chaque navigation ViewTransition
-    document.addEventListener('astro:after-swap', initTheme);
-  </script>
-</head>
+      // Initialisation au chargement
+      initTheme();
 
-<body class="min-h-screen">
-  <!-- Layout principal avec Grid Tailwind -->
-  <div class="min-h-screen grid grid-rows-[auto_1fr_auto]">
-    
-    <TwSizeIndicator />
-    <!-- HEADER fixe -->
-    <header class="fixed top-0 left-0 right-0 z-50 bg-transparent">
-      <Header />
-    </header>
+      // Réinitialisation après chaque navigation ViewTransition
+      document.addEventListener('astro:after-swap', initTheme);
+    </script>
+  </head>
 
-    <!-- MAIN avec Hero full-width -->
-    <main class="pt-16">
-      <!-- Hero full-width -->
-      <slot name="hero" />  
-      <!-- Contenu centré pour les autres sections -->
-      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <slot />
-      </div>
-    </main>
+  <body class="min-h-screen">
+    <!-- Layout principal avec Grid Tailwind -->
+    <div class="min-h-screen grid grid-rows-[auto_1fr_auto]">
+      <TwSizeIndicator />
+      <!-- HEADER fixe -->
+      <header class="fixed top-0 left-0 right-0 z-50 bg-transparent">
+        <Header />
+      </header>
 
-    <!-- FOOTER -->
-    <footer class="mt-auto">
-      <Footer />
-    </footer>
-  </div>
-</body>
+      <!-- MAIN avec Hero full-width -->
+      <main class="pt-16">
+        <!-- Hero full-width -->
+        <slot name="hero" />
+        <!-- Contenu centré pour les autres sections -->
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <slot />
+        </div>
+      </main>
+
+      <!-- FOOTER -->
+      <footer class="mt-auto">
+        <Footer />
+      </footer>
+    </div>
+  </body>
 </html>
 
 <!-- CSS minimal - seulement pour les spécificités impossibles avec Tailwind -->
 <style>
   /* Tailwind CSS v4 gère automatiquement le reset via @import "tailwindcss" */
   /* Plus besoin de reset manual ni de CSS custom pour le layout */
-  
+
   /* Transition douce et fluide pour ViewTransitions */
   ::view-transition-old(root),
   ::view-transition-new(root) {
     animation-duration: 0.6s;
     animation-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
   }
-  
+
   ::view-transition-old(root) {
     animation-name: fade-out-smooth;
   }
-  
+
   ::view-transition-new(root) {
     animation-name: fade-in-smooth;
   }
-  
+
   @keyframes fade-out-smooth {
-    0% { opacity: 1; }
-    100% { opacity: 0; }
+    0% {
+      opacity: 1;
+    }
+    100% {
+      opacity: 0;
+    }
   }
-  
+
   @keyframes fade-in-smooth {
-    0% { opacity: 0; }
-    100% { opacity: 1; }
+    0% {
+      opacity: 0;
+    }
+    100% {
+      opacity: 1;
+    }
   }
 </style>

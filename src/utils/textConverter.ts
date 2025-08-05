@@ -6,8 +6,6 @@ export const slugify = (content: string) => {
   return slug(content);
 };
 
-
-
 // markdownify
 export const markdownify = (content: string, div?: boolean) => {
   return div ? marked.parse(content) : marked.parseInline(content);
@@ -44,24 +42,23 @@ export const plainify = (content: string) => {
 
 // smartTruncate - Tronque intelligemment le texte sur le dernier mot complet
 export const smartTruncate = (content: string, limit: number): string => {
-  if (!content) return "";
-  
+  if (!content) return '';
+
   const cleanText = plainify(content);
   if (cleanText.length <= limit) return cleanText;
-  
+
   // Tronquer à la limite et chercher le dernier espace
   const truncated = cleanText.slice(0, limit);
   const lastSpaceIndex = truncated.lastIndexOf(' ');
-  
+
   // Si on trouve un espace et qu'il n'est pas trop proche du début
   if (lastSpaceIndex > limit * 0.8) {
-    return truncated.slice(0, lastSpaceIndex) + "...";
+    return truncated.slice(0, lastSpaceIndex) + '...';
   }
-  
-  // Sinon, tronquer directement avec ...
-  return truncated + "...";
-};
 
+  // Sinon, tronquer directement avec ...
+  return truncated + '...';
+};
 
 // strip entities for plainify
 const htmlEntityDecoder = (htmlWithEntities: string) => {

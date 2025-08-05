@@ -45,11 +45,7 @@ const { title = 'Contactez-moi', description = 'Je réponds généralement sous 
       -->
       <form action={contactFormAction} method="POST" class="grid gap-6">
         <!-- Anti-spam : champ caché + sujet par défaut -->
-        <input
-          type="hidden"
-          name="_subject"
-          value={`Nouveau message de ${title}`}
-        />
+        <input type="hidden" name="_subject" value={`Nouveau message de ${title}`} />
         <input type="text" name="_gotcha" class="hidden" />
 
         <!-- Champ : Nom -->
@@ -95,8 +91,7 @@ const { title = 'Contactez-moi', description = 'Je réponds généralement sous 
             rows="5"
             placeholder="Bonjour, je vous contacte pour..."
             class="textarea textarea-bordered w-full"
-            required
-          ></textarea>
+            required></textarea>
         </div>
 
         <!-- Bouton -->
