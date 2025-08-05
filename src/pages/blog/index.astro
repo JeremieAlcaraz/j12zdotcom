@@ -2,19 +2,16 @@
 import BaseLayout from '@/layouts/BaseLayout.astro';
 import BlogCard from '@components/blog/BlogCard.astro';
 import Pagination from '@components/blog/Pagination.astro';
-import config from "@/config/siteConfig.ts";
+import config from '@/config/siteConfig.ts';
 import { sortByDate } from '@utils/sortFunctions';
 import PostSidebar from '@components/blog/PostSidebar.astro';
-import { getSinglePage } from "@/utils/contentParser.astro";
+import { getSinglePage } from '@/utils/contentParser.astro';
 import { getCollection } from 'astro:content';
-import type { CollectionEntry } from "astro:content";
-import { getEntry } from "astro:content";
+import type { CollectionEntry } from 'astro:content';
+import { getEntry } from 'astro:content';
 
-const BLOG_FOLDER = "blog";
-const postIndex = (await getEntry(
-  BLOG_FOLDER,
-  "-index"
-)) as CollectionEntry<"blog">;
+const BLOG_FOLDER = 'blog';
+const postIndex = (await getEntry(BLOG_FOLDER, '-index')) as CollectionEntry<'blog'>;
 const posts = await getSinglePage(BLOG_FOLDER);
 // const allCategories = posts.flatMap((post) => post.data.categories);
 // const sortedPosts = sortByDate(posts);
@@ -28,7 +25,6 @@ const currentPosts = posts.slice(0, config.settings.pagination);
   <section class="py-8 sm:py-12 lg:py-16 px-4">
     <div class="max-w-6xl mx-auto">
       <div class="flex flex-col lg:flex-row gap-8">
-        
         <!-- Colonne principale pour les articles -->
         <div class="flex-1">
           <!-- Grid responsive pour les cartes -->
@@ -43,14 +39,10 @@ const currentPosts = posts.slice(0, config.settings.pagination);
           </div>
           <!-- Pagination -->
           <div class="flex justify-center mt-12">
-            <Pagination
-              section={BLOG_FOLDER}
-              currentPage={1}
-              totalPages={totalPages}
-            />
+            <Pagination section={BLOG_FOLDER} currentPage={1} totalPages={totalPages} />
           </div>
         </div>
-        
+
         <!-- Sidebar (décommentez si vous voulez l'activer) -->
         <!-- 
         <div class="lg:w-1/3">

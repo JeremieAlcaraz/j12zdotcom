@@ -1,12 +1,12 @@
 ---
-title: "Découvrez les nouveautés de JavaScript ES2025"
-meta_title: "Tout sur JavaScript ES2025"
-description: "Un aperçu complet des nouvelles fonctionnalités de JavaScript ES2025."
+title: 'Découvrez les nouveautés de JavaScript ES2025'
+meta_title: 'Tout sur JavaScript ES2025'
+description: 'Un aperçu complet des nouvelles fonctionnalités de JavaScript ES2025.'
 date: 2025-06-15
-image: "/img_opt/image-placeholder.png"
-author: "Jérémie Alcaraz"
-categories: ["JavaScript", "Développement Web"]
-tags: ["ES2025", "Programmation"]
+image: '/img_opt/image-placeholder.png'
+author: 'Jérémie Alcaraz'
+categories: ['JavaScript', 'Développement Web']
+tags: ['ES2025', 'Programmation']
 draft: false
 ---
 
@@ -26,13 +26,13 @@ console.log(uniqueNumbers); // [1, 2, 3, 4, 5]
 
 ### Le Pipe Operator `|>`
 
-Le *pipe operator* est une nouvelle syntaxe qui facilite le chaînage de fonctions. Il rend le code plus lisible et plus intuitif.
+Le _pipe operator_ est une nouvelle syntaxe qui facilite le chaînage de fonctions. Il rend le code plus lisible et plus intuitif.
 
 ```javascript
 const add = (a, b) => a + b;
 const square = (n) => n * n;
 
-const result = 5 |> (n => add(n, 5)) |> square;
+const result = 5 |> ((n) => add(n, 5)) |> square;
 console.log(result); // 100
 ```
 

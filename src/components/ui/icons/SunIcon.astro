@@ -14,6 +14,6 @@ const { class: className = 'w-5 h-5 fill-current', title, ...rest } = Astro.prop
   class={className}
   aria-hidden={title ? undefined : 'true'}
   role="img"
-  {...(title && { title })}
+  {...title && { title }}
   {...rest}
 />

@@ -40,9 +40,7 @@ const images = import.meta.glob<{ default: ImageMetadata }>(
 /* 4️⃣  Vérification et log dev convivial */
 const isValid = !!images[imageKey];
 if (!isValid) {
-  console.error(
-    `\x1b[31mImage not found – ${imageKey}. Place it under src/assets.\x1b[0m`
-  );
+  console.error(`\x1b[31mImage not found – ${imageKey}. Place it under src/assets.\x1b[0m`);
 }
 ---
 
