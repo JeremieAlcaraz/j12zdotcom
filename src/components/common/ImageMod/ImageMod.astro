@@ -25,7 +25,7 @@ const {
   class: className,
   format = 'auto',
   style,
-} = Astro.props as Props;
+} = Astro.props;
 
 /* 1️⃣  Normaliser le chemin fourni */
 const normalized = rawSrc.startsWith('/') ? rawSrc : `/${rawSrc}`;
