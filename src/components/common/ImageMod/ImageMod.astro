@@ -12,7 +12,7 @@ interface Props {
   decoding?: 'async' | 'auto' | 'sync';
   format?: 'auto' | 'avif' | 'jpeg' | 'png' | 'svg' | 'webp';
   class?: string;
-  style?: any;
+  style?: string;
 }
 
 const {
@@ -39,8 +39,11 @@ const images = import.meta.glob<{ default: ImageMetadata }>(
 
 /* 4️⃣  Vérification et log dev convivial */
 const isValid = !!images[imageKey];
-!isValid &&
-  console.error(`\x1b[31mImage not found – ${imageKey}. Place it under src/assets.\x1b[0m`);
+if (!isValid) {
+  console.error(
+    `\x1b[31mImage not found – ${imageKey}. Place it under src/assets.\x1b[0m`
+  );
+}
 ---
 
 {
