@@ -33,8 +33,36 @@ const blogCollection = defineCollection({
   }),
 });
 
+// About collection schema
+const aboutCollection = defineCollection({
+  loader: glob({ pattern: '**/*.{md,mdx}', base: 'src/content/about' }),
+  schema: z.object({
+    presentation: z.object({
+      title: z.string(),
+      content: z.string(),
+      image: z.string(),
+    }),
+    story: z.object({
+      title: z.string(),
+      content: z.string(),
+      image: z.string(),
+    }),
+    differences: z.object({
+      title: z.string(),
+      content: z.string(),
+      image: z.string(),
+    }),
+    credentials: z.object({
+      title: z.string(),
+      content: z.string(),
+      image: z.string().optional(),
+    }),
+  }),
+});
+
 // Export all collections
 export const collections = {
   homepage: homepageCollection,
   blog: blogCollection,
+  about: aboutCollection,
 };
