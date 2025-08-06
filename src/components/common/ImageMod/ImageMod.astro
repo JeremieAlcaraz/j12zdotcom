@@ -27,6 +27,8 @@ const {
   style,
 } = Astro.props;
 
+const imageFormat = format === 'auto' ? undefined : format;
+
 /* 1️⃣  Normaliser le chemin fourni */
 const normalized = rawSrc.startsWith('/') ? rawSrc : `/${rawSrc}`;
 /* 2️⃣  Construire le chemin absolu attendu par import.meta.glob */
@@ -54,7 +56,7 @@ if (!isValid) {
       loading={loading}
       decoding={decoding}
       class={className}
-      format={format}
+      format={imageFormat}
       style={style}
     />
   )
