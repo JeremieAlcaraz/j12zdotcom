@@ -1,5 +1,9 @@
 /* Imports Tailwind et DaisyUI */
 @import 'tailwindcss';
+@plugin "../tailwind-plugin/tw-theme";
+@plugin "../tailwind-plugin/tw-bs-grid";
+@plugin "@tailwindcss/forms";
+@plugin "@tailwindcss/typography";
 @plugin "daisyui";
 
 /* Thèmes */
