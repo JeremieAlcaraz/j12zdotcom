@@ -1,12 +1,21 @@
 ---
 import BaseLayout from '@layouts/BaseLayout.astro';
 import Hero from '@components/ui/Hero.astro';
+import { getEntry } from "astro:content";
+import Testimonial from "@/components/ui/Testimonial.astro";
+
+
+const testimonial = (await getEntry(
+  "testimonialSection",
+  "testimonial"
+)) as CollectionEntry<"testimonialSection">;
 ---
 
 <BaseLayout title="Accueil – Mon Site">
   <!-- Hero utilise le slot hero pour être full-width -->
   <Hero slot="hero" />
 
+  <Testimonial testimonial={testimonial} />
   <!-- Autres sections peuvent être ajoutées ici -->
   <!-- Elles seront automatiquement centrées dans le container -->
 </BaseLayout>

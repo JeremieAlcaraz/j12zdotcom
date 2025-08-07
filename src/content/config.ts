@@ -1,5 +1,5 @@
-import { glob } from 'astro/loaders';
-import { defineCollection, z } from 'astro:content';
+import { glob } from 'astro/loaders'
+import { defineCollection, z } from 'astro:content'
 
 // Homepage collection schema
 const homepageCollection = defineCollection({
@@ -16,7 +16,7 @@ const homepageCollection = defineCollection({
       }),
     }),
   }),
-});
+})
 
 const blogCollection = defineCollection({
   loader: glob({ pattern: '**/*.{md,mdx}', base: 'src/content/blog' }),
@@ -31,8 +31,26 @@ const blogCollection = defineCollection({
     tags: z.array(z.string()).default(['others']),
     draft: z.boolean().optional(),
   }),
-});
-
+})
+const testimonialSectionCollection = defineCollection({
+  loader: glob({
+    pattern: 'testimonial.{md,mdx}',
+    base: 'src/content/sections',
+  }),
+  schema: z.object({
+    enable: z.boolean(),
+    title: z.string(),
+    description: z.string(),
+    testimonials: z.array(
+      z.object({
+        name: z.string(),
+        avatar: z.string(),
+        designation: z.string(),
+        content: z.string(),
+      })
+    ),
+  }),
+})
 // About collection schema
 const aboutCollection = defineCollection({
   loader: glob({ pattern: '**/*.{md,mdx}', base: 'src/content/about' }),
@@ -58,11 +76,15 @@ const aboutCollection = defineCollection({
       image: z.string().optional(),
     }),
   }),
-});
+})
 
 // Export all collections
 export const collections = {
+  //pages
   homepage: homepageCollection,
   blog: blogCollection,
   about: aboutCollection,
-};
+
+  //sections
+  testimonialSection: testimonialSectionCollection,
+}
