@@ -1,4 +1,6 @@
+
 ---
+// Testimonials.astro
 import { markdownify } from "@/utils/textConverter";
 import ImageMod from "@/components/common/ImageMod/ImageMod.astro";
 const { testimonial } = Astro.props;
@@ -13,6 +15,7 @@ const { testimonial } = Astro.props;
             <h2 set:html={markdownify(testimonial.data.title)} class="mb-4" />
             <p set:html={markdownify(testimonial.data.description)} />
           </div>
+
           <div class="col-12">
             <div class="swiper testimonial-slider">
               <div class="swiper-wrapper">
@@ -24,8 +27,9 @@ const { testimonial } = Astro.props;
                     designation: string;
                   }) => (
                     <div class="swiper-slide">
-                      <div class="rounded-lg bg-light px-7 py-10 dark:bg-darkmode-light">
-                        <div class="text-text-dark dark:text-white">
+                      {/* Carte de témoignage DaisyUI */}
+                      <div class="rounded-lg bg-base-100 px-7 py-10">
+                        <div class="text-base-content">
                           <svg
                             width="33"
                             height="20"
@@ -39,29 +43,29 @@ const { testimonial } = Astro.props;
                             />
                           </svg>
                         </div>
+
                         <blockquote
-                          class="mt-8"
+                          class="mt-8 text-base-content"
                           set:html={markdownify(item.content)}
                         />
-                        <div class="mt-11 flex items-center">
-                          <div class="text-text-dark dark:text-white">
-                            <ImageMod
-                              height={50}
-                              width={50}
-                              class="rounded-full"
-                              src={item.avatar}
-                              alt={item.name}
-                              format="webp"
-                            />
-                          </div>
+
+                        <div class="mt-11 flex items-center text-base-content">
+                          <ImageMod
+                            height={50}
+                            width={50}
+                            class="rounded-full"
+                            src={item.avatar}
+                            alt={item.name}
+                            format="webp"
+                          />
                           <div class="ml-4">
                             <h3
                               set:text={item.name}
-                              class="h5 font-primary font-semibold"
+                              class="h5 font-primary font-semibold text-base-content"
                             />
                             <p
                               set:text={item.designation}
-                              class="text-text-dark dark:text-white"
+                              class="text-base-content"
                             />
                           </div>
                         </div>
@@ -70,6 +74,7 @@ const { testimonial } = Astro.props;
                   )
                 )}
               </div>
+
               <div class="testimonial-slider-pagination mt-9 flex items-center justify-center text-center" />
             </div>
           </div>
@@ -85,7 +90,6 @@ const { testimonial } = Astro.props;
   import "swiper/css/pagination";
   import { Autoplay, Pagination } from "swiper/modules";
 
-  // astro:page-load event is fired when the page is loaded
   document.addEventListener("astro:page-load", () => {
     new Swiper(".testimonial-slider", {
       modules: [Pagination, Autoplay],
@@ -102,13 +106,12 @@ const { testimonial } = Astro.props;
         clickable: true,
       },
       breakpoints: {
-        768: {
-          slidesPerView: 2,
-        },
-        992: {
-          slidesPerView: 3,
-        },
+        768: { slidesPerView: 2 },
+        992: { slidesPerView: 3 },
       },
     });
   });
 </script>
+
+
+
