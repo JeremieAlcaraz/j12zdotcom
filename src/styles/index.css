@@ -8,3 +8,8 @@
 
 /* Thèmes */
 @import './themes/douceur.css';
+
+
+@layer base {
+  @import "./base.css";
+}
