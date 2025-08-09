@@ -1,10 +1,10 @@
 ---
-import '@styles/index.css';
-import { Header } from '@components/common/index';
-import { Footer } from '@components/common/index';
-import TwSizeIndicator from '@components/ui/TwSizeIndicator.astro';
-import { ClientRouter } from 'astro:transitions';
-const { title = 'Mon Site' } = Astro.props;
+import '@styles/index.css'
+import { Header } from '@components/common/index'
+import { Footer } from '@components/common/index'
+import TwSizeIndicator from '@components/ui/TwSizeIndicator.astro'
+import { ClientRouter } from 'astro:transitions'
+const { title = 'Mon Site' } = Astro.props
 ---
 
 <!doctype html>
@@ -18,39 +18,39 @@ const { title = 'Mon Site' } = Astro.props;
 
     <script is:inline>
       function initTheme() {
-        const THEME_STORAGE_KEY = 'theme';
-        const savedTheme = localStorage.getItem(THEME_STORAGE_KEY);
-        const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-        const initialThemeIsDark = savedTheme ? savedTheme === 'dark' : prefersDark;
+        const THEME_STORAGE_KEY = 'theme'
+        const savedTheme = localStorage.getItem(THEME_STORAGE_KEY)
+        const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches
+        const initialThemeIsDark = savedTheme ? savedTheme === 'dark' : prefersDark
         document.documentElement.setAttribute(
           'data-theme',
           initialThemeIsDark ? 'dark' : 'douceurLight'
-        );
+        )
       }
 
       // Initialisation au chargement
-      initTheme();
+      initTheme()
 
       // Réinitialisation après chaque navigation ViewTransition
-      document.addEventListener('astro:after-swap', initTheme);
+      document.addEventListener('astro:after-swap', initTheme)
     </script>
   </head>
 
   <body class="min-h-screen">
-    <!-- Layout principal avec Grid Tailwind -->
-    <div class="min-h-screen grid grid-rows-[auto_1fr_auto]">
-      <TwSizeIndicator />
-      <!-- HEADER fixe -->
-      <header class="fixed top-0 left-0 right-0 z-50 bg-transparent">
-        <Header />
-      </header>
+    <TwSizeIndicator />
+    <!-- HEADER fixe -->
+    <header class="fixed top-0 right-0 left-0 z-50 bg-transparent">
+      <Header />
+    </header>
 
+    <!-- Layout principal avec Grid Tailwind -->
+    <div class="grid min-h-screen grid-rows-[1fr_auto]">
       <!-- MAIN avec Hero full-width -->
       <main class="pt-16">
         <!-- Hero full-width -->
         <slot name="hero" />
         <!-- Contenu centré pour les autres sections -->
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <slot />
         </div>
       </main>
