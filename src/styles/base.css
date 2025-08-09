@@ -18,4 +18,8 @@ input#nav-toggle:checked ~ #nav-menu {
 
 .swiper-pagination-bullet-active {
   @apply !h-4 !w-4 !bg-primary dark:!bg-darkmode-primary;
+}  
+
+.section {
+  @apply py-16 md:py-24;
 }
