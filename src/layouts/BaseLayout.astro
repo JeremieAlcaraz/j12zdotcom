@@ -46,7 +46,8 @@ const { title = 'Mon Site' } = Astro.props
     <!-- Layout principal avec Grid Tailwind -->
     <div class="grid min-h-screen grid-rows-[1fr_auto]">
       <!-- MAIN avec Hero full-width -->
-      <main class="pt-16">
+      <!-- pt-20 (5rem) compense la navbar de même hauteur -->
+      <main class="pt-20">
         <!-- Hero full-width -->
         <slot name="hero" />
         <!-- Contenu centré pour les autres sections -->
