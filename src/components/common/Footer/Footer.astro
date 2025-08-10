@@ -6,21 +6,22 @@ import siteConfig from '@config/siteConfig';
 const { copyright } = siteConfig.params;
 ---
 
-<footer class="footer footer-horizontal footer-center bg-base-300 text-base-content rounded p-10">
-  <nav class="grid grid-flow-col gap-4">
-    <a class="link link-hover" href="/elements">Elements</a>
-    <a class="link link-hover">About us</a>
-    <a class="link link-hover">Contact</a>
-    <a class="link link-hover">Jobs</a>
-    <a class="link link-hover">Press kit</a>
-  </nav>
-  <nav>
-    <div class="grid grid-flow-col gap-4">
-      <a>
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          width="24"
-          height="24"
+<footer class="bg-base-300 text-base-content w-full">
+  <div class="footer footer-horizontal footer-center rounded p-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <nav class="grid grid-flow-col gap-4">
+      <a class="link link-hover" href="/elements">Elements</a>
+      <a class="link link-hover">About us</a>
+      <a class="link link-hover">Contact</a>
+      <a class="link link-hover">Jobs</a>
+      <a class="link link-hover">Press kit</a>
+    </nav>
+    <nav>
+      <div class="grid grid-flow-col gap-4">
+        <a>
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="24"
+            height="24"
           viewBox="0 0 24 24"
           class="fill-current"
         >
@@ -56,8 +57,9 @@ const { copyright } = siteConfig.params;
         </svg>
       </a>
     </div>
-  </nav>
-  <aside>
-    <p>Copyright © {new Date().getFullYear()} - {copyright}</p>
-  </aside>
+    </nav>
+    <aside>
+      <p>Copyright © {new Date().getFullYear()} - {copyright}</p>
+    </aside>
+  </div>
 </footer>

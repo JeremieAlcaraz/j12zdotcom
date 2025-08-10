@@ -23,12 +23,8 @@ const { banner } = homepage.data as Homepage;
 ---
 
 <!-- Hero optimisé avec Tailwind CSS v4 + DaisyUI v5 -->
-<section
-  class="min-h-[max(85vh,500px)] flex items-center justify-center px-4 py-8 lg:px-8 lg:py-16"
->
-  <div
-    class="grid grid-cols-1 lg:grid-cols-[2fr_3fr] gap-8 lg:gap-16 items-stretch max-w-7xl w-full min-h-[400px]"
-  >
+<section class="w-full min-h-[max(85vh,500px)] flex items-center py-8 lg:py-16">
+  <div class="grid grid-cols-1 lg:grid-cols-[2fr_3fr] gap-8 lg:gap-16 items-stretch w-full max-w-7xl min-h-[400px] px-4 lg:px-8 mx-auto">
     <!-- COLONNE IMAGE avec Halo -->
     <div class="flex justify-center items-center p-4 lg:p-8 order-1 lg:order-1">
       <div class="relative w-64 h-64 md:w-80 md:h-80 lg:w-96 lg:h-96 flex-shrink-0">
@@ -84,12 +80,3 @@ const { banner } = homepage.data as Homepage;
     </div>
   </div>
 </section>
-
-<style>
-  /* CSS minimal - seulement pour les spécificités impossibles avec Tailwind */
-  @media (max-width: 1023px) {
-    .grid-cols-\[2fr_3fr\] {
-      grid-template-columns: 1fr;
-    }
-  }
-</style>

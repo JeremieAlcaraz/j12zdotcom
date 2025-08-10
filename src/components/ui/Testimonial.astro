@@ -7,15 +7,15 @@ const { testimonial } = Astro.props
 
 {
   testimonial.data.enable && (
-    <section class="section">
-      <div class="container">
+    <section class="section w-full">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="flex flex-wrap">
           <div class="mx-auto mb-12 w-full text-center md:w-5/6 lg:w-2/3 xl:w-1/2">
             <h2 set:html={markdownify(testimonial.data.title)} class="mb-4" />
             <p set:html={markdownify(testimonial.data.description)} />
           </div>
 
-          <div class="w-full">
+          <div class="w-full overflow-hidden">
             <div class="swiper testimonial-slider">
               <div class="swiper-wrapper">
                 {testimonial.data.testimonials.map(
