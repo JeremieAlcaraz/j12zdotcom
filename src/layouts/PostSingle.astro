@@ -1,23 +1,23 @@
 ---
-import dateFormat from '@/utils/dateFormat';
-import { humanize, markdownify, slugify } from '@/utils/textConverter';
-import { render } from 'astro:content';
-import { FaRegClock, FaRegFolder, FaRegUserCircle } from 'react-icons/fa';
-import ImageMod from '@components/common/ImageMod/ImageMod.astro';
+import dateFormat from '@/utils/dateFormat'
+import { humanize, markdownify, slugify } from '@/utils/textConverter'
+import { render } from 'astro:content'
+import { FaRegClock, FaRegFolder, FaRegUserCircle } from 'react-icons/fa'
+import ImageMod from '@components/common/ImageMod/ImageMod.astro'
 
-const { post } = Astro.props;
+const { post } = Astro.props
 
 // === LOGS DE DÉBOGAGE ===
-console.log('=== DEBUG PostSingle ===');
-console.log('Post received in PostSingle:', !!post);
-console.log('Post data keys:', Object.keys(post?.data || {}));
-console.log('Title from PostSingle:', post?.data?.title);
+console.log('=== DEBUG PostSingle ===')
+console.log('Post received in PostSingle:', !!post)
+console.log('Post data keys:', Object.keys(post?.data || {}))
+console.log('Title from PostSingle:', post?.data?.title)
 
 // Test du rendu du contenu
 
-const { Content } = await render(post);
+const { Content } = await render(post)
 
-const { title, description, author, categories, image, date, tags } = post.data;
+const { title, description, author, categories, image, date, tags } = post.data
 console.log('Destructured values:', {
   title,
   author,
@@ -25,7 +25,7 @@ console.log('Destructured values:', {
   image,
   date,
   tags: tags?.length,
-});
+})
 ---
 
 <section class="section pt-7">
@@ -40,8 +40,8 @@ console.log('Destructured values:', {
       <p><strong>Image:</strong> {post?.data?.image}</p>
     </div>
 
-    <div class="row justify-center">
-      <article class="lg:col-10">
+    <div class="flex justify-center">
+      <article class="w-full lg:w-5/6">
         {
           image && (
             <div class="mb-10">
@@ -60,12 +60,12 @@ console.log('Destructured values:', {
         <ul class="mb-4">
           <li class="mr-4 inline-block">
             <a href={`/authors/${slugify(author)}`}>
-              <FaRegUserCircle className={'mr-2 -mt-1 inline-block'} />
+              <FaRegUserCircle className={'-mt-1 mr-2 inline-block'} />
               {humanize(author)}
             </a>
           </li>
           <li class="mr-4 inline-block">
-            <FaRegFolder className={'mr-2 -mt-1 inline-block'} />
+            <FaRegFolder className={'-mt-1 mr-2 inline-block'} />
             {
               categories.map((category: string, index: number) => (
                 <a href={`/categories/${slugify(category)}`}>
@@ -76,7 +76,7 @@ console.log('Destructured values:', {
             }
           </li>
           <li class="mr-4 inline-block">
-            <FaRegClock className={'mr-2 -mt-1 inline-block'} />
+            <FaRegClock className={'-mt-1 mr-2 inline-block'} />
             {dateFormat(date)}
           </li>
         </ul>
@@ -90,8 +90,8 @@ console.log('Destructured values:', {
         </div>
 
         <!-- Tags section -->
-        <div class="row items-start justify-between">
-          <div class="mb-10 flex items-center lg:col-5 lg:mb-0">
+        <div class="flex flex-wrap items-start justify-between">
+          <div class="mb-10 flex w-full items-center lg:mb-0 lg:w-5/12">
             <h5 class="mr-3">Tags :</h5>
             <ul>
               {
@@ -99,7 +99,7 @@ console.log('Destructured values:', {
                   tags.map((tag: string) => (
                     <li class="inline-block">
                       <a
-                        class="m-1 block rounded bg-light px-3 py-1 hover:bg-primary hover:text-white dark:bg-darkmode-light dark:hover:bg-darkmode-primary dark:hover:text-text-dark"
+                        class="bg-light hover:bg-primary dark:bg-darkmode-light dark:hover:bg-darkmode-primary dark:hover:text-text-dark m-1 block rounded px-3 py-1 hover:text-white"
                         href={`/tags/${slugify(tag)}`}
                       >
                         {humanize(tag)}

@@ -1,34 +1,33 @@
-
 ---
 // Testimonials.astro
-import { markdownify } from "@/utils/textConverter";
-import ImageMod from "@/components/common/ImageMod/ImageMod.astro";
-const { testimonial } = Astro.props;
+import { markdownify } from '@/utils/textConverter'
+import ImageMod from '@/components/common/ImageMod/ImageMod.astro'
+const { testimonial } = Astro.props
 ---
 
 {
   testimonial.data.enable && (
     <section class="section">
       <div class="container">
-        <div class="row">
-          <div class="mx-auto mb-12 text-center md:col-10 lg:col-8 xl:col-6">
+        <div class="flex flex-wrap">
+          <div class="mx-auto mb-12 w-full text-center md:w-5/6 lg:w-2/3 xl:w-1/2">
             <h2 set:html={markdownify(testimonial.data.title)} class="mb-4" />
             <p set:html={markdownify(testimonial.data.description)} />
           </div>
 
-          <div class="col-12">
+          <div class="w-full">
             <div class="swiper testimonial-slider">
               <div class="swiper-wrapper">
                 {testimonial.data.testimonials.map(
                   (item: {
-                    avatar: string;
-                    content: string;
-                    name: string;
-                    designation: string;
+                    avatar: string
+                    content: string
+                    name: string
+                    designation: string
                   }) => (
                     <div class="swiper-slide">
                       {/* Carte de témoignage DaisyUI */}
-                      <div class="rounded-lg bg-base-100 px-7 py-10">
+                      <div class="bg-base-100 rounded-lg px-7 py-10">
                         <div class="text-base-content">
                           <svg
                             width="33"
@@ -45,11 +44,11 @@ const { testimonial } = Astro.props;
                         </div>
 
                         <blockquote
-                          class="mt-8 text-base-content"
+                          class="text-base-content mt-8"
                           set:html={markdownify(item.content)}
                         />
 
-                        <div class="mt-11 flex items-center text-base-content">
+                        <div class="text-base-content mt-11 flex items-center">
                           <ImageMod
                             height={50}
                             width={50}
@@ -61,12 +60,9 @@ const { testimonial } = Astro.props;
                           <div class="ml-4">
                             <h3
                               set:text={item.name}
-                              class="h5 font-primary font-semibold text-base-content"
+                              class="h5 font-primary text-base-content font-semibold"
                             />
-                            <p
-                              set:text={item.designation}
-                              class="text-base-content"
-                            />
+                            <p set:text={item.designation} class="text-base-content" />
                           </div>
                         </div>
                       </div>
@@ -85,13 +81,13 @@ const { testimonial } = Astro.props;
 }
 
 <script>
-  import { Swiper } from "swiper";
-  import "swiper/css";
-  import "swiper/css/pagination";
-  import { Autoplay, Pagination } from "swiper/modules";
+  import { Swiper } from 'swiper'
+  import 'swiper/css'
+  import 'swiper/css/pagination'
+  import { Autoplay, Pagination } from 'swiper/modules'
 
-  document.addEventListener("astro:page-load", () => {
-    new Swiper(".testimonial-slider", {
+  document.addEventListener('astro:page-load', () => {
+    new Swiper('.testimonial-slider', {
       modules: [Pagination, Autoplay],
       spaceBetween: 24,
       loop: true,
@@ -101,17 +97,14 @@ const { testimonial } = Astro.props;
         disableOnInteraction: false,
       },
       pagination: {
-        el: ".testimonial-slider-pagination",
-        type: "bullets",
+        el: '.testimonial-slider-pagination',
+        type: 'bullets',
         clickable: true,
       },
       breakpoints: {
         768: { slidesPerView: 2 },
         992: { slidesPerView: 3 },
       },
-    });
-  });
+    })
+  })
 </script>
-
-
-
