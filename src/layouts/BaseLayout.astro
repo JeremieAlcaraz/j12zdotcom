@@ -1,8 +1,9 @@
 ---
-// src/layouts/Layout.astro
-import '@styles/global.css';
-import Navbar from '@components/header/Header.astro';
-import Footer from '@components/footer/Footer.astro';
+import '@styles/index.css';
+import { Header } from '@components/common/index';
+import { Footer } from '@components/common/index';
+import TwSizeIndicator from '@components/ui/TwSizeIndicator.astro';
+import { ClientRouter } from 'astro:transitions';
 const { title = 'Mon Site' } = Astro.props;
 ---
 
@@ -13,46 +14,90 @@ const { title = 'Mon Site' } = Astro.props;
     <meta name="viewport" content="width=device-width" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <title>{title}</title>
+    <ClientRouter />
+
+    <script is:inline>
+      function initTheme() {
+        const THEME_STORAGE_KEY = 'theme';
+        const savedTheme = localStorage.getItem(THEME_STORAGE_KEY);
+        const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+        const initialThemeIsDark = savedTheme ? savedTheme === 'dark' : prefersDark;
+        document.documentElement.setAttribute(
+          'data-theme',
+          initialThemeIsDark ? 'dark' : 'douceurLight'
+        );
+      }
+
+      // Initialisation au chargement
+      initTheme();
+
+      // Réinitialisation après chaque navigation ViewTransition
+      document.addEventListener('astro:after-swap', initTheme);
+    </script>
   </head>
 
-  <body class="min-h-screen flex flex-col">
-    <!-- ====================================== -->
-    <!-- 1) HEADER : full-width (pas de container) -->
-    <!-- ====================================== -->
-    <header class="fixed inset-x-0 top-0 z-50
-        bg-transparent">
-      <Navbar />
-    </header>
+  <body class="min-h-screen">
+    <!-- Layout principal avec Grid Tailwind -->
+    <div class="min-h-screen grid grid-rows-[auto_1fr_auto]">
+      <TwSizeIndicator />
+      <!-- HEADER fixe -->
+      <header class="fixed top-0 left-0 right-0 z-50 bg-transparent">
+        <Header />
+      </header>
 
-    <!-- ====================================== -->
-    <!-- 2) MAIN :                          -->
-    <!--    a) slot hero full-width        -->
-    <!--    b) slot par défaut centré      -->
-    <!-- ====================================== -->
-    <main class="flex-1 pt-16">
-      <!-- a) HERO en full-width -->
-      <slot name="hero" />
+      <!-- MAIN avec Hero full-width -->
+      <main class="pt-16 overflow-x-hidden">
+        <!-- Hero full-width -->
+        <slot name="hero" />
+        <!-- Contenu centré pour les autres sections -->
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <slot />
+        </div>
+      </main>
 
-      <!-- b) CONTENU centré dans container -->
-      <div class="container mx-auto px-4">
-        <slot />
-      </div>
-    </main>
-    <!-- ====================================== -->
-    <!-- 3) FOOTER : en bas de page -->
-    <!-- ====================================== -->
-    <footer>
-      <Footer />
-    </footer>
+      <!-- FOOTER -->
+      <footer class="mt-auto">
+        <Footer />
+      </footer>
+    </div>
   </body>
 </html>
 
+<!-- CSS minimal - seulement pour les spécificités impossibles avec Tailwind -->
 <style>
-  /* reset minimal */
-  html,
-  body {
-    margin: 0;
-    width: 100%;
-    height: 100%;
+  /* Tailwind CSS v4 gère automatiquement le reset via @import "tailwindcss" */
+  /* Plus besoin de reset manual ni de CSS custom pour le layout */
+
+  /* Transition douce et fluide pour ViewTransitions */
+  ::view-transition-old(root),
+  ::view-transition-new(root) {
+    animation-duration: 0.6s;
+    animation-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  ::view-transition-old(root) {
+    animation-name: fade-out-smooth;
+  }
+
+  ::view-transition-new(root) {
+    animation-name: fade-in-smooth;
+  }
+
+  @keyframes fade-out-smooth {
+    0% {
+      opacity: 1;
+    }
+    100% {
+      opacity: 0;
+    }
+  }
+
+  @keyframes fade-in-smooth {
+    0% {
+      opacity: 0;
+    }
+    100% {
+      opacity: 1;
+    }
   }
 </style>

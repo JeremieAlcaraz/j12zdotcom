@@ -8,16 +8,12 @@
       "@utils/*": ["src/utils/*"],
       "@config/*": ["src/config/*"],
       "@layouts/*": ["src/layouts/*"],
+      "@types/*": ["src/types/*"],
       "@playground/*": ["src/playground/*"],
-      "@styles/*": ["src/styles/*"]
+      "@styles/*": ["src/styles/*"],
+      "@/*": ["./src/*"]
     }
   },
-  "include": [
-    ".astro/types.d.ts",
-    "**/*"
-  ],
-  "exclude": [
-    "dist",
-    "node_modules"
-  ]
+  "include": [".astro/types.d.ts", "**/*.ts", "**/*.tsx", "**/*.astro"],
+  "exclude": ["dist", "node_modules"]
 }
