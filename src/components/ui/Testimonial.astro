@@ -1,4 +1,3 @@
-
 ---
 // Testimonials.astro
 import { markdownify } from "@/utils/textConverter";
@@ -10,15 +9,14 @@ const { testimonial } = Astro.props;
   testimonial.data.enable && (
     <section class="section">
       <div class="container">
-        <div class="row">
-          <div class="mx-auto mb-12 text-center md:col-10 lg:col-8 xl:col-6">
-            <h2 set:html={markdownify(testimonial.data.title)} class="mb-4" />
-            <p set:html={markdownify(testimonial.data.description)} />
-          </div>
+        <div class="mx-auto mb-12 w-full text-center md:w-5/6 lg:w-2/3 xl:w-1/2">
+          <h2 set:html={markdownify(testimonial.data.title)} class="mb-4" />
+          <p set:html={markdownify(testimonial.data.description)} />
+        </div>
 
-          <div class="col-12">
-            <div class="swiper testimonial-slider">
-              <div class="swiper-wrapper">
+        <div>
+          <div class="swiper testimonial-slider">
+            <div class="swiper-wrapper">
                 {testimonial.data.testimonials.map(
                   (item: {
                     avatar: string;
