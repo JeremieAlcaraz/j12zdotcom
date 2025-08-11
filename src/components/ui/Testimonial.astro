@@ -2,14 +2,16 @@
 // Testimonials.astro
 import { markdownify } from '@/utils/textConverter'
 import ImageMod from '@/components/common/ImageMod/ImageMod.astro'
+import Container from '@components/ui/Container.astro'
+import Section from '@components/ui/Section.astro'
 const { testimonial } = Astro.props
 ---
 
 {
-  testimonial.data.enable && (
-    <section class="section w-full">
-      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="flex flex-wrap">
+    testimonial.data.enable && (
+      <Section class="w-full">
+        <Container>
+          <div class="flex flex-wrap">
           <div class="mx-auto mb-12 w-full text-center md:w-5/6 lg:w-2/3 xl:w-1/2">
             <h2 set:html={markdownify(testimonial.data.title)} class="mb-4" />
             <p set:html={markdownify(testimonial.data.description)} />
@@ -73,10 +75,10 @@ const { testimonial } = Astro.props
 
               <div class="testimonial-slider-pagination mt-9 flex items-center justify-center text-center" />
             </div>
+            </div>
           </div>
-        </div>
-      </div>
-    </section>
+        </Container>
+      </Section>
   )
 }
 

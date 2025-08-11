@@ -2,12 +2,13 @@
 // src/components/Navbar.astro
 // ✅ Imports
 import siteConfig from '@config/siteConfig';
+import Container from '@components/ui/Container.astro';
 
 const { copyright } = siteConfig.params;
 ---
 
-<footer class="bg-base-300 text-base-content w-full">
-  <div class="footer footer-horizontal footer-center rounded p-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+  <footer class="bg-base-300 text-base-content w-full">
+    <Container as="div" class="footer footer-horizontal footer-center rounded p-10">
     <nav class="grid grid-flow-col gap-4">
       <a class="link link-hover" href="/elements">Elements</a>
       <a class="link link-hover">About us</a>
@@ -60,6 +61,6 @@ const { copyright } = siteConfig.params;
     </nav>
     <aside>
       <p>Copyright © {new Date().getFullYear()} - {copyright}</p>
-    </aside>
-  </div>
-</footer>
+      </aside>
+    </Container>
+  </footer>

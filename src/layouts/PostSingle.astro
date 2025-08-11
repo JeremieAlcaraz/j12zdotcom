@@ -4,42 +4,18 @@ import { humanize, markdownify, slugify } from '@/utils/textConverter'
 import { render } from 'astro:content'
 import { FaRegClock, FaRegFolder, FaRegUserCircle } from 'react-icons/fa'
 import ImageMod from '@components/common/ImageMod/ImageMod.astro'
+import Container from '@components/ui/Container.astro'
+import Section from '@components/ui/Section.astro'
 
 const { post } = Astro.props
-
-// === LOGS DE DÉBOGAGE ===
-console.log('=== DEBUG PostSingle ===')
-console.log('Post received in PostSingle:', !!post)
-console.log('Post data keys:', Object.keys(post?.data || {}))
-console.log('Title from PostSingle:', post?.data?.title)
-
-// Test du rendu du contenu
 
 const { Content } = await render(post)
 
 const { title, description, author, categories, image, date, tags } = post.data
-console.log('Destructured values:', {
-  title,
-  author,
-  categories: categories?.length,
-  image,
-  date,
-  tags: tags?.length,
-})
 ---
 
-<section class="section pt-7">
-  <div class="container">
-    <!-- TEST DE DÉBOGAGE - SUPPRIMEZ APRÈS -->
-    <div style="border: 3px solid red; padding: 20px; margin: 20px 0; background: yellow;">
-      <h1>🔍 DEBUG: PostSingle chargé</h1>
-      <p><strong>Post ID:</strong> {post?.id}</p>
-      <p><strong>Post Title:</strong> {post?.data?.title}</p>
-      <p><strong>Author:</strong> {post?.data?.author}</p>
-      <p><strong>Categories:</strong> {post?.data?.categories?.join(', ')}</p>
-      <p><strong>Image:</strong> {post?.data?.image}</p>
-    </div>
-
+<Section class="pt-7">
+  <Container>
     <div class="flex justify-center">
       <article class="w-full lg:w-5/6">
         {
@@ -81,15 +57,10 @@ console.log('Destructured values:', {
           </li>
         </ul>
 
-        <!-- TEST DU CONTENU -->
-        <div style="border: 2px solid blue; padding: 10px; margin: 10px 0;">
-          <h3>🔍 DEBUG: Contenu markdown</h3>
-          <div class="content mb-10">
-            <Content />
-          </div>
+        <div class="content mb-10">
+          <Content />
         </div>
 
-        <!-- Tags section -->
         <div class="flex flex-wrap items-start justify-between">
           <div class="mb-10 flex w-full items-center lg:mb-0 lg:w-5/12">
             <h5 class="mr-3">Tags :</h5>
@@ -112,5 +83,5 @@ console.log('Destructured values:', {
         </div>
       </article>
     </div>
-  </div>
-</section>
+  </Container>
+</Section>

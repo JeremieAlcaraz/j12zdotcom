@@ -9,6 +9,8 @@ import { getSinglePage } from '@/utils/contentParser.astro';
 import { getCollection } from 'astro:content';
 import type { CollectionEntry } from 'astro:content';
 import { getEntry } from 'astro:content';
+import Section from '@components/ui/Section.astro';
+import Container from '@components/ui/Container.astro';
 
 const BLOG_FOLDER = 'blog';
 const postIndex = (await getEntry(BLOG_FOLDER, '-index')) as CollectionEntry<'blog'>;
@@ -20,11 +22,11 @@ const totalPages = Math.ceil(posts.length / config.settings.pagination);
 const currentPosts = posts.slice(0, config.settings.pagination);
 ---
 
-<BaseLayout title="Blog">
-  <!-- Section principale avec padding top pour éviter que ça colle au header -->
-  <section class="py-8 sm:py-12 lg:py-16 px-4">
-    <div class="max-w-6xl mx-auto">
-      <div class="flex flex-col lg:flex-row gap-8">
+  <BaseLayout title="Blog">
+    <!-- Section principale avec padding top pour éviter que ça colle au header -->
+    <Section>
+      <Container class="max-w-6xl">
+        <div class="flex flex-col lg:flex-row gap-8">
         <!-- Colonne principale pour les articles -->
         <div class="flex-1">
           <!-- Grid responsive pour les cartes -->
@@ -52,7 +54,7 @@ const currentPosts = posts.slice(0, config.settings.pagination);
           />
         </div>
         -->
-      </div>
-    </div>
-  </section>
-</BaseLayout>
+        </div>
+      </Container>
+    </Section>
+  </BaseLayout>

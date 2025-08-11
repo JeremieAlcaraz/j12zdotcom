@@ -3,6 +3,7 @@ import '@styles/index.css';
 import { Header } from '@components/common/index';
 import { Footer } from '@components/common/index';
 import TwSizeIndicator from '@components/ui/TwSizeIndicator.astro';
+import Container from '@components/ui/Container.astro';
 import { ClientRouter } from 'astro:transitions';
 const { title = 'Mon Site' } = Astro.props;
 ---
@@ -50,9 +51,9 @@ const { title = 'Mon Site' } = Astro.props;
         <!-- Hero full-width -->
         <slot name="hero" />
         <!-- Contenu centré pour les autres sections -->
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <Container>
           <slot />
-        </div>
+        </Container>
       </main>
 
       <!-- FOOTER -->

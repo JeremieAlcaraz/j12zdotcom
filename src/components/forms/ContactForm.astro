@@ -12,6 +12,8 @@
 // ------------------------------------------------------------------
 
 import siteConfig from '@config/siteConfig';
+import Section from '@components/ui/Section.astro';
+import Container from '@components/ui/Container.astro';
 
 // Type Script : les pages peuvent importer ce type si besoin.
 export interface ContactFormProps {
@@ -27,16 +29,16 @@ const { title = 'Contactez-moi', description = 'Je réponds généralement sous 
   Astro.props as ContactFormProps;
 ---
 
-<section id="contact" class="py-16 md:py-24 bg-base-200/30">
-  <div class="container mx-auto px-4">
-    <div class="max-w-2xl mx-auto text-center">
+  <Section id="contact" class="bg-base-200/30">
+    <Container>
+      <div class="max-w-2xl mx-auto text-center">
       <h2 class="text-3xl md:text-4xl font-bold mb-4">{title}</h2>
       <p class="mb-8 text-base-content/80">
         {description}
       </p>
     </div>
 
-    <div class="max-w-2xl mx-auto card bg-base-100 shadow-xl p-6 md:p-8">
+      <div class="max-w-2xl mx-auto card bg-base-100 shadow-xl p-6 md:p-8">
       <!--
         ✉️  Formulaire :
         - action : provient de votre config -> facile à changer depuis un seul endroit ;
@@ -105,5 +107,5 @@ const { title = 'Contactez-moi', description = 'Je réponds généralement sous 
         </div>
       </form>
     </div>
-  </div>
-</section>
+    </Container>
+  </Section>

@@ -3,6 +3,8 @@ import BaseLayout from '@/layouts/BaseLayout.astro'
 import BlogCard from '@components/blog/BlogCard.astro'
 import Pagination from '@components/blog/Pagination.astro'
 import { getCollection } from 'astro:content'
+import Section from '@components/ui/Section.astro'
+import Container from '@components/ui/Container.astro'
 
 const allPosts = await getCollection('blog')
 const postsPerPage = 5
@@ -14,13 +16,13 @@ export async function getStaticPaths({ paginate }) {
 const { page } = Astro.props
 ---
 
-<BaseLayout title={`Blog - Page ${page.currentPage}`}>
-  <section class="section">
-    <div class="container">
-      <div class="grid grid-cols-1 gap-y-14 md:grid-cols-2 md:gap-x-6">
-        {page.data.map(post => <BlogCard data={post} />)}
-      </div>
-      <Pagination section="blog" currentPage={page.currentPage} totalPages={page.lastPage} />
-    </div>
-  </section>
-</BaseLayout>
+  <BaseLayout title={`Blog - Page ${page.currentPage}`}>
+    <Section>
+      <Container>
+        <div class="grid grid-cols-1 gap-y-14 md:grid-cols-2 md:gap-x-6">
+          {page.data.map(post => <BlogCard data={post} />)}
+        </div>
+        <Pagination section="blog" currentPage={page.currentPage} totalPages={page.lastPage} />
+      </Container>
+    </Section>
+  </BaseLayout>
