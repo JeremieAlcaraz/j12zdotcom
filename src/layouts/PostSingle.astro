@@ -40,8 +40,8 @@ console.log('Destructured values:', {
       <p><strong>Image:</strong> {post?.data?.image}</p>
     </div>
 
-    <div class="row justify-center">
-      <article class="lg:col-10">
+    <div class="flex justify-center">
+      <article class="w-full lg:w-5/6">
         {
           image && (
             <div class="mb-10">
@@ -90,8 +90,8 @@ console.log('Destructured values:', {
         </div>
 
         <!-- Tags section -->
-        <div class="row items-start justify-between">
-          <div class="mb-10 flex items-center lg:col-5 lg:mb-0">
+        <div class="flex flex-wrap items-start justify-between">
+          <div class="mb-10 flex items-center lg:mb-0 lg:w-5/12">
             <h5 class="mr-3">Tags :</h5>
             <ul>
               {
