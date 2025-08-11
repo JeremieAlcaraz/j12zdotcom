@@ -15,7 +15,7 @@ const { testimonial } = Astro.props;
         </div>
 
         <div>
-          <div class="swiper testimonial-slider">
+          <div class="swiper testimonial-slider overflow-hidden">
             <div class="swiper-wrapper">
                 {testimonial.data.testimonials.map(
                   (item: {
@@ -90,9 +90,10 @@ const { testimonial } = Astro.props;
   document.addEventListener("astro:page-load", () => {
     new Swiper(".testimonial-slider", {
       modules: [Pagination, Autoplay],
+      slidesPerView: 1,
+      grabCursor: true,
       spaceBetween: 24,
       loop: true,
-      centeredSlides: true,
       autoplay: {
         delay: 2500,
         disableOnInteraction: false,
