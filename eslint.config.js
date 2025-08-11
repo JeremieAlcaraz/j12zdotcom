@@ -8,7 +8,8 @@ import globals from 'globals';
 
 export default tseslint.config(
   {
-    ignores: ['node_modules', 'dist', '.astro', 'public', 'eslint.config.js', 'astro.config.mjs', 'src/components/ui/Testimonial.astro'],
+    ignores: ['node_modules', 'dist', '.astro', 'public', 'eslint.config.js', 'astro.config.mjs'],
+
   },
   eslint.configs.recommended,
   ...tseslint.configs.recommended,
