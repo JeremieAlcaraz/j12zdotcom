@@ -5,10 +5,10 @@
   "editor.formatOnSave": true,
   "editor.codeActionsOnSave": { "source.fixAll": "explicit" },
 
-  "[astro]":        { "editor.defaultFormatter": "esbenp.prettier-vscode" },
-  "[javascript]":   { "editor.defaultFormatter": "esbenp.prettier-vscode" },
-  "[typescript]":   { "editor.defaultFormatter": "esbenp.prettier-vscode" },
-  "[css]":          { "editor.defaultFormatter": "esbenp.prettier-vscode" },
+  "[astro]": { "editor.defaultFormatter": "esbenp.prettier-vscode" },
+  "[javascript]": { "editor.defaultFormatter": "esbenp.prettier-vscode" },
+  "[typescript]": { "editor.defaultFormatter": "esbenp.prettier-vscode" },
+  "[css]": { "editor.defaultFormatter": "esbenp.prettier-vscode" },
 
   // ————————————————————————————————————
   // 2. Améliorations Astro
@@ -34,10 +34,10 @@
           "comment.block.documentation",
           "comment.line",
           "comment.line.double-dash",
-          "punctuation.definition.comment"      // <-- chevrons & tirets
+          "punctuation.definition.comment" // <-- chevrons & tirets
         ],
         "settings": {
-          "foreground": "#6A9955",               // vert
+          "foreground": "#6A9955" // vert
         }
       }
     ]
@@ -57,18 +57,6 @@
   // ————————————————————————————————————
   // 4. Spell-Checker (on l’exclut des .astro)
   // ————————————————————————————————————
-  "cSpell.enableFiletypes": [
-    "javascript",
-    "typescript",
-    "css",
-    "markdown",
-    "json"
-  ],
-  "cSpell.enabledLanguageIds": [
-    "javascript",
-    "typescript",
-    "css",
-    "markdown",
-    "json"
-  ]
+  "cSpell.enableFiletypes": ["javascript", "typescript", "css", "markdown", "json"],
+  "cSpell.enabledLanguageIds": ["javascript", "typescript", "css", "markdown", "json"]
 }

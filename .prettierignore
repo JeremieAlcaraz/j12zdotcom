@@ -1,0 +1,18 @@
+# lockfile
+pnpm-lock.yaml
+
+# dossier des dépendances
+node_modules/
+
+# fichiers générés
+dist/
+.astro/
+public/
+
+# config d’IDE / OS
+.vscode/
+.DS_Store
+
+# styles compilés (si tu en as)
+src/styles/**/*.css
+

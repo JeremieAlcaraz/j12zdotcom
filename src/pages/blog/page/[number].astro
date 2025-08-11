@@ -1,0 +1,86 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import BlogCard from '@components/blog/BlogCard.astro';
+import Pagination from '@components/blog/Pagination.astro';
+import config from '@/config/siteConfig.ts';
+import { sortByDate } from '@utils/sortFunctions';
+import PostSidebar from '@components/blog/PostSidebar.astro';
+import { getSinglePage } from '@/utils/contentParser.astro';
+import { getCollection } from 'astro:content';
+import type { CollectionEntry } from 'astro:content';
+import { getEntry } from 'astro:content';
+
+const COLLECTION_FOLDER = 'blog';
+const { number } = Astro.params;
+
+const postIndex = (await getEntry(COLLECTION_FOLDER, '-index')) as CollectionEntry<'blog'>;
+const posts = await getSinglePage(COLLECTION_FOLDER);
+// const allCategories = posts.flatMap((post) => post.data.categories);
+const sortedPosts = sortByDate(posts);
+// const categories = [...new Set(allCategories)];
+
+const currentPage = parseInt(number ?? '1', 10) || 1;
+const totalPages = Math.ceil(posts.length / config.settings.pagination);
+// const currentPosts = posts.slice(0, config.settings.pagination);
+const indexOfLastPost = currentPage * config.settings.pagination;
+const indexOfFirstPost = indexOfLastPost - config.settings.pagination;
+
+const currentPosts = sortedPosts.slice(indexOfFirstPost, indexOfLastPost);
+
+export async function getStaticPaths() {
+  const COLLECTION_FOLDER = 'blog';
+  const posts = await getSinglePage(COLLECTION_FOLDER);
+  const totalPages = Math.ceil(posts.length / config.settings.pagination);
+  const paths = [];
+
+  for (let i = 0; i < totalPages; i++) {
+    paths.push({
+      params: {
+        number: (i + 1).toString(),
+      },
+    });
+  }
+  return paths;
+}
+---
+
+<BaseLayout title="Blog">
+  <!-- Section principale avec padding top pour éviter que ça colle au header -->
+  <section class="py-8 sm:py-12 lg:py-16 px-4">
+    <div class="max-w-6xl mx-auto">
+      <div class="flex flex-col lg:flex-row gap-8">
+        <!-- Colonne principale pour les articles -->
+        <div class="flex-1">
+          <!-- Grid responsive pour les cartes -->
+          <div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-4 sm:gap-6 mb-8">
+            {
+              currentPosts.map((post) => (
+                <div class="w-full">
+                  <BlogCard data={post} />
+                </div>
+              ))
+            }
+          </div>
+          <!-- Pagination -->
+          <div class="flex justify-center mt-12">
+            <Pagination
+              section={COLLECTION_FOLDER}
+              currentPage={currentPage}
+              totalPages={totalPages}
+            />
+          </div>
+        </div>
+
+        <!-- Sidebar (décommentez si vous voulez l'activer) -->
+        <!-- 
+        <div class="lg:w-1/3">
+          <PostSidebar
+            categories={categories}
+            allCategories={allCategories}
+          />
+        </div>
+        -->
+      </div>
+    </div>
+  </section>
+</BaseLayout>

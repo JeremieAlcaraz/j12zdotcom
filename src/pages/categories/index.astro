@@ -1,0 +1,30 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import { getCollection } from 'astro:content';
+
+const blogEntries = await getCollection('blog');
+const allCategories = blogEntries.flatMap((entry) => entry.data.categories);
+const categories = [...new Set(allCategories)];
+---
+
+<BaseLayout title="Categories">
+  <section class="section">
+    <div class="container text-center">
+      <h1 class="h2 mb-8">Toutes les catégories</h1>
+      <ul class="space-y-4">
+        {
+          categories.map((category) => {
+            const count = allCategories.filter((c) => c === category).length;
+            return (
+              <li class="inline-block">
+                <a href={`/categories/${category}`} class="btn btn-lg btn-outline capitalize">
+                  {category} <div class="badge badge-primary">{count}</div>
+                </a>
+              </li>
+            );
+          })
+        }
+      </ul>
+    </div>
+  </section>
+</BaseLayout>

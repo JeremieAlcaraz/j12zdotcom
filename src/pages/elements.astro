@@ -1,0 +1,57 @@
+---
+// src/pages/elements.astro
+// cette page servira à tester tous les components
+import BaseLayout from '@layouts/BaseLayout.astro';
+import BlogCard from '@components/blog/BlogCard.astro';
+import Pagination from '@components/blog/Pagination.astro';
+import config from '@config/siteConfig';
+import { getSinglePage } from '@/utils/contentParser.astro';
+import { getAllTaxonomy, getTaxonomy } from '@/utils/taxonomyParser.astro';
+import { sortByDate } from '@/utils/sortFunctions';
+import type { CollectionEntry } from 'astro:content';
+import { getEntry } from 'astro:content';
+import Hero from '@components/ui/Hero.astro';
+
+const BLOG_FOLDER = 'blog';
+const postIndex = (await getEntry(BLOG_FOLDER, '-index')) as CollectionEntry<'blog'>;
+const posts = await getSinglePage(BLOG_FOLDER);
+const allCategories = await getAllTaxonomy(BLOG_FOLDER, 'categories');
+const categories = await getTaxonomy(BLOG_FOLDER, 'categories');
+const tags = await getTaxonomy(BLOG_FOLDER, 'tags');
+const sortedPosts = sortByDate(posts);
+const totalPages: number = Math.ceil(posts.length / config.settings.pagination);
+const currentPosts = sortedPosts.slice(0, config.settings.pagination);
+const currentPage = 1; // Pour l'exemple, on peut aussi récupérer depuis l'URL
+---
+
+<BaseLayout title="elements">
+  <!-- Section Hero -->
+
+  <section class="mt-16 mb-12 border-2 border-primary rounded-lg p-8">
+    <h2 class="text-3xl font-bold text-center mb-8">Hero Section</h2>
+    <!-- TODO:  Tester de mettre un wrapper  sur le Hero directement -->
+    <Hero />
+  </section>
+
+  <!-- Section Blog Cards -->
+  <section class="mt-16 mb-12">
+    <h2 class="text-3xl font-bold text-center mb-8">Les cartes de blog</h2>
+    <div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-4 sm:gap-6 mb-8">
+      {
+        currentPosts.map((post) => (
+          <div class="w-full">
+            <BlogCard data={post} />
+          </div>
+        ))
+      }
+    </div>
+  </section>
+
+  <!-- Section Pagination -->
+  <section class="mt-16 mb-12">
+    <h2 class="text-3xl font-bold text-center mb-8">La Pagination</h2>
+    <div class="flex justify-center">
+      <Pagination section="blog" totalPages={Math.max(totalPages, 5)} currentPage={currentPage} />
+    </div>
+  </section>
+</BaseLayout>
