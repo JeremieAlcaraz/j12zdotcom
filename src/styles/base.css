@@ -9,10 +9,10 @@
   }
 
   .swiper-pagination-bullet-active {
-    @apply h-4 w-4 bg-primary;
+    @apply h-4 w-4 !bg-primary;
   }
   .dark .swiper-pagination-bullet-active {
-    @apply bg-primary; /* le thème Daisy ajuste le contraste */
+    @apply !bg-primary; /* le thème Daisy ajuste le contraste */
   }
 }
 
