@@ -39,4 +39,3 @@ Voici un aperçu des dossiers et fichiers les plus importants :
 | `pnpm lint`    | Analyse le code pour détecter les erreurs et problèmes de style.       |
 | `pnpm format`  | Formate l'ensemble du code avec Prettier.                              |
 | `pnpm check`   | Lance le vérificateur de types de TypeScript sur le projet.            |
-

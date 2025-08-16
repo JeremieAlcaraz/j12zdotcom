@@ -1,55 +1,51 @@
 ---
 // src/pages/elements.astro
 // cette page servira à tester tous les components
-import BaseLayout from '@layouts/BaseLayout.astro';
-import BlogCard from '@components/blog/BlogCard.astro';
-import Pagination from '@components/blog/Pagination.astro';
-import Testimonial from "@/components/ui/Testimonial.astro";
-import { Footer } from '@components/common';
-import config from '@config/siteConfig';
-import { getSinglePage } from '@/utils/contentParser.astro';
-import { getAllTaxonomy, getTaxonomy } from '@/utils/taxonomyParser.astro';
-import { sortByDate } from '@/utils/sortFunctions';
-import type { CollectionEntry } from 'astro:content';
-import { getEntry } from 'astro:content';
-import Hero from '@components/ui/Hero.astro';
+import BaseLayout from '@layouts/BaseLayout.astro'
+import BlogCard from '@components/blog/BlogCard.astro'
+import Pagination from '@components/blog/Pagination.astro'
+import Testimonial from '@/components/ui/Testimonial.astro'
+import Footer from '@/components/layout/SiteFooter.astro';
+import config from '@config/siteConfig'
+import { getSinglePage } from '@/utils/contentParser.astro'
+import { getAllTaxonomy, getTaxonomy } from '@/utils/taxonomyParser.astro'
+import { sortByDate } from '@/utils/sortFunctions'
+import type { CollectionEntry } from 'astro:content'
+import { getEntry } from 'astro:content'
+import Hero from '@/components/sections/HeroSection.astro'
 
-
-
-
-const BLOG_FOLDER = 'blog';
-const postIndex = (await getEntry(BLOG_FOLDER, '-index')) as CollectionEntry<'blog'>;
-const posts = await getSinglePage(BLOG_FOLDER);
-const allCategories = await getAllTaxonomy(BLOG_FOLDER, 'categories');
-const categories = await getTaxonomy(BLOG_FOLDER, 'categories');
-const tags = await getTaxonomy(BLOG_FOLDER, 'tags');
-const sortedPosts = sortByDate(posts);
-const totalPages: number = Math.ceil(posts.length / config.settings.pagination);
-const currentPosts = sortedPosts.slice(0, config.settings.pagination);
-const currentPage = 1; // Pour l'exemple, on peut aussi récupérer depuis l'URL
+const BLOG_FOLDER = 'blog'
+const postIndex = (await getEntry(BLOG_FOLDER, '-index')) as CollectionEntry<'blog'>
+const posts = await getSinglePage(BLOG_FOLDER)
+const allCategories = await getAllTaxonomy(BLOG_FOLDER, 'categories')
+const categories = await getTaxonomy(BLOG_FOLDER, 'categories')
+const tags = await getTaxonomy(BLOG_FOLDER, 'tags')
+const sortedPosts = sortByDate(posts)
+const totalPages: number = Math.ceil(posts.length / config.settings.pagination)
+const currentPosts = sortedPosts.slice(0, config.settings.pagination)
+const currentPage = 1 // Pour l'exemple, on peut aussi récupérer depuis l'URL
 
 const testimonial = (await getEntry(
-  "testimonialSection",
-  "testimonial"
-)) as CollectionEntry<"testimonialSection">;
-
+  'testimonialSection',
+  'testimonial'
+)) as CollectionEntry<'testimonialSection'>
 ---
 
 <BaseLayout title="elements">
   <!-- Section Hero -->
 
-  <section class="mt-16 mb-12 border-2 border-primary rounded-lg p-8">
-    <h2 class="text-3xl font-bold text-center mb-8">Hero Section</h2>
+  <section class="border-primary mt-16 mb-12 rounded-lg border-2 p-8">
+    <h2 class="mb-8 text-center text-3xl font-bold">Hero Section</h2>
     <!-- TODO:  Tester de mettre un wrapper  sur le Hero directement -->
     <Hero />
   </section>
 
   <!-- Section Blog Cards -->
-<section class="mt-16 mb-12 border border-primary border-dotted">
-    <h2 class="text-3xl font-bold text-center mb-8">Les cartes de blog</h2>
-    <div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-4 sm:gap-6 mb-8">
+  <section class="border-primary mt-16 mb-12 border border-dotted">
+    <h2 class="mb-8 text-center text-3xl font-bold">Les cartes de blog</h2>
+    <div class="mb-8 grid grid-cols-1 gap-4 sm:grid-cols-2 sm:gap-6 xl:grid-cols-3">
       {
-        currentPosts.map((post) => (
+        currentPosts.map(post => (
           <div class="w-full">
             <BlogCard data={post} />
           </div>
@@ -58,24 +54,24 @@ const testimonial = (await getEntry(
     </div>
   </section>
   <!-- Section Testimonial -->
-<section class="mt-16 mb-12 border border-primary border-dotted">
-    <h2 class="text-3xl font-bold text-center mb-8">Section Témoignages</h2>
+  <section class="border-primary mt-16 mb-12 border border-dotted">
+    <h2 class="mb-8 text-center text-3xl font-bold">Section Témoignages</h2>
     <div class="flex justify-center">
       <Testimonial testimonial={testimonial} />
     </div>
-</section>
+  </section>
 
   <!-- Section Pagination -->
-  <section class="mt-16 mb-12 border border-primary border-dotted">
-    <h2 class="text-3xl font-bold text-center mb-8">La Pagination</h2>
+  <section class="border-primary mt-16 mb-12 border border-dotted">
+    <h2 class="mb-8 text-center text-3xl font-bold">La Pagination</h2>
     <div class="flex justify-center">
       <Pagination section="blog" totalPages={Math.max(totalPages, 5)} currentPage={currentPage} />
     </div>
   </section>
 
   <!-- section Footer -->
-  <section class="mt-16 mb-12 border border-primary border-dotted">
-    <h2 class="text-3xl font-bold text-center mb-8">Footer</h2>
+  <section class="border-primary mt-16 mb-12 border border-dotted">
+    <h2 class="mb-8 text-center text-3xl font-bold">Footer</h2>
     <Footer />
   </section>
 </BaseLayout>

@@ -1,9 +1,16 @@
 ---
-import type { NavbarProps } from './Header.types';
-import { SunIcon, MoonIcon } from '@/components';
-import { defaultLogo, defaultLogoDark, defaultLinks } from '@config/navigation'; // Valeurs par défaut pour logo et liens
+import type { NavLink } from './SiteHeader.types';
+import SunIcon from '@/components/atoms/icons/SunIcon.astro';
+import MoonIcon from '@/components/atoms/icons/MoonIcon.astro';
+import { defaultLogo, defaultLogoDark, defaultLinks } from '@/config/navigation'; // Valeurs par défaut pour logo et liens
+
+interface Props {
+  logo?: string;
+  links?: NavLink[];
+}
+
 // ✅ DESTRUCTURATION DES PROPS avec valeurs par défaut
-const { logo = defaultLogo, links = defaultLinks } = Astro.props as NavbarProps;
+const { logo = defaultLogo, links = defaultLinks } = Astro.props;
 ---
 
 <!-- ==========================================
@@ -27,12 +34,12 @@ const { logo = defaultLogo, links = defaultLinks } = Astro.props as NavbarProps;
   </div>
 
   <!-- PARTIE CENTRALE DE LA NAVBAR (navigation principale) -->
-  <div class="navbar-center hidden lg:flex overflow-visible">
+  <div class="navbar-center hidden overflow-visible lg:flex">
     <!-- LISTE DE NAVIGATION HORIZONTALE -->
-    <ul class="menu menu-horizontal px-1 overflow-visible">
+    <ul class="menu menu-horizontal overflow-visible px-1">
       {
         /* BOUCLE JAVASCRIPT pour générer les liens de navigation */
-        links.map(({ href, label }) => (
+        links.map(({ href, label }: NavLink) => (
           <li>
             <a href={href} class="hover:bg-primary hover:text-primary-content rounded-lg">
               {label}
@@ -84,11 +91,11 @@ const { logo = defaultLogo, links = defaultLinks } = Astro.props as NavbarProps;
       <!-- shadow = ombre, bg-base-100 = couleur de fond, rounded-box = coins arrondis -->
       <ul
         tabindex="0"
-        class="menu menu-sm dropdown-content mt-3 z-[1] p-2 shadow bg-base-100 rounded-box w-52"
+        class="menu menu-sm dropdown-content bg-base-100 rounded-box z-[1] mt-3 w-52 p-2 shadow"
       >
         {
           /* MÊME BOUCLE que pour le menu desktop mais sans styling hover spécial */
-          links.map(({ href, label }) => (
+          links.map(({ href, label }: NavLink) => (
             <li>
               <a href={href}>{label}</a>
             </li>
@@ -103,5 +110,5 @@ const { logo = defaultLogo, links = defaultLinks } = Astro.props as NavbarProps;
      SECTION SCRIPT JAVASCRIPT CLIENT
      ========================================== -->
 <script>
-  import '@/utils/toggleDark';
+  import '@/utils/toggleDark'
 </script>
