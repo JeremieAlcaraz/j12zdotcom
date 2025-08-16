@@ -4,23 +4,24 @@ import BlogCard from '@/components/organisms/BlogCard.astro'
 import Pagination from '@/components/molecules/Pagination.astro'
 import config from '@/config/siteConfig.ts'
 import { sortByDate } from '@utils/sortFunctions'
-import PostSidebar from '@/components/organisms/PostSidebar.astro'
 import { getSinglePage } from '@/utils/contentParser.astro'
-import { getCollection } from 'astro:content'
 import type { CollectionEntry } from 'astro:content'
 import { getEntry } from 'astro:content'
 
 const BLOG_FOLDER = 'blog'
 const postIndex = (await getEntry(BLOG_FOLDER, '-index')) as CollectionEntry<'blog'>
 const posts = await getSinglePage(BLOG_FOLDER)
-// const allCategories = posts.flatMap((post) => post.data.categories);
-// const sortedPosts = sortByDate(posts);
-// const categories = [...new Set(allCategories)];
+const sortedPosts = sortByDate(posts)
 const totalPages = Math.ceil(posts.length / config.settings.pagination)
-const currentPosts = posts.slice(0, config.settings.pagination)
+const currentPosts = sortedPosts.slice(0, config.settings.pagination)
 ---
 
-<BaseLayout title="Blog">
+<BaseLayout
+  title={postIndex.data.title}
+  meta_title={postIndex.data.meta_title}
+  image={postIndex.data.image}
+  description={postIndex.data.description}
+>
   <!-- Section principale avec padding top pour éviter que ça colle au header -->
   <section class="px-4 py-8 sm:py-12 lg:py-16">
     <div class="mx-auto max-w-6xl">
