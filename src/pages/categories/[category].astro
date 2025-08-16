@@ -1,34 +1,30 @@
 ---
-import BaseLayout from '@/layouts/BaseLayout.astro';
-import BlogCard from '@components/blog/BlogCard.astro';
-import { getCollection } from 'astro:content';
+import BaseLayout from '@/layouts/BaseLayout.astro'
+import BlogCard from '@/components/organisms/BlogCard.astro'
+import { getCollection } from 'astro:content'
 
 export async function getStaticPaths() {
-  const blogEntries = await getCollection('blog');
-  const categories = [...new Set(blogEntries.flatMap((entry) => entry.data.categories))];
-  return categories.map((category) => ({
+  const blogEntries = await getCollection('blog')
+  const categories = [...new Set(blogEntries.flatMap(entry => entry.data.categories))]
+  return categories.map(category => ({
     params: { category },
-  }));
+  }))
 }
 
-const { category } = Astro.params;
-const blogEntries = await getCollection('blog', ({ data }) => data.categories.includes(category!));
+const { category } = Astro.params
+const blogEntries = await getCollection('blog', ({ data }) => data.categories.includes(category!))
 ---
 
 <BaseLayout title={`Category: ${category}`}>
   <section class="section">
     <div class="container">
       <h1 class="h2 mb-8 text-center">
-        Affichage des articles de la catégorie <span class="capitalize text-primary"
+        Affichage des articles de la catégorie <span class="text-primary capitalize"
           >{category}</span
         >
       </h1>
       <div class="grid gap-14 md:grid-cols-2 lg:grid-cols-3">
-        {
-          blogEntries.map((post) => (
-            <BlogCard data={post} />
-          ))
-        }
+        {blogEntries.map(post => <BlogCard data={post} />)}
       </div>
     </div>
   </section>

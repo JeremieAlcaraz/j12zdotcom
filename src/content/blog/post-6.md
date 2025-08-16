@@ -56,9 +56,9 @@ graph TD
 <script>
   // JavaScript uniquement pour ce composant
   document.getElementById('toggle')?.addEventListener('click', () => {
-    const content = document.getElementById('content');
-    content?.classList.toggle('hidden');
-  });
+    const content = document.getElementById('content')
+    content?.classList.toggle('hidden')
+  })
 </script>
 ```
 
@@ -69,8 +69,8 @@ graph TD
 ```astro
 ---
 // components/OptimizedImage.astro
-import { Picture } from 'astro:assets';
-import heroImage from '../assets/hero.jpg';
+import { Picture } from 'astro:assets'
+import heroImage from '../assets/hero.jpg'
 ---
 
 <Picture
@@ -88,7 +88,7 @@ import heroImage from '../assets/hero.jpg';
 
 ```js
 // astro.config.mjs
-import { defineConfig } from 'astro/config';
+import { defineConfig } from 'astro/config'
 
 export default defineConfig({
   image: {
@@ -103,7 +103,7 @@ export default defineConfig({
   experimental: {
     assets: true,
   },
-});
+})
 ```
 
 > **⚠️ Attention !**
@@ -116,7 +116,7 @@ export default defineConfig({
 ```astro
 ---
 // components/LazyComponent.astro
-const { threshold = 0.1, rootMargin = '100px' } = Astro.props;
+const { threshold = 0.1, rootMargin = '100px' } = Astro.props
 ---
 
 <div class="lazy-container" data-threshold={threshold} data-root-margin={rootMargin}>
@@ -128,21 +128,21 @@ const { threshold = 0.1, rootMargin = '100px' } = Astro.props;
     root: null,
     rootMargin: document.currentScript?.dataset.rootMargin || '100px',
     threshold: parseFloat(document.currentScript?.dataset.threshold || '0.1'),
-  };
+  }
 
-  const observer = new IntersectionObserver((entries) => {
-    entries.forEach((entry) => {
+  const observer = new IntersectionObserver(entries => {
+    entries.forEach(entry => {
       if (entry.isIntersecting) {
         // Charger le contenu
-        entry.target.classList.add('loaded');
-        observer.unobserve(entry.target);
+        entry.target.classList.add('loaded')
+        observer.unobserve(entry.target)
       }
-    });
-  }, observerOptions);
+    })
+  }, observerOptions)
 
-  document.querySelectorAll('.lazy-container').forEach((el) => {
-    observer.observe(el);
-  });
+  document.querySelectorAll('.lazy-container').forEach(el => {
+    observer.observe(el)
+  })
 </script>
 ```
 
@@ -194,23 +194,23 @@ npm run build -- --analyze
 <script>
   async function loadDashboard() {
     // Import dynamique pour réduire le bundle initial
-    const { DashboardWidget } = await import('../components/DashboardWidget.js');
-    const { ChartLibrary } = await import('../lib/charts.js');
+    const { DashboardWidget } = await import('../components/DashboardWidget.js')
+    const { ChartLibrary } = await import('../lib/charts.js')
 
-    const container = document.getElementById('dashboard-container');
+    const container = document.getElementById('dashboard-container')
     if (container) {
       // Initialiser le dashboard
       new DashboardWidget(container, {
         charts: ChartLibrary,
-      });
+      })
     }
   }
 
   // Charger seulement quand l'utilisateur interagit
   document.addEventListener('DOMContentLoaded', () => {
-    const trigger = document.querySelector('[data-load-dashboard]');
-    trigger?.addEventListener('click', loadDashboard, { once: true });
-  });
+    const trigger = document.querySelector('[data-load-dashboard]')
+    trigger?.addEventListener('click', loadDashboard, { once: true })
+  })
 </script>
 ```
 
@@ -254,28 +254,28 @@ npm run build -- --analyze
 // src/utils/performance.js
 export class PerformanceMonitor {
   constructor() {
-    this.metrics = {};
-    this.initWebVitals();
+    this.metrics = {}
+    this.initWebVitals()
   }
 
   async initWebVitals() {
-    const { getCLS, getFID, getFCP, getLCP, getTTFB } = await import('web-vitals');
+    const { getCLS, getFID, getFCP, getLCP, getTTFB } = await import('web-vitals')
 
-    getCLS(this.onCLS.bind(this));
-    getFID(this.onFID.bind(this));
-    getFCP(this.onFCP.bind(this));
-    getLCP(this.onLCP.bind(this));
-    getTTFB(this.onTTFB.bind(this));
+    getCLS(this.onCLS.bind(this))
+    getFID(this.onFID.bind(this))
+    getFCP(this.onFCP.bind(this))
+    getLCP(this.onLCP.bind(this))
+    getTTFB(this.onTTFB.bind(this))
   }
 
   onCLS(metric) {
-    this.metrics.cls = metric.value;
-    this.sendToAnalytics('CLS', metric);
+    this.metrics.cls = metric.value
+    this.sendToAnalytics('CLS', metric)
   }
 
   onFID(metric) {
-    this.metrics.fid = metric.value;
-    this.sendToAnalytics('FID', metric);
+    this.metrics.fid = metric.value
+    this.sendToAnalytics('FID', metric)
   }
 
   // ... autres métriques
@@ -286,14 +286,14 @@ export class PerformanceMonitor {
       gtag('event', name, {
         custom_parameter_1: metric.value,
         custom_parameter_2: metric.rating,
-      });
+      })
     }
   }
 }
 
 // Initialiser le monitoring
 if (typeof window !== 'undefined') {
-  new PerformanceMonitor();
+  new PerformanceMonitor()
 }
 ```
 
@@ -317,7 +317,7 @@ export default {
     'largest-contentful-paint': ['error', { maxNumericValue: 2500 }],
     'cumulative-layout-shift': ['error', { maxNumericValue: 0.1 }],
   },
-};
+}
 ```
 
 ## 🔧 5. Configuration avancée d'Astro
@@ -326,9 +326,9 @@ export default {
 
 ```js
 // astro.config.mjs
-import { defineConfig } from 'astro/config';
-import sitemap from '@astrojs/sitemap';
-import compress from 'astro-compress';
+import { defineConfig } from 'astro/config'
+import sitemap from '@astrojs/sitemap'
+import compress from 'astro-compress'
 
 export default defineConfig({
   site: 'https://votre-site.com',
@@ -372,7 +372,7 @@ export default defineConfig({
       noExternal: ['@fontsource/inter'],
     },
   },
-});
+})
 ```
 
 ## 📱 6. Optimisation mobile
@@ -381,21 +381,21 @@ export default defineConfig({
 
 ```js
 // public/sw.js
-const CACHE_NAME = 'astro-site-v1';
-const urlsToCache = ['/', '/css/main.css', '/js/main.js', '/images/logo.png'];
+const CACHE_NAME = 'astro-site-v1'
+const urlsToCache = ['/', '/css/main.css', '/js/main.js', '/images/logo.png']
 
-self.addEventListener('install', (event) => {
-  event.waitUntil(caches.open(CACHE_NAME).then((cache) => cache.addAll(urlsToCache)));
-});
+self.addEventListener('install', event => {
+  event.waitUntil(caches.open(CACHE_NAME).then(cache => cache.addAll(urlsToCache)))
+})
 
-self.addEventListener('fetch', (event) => {
+self.addEventListener('fetch', event => {
   event.respondWith(
-    caches.match(event.request).then((response) => {
+    caches.match(event.request).then(response => {
       // Retourner le cache si disponible, sinon fetch
-      return response || fetch(event.request);
+      return response || fetch(event.request)
     })
-  );
-});
+  )
+})
 ```
 
 ```astro
@@ -409,13 +409,13 @@ self.addEventListener('fetch', (event) => {
     window.addEventListener('load', () => {
       navigator.serviceWorker
         .register('/sw.js')
-        .then((registration) => {
-          console.log('SW registered: ', registration);
+        .then(registration => {
+          console.log('SW registered: ', registration)
         })
-        .catch((registrationError) => {
-          console.log('SW registration failed: ', registrationError);
-        });
-    });
+        .catch(registrationError => {
+          console.log('SW registration failed: ', registrationError)
+        })
+    })
   }
 </script>
 ```

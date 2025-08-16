@@ -1,15 +1,14 @@
 ---
-import BaseLayout from '@layouts/BaseLayout.astro';
-import Hero from '@components/ui/Hero.astro';
-import { getEntry } from "astro:content";
-import Testimonial from "@/components/ui/Testimonial.astro";
-import type { CollectionEntry } from "astro:content";
-
+import BaseLayout from '@layouts/BaseLayout.astro'
+import Hero from '@components/ui/Hero.astro'
+import { getEntry } from 'astro:content'
+import Testimonial from '@/components/sections/TestimonialSection.astro'
+import type { CollectionEntry } from 'astro:content'
 
 const testimonial = (await getEntry(
-  "testimonialSection",
-  "testimonial"
-)) as CollectionEntry<"testimonialSection">;
+  'testimonialSection',
+  'testimonial'
+)) as CollectionEntry<'testimonialSection'>
 ---
 
 <BaseLayout title="Accueil – Mon Site">
