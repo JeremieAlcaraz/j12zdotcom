@@ -1,13 +1,13 @@
 ---
 /// <reference types="astro/client" />
-import Raw from '@/assets/icons/sun-icon.svg';
+import Raw from '@/assets/icons/sun-icon.svg'
 
 export interface Props extends astroHTML.JSX.SVGAttributes {
-  class?: string;
-  title?: string;
+  class?: string
+  title?: string
 }
 
-const { class: className = 'w-5 h-5 fill-current', title, ...rest } = Astro.props;
+const { class: className = 'w-5 h-5 fill-current', title, ...rest } = Astro.props
 ---
 
 <Raw

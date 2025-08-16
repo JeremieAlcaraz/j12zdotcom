@@ -7,15 +7,15 @@
        2) defaultLinks  → tableau de liens réutilisable
 -------------------------------------------------------------------- */
 
-import type { NavLink } from '@components/common/Header/Header.types';
-import logoDark from '@assets/logos/logo-dark.svg';
-import logoWhite from '@assets/logos/logo-white.svg';
+import type { NavLink } from '@/components/layout/SiteHeader.types'
+import logoDark from '@assets/logos/logo-dark.svg'
+import logoWhite from '@assets/logos/logo-white.svg'
 
 /** Logo par défaut pour le thème clair */
-export const defaultLogo: string = logoDark.src;
+export const defaultLogo: string = logoDark.src
 
 /** Variante utilisée automatiquement en mode sombre */
-export const defaultLogoDark: string = logoWhite.src;
+export const defaultLogoDark: string = logoWhite.src
 
 /** Liens par défaut – peuvent être overridés via la prop `links` */
 export const defaultLinks: NavLink[] = [
@@ -23,4 +23,4 @@ export const defaultLinks: NavLink[] = [
   { href: '/blog', label: 'Blog' },
   { href: '/about', label: 'À propos' },
   { href: '/contact', label: 'Contact' },
-] satisfies NavLink[];
+] satisfies NavLink[]

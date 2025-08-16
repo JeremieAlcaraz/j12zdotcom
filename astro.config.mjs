@@ -1,12 +1,12 @@
 // astro.config.mjs
 // @ts-check                             // Active la vérification de type dans ce fichier JS
-import { defineConfig } from 'astro/config'; // ✅ Fonction pour définir la config d’Astro
-import react from '@astrojs/react'; // 🚀 Intégration React (JSX/TSX)
-import svelte from '@astrojs/svelte'; // 🌱 Intégration Svelte (.svelte)
-import mdx from '@astrojs/mdx'; // 📄 Intégration MDX (Markdown + JSX/TSX)
-import sitemap from '@astrojs/sitemap'; // 🗺️ Génération automatique de sitemap.xml
-import tailwindcss from '@tailwindcss/vite'; // 🎨 Plugin Vite pour Tailwind CSS v4
-import tsconfigPaths from 'vite-tsconfig-paths'; // 🔗 Plugin Vite pour utiliser les alias TS
+import { defineConfig } from 'astro/config' // ✅ Fonction pour définir la config d’Astro
+import react from '@astrojs/react' // 🚀 Intégration React (JSX/TSX)
+import svelte from '@astrojs/svelte' // 🌱 Intégration Svelte (.svelte)
+import mdx from '@astrojs/mdx' // 📄 Intégration MDX (Markdown + JSX/TSX)
+import sitemap from '@astrojs/sitemap' // 🗺️ Génération automatique de sitemap.xml
+import tailwindcss from '@tailwindcss/vite' // 🎨 Plugin Vite pour Tailwind CSS v4
+import tsconfigPaths from 'vite-tsconfig-paths' // 🔗 Plugin Vite pour utiliser les alias TS
 
 export default defineConfig({
   // ────────────────────────────────
@@ -31,4 +31,4 @@ export default defineConfig({
     // ❌ Plus besoin de `resolve.alias` manuel !
     //    Tous tes alias sont désormais lus depuis tsconfig.json
   },
-});
+})
