@@ -4,7 +4,8 @@ import Header from '@/components/layout/SiteHeader.astro'
 import Footer from '@/components/layout/SiteFooter.astro'
 import TwSizeIndicator from '@/components/dev/TwSizeIndicator.astro'
 import { ClientRouter } from 'astro:transitions'
-const { title = 'Mon Site' } = Astro.props
+const { title = 'Mon Site', meta_title, description, image } = Astro.props
+const pageTitle = meta_title || title
 ---
 
 <!doctype html>
@@ -13,7 +14,14 @@ const { title = 'Mon Site' } = Astro.props
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-    <title>{title}</title>
+    <title>{pageTitle}</title>
+    {description && <meta name="description" content={description} />}
+    {image && <meta property="og:image" content={image} />}
+    <meta property="og:title" content={pageTitle} />
+    {description && <meta property="og:description" content={description} />}
+    <meta name="twitter:title" content={pageTitle} />
+    {description && <meta name="twitter:description" content={description} />}
+    {image && <meta name="twitter:image" content={image} />}
     <ClientRouter />
 
     <script is:inline>
