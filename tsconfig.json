@@ -4,10 +4,7 @@
     "baseUrl": ".",
     "paths": {
       "@assets/*": ["src/assets/*"],
-      "@components/*": ["src/components/*"],
       "@utils/*": ["src/utils/*"],
-      "@config/*": ["src/config/*"],
-      "@layouts/*": ["src/layouts/*"],
       "@types/*": ["src/types/*"],
       "@playground/*": ["src/playground/*"],
       "@styles/*": ["src/styles/*"],
