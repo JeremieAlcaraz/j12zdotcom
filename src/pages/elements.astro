@@ -1,12 +1,12 @@
 ---
 // src/pages/elements.astro
 // cette page servira à tester tous les components
-import BaseLayout from '@layouts/BaseLayout.astro'
-import BlogCard from '@components/blog/BlogCard.astro'
-import Pagination from '@components/blog/Pagination.astro'
-import Testimonial from '@/components/ui/Testimonial.astro'
+import BaseLayout from '@/layouts/BaseLayout.astro'
+import BlogCard from '@/components/organisms/BlogCard.astro'
+import Pagination from '@/components/molecules/Pagination.astro'
+import TestimonialSection from '@/components/sections/TestimonialSection.astro'
 import Footer from '@/components/layout/SiteFooter.astro';
-import config from '@config/siteConfig'
+import config from '@/config/siteConfig.ts'
 import { getSinglePage } from '@/utils/contentParser.astro'
 import { getAllTaxonomy, getTaxonomy } from '@/utils/taxonomyParser.astro'
 import { sortByDate } from '@/utils/sortFunctions'
@@ -57,7 +57,7 @@ const testimonial = (await getEntry(
   <section class="border-primary mt-16 mb-12 border border-dotted">
     <h2 class="mb-8 text-center text-3xl font-bold">Section Témoignages</h2>
     <div class="flex justify-center">
-      <Testimonial testimonial={testimonial} />
+      <TestimonialSection testimonial={testimonial} />
     </div>
   </section>
 
