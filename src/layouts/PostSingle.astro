@@ -6,111 +6,69 @@ import { FaRegClock, FaRegFolder, FaRegUserCircle } from 'react-icons/fa'
 import ImageMod from '@/components/atoms/ImageMod.astro'
 
 const { post } = Astro.props
-
-// === LOGS DE DÉBOGAGE ===
-console.log('=== DEBUG PostSingle ===')
-console.log('Post received in PostSingle:', !!post)
-console.log('Post data keys:', Object.keys(post?.data || {}))
-console.log('Title from PostSingle:', post?.data?.title)
-
-// Test du rendu du contenu
-
 const { Content } = await render(post)
-
-const { title, description, author, categories, image, date, tags } = post.data
-console.log('Destructured values:', {
-  title,
-  author,
-  categories: categories?.length,
-  image,
-  date,
-  tags: tags?.length,
-})
+const { title, author, categories, image, date, tags } = post.data
 ---
 
-<section class="section pt-7">
-  <div class="container">
-    <!-- TEST DE DÉBOGAGE - SUPPRIMEZ APRÈS -->
-    <div style="border: 3px solid red; padding: 20px; margin: 20px 0; background: yellow;">
-      <h1>🔍 DEBUG: PostSingle chargé</h1>
-      <p><strong>Post ID:</strong> {post?.id}</p>
-      <p><strong>Post Title:</strong> {post?.data?.title}</p>
-      <p><strong>Author:</strong> {post?.data?.author}</p>
-      <p><strong>Categories:</strong> {post?.data?.categories?.join(', ')}</p>
-      <p><strong>Image:</strong> {post?.data?.image}</p>
-    </div>
-
-    <div class="flex justify-center">
-      <article class="w-full lg:w-5/6">
+<section class="py-8">
+  <div class="mx-auto max-w-3xl">
+    {
+      image && (
+        <div class="mb-8">
+          <ImageMod
+            src={image}
+            height={500}
+            width={1200}
+            alt={title}
+            class="w-full rounded"
+            format="webp"
+          />
+        </div>
+      )
+    }
+    <h1 set:html={markdownify(title)} class="mb-6 text-3xl font-bold" />
+    <ul class="mb-8 flex flex-wrap items-center gap-x-4 text-sm text-gray-600 dark:text-gray-400">
+      <li class="flex items-center">
+        <FaRegUserCircle className={'-mt-0.5 mr-2 inline-block'} />
+        <a href={`/authors/${slugify(author)}`}>{humanize(author)}</a>
+      </li>
+      <li class="flex items-center">
+        <FaRegFolder className={'-mt-0.5 mr-2 inline-block'} />
         {
-          image && (
-            <div class="mb-10">
-              <ImageMod
-                src={image}
-                height={500}
-                width={1200}
-                alt={title}
-                class="w-full rounded"
-                format="webp"
-              />
-            </div>
-          )
-        }
-        <h1 set:html={markdownify(title)} class="h2 mb-4" />
-        <ul class="mb-4">
-          <li class="mr-4 inline-block">
-            <a href={`/authors/${slugify(author)}`}>
-              <FaRegUserCircle className={'-mt-1 mr-2 inline-block'} />
-              {humanize(author)}
+          categories.map((category: string, index: number) => (
+            <a href={`/categories/${slugify(category)}`}>
+              {humanize(category)}
+              {index !== categories.length - 1 && ','}
             </a>
-          </li>
-          <li class="mr-4 inline-block">
-            <FaRegFolder className={'-mt-1 mr-2 inline-block'} />
-            {
-              categories.map((category: string, index: number) => (
-                <a href={`/categories/${slugify(category)}`}>
-                  {humanize(category)}
-                  {index !== categories.length - 1 && ','}
-                </a>
-              ))
-            }
-          </li>
-          <li class="mr-4 inline-block">
-            <FaRegClock className={'-mt-1 mr-2 inline-block'} />
-            {dateFormat(date)}
-          </li>
-        </ul>
-
-        <!-- TEST DU CONTENU -->
-        <div style="border: 2px solid blue; padding: 10px; margin: 10px 0;">
-          <h3>🔍 DEBUG: Contenu markdown</h3>
-          <div class="content mb-10">
-            <Content />
-          </div>
-        </div>
-
-        <!-- Tags section -->
-        <div class="flex flex-wrap items-start justify-between">
-          <div class="mb-10 flex items-center lg:mb-0 lg:w-5/12">
-            <h5 class="mr-3">Tags :</h5>
-            <ul>
-              {
-                tags &&
-                  tags.map((tag: string) => (
-                    <li class="inline-block">
-                      <a
-                        class="bg-light hover:bg-primary dark:bg-darkmode-light dark:hover:bg-darkmode-primary dark:hover:text-text-dark m-1 block rounded px-3 py-1 hover:text-white"
-                        href={`/tags/${slugify(tag)}`}
-                      >
-                        {humanize(tag)}
-                      </a>
-                    </li>
-                  ))
-              }
-            </ul>
-          </div>
-        </div>
-      </article>
+          ))
+        }
+      </li>
+      <li class="flex items-center">
+        <FaRegClock className={'-mt-0.5 mr-2 inline-block'} />
+        {dateFormat(date)}
+      </li>
+    </ul>
+    <div class="prose dark:prose-invert mb-10 max-w-none">
+      <Content />
     </div>
+    {
+      tags && (
+        <div class="flex flex-wrap items-center gap-2">
+          <h5 class="mr-2">Tags :</h5>
+          <ul class="flex flex-wrap gap-2">
+            {tags.map((tag: string) => (
+              <li>
+                <a
+                  class="bg-light hover:bg-primary dark:bg-darkmode-light dark:hover:bg-darkmode-primary m-1 inline-block rounded px-3 py-1 text-sm hover:text-white"
+                  href={`/tags/${slugify(tag)}`}
+                >
+                  {humanize(tag)}
+                </a>
+              </li>
+            ))}
+          </ul>
+        </div>
+      )
+    }
   </div>
 </section>
