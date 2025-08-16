@@ -11,10 +11,10 @@ const { title, author, categories, image, date, tags } = post.data
 ---
 
 <section class="py-8">
-  <div class="mx-auto max-w-3xl">
+  <article class="prose prose-lg dark:prose-invert mx-auto max-w-3xl">
     {
       image && (
-        <div class="mb-8">
+        <figure class="not-prose mb-8">
           <ImageMod
             src={image}
             height={500}
@@ -23,37 +23,37 @@ const { title, author, categories, image, date, tags } = post.data
             class="w-full rounded"
             format="webp"
           />
-        </div>
+        </figure>
       )
     }
-    <h1 set:html={markdownify(title)} class="mb-6 text-3xl font-bold" />
-    <ul class="mb-8 flex flex-wrap items-center gap-x-4 text-sm text-gray-600 dark:text-gray-400">
-      <li class="flex items-center">
-        <FaRegUserCircle className={'-mt-0.5 mr-2 inline-block'} />
-        <a href={`/authors/${slugify(author)}`}>{humanize(author)}</a>
-      </li>
-      <li class="flex items-center">
-        <FaRegFolder className={'-mt-0.5 mr-2 inline-block'} />
-        {
-          categories.map((category: string, index: number) => (
-            <a href={`/categories/${slugify(category)}`}>
-              {humanize(category)}
-              {index !== categories.length - 1 && ','}
-            </a>
-          ))
-        }
-      </li>
-      <li class="flex items-center">
-        <FaRegClock className={'-mt-0.5 mr-2 inline-block'} />
-        {dateFormat(date)}
-      </li>
-    </ul>
-    <div class="prose dark:prose-invert mb-10 max-w-none">
-      <Content />
-    </div>
+    <header class="not-prose mb-8">
+      <h1 set:html={markdownify(title)} class="mb-4" />
+      <ul class="flex flex-wrap items-center gap-x-4 text-sm text-gray-600 dark:text-gray-400">
+        <li class="flex items-center">
+          <FaRegUserCircle className={'-mt-0.5 mr-2 inline-block'} />
+          <a href={`/authors/${slugify(author)}`}>{humanize(author)}</a>
+        </li>
+        <li class="flex items-center">
+          <FaRegFolder className={'-mt-0.5 mr-2 inline-block'} />
+          {
+            categories.map((category: string, index: number) => (
+              <a href={`/categories/${slugify(category)}`}>
+                {humanize(category)}
+                {index !== categories.length - 1 && ','}
+              </a>
+            ))
+          }
+        </li>
+        <li class="flex items-center">
+          <FaRegClock className={'-mt-0.5 mr-2 inline-block'} />
+          {dateFormat(date)}
+        </li>
+      </ul>
+    </header>
+    <Content />
     {
       tags && (
-        <div class="flex flex-wrap items-center gap-2">
+        <div class="not-prose mt-10 flex flex-wrap items-center gap-2">
           <h5 class="mr-2">Tags :</h5>
           <ul class="flex flex-wrap gap-2">
             {tags.map((tag: string) => (
@@ -70,5 +70,5 @@ const { title, author, categories, image, date, tags } = post.data
         </div>
       )
     }
-  </div>
+  </article>
 </section>
