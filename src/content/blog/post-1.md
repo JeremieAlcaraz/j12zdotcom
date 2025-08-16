@@ -19,9 +19,9 @@ Chaque année, JavaScript évolue avec de nouvelles fonctionnalités passionnant
 L'une des méthodes les plus attendues est enfin là ! `Array.prototype.unique()` permet de dédoublonner un tableau de manière simple et performante.
 
 ```javascript
-const numbers = [1, 2, 2, 3, 4, 4, 5];
-const uniqueNumbers = numbers.unique();
-console.log(uniqueNumbers); // [1, 2, 3, 4, 5]
+const numbers = [1, 2, 2, 3, 4, 4, 5]
+const uniqueNumbers = numbers.unique()
+console.log(uniqueNumbers) // [1, 2, 3, 4, 5]
 ```
 
 ### Le Pipe Operator `|>`
@@ -29,11 +29,11 @@ console.log(uniqueNumbers); // [1, 2, 3, 4, 5]
 Le _pipe operator_ est une nouvelle syntaxe qui facilite le chaînage de fonctions. Il rend le code plus lisible et plus intuitif.
 
 ```javascript
-const add = (a, b) => a + b;
-const square = (n) => n * n;
+const add = (a, b) => a + b
+const square = n => n * n
 
-const result = 5 |> ((n) => add(n, 5)) |> square;
-console.log(result); // 100
+const result = 5 |> (n => add(n, 5)) |> square
+console.log(result) // 100
 ```
 
 ## Conclusion

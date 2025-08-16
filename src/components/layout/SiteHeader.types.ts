@@ -4,14 +4,14 @@
 
 /** Un lien de navigation classique */
 export interface NavLink {
-  href: string;
-  label: string;
+  href: string
+  label: string
 }
 
 /** Props acceptées par <Navbar /> */
 export interface NavbarProps {
   /** URL absolue ou relative du logo affiché à gauche */
-  logo?: string;
+  logo?: string
   /** Tableau des liens principaux (ordre d’affichage) */
-  links?: NavLink[];
+  links?: NavLink[]
 }

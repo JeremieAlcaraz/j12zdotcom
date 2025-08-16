@@ -1,28 +1,26 @@
 ---
+import type { GetStaticPaths, Page } from 'astro';
+import type { CollectionEntry } from 'astro:content';
 import BaseLayout from '@/layouts/BaseLayout.astro';
-import BlogCard from '@components/blog/BlogCard.astro';
-import Pagination from '@components/blog/Pagination.astro';
+import BlogCard from '@/components/organisms/BlogCard.astro';
+import Pagination from '@/components/molecules/Pagination.astro';
 import { getCollection } from 'astro:content';
 
 const allPosts = await getCollection('blog');
 const postsPerPage = 5;
 
-export async function getStaticPaths({ paginate }) {
+export const getStaticPaths: GetStaticPaths = ({ paginate }) => {
   return paginate(allPosts, { pageSize: postsPerPage });
-}
+};
 
-const { page } = Astro.props;
+const { page } = Astro.props as { page: Page<CollectionEntry<"blog">> };
 ---
 
 <BaseLayout title={`Blog - Page ${page.currentPage}`}>
   <section class="section">
     <div class="container">
       <div class="grid gap-14 md:grid-cols-2">
-        {
-          page.data.map((post) => (
-            <BlogCard data={post} />
-          ))
-        }
+        {page.data.map((post: CollectionEntry<"blog">) => <BlogCard data={post} />)}
       </div>
       <Pagination section="blog" currentPage={page.currentPage} totalPages={page.lastPage} />
     </div>

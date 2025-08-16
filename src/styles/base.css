@@ -1,25 +1,18 @@
-/* navbar toggler */
-input#nav-toggle:checked + label #show-button {
-  @apply hidden;
+
+@layer components {
+  /* swiper pagination */
+  .swiper-pagination-bullet {
+    @apply h-2.5 w-2.5 opacity-100 bg-base-300;
+  }
+  .dark .swiper-pagination-bullet {
+    @apply bg-base-200;
+  }
+
+  .swiper-pagination-bullet-active {
+    @apply h-4 w-4 !bg-primary;
+  }
+  .dark .swiper-pagination-bullet-active {
+    @apply !bg-primary; /* le thème Daisy ajuste le contraste */
+  }
 }
 
-input#nav-toggle:checked + label #hide-button {
-  @apply block;
-}
-
-input#nav-toggle:checked ~ #nav-menu {
-  @apply block;
-}
-
-/* swiper pagination */
-.swiper-pagination-bullet {
-  @apply !h-2.5 !w-2.5 !bg-light !opacity-100 dark:!bg-darkmode-light;
-}
-
-.swiper-pagination-bullet-active {
-  @apply !h-4 !w-4 !bg-primary dark:!bg-darkmode-primary;
-}  
-
-.section {
-  @apply py-16 md:py-24;
-}

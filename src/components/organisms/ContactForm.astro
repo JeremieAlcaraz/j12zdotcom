@@ -11,32 +11,32 @@
 //  • Les props `title` & `description` sont facultatives pour garder le composant flexible.
 // ------------------------------------------------------------------
 
-import siteConfig from '@config/siteConfig';
+import siteConfig from '@/config/siteConfig.ts'
 
 // Type Script : les pages peuvent importer ce type si besoin.
 export interface ContactFormProps {
   /** Titre H2 au-dessus du formulaire. */
-  title?: string;
+  title?: string
   /** Court texte d’intro / call-to-action. */
-  description?: string;
+  description?: string
 }
 
-const { contactFormAction } = siteConfig.params;
+const { contactFormAction } = siteConfig.params
 
 const { title = 'Contactez-moi', description = 'Je réponds généralement sous 24 h.' } =
-  Astro.props as ContactFormProps;
+  Astro.props as ContactFormProps
 ---
 
-<section id="contact" class="py-16 md:py-24 bg-base-200/30">
+<section id="contact" class="bg-base-200/30 py-16 md:py-24">
   <div class="container mx-auto px-4">
-    <div class="max-w-2xl mx-auto text-center">
-      <h2 class="text-3xl md:text-4xl font-bold mb-4">{title}</h2>
-      <p class="mb-8 text-base-content/80">
+    <div class="mx-auto max-w-2xl text-center">
+      <h2 class="mb-4 text-3xl font-bold md:text-4xl">{title}</h2>
+      <p class="text-base-content/80 mb-8">
         {description}
       </p>
     </div>
 
-    <div class="max-w-2xl mx-auto card bg-base-100 shadow-xl p-6 md:p-8">
+    <div class="card bg-base-100 mx-auto max-w-2xl p-6 shadow-xl md:p-8">
       <!--
         ✉️  Formulaire :
         - action : provient de votre config -> facile à changer depuis un seul endroit ;
@@ -98,7 +98,7 @@ const { title = 'Contactez-moi', description = 'Je réponds généralement sous 
         <div class="mt-6 flex justify-center">
           <button
             type="submit"
-            class="btn btn-primary shadow-lg shadow-primary/40 transition-shadow duration-300 hover:shadow-primary/60"
+            class="btn btn-primary shadow-primary/40 hover:shadow-primary/60 shadow-lg transition-shadow duration-300"
           >
             Envoyer le message
           </button>
