@@ -8,6 +8,8 @@ import sitemap from '@astrojs/sitemap' // 🗺️ Génération automatique de si
 import tailwindcss from '@tailwindcss/vite' // 🎨 Plugin Vite pour Tailwind CSS v4
 import tsconfigPaths from 'vite-tsconfig-paths' // 🔗 Plugin Vite pour utiliser les alias TS
 
+import cloudflare from '@astrojs/cloudflare'
+
 export default defineConfig({
   // ────────────────────────────────
   // 1️⃣  Integrations Astro
@@ -31,4 +33,6 @@ export default defineConfig({
     // ❌ Plus besoin de `resolve.alias` manuel !
     //    Tous tes alias sont désormais lus depuis tsconfig.json
   },
+
+  adapter: cloudflare(),
 })
