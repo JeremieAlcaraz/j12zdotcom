@@ -12,17 +12,20 @@
     "preview": "astro preview",
     "check": "astro check",
     "clean": "rm -rf dist .astro",
-    "build:prod": "pnpm run clean && pnpm run build",
+    "type-check": "astro sync && tsc --noEmit",
     "lint": "eslint . --ext .js,.jsx,.ts,.tsx,.astro,.svelte",
     "lint:fix": "eslint . --ext .js,.jsx,.ts,.tsx,.astro,.svelte --fix",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
-    "type-check": "astro sync && tsc --noEmit",
-    "img:avif": "mkdir -p src/assets/img_opt && pnpm exec sharp -i src/assets/img_raw/*.{png,jpg,jpeg} -o src/assets/img_opt/{name}.avif -f avif -q 75 resize 1500",
-    "img:webp": "mkdir -p src/assets/img_opt && pnpm exec sharp -i src/assets/img_raw/*.{png,jpg,jpeg} -o src/assets/img_opt/{name}.webp -f webp -q 75 resize 1500",
-    "img:png": "mkdir -p src/assets/img_opt && pnpm exec sharp -i src/assets/img_raw/*.{png,jpg,jpeg} -o src/assets/img_opt/{name}.png  -f png -q 80 resize 1500",
+    "img:avif": "mkdir -p src/assets/img_opt src/assets/img_raw && { ls src/assets/img_raw/*.png src/assets/img_raw/*.jpg src/assets/img_raw/*.jpeg >/dev/null 2>&1 && pnpm exec sharp -i src/assets/img_raw/*.png -i src/assets/img_raw/*.jpg -i src/assets/img_raw/*.jpeg -o src/assets/img_opt/{name}.avif -f avif -q 75 resize 1500 || echo \"No raw images to convert (avif)\"; }",
+    "img:webp": "mkdir -p src/assets/img_opt src/assets/img_raw && { ls src/assets/img_raw/*.png src/assets/img_raw/*.jpg src/assets/img_raw/*.jpeg >/dev/null 2>&1 && pnpm exec sharp -i src/assets/img_raw/*.png -i src/assets/img_raw/*.jpg -i src/assets/img_raw/*.jpeg -o src/assets/img_opt/{name}.webp -f webp -q 75 resize 1500 || echo \"No raw images to convert (webp)\"; }",
+    "img:png": "mkdir -p src/assets/img_opt src/assets/img_raw && { ls src/assets/img_raw/*.png src/assets/img_raw/*.jpg src/assets/img_raw/*.jpeg >/dev/null 2>&1 && pnpm exec sharp -i src/assets/img_raw/*.png -i src/assets/img_raw/*.jpg -i src/assets/img_raw/*.jpeg -o src/assets/img_opt/{name}.png  -f png  -q 80 resize 1500 || echo \"No raw images to convert (png)\"; }",
     "img:opt": "pnpm run img:avif && pnpm run img:webp && pnpm run img:png",
-    "build": "pnpm run img:opt && astro check && astro build"
+    "build": "pnpm run img:opt && astro check && astro build",
+    "build:prod": "pnpm run clean && pnpm run build",
+    "preview:static": "pnpm dlx serve dist",
+    "cf:preview": "pnpm build && pnpm dlx wrangler dev",
+    "cf:deploy": "pnpm build && pnpm dlx wrangler deploy"
   },
   "dependencies": {
     "@astrojs/check": "0.9.4",
@@ -85,7 +88,8 @@
     "typescript": "^5.8.3",
     "typescript-eslint": "^8.38.0",
     "vite-tsconfig-paths": "^5.1.4",
-    "vitest": "^3.2.4"
+    "vitest": "^3.2.4",
+    "wrangler": "^4.31.0"
   },
   "engines": {
     "node": ">=18.0.0",
