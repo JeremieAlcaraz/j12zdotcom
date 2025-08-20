@@ -1,28 +1,73 @@
+
 ---
-import type { GetStaticPaths, Page } from 'astro'
-import type { CollectionEntry } from 'astro:content'
 import BaseLayout from '@/layouts/BaseLayout.astro'
 import BlogCard from '@/components/organisms/BlogCard.astro'
 import Pagination from '@/components/molecules/Pagination.astro'
-import { getCollection } from 'astro:content'
+import config from '@/config/siteConfig.ts'
+import { sortByDate } from '@utils/sortFunctions'
+import { getSinglePage } from '@/utils/contentParser.astro'
+import type { CollectionEntry } from 'astro:content'
+import { getEntry } from 'astro:content'
 
-const allPosts = await getCollection('blog')
-const postsPerPage = 5
+const COLLECTION = 'blog' // <-- utilisé hors getStaticPaths
+const { page: pageParam } = Astro.params
 
-export const getStaticPaths: GetStaticPaths = ({ paginate }) => {
-  return paginate(allPosts, { pageSize: postsPerPage })
+// Page d'index (meta, title, etc.)
+const postIndex = (await getEntry(COLLECTION, '-index')) as CollectionEntry<'blog'>
+
+// Récup + tri des posts
+const posts = await getSinglePage(COLLECTION)
+const sortedPosts = sortByDate(posts)
+
+// Pagination
+const perPage = config.settings.pagination
+const currentPage = Math.max(1, parseInt(pageParam ?? '1', 10) || 1)
+const totalPages = Math.ceil(sortedPosts.length / perPage)
+const start = (currentPage - 1) * perPage
+const end = start + perPage
+const currentPosts = sortedPosts.slice(start, end)
+
+// Génération des chemins (param = "page")
+export async function getStaticPaths() {
+  const COLLECTION_FOLDER = 'blog'                 // <-- redéclaré ici
+  const posts = await getSinglePage(COLLECTION_FOLDER)
+  const perPage = config.settings.pagination
+  const totalPages = Math.ceil(posts.length / perPage)
+
+  return Array.from({ length: totalPages }, (_, i) => ({
+    params: { page: String(i + 1) },
+  }))
 }
-
-const { page } = Astro.props as { page: Page<CollectionEntry<'blog'>> }
 ---
 
-<BaseLayout title={`Blog - Page ${page.currentPage}`}>
-  <section class="section">
-    <div class="container">
-      <div class="grid gap-14 md:grid-cols-2">
-        {page.data.map((post: CollectionEntry<'blog'>) => <BlogCard data={post} />)}
+<BaseLayout
+  title={postIndex.data.title}
+  meta_title={postIndex.data.meta_title}
+  image={postIndex.data.image}
+  description={postIndex.data.description}
+>
+  <section class="px-4 py-8 sm:py-12 lg:py-16">
+    <div class="mx-auto max-w-6xl">
+      <div class="flex flex-col gap-8 lg:flex-row">
+        <div class="flex-1">
+          <div class="mb-8 grid grid-cols-1 gap-4 sm:grid-cols-2 sm:gap-6 xl:grid-cols-3">
+            {currentPosts.map((post) => (
+              <div class="w-full">
+                <BlogCard data={post} />
+              </div>
+            ))}
+          </div>
+
+          <div class="mt-12 flex justify-center">
+            <Pagination
+              section={COLLECTION}                 
+              currentPage={currentPage}
+              totalPages={totalPages}
+            />
+          </div>
+        </div>
       </div>
-      <Pagination section="blog" currentPage={page.currentPage} totalPages={page.lastPage} />
     </div>
   </section>
 </BaseLayout>
+
