@@ -6,7 +6,7 @@ import mdx from '@astrojs/mdx'
 import sitemap from '@astrojs/sitemap'
 import tailwindcss from '@tailwindcss/vite'
 import tsconfigPaths from 'vite-tsconfig-paths'
-import cloudflare from '@astrojs/cloudflare'
+// import cloudflare from '@astrojs/cloudflare'
 
 export default defineConfig({
   // 1) Intégrations
@@ -22,11 +22,11 @@ export default defineConfig({
   output: 'static',
 
   // 4) Adapter Cloudflare + images compilées (Sharp au build)
-  adapter: cloudflare({
-    // Cloudflare ne supporte pas Sharp au runtime → on pré-optimise au build.
-    imageService: 'compile',
-  }),
-
+  // Cloudflare ne supporte pas Sharp au runtime → on pré-optimise au build.
+  // adapter: cloudflare({
+  //   imageService: 'compile',
+  // }),
+  //
   // 5) Service d’images : Sharp
   image: {
     service: {
