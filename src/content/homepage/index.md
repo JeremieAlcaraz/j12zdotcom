@@ -1,11 +1,11 @@
 ---
 # Banner
 banner:
-  title: 'The Ultimate Starter Template'
-  content: 'Astroplate is a free starter template built with Astro and TailwindCSS, providing everything you need to jumpstart your Astro project and save valuable time.'
+  title: 'Simplifie ton quotidien avec une productivité douce'
+  content: 'Je t’aide à apprivoiser les bons outils (Notion, ChatGPT, n8n…) pour gagner en clarté, automatiser tes tâches et retrouver du temps pour l’essentiel. Sans complexité, juste avec ce qu’il faut.'
   image: 'img_opt/banner.png'
   button:
     enable: true
-    label: 'Get Started For Free'
-    link: 'https://github.com/zeon-studio/astroplate'
+    label: 'Découvrir mes formations'
+    link: '/formations'
 ---
