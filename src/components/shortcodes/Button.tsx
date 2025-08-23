@@ -16,8 +16,8 @@ const Button = ({
       href={link}
       target="_blank"
       rel={`noopener noreferrer ${rel ? (rel === 'follow' ? '' : rel) : 'nofollow'}`}
-      className={`btn me-4 mb-4 hover:text-white hover:no-underline dark:hover:text-black ${
-        style === 'outline' ? 'btn-outline-primary' : 'btn-primary'
+      className={`btn me-4 mb-4 hover:no-underline ${
+        style === 'outline' ? 'btn-outline btn-primary' : 'btn-primary'
       }`}
     >
       {label}
