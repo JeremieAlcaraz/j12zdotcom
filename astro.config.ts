@@ -8,9 +8,14 @@ import tailwindcss from '@tailwindcss/vite'
 import tsconfigPaths from 'vite-tsconfig-paths'
 import AutoImport from 'astro-auto-import' // ⟵ NEW
 // import cloudflare from '@astrojs/cloudflare'
+import remarkCollapse from 'remark-collapse'
+import remarkToc from 'remark-toc'
 
 export default defineConfig({
   // 1) Intégrations
+  // site: config.site.base_url ? config.site.base_url : 'http://examplesite.com',
+  // base: config.site.base_path ? config.site.base_path : '/',
+  // trailingSlash: config.site.trailing_slash ? 'always' : 'never',
   integrations: [
     react(),
     svelte(),
@@ -51,5 +56,9 @@ export default defineConfig({
       entrypoint: 'astro/assets/services/sharp',
       // config: { ... } // (optionnel) réglages Sharp si besoin
     },
+  },
+  // Markdown (TOC + sections repliables)
+  markdown: {
+    remarkPlugins: [remarkToc, [remarkCollapse, { test: 'Table of contents' }]],
   },
 })
