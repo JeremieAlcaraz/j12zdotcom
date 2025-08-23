@@ -5,7 +5,7 @@
 @plugin "daisyui";
 
 /* Thèmes */
-@import './themes/douceur.css';
+@import './theme.css';
 
 
 @layer base {
