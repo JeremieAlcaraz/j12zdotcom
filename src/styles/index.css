@@ -11,3 +11,10 @@
 @layer base {
   @import "./base.css";
 }
+
+@layer components {
+  @import "./components.css";
+  /* @import "./navigation.css"; */
+  /* @import "./buttons.css"; */
+  /* @import "./search.css"; */
+}
