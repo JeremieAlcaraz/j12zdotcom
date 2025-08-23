@@ -18,13 +18,13 @@ export default defineConfig({
     AutoImport({
       // export default requis (ou map explicite, cf. ci-dessous)
       imports: [
-        '@/components/toclassify/Button',
-        '@/components/toclassify/Accordion',
-        '@/components/toclassify/Notice',
-        '@/components/toclassify/Video',
-        '@/components/toclassify/Youtube',
-        '@/components/toclassify/Tabs',
-        '@/components/toclassify/Tab',
+        '@/components/shortcodes/Button',
+        '@/components/shortcodes/Accordion',
+        '@/components/shortcodes/Notice',
+        '@/components/shortcodes/Video',
+        '@/components/shortcodes/Youtube',
+        '@/components/shortcodes/Tabs',
+        '@/components/shortcodes/Tab',
       ],
     }),
     mdx(),
