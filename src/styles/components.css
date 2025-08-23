@@ -1,5 +1,9 @@
 
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 
+@layer components {
   /* section style */
   .section { @apply py-24 xl:py-28; }
   .section-sm { @apply py-16 xl:py-20; }
@@ -20,7 +24,7 @@
   .notice { @apply mb-6 rounded-lg border border-base-300 px-8 py-6 bg-base-100; }
   .notice-head { @apply flex items-center; }
   .notice-head svg { @apply mr-3; }
-  .notice-head p { @apply font-serif text-xl text-neutral; }
+  .notice-head p { @apply font-serif text-xl; }
   .notice-body { @apply mt-3; }
   .notice-body p { @apply my-0; }
 
@@ -83,4 +87,5 @@
     @apply prose-th:relative prose-th:z-10 prose-th:px-4 prose-th:py-[18px] prose-th:text-neutral;
     @apply prose-tr:border-base-300;
     @apply prose-td:relative prose-td:z-10 prose-td:px-3 prose-td:py-[18px];
+  }
 }
