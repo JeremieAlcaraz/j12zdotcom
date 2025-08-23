@@ -5,7 +5,7 @@ const Youtube = ({ id, title, ...rest }: { id: string; title: string; [key: stri
     import('@justinribeiro/lite-youtube')
   }, [])
 
-  // @ts-ignore
+  // @ts-expect-error - custom element provided by lite-youtube
   return <lite-youtube videoid={id} videotitle={title} {...rest} />
 }
 
