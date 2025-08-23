@@ -2,10 +2,9 @@ import { humanize } from '@/utils/textConverter'
 import React from 'react'
 
 function Notice({ type, children }: { type: string; children: React.ReactNode }) {
-  const color = type === 'tip' ? 'success' : type
   return (
-    <div role="alert" className={`alert alert-${color} flex flex-col gap-2`}>
-      <div className="flex items-center gap-2">
+    <div className={`notice ${type}`}>
+      <div className="notice-head">
         {type === 'tip' ? (
           <svg
             width="20"
@@ -70,9 +69,9 @@ function Notice({ type, children }: { type: string; children: React.ReactNode })
             />
           </svg>
         )}
-        <span className="font-bold">{humanize(type)}</span>
+        <p className="my-0 ml-1.5">{humanize(type)}</p>
       </div>
-      <div>{children}</div>
+      <div className="notice-body">{children}</div>
     </div>
   )
 }
