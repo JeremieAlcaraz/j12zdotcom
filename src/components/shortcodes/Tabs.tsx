@@ -5,10 +5,9 @@ const Tabs = ({ children }: { children: React.ReactElement }) => {
   const [active, setActive] = useState<number>(0)
   const [defaultFocus, setDefaultFocus] = useState<boolean>(false)
 
-  const tabRefs: React.RefObject<HTMLElement[]> = useRef([])
+  const tabRefs = useRef<(HTMLButtonElement | null)[]>([])
   useEffect(() => {
     if (defaultFocus) {
-      //@ts-ignore
       tabRefs.current[active]?.focus()
     } else {
       setDefaultFocus(true)
@@ -31,27 +30,28 @@ const Tabs = ({ children }: { children: React.ReactElement }) => {
   }
 
   return (
-    <div className="tab">
-      <ul className="tab-nav">
+    <div>
+      <div role="tablist" className="tabs tabs-bordered">
         {tabLinks.map((item: { name: string; children: string }, index: number) => (
-          <li
+          <button
             key={index}
-            className={`tab-nav-item ${index === active && 'active'}`}
             role="tab"
+            className={`tab ${index === active ? 'tab-active' : ''}`}
             tabIndex={index === active ? 0 : -1}
             onKeyDown={event => handleKeyDown(event, index)}
             onClick={() => setActive(index)}
-            //@ts-ignore
-            ref={ref => (tabRefs.current[index] = ref)}
+            ref={ref => {
+              tabRefs.current[index] = ref
+            }}
           >
             {item.name}
-          </li>
+          </button>
         ))}
-      </ul>
+      </div>
       {tabLinks.map((item: { name: string; children: string }, i: number) => (
         <div
-          className={active === i ? 'tab-content block px-5' : 'hidden'}
           key={i}
+          className={`mt-4 ${active === i ? 'block' : 'hidden'}`}
           dangerouslySetInnerHTML={{
             __html: marked.parse(item.children),
           }}
