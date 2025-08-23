@@ -1,0 +1,86 @@
+
+
+  /* section style */
+  .section { @apply py-24 xl:py-28; }
+  .section-sm { @apply py-16 xl:py-20; }
+
+  /* container */
+  .container { @apply mx-auto xl:!max-w-[1320px] px-4; }
+
+  /* social icons */
+  .social-icons { @apply space-x-4; }
+  .social-icons li { @apply inline-block; }
+  .social-icons li a {
+    @apply flex h-9 w-9 items-center justify-center rounded-sm
+           bg-primary text-primary-content text-center leading-9;
+  }
+  .social-icons li a svg { @apply h-5 w-5; }
+
+  /* notice */
+  .notice { @apply mb-6 rounded-lg border border-base-300 px-8 py-6 bg-base-100; }
+  .notice-head { @apply flex items-center; }
+  .notice-head svg { @apply mr-3; }
+  .notice-head p { @apply font-serif text-xl text-neutral; }
+  .notice-body { @apply mt-3; }
+  .notice-body p { @apply my-0; }
+
+  /* variantes avec palette du thème */
+  .notice.note    { @apply text-info border-current; }
+  .notice.tip     { @apply text-success border-current; }
+  .notice.info    { @apply text-warning border-current; }
+  .notice.warning { @apply text-error border-current; }
+
+  /* tabs */
+  .tab { @apply overflow-hidden rounded-lg border border-base-300; }
+  .tab-nav { @apply flex border-b border-base-300 bg-base-200 !m-0 !list-none; }
+  .tab-nav-item {
+    @apply cursor-pointer border-b-[3px] border-base-300 py-2 text-lg text-neutral opacity-80 !my-0 !px-8;
+  }
+  .tab-nav-item.active { @apply border-b-[3px] border-primary opacity-100; }
+  .tab-content { @apply px-5; }
+  .tab-content-panel { @apply p-8; }
+  .tab-content-panel p { @apply mb-0; }
+  .tab-content-panel.active { @apply block; }
+
+  /* accordion */
+  .accordion { @apply mb-6 overflow-hidden rounded-lg border border-base-300 bg-base-200; }
+  .accordion-header { @apply flex w-full cursor-pointer items-center justify-between px-8 py-4 text-lg text-neutral; }
+  .accordion-icon { @apply h-[.8em] w-[.8em] -rotate-90 transition-transform duration-200; }
+  .accordion-content { @apply max-h-0 overflow-hidden px-8 py-0; }
+  .accordion.active .accordion-icon { @apply rotate-0; }
+  .accordion.active .accordion-content { @apply max-h-screen; }
+
+  /* modal */
+  .modal { @apply fixed inset-0 z-40 hidden h-full w-full overflow-auto; }
+  .modal-overlay { @apply fixed inset-0 z-40 hidden h-full w-full bg-black/40; }
+  .modal-content { @apply relative top-1/2 z-50 mx-auto max-w-[90%] -translate-y-1/2 rounded-lg bg-base-100 p-8; }
+  .modal-close { @apply absolute right-3 top-3 h-8 w-8 rounded-full bg-base-200 text-center leading-8 text-neutral; }
+
+  /* content (typography plugin friendly) */
+  .content {
+    @apply prose max-w-none;
+    @apply prose-headings:mb-[.3em] prose-headings:mt-[.6em] prose-headings:text-neutral;
+    @apply prose-h1:text-4xl md:prose-h1:text-5xl;
+    @apply prose-h2:text-3xl md:prose-h2:text-4xl;
+    @apply prose-h3:text-2xl md:prose-h3:text-3xl;
+    @apply prose-p:text-base prose-p:text-neutral;
+    @apply prose-a:text-neutral prose-a:[&.btn]:no-underline;
+    @apply prose-img:max-w-full prose-img:rounded;
+    @apply prose-strong:text-neutral;
+    @apply prose-hr:border-base-300;
+    @apply prose-pre:rounded-lg prose-pre:bg-base-200;
+    @apply prose-code:text-neutral;
+    @apply prose-li:text-neutral;
+    @apply prose-blockquote:rounded-lg prose-blockquote:border prose-blockquote:border-l-[10px]
+           prose-blockquote:border-primary prose-blockquote:bg-base-200 prose-blockquote:px-8
+           prose-blockquote:py-10 prose-blockquote:font-serif prose-blockquote:text-2xl prose-blockquote:not-italic
+           prose-blockquote:text-neutral;
+    @apply prose-table:relative prose-table:overflow-hidden prose-table:rounded-lg
+           prose-table:before:absolute prose-table:before:left-0 prose-table:before:top-0
+           prose-table:before:h-full prose-table:before:w-full prose-table:before:rounded-[inherit]
+           prose-table:before:border prose-table:before:border-base-300 prose-table:before:content-[""];
+    @apply prose-thead:border-base-300 prose-thead:bg-base-200;
+    @apply prose-th:relative prose-th:z-10 prose-th:px-4 prose-th:py-[18px] prose-th:text-neutral;
+    @apply prose-tr:border-base-300;
+    @apply prose-td:relative prose-td:z-10 prose-td:px-3 prose-td:py-[18px];
+}
