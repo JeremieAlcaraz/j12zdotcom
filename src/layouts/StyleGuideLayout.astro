@@ -1,0 +1,41 @@
+---
+import '@styles/index.css'
+import StyleGuideHeader from '@/components/dev/StyleGuideHeader.astro'
+import StyleGuideFooter from '@/components/dev/StyleGuideFooter.astro'
+import { ClientRouter } from 'astro:transitions'
+const { title = 'Style Guide' } = Astro.props
+---
+<!doctype html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width" />
+    <title>{title}</title>
+    <ClientRouter />
+  </head>
+  <body class="min-h-screen">
+    <div class="grid min-h-screen grid-rows-[auto_1fr_auto]">
+      <header class="sticky top-0 z-50">
+        <StyleGuideHeader />
+      </header>
+      <main class="p-4">
+        <slot />
+      </main>
+      <footer>
+        <StyleGuideFooter />
+      </footer>
+    </div>
+  </body>
+</html>
+
+<style>
+  ::view-transition-old(root),
+  ::view-transition-new(root) {
+    animation-duration: 0.4s;
+    animation-timing-function: cubic-bezier(0.4,0,0.2,1);
+  }
+  ::view-transition-old(root){animation-name:fade-out;}
+  ::view-transition-new(root){animation-name:fade-in;}
+  @keyframes fade-out{from{opacity:1}to{opacity:0}}
+  @keyframes fade-in{from{opacity:0}to{opacity:1}}
+</style>
