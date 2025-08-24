@@ -1,0 +1,32 @@
+---
+import StyleGuideLayout from '@/layouts/StyleGuideLayout.astro'
+import Halo from '@/components/atoms/Halo.astro'
+import ImageMod from '@/components/atoms/ImageMod.astro'
+import SunIcon from '@/components/atoms/icons/SunIcon.astro'
+import MoonIcon from '@/components/atoms/icons/MoonIcon.astro'
+---
+<StyleGuideLayout title="Style Guide | Atoms">
+  <section class="border-primary mt-16 mb-12 border border-dotted p-4">
+    <h2 class="mb-8 text-center text-3xl font-bold">Halo</h2>
+    <div class="flex justify-center">
+      <div class="h-64 w-64">
+        <Halo />
+      </div>
+    </div>
+  </section>
+
+  <section class="border-primary mt-16 mb-12 border border-dotted p-4">
+    <h2 class="mb-8 text-center text-3xl font-bold">ImageMod</h2>
+    <div class="flex justify-center">
+      <ImageMod src="img_opt/jeremie-hero.png" alt="Jérémie" width={400} height={400} />
+    </div>
+  </section>
+
+  <section class="border-primary mt-16 mb-12 border border-dotted p-4">
+    <h2 class="mb-8 text-center text-3xl font-bold">Icônes</h2>
+    <div class="flex justify-center gap-4">
+      <SunIcon class="h-8 w-8" />
+      <MoonIcon class="h-8 w-8" />
+    </div>
+  </section>
+</StyleGuideLayout>
