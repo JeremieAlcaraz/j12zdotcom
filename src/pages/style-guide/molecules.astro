@@ -1,14 +1,14 @@
 ---
 import StyleGuideLayout from '@/layouts/StyleGuideLayout.astro'
-import Pagination from '@/components/molecules/Pagination.astro'
-import Section from '@/components/atoms/Section.astro'
+import ComponentGallery from '@/components/dev/ComponentGallery.astro'
+
+const modules = import.meta.glob('@/components/molecules/**/*.astro', { eager: true })
+
+const demoProps = {
+  Pagination: { section: 'blog', totalPages: 5, currentPage: 1 },
+}
 ---
 
 <StyleGuideLayout title="Style Guide | Molecules">
-  <Section>
-    <h2 class="mb-8 text-center text-3xl font-bold">Pagination</h2>
-    <div class="flex justify-center">
-      <Pagination section="blog" totalPages={5} currentPage={1} />
-    </div>
-  </Section>
+  <ComponentGallery modules={modules} demoProps={demoProps} />
 </StyleGuideLayout>

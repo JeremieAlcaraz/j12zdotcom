@@ -1,0 +1,48 @@
+---
+import Section from '@/components/atoms/Section.astro'
+
+interface ExtraComponent {
+  name: string
+  Component: any
+  props?: Record<string, any>
+  clientLoad?: boolean
+}
+
+interface Props {
+  modules: Record<string, any>
+  demoProps?: Record<string, any>
+  clientLoad?: string[]
+  exclude?: string[]
+  extra?: ExtraComponent[]
+}
+
+const { modules, demoProps = {}, clientLoad = [], exclude = [], extra = [] } = Astro.props as Props
+
+const autoComponents = Object.entries(modules)
+  .map(([path, mod]) => {
+    const name =
+      path
+        .split('/')
+        .pop()
+        ?.replace(/\.(astro|tsx|jsx|svelte)$/i, '') ?? ''
+    return {
+      name,
+      Component: (mod as any).default,
+      props: demoProps[name] ?? {},
+      clientLoad: clientLoad.includes(name),
+    }
+  })
+  .filter(({ name }) => name && !exclude.includes(name))
+  .sort((a, b) => a.name.localeCompare(b.name))
+
+const components = [...autoComponents, ...extra]
+---
+
+{
+  components.map(({ name, Component, props, clientLoad }) => (
+    <Section>
+      <h2 class="mb-8 text-center text-3xl font-bold">{name}</h2>
+      <Component {...props} {...(clientLoad ? { 'client:load': '' } : {})} />
+    </Section>
+  ))
+}
