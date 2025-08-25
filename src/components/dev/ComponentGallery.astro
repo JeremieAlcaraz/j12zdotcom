@@ -1,0 +1,61 @@
+---
+import Section from '@/components/atoms/Section.astro'
+
+interface ExtraComponent {
+  name: string
+  Component: any
+  props?: Record<string, any>
+  clientLoad?: boolean
+  path?: string
+}
+
+interface Props {
+  modules: Record<string, any>
+  demoProps?: Record<string, any>
+  clientLoad?: string[]
+  exclude?: string[]
+  extra?: ExtraComponent[]
+}
+
+const { modules, demoProps = {}, clientLoad = [], exclude = [], extra = [] } = Astro.props as Props
+
+const autoComponents = Object.entries(modules)
+  .map(([path, mod]) => {
+    const name =
+      path
+        .split('/')
+        .pop()
+        ?.replace(/\.(astro|tsx|jsx|svelte)$/i, '') ?? ''
+    return {
+      name,
+      Component: (mod as any).default,
+      props: demoProps[name] ?? {},
+      clientLoad: clientLoad.includes(name),
+      path,
+    }
+  })
+  .filter(({ name }) => name && !exclude.includes(name))
+  .sort((a, b) => a.name.localeCompare(b.name))
+
+const components = [...autoComponents, ...extra]
+---
+
+{
+  components.map(({ name, Component, props, clientLoad, path }) => (
+    <Section class="flex flex-col items-start">
+      <h2 class="mb-8 text-3xl font-bold">{name}</h2>
+      <div class="flex flex-col items-start gap-4">
+        <Component
+          {...props}
+          {...(clientLoad
+            ? {
+                'client:load': '',
+                'client:component-path': path,
+                'client:component-export': 'default',
+              }
+            : {})}
+        />
+      </div>
+    </Section>
+  ))
+}

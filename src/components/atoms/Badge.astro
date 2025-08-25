@@ -1,0 +1,14 @@
+---
+interface Props {
+  label: string
+  variant?: 'primary' | 'secondary' | 'neutral'
+}
+const { label, variant = 'primary' } = Astro.props as Props
+const base = 'inline-block rounded-full px-2 py-1 text-xs font-semibold'
+const variants = {
+  primary: 'bg-blue-100 text-blue-800',
+  secondary: 'bg-green-100 text-green-800',
+  neutral: 'bg-gray-100 text-gray-800',
+}
+---
+<span class={`${base} ${variants[variant]}`}>{label}</span>

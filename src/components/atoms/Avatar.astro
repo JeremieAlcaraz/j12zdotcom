@@ -1,0 +1,11 @@
+---
+import ImageMod from './ImageMod.astro'
+
+interface Props {
+  src: string
+  alt?: string
+  size?: number
+}
+const { src, alt = 'Avatar', size = 40 } = Astro.props as Props
+---
+<ImageMod src={src} alt={alt} width={size} height={size} class="rounded-full object-cover" />

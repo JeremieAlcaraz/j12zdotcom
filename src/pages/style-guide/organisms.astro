@@ -1,27 +1,29 @@
 ---
 import StyleGuideLayout from '@/layouts/StyleGuideLayout.astro'
-import BlogCard from '@/components/organisms/BlogCard.astro'
+import ComponentGallery from '@/components/dev/ComponentGallery.astro'
+import BlogCardGallery from '@/components/dev/BlogCardGallery.astro'
 import { getSinglePage } from '@/utils/contentParser.astro'
 import { sortByDate } from '@/utils/sortFunctions'
-import Section from '@/components/atoms/Section.astro'
+
+const modules = import.meta.glob('@/components/organisms/**/*.astro', { eager: true })
 
 const BLOG_FOLDER = 'blog'
 const posts = await getSinglePage(BLOG_FOLDER)
 const sortedPosts = sortByDate(posts)
 const currentPosts = sortedPosts.slice(0, 3)
+
+const demoProps = {
+  PostSidebar: { categories: ['astro', 'dev'], allCategories: ['astro', 'dev', 'astro'] },
+}
+
+const extra = [{ name: 'BlogCard', Component: BlogCardGallery, props: { posts: currentPosts } }]
 ---
 
 <StyleGuideLayout title="Style Guide | Organisms">
-  <Section>
-    <h2 class="mb-8 text-center text-3xl font-bold">Blog Cards</h2>
-    <div class="mb-8 grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-3">
-      {
-        currentPosts.map(post => (
-          <div class="w-full">
-            <BlogCard data={post} />
-          </div>
-        ))
-      }
-    </div>
-  </Section>
+  <ComponentGallery
+    modules={modules}
+    demoProps={demoProps}
+    exclude={['TestimonialCard', 'BlogCard']}
+    extra={extra}
+  />
 </StyleGuideLayout>
