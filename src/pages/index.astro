@@ -3,6 +3,7 @@ import BaseLayout from '@/layouts/BaseLayout.astro'
 import Hero from '@/components/sections/HeroSection.astro'
 import { getEntry } from 'astro:content'
 import Testimonial from '@/components/sections/TestimonialSection.astro'
+import Section from '@/components/atoms/Section.astro'
 import type { CollectionEntry } from 'astro:content'
 
 const testimonial = (await getEntry(
@@ -15,8 +16,12 @@ const testimonial = (await getEntry(
   <!-- Hero utilise le slot hero pour être full-width -->
   <Hero slot="hero" />
 
-  <Testimonial testimonial={testimonial} />
-  <Testimonial testimonial={testimonial} />
+  <Section>
+    <Testimonial testimonial={testimonial} />
+  </Section>
+  <Section>
+    <Testimonial testimonial={testimonial} />
+  </Section>
   <!-- Autres sections peuvent être ajoutées ici -->
   <!-- Elles seront automatiquement centrées dans le container -->
 </BaseLayout>
