@@ -1,6 +1,7 @@
 ---
 import StyleGuideLayout from '@/layouts/StyleGuideLayout.astro'
 import ComponentGallery from '@/components/dev/ComponentGallery.astro'
+import BlogCardGallery from '@/components/dev/BlogCardGallery.astro'
 import { getSinglePage } from '@/utils/contentParser.astro'
 import { sortByDate } from '@/utils/sortFunctions'
 
@@ -9,14 +10,20 @@ const modules = import.meta.glob('@/components/organisms/**/*.astro', { eager: t
 const BLOG_FOLDER = 'blog'
 const posts = await getSinglePage(BLOG_FOLDER)
 const sortedPosts = sortByDate(posts)
-const currentPosts = sortedPosts.slice(0, 1)
+const currentPosts = sortedPosts.slice(0, 3)
 
 const demoProps = {
-  BlogCard: { data: currentPosts[0] },
   PostSidebar: { categories: ['astro', 'dev'], allCategories: ['astro', 'dev', 'astro'] },
 }
+
+const extra = [{ name: 'BlogCard', Component: BlogCardGallery, props: { posts: currentPosts } }]
 ---
 
 <StyleGuideLayout title="Style Guide | Organisms">
-  <ComponentGallery modules={modules} demoProps={demoProps} exclude={['TestimonialCard']} />
+  <ComponentGallery
+    modules={modules}
+    demoProps={demoProps}
+    exclude={['TestimonialCard', 'BlogCard']}
+    extra={extra}
+  />
 </StyleGuideLayout>
