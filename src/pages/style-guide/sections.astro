@@ -1,36 +1,27 @@
 ---
 import StyleGuideLayout from '@/layouts/StyleGuideLayout.astro'
-import Hero from '@/components/sections/HeroSection.astro'
-import TestimonialSection from '@/components/sections/TestimonialSection.astro'
+import ComponentGallery from '@/components/dev/ComponentGallery.astro'
+import Section from '@/components/atoms/Section.astro'
 import Footer from '@/components/layout/SiteFooter.astro'
 import { getEntry } from 'astro:content'
 import type { CollectionEntry } from 'astro:content'
-import Section from '@/components/atoms/Section.astro'
+
+const modules = import.meta.glob('@/components/sections/**/*.astro', { eager: true })
 
 const testimonial = (await getEntry(
   'testimonialSection',
   'testimonial'
 )) as CollectionEntry<'testimonialSection'>
+
+const demoProps = {
+  TestimonialSection: { testimonial },
+}
+
+const extra = [{ name: 'Footer', Component: Footer }]
 ---
 
 <StyleGuideLayout title="Style Guide | Sections">
-  <section class="border-primary mt-16 mb-12 rounded-lg border-2 p-8">
-    <h2 class="mb-8 text-center text-3xl font-bold">Hero Section</h2>
-    <Hero />
-  </section>
-
-  <Section>
-    <h2 class="mb-8 text-center text-3xl font-bold">Section Témoignages</h2>
-    <div class="flex justify-center">
-      <TestimonialSection testimonial={testimonial} />
-    </div>
-  </Section>
-
-  <Section>
-    <h2 class="mb-8 text-center text-3xl font-bold">Footer</h2>
-    <Footer />
-  </Section>
-
+  <ComponentGallery modules={modules} demoProps={demoProps} extra={extra} />
   <Section>
     <h2 class="mb-8 text-center text-3xl font-bold">Calendrier Luma</h2>
     <div class="flex justify-center">
