@@ -1,0 +1,13 @@
+---
+import Spinner from '@/components/atoms/Spinner.astro'
+import Section from '@/components/atoms/Section.astro'
+
+interface Props {
+  text?: string
+}
+const { text = 'Loading...' } = Astro.props as Props
+---
+<Section class="flex items-center justify-center space-x-2">
+  <Spinner />
+  <span>{text}</span>
+</Section>

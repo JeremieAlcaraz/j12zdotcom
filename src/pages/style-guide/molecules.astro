@@ -6,6 +6,13 @@ const modules = import.meta.glob('@/components/molecules/**/*.astro', { eager: t
 
 const demoProps = {
   Pagination: { section: 'blog', totalPages: 5, currentPage: 1 },
+  UserCard: {
+    name: 'Jane Doe',
+    role: 'CEO',
+    avatar: 'img_opt/jeremie-hero.png',
+    status: 'Active',
+  },
+  LoadingSection: { text: 'Chargement...' },
 }
 ---
 
