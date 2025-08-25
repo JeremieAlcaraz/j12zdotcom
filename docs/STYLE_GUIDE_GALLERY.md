@@ -84,7 +84,9 @@ const clientLoad = ['Accordion', 'Button', 'Notice']
 <ComponentGallery modules={modules} demoProps={demoProps} clientLoad={clientLoad} />
 ```
 
-Ils recevront l'attribut `client:load` automatiquement.
+Les composants listés recevront `client:load` **et** les attributs techniques
+`client:component-path` / `client:component-export` nécessaires pour
+hydrater correctement les imports dynamiques.
 
 ---
 

@@ -6,6 +6,7 @@ interface ExtraComponent {
   Component: any
   props?: Record<string, any>
   clientLoad?: boolean
+  path?: string
 }
 
 interface Props {
@@ -30,6 +31,7 @@ const autoComponents = Object.entries(modules)
       Component: (mod as any).default,
       props: demoProps[name] ?? {},
       clientLoad: clientLoad.includes(name),
+      path,
     }
   })
   .filter(({ name }) => name && !exclude.includes(name))
@@ -39,10 +41,21 @@ const components = [...autoComponents, ...extra]
 ---
 
 {
-  components.map(({ name, Component, props, clientLoad }) => (
-    <Section>
-      <h2 class="mb-8 text-center text-3xl font-bold">{name}</h2>
-      <Component {...props} {...(clientLoad ? { 'client:load': '' } : {})} />
+  components.map(({ name, Component, props, clientLoad, path }) => (
+    <Section class="flex flex-col items-start">
+      <h2 class="mb-8 text-3xl font-bold">{name}</h2>
+      <div class="flex flex-col items-start gap-4">
+        <Component
+          {...props}
+          {...(clientLoad
+            ? {
+                'client:load': '',
+                'client:component-path': path,
+                'client:component-export': 'default',
+              }
+            : {})}
+        />
+      </div>
     </Section>
   ))
 }
