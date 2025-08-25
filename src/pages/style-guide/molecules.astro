@@ -1,12 +1,14 @@
 ---
 import StyleGuideLayout from '@/layouts/StyleGuideLayout.astro'
 import Pagination from '@/components/molecules/Pagination.astro'
+import Section from '@/components/atoms/Section.astro'
 ---
+
 <StyleGuideLayout title="Style Guide | Molecules">
-  <section class="border-primary mt-16 mb-12 border border-dotted p-4">
+  <Section>
     <h2 class="mb-8 text-center text-3xl font-bold">Pagination</h2>
     <div class="flex justify-center">
       <Pagination section="blog" totalPages={5} currentPage={1} />
     </div>
-  </section>
+  </Section>
 </StyleGuideLayout>

@@ -5,34 +5,40 @@ import Button from '@/components/shortcodes/Button.tsx'
 import Notice from '@/components/shortcodes/Notice.tsx'
 import Video from '@/components/shortcodes/Video.tsx'
 import Youtube from '@/components/shortcodes/Youtube.tsx'
+import Section from '@/components/atoms/Section.astro'
 ---
+
 <StyleGuideLayout title="Style Guide | Shortcodes MDX">
-  <section class="border-primary mt-16 mb-12 border border-dotted p-4">
+  <Section>
     <h2 class="mb-8 text-center text-3xl font-bold">Accordion</h2>
     <Accordion title="Titre" client:load>
       <p>Contenu de l'accordéon.</p>
     </Accordion>
-  </section>
+  </Section>
 
-  <section class="border-primary mt-16 mb-12 border border-dotted p-4">
+  <Section>
     <h2 class="mb-8 text-center text-3xl font-bold">Button</h2>
     <Button label="Visiter Astro" link="https://astro.build" client:load />
-  </section>
+  </Section>
 
-  <section class="border-primary mt-16 mb-12 border border-dotted p-4">
+  <Section>
     <h2 class="mb-8 text-center text-3xl font-bold">Notice</h2>
-    <Notice type="tip" client:load>
-      Une petite astuce.
-    </Notice>
-  </section>
+    <Notice type="tip" client:load> Une petite astuce. </Notice>
+  </Section>
 
-  <section class="border-primary mt-16 mb-12 border border-dotted p-4">
+  <Section>
     <h2 class="mb-8 text-center text-3xl font-bold">Video</h2>
-    <Video title="Sample" src="https://www.w3schools.com/html/mov_bbb.mp4" width={320} height={240} client:load />
-  </section>
+    <Video
+      title="Sample"
+      src="https://www.w3schools.com/html/mov_bbb.mp4"
+      width={320}
+      height={240}
+      client:load
+    />
+  </Section>
 
-  <section class="border-primary mt-16 mb-12 border border-dotted p-4">
+  <Section>
     <h2 class="mb-8 text-center text-3xl font-bold">Youtube</h2>
     <Youtube id="dQw4w9WgXcQ" title="YouTube" style={{ maxWidth: '560px' }} client:load />
-  </section>
+  </Section>
 </StyleGuideLayout>
