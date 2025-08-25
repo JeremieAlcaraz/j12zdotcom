@@ -7,7 +7,12 @@ import ImageMod from '@/components/atoms/ImageMod.astro'
 
 const { summaryLength, blogFolder }: { summaryLength: number; blogFolder: string } = config.settings
 
-const { data } = Astro.props
+interface Props {
+  data: any
+  base?: 100 | 200 | 300
+}
+
+const { data, base = 100 } = Astro.props as Props
 
 // Vérification que data existe et qu'il contient bien une propriété data
 if (!data || !data.data) {
@@ -17,10 +22,15 @@ if (!data || !data.data) {
 }
 
 const { title, image, date, author, categories } = data.data
+const baseClasses = {
+  100: 'bg-base-100',
+  200: 'bg-base-200',
+  300: 'bg-base-300',
+} as const
 ---
 
 <!-- Carte responsive avec hauteur uniforme -->
-<div class="card bg-base-100 flex h-full flex-col shadow-sm">
+<div class={`card ${baseClasses[base]} flex h-full flex-col shadow-sm`}>
   <figure class="flex-shrink-0">
     {
       image && (
