@@ -1,0 +1,5 @@
+---
+import ButtonComponent from './Button.tsx'
+const props = Astro.props as any
+---
+<ButtonComponent client:load {...props} />
