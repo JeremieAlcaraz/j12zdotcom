@@ -3,38 +3,62 @@
 import PaginationItem from '@/components/atoms/PaginationItem.astro'
 import ChevronLeftIcon from '@/components/atoms/icons/ChevronLeftIcon.astro'
 import ChevronRightIcon from '@/components/atoms/icons/ChevronRightIcon.astro'
-import { getPageList, getPrevHref, getNextHref, getPageHref } from '@/utils/pagination'
 
-interface Props {
-  section?: string
-  currentPage?: number
-  totalPages?: number
+type NavLink = {
+  href?: string
+  label?: string
 }
 
-const { section, currentPage = 1, totalPages = 1 }: Props = Astro.props
+type PageLink = {
+  n: number
+  href?: string
+  current?: boolean
+  label?: string
+}
 
-const pageList = getPageList(totalPages)
-const prevHref = getPrevHref(section, currentPage)
-const nextHref = getNextHref(section, currentPage, totalPages)
+interface Props {
+  pages: PageLink[]
+  prev?: NavLink
+  next?: NavLink
+}
+
+const { pages, prev, next }: Props = Astro.props
+const current = pages.find((p) => p.current)?.n
 ---
 
-<div class="join" role="navigation" aria-label="Pagination">
-  <PaginationItem {...prevHref ? { href: prevHref } : { disabled: true }} label="Page précédente">
-    <ChevronLeftIcon />
+<nav class="join" aria-label="Pagination">
+  <PaginationItem
+    {...(prev?.href ? { href: prev.href } : { disabled: true })}
+    label={prev?.label ?? 'Page précédente'}
+    rel="prev"
+  >
+    <ChevronLeftIcon aria-hidden="true" />
   </PaginationItem>
 
-  {
-    pageList.map(page => (
+  {pages.map((p) =>
+    p.current ? (
       <PaginationItem
-        page={page}
-        label={`Page ${page}`}
-        current={page === currentPage}
-        href={page === currentPage ? undefined : getPageHref(section, page)}
+        page={p.n}
+        current
+        label={p.label ?? `Page ${p.n}`}
+        aria-current="page"
       />
-    ))
-  }
+    ) : (
+      <PaginationItem
+        page={p.n}
+        href={p.href}
+        label={p.label ?? `Aller à la page ${p.n}`}
+        {...(current && p.n === current + 1 ? { rel: 'next' } : {})}
+        {...(current && p.n === current - 1 ? { rel: 'prev' } : {})}
+      />
+    )
+  )}
 
-  <PaginationItem {...nextHref ? { href: nextHref } : { disabled: true }} label="Page suivante">
-    <ChevronRightIcon />
+  <PaginationItem
+    {...(next?.href ? { href: next.href } : { disabled: true })}
+    label={next?.label ?? 'Page suivante'}
+    rel="next"
+  >
+    <ChevronRightIcon aria-hidden="true" />
   </PaginationItem>
-</div>
+</nav>

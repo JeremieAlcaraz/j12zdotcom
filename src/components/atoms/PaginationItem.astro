@@ -2,12 +2,13 @@
 interface Props {
   page?: number
   href?: string
+  rel?: string
   current?: boolean
   disabled?: boolean
   label: string
 }
 
-const { page, href, current = false, disabled = false, label }: Props = Astro.props
+const { page, href, rel, current = false, disabled = false, label }: Props = Astro.props
 
 const Tag = href && !disabled ? 'a' : 'span'
 const classes = ['join-item btn btn-square', current && 'btn-primary', disabled && 'btn-disabled']
@@ -19,6 +20,7 @@ const classes = ['join-item btn btn-square', current && 'btn-primary', disabled 
   {...href && !disabled ? { href } : {}}
   class={classes}
   aria-label={label}
+  {...rel && href && !disabled ? { rel } : {}}
   {...current ? { 'aria-current': 'page' } : {}}
 >
   {page ?? <slot />}
