@@ -1,109 +1,40 @@
 ---
-// src/components/blog/Pagination.astro
-type Pagination = {
+// src/components/molecules/Pagination.astro
+import PaginationItem from '@/components/atoms/PaginationItem.astro'
+import ChevronLeftIcon from '@/components/atoms/icons/ChevronLeftIcon.astro'
+import ChevronRightIcon from '@/components/atoms/icons/ChevronRightIcon.astro'
+import { getPageList, getPrevHref, getNextHref, getPageHref } from '@/utils/pagination'
+
+interface Props {
   section?: string
   currentPage?: number
   totalPages?: number
 }
 
-const { section, currentPage = 1, totalPages = 1 }: Pagination = Astro.props
+const { section, currentPage = 1, totalPages = 1 }: Props = Astro.props
 
-const indexPageLink = currentPage === 2
-const hasPrevPage = currentPage > 1
-const hasNextPage = totalPages > currentPage
-
-let pageList: number[] = []
-for (let i = 1; i <= totalPages; i++) {
-  pageList.push(i)
-}
+const pageList = getPageList(totalPages)
+const prevHref = getPrevHref(section, currentPage)
+const nextHref = getNextHref(section, currentPage, totalPages)
 ---
 
-{
-  (
-    // Test - affichage forcé
-    <div class="join" role="navigation" aria-label="Pagination">
-      {/* Previous button */}
-      {hasPrevPage ? (
-        <a
-          href={
-            indexPageLink
-              ? `${section ? '/' + section : '/'}`
-              : `${section ? '/' + section : ''}/page/${currentPage - 1}`
-          }
-          class="join-item btn btn-square"
-          aria-label="Page précédente"
-        >
-          <svg viewBox="0 0 20 20" fill="currentColor" aria-hidden="true" height="20" width="20">
-            <path
-              fill-rule="evenodd"
-              d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z"
-              clip-rule="evenodd"
-            />
-          </svg>
-        </a>
-      ) : (
-        <span class="join-item btn btn-square btn-disabled" aria-label="Page précédente">
-          <svg viewBox="0 0 20 20" fill="currentColor" aria-hidden="true" height="20" width="20">
-            <path
-              fill-rule="evenodd"
-              d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z"
-              clip-rule="evenodd"
-            />
-          </svg>
-        </span>
-      )}
+<div class="join" role="navigation" aria-label="Pagination">
+  <PaginationItem {...prevHref ? { href: prevHref } : { disabled: true }} label="Page précédente">
+    <ChevronLeftIcon />
+  </PaginationItem>
 
-      {/* Page numbers */}
-      {pageList.map((pagination, i) =>
-        pagination === currentPage ? (
-          <span
-            aria-current="page"
-            class="join-item btn btn-square btn-primary"
-            aria-label={`Page ${pagination}`}
-          >
-            {pagination}
-          </span>
-        ) : (
-          <a
-            href={
-              i === 0
-                ? `${section ? '/' + section : '/'}`
-                : `${section ? '/' + section : ''}/page/${pagination}`
-            }
-            class="join-item btn btn-square"
-            aria-label={`Aller à la page ${pagination}`}
-          >
-            {pagination}
-          </a>
-        )
-      )}
+  {
+    pageList.map(page => (
+      <PaginationItem
+        page={page}
+        label={`Page ${page}`}
+        current={page === currentPage}
+        href={page === currentPage ? undefined : getPageHref(section, page)}
+      />
+    ))
+  }
 
-      {/* Next button */}
-      {hasNextPage ? (
-        <a
-          href={`${section ? '/' + section : ''}/page/${currentPage + 1}`}
-          class="join-item btn btn-square"
-          aria-label="Page suivante"
-        >
-          <svg viewBox="0 0 20 20" fill="currentColor" aria-hidden="true" height="20" width="20">
-            <path
-              fill-rule="evenodd"
-              d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
-              clip-rule="evenodd"
-            />
-          </svg>
-        </a>
-      ) : (
-        <span class="join-item btn btn-square btn-disabled" aria-label="Page suivante">
-          <svg viewBox="0 0 20 20" fill="currentColor" aria-hidden="true" height="20" width="20">
-            <path
-              fill-rule="evenodd"
-              d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
-              clip-rule="evenodd"
-            />
-          </svg>
-        </span>
-      )}
-    </div>
-  )
-}
+  <PaginationItem {...nextHref ? { href: nextHref } : { disabled: true }} label="Page suivante">
+    <ChevronRightIcon />
+  </PaginationItem>
+</div>

@@ -1,0 +1,25 @@
+---
+interface Props {
+  page?: number
+  href?: string
+  current?: boolean
+  disabled?: boolean
+  label: string
+}
+
+const { page, href, current = false, disabled = false, label }: Props = Astro.props
+
+const Tag = href && !disabled ? 'a' : 'span'
+const classes = ['join-item btn btn-square', current && 'btn-primary', disabled && 'btn-disabled']
+  .filter(Boolean)
+  .join(' ')
+---
+
+<Tag
+  {...href && !disabled ? { href } : {}}
+  class={classes}
+  aria-label={label}
+  {...current ? { 'aria-current': 'page' } : {}}
+>
+  {page ?? <slot />}
+</Tag>
