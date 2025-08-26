@@ -8,6 +8,7 @@ import { sortByDate } from '@utils/sortFunctions'
 import { getSinglePage } from '@/utils/contentParser.astro'
 import type { CollectionEntry } from 'astro:content'
 import { getEntry } from 'astro:content'
+import { makePaginationLinks } from '@/utils/pagination'
 
 const COLLECTION = 'blog' // <-- utilisé hors getStaticPaths
 const { page: pageParam } = Astro.params
@@ -26,6 +27,8 @@ const totalPages = Math.ceil(sortedPosts.length / perPage)
 const start = (currentPage - 1) * perPage
 const end = start + perPage
 const currentPosts = sortedPosts.slice(start, end)
+
+const { pages, prev, next } = makePaginationLinks(COLLECTION, currentPage, totalPages)
 
 // Génération des chemins (param = "page")
 export async function getStaticPaths() {
@@ -58,13 +61,11 @@ export async function getStaticPaths() {
             ))}
           </div>
 
-          <div class="mt-12 flex justify-center">
-            <Pagination
-              section={COLLECTION}                 
-              currentPage={currentPage}
-              totalPages={totalPages}
-            />
-          </div>
+          {totalPages > 1 && (
+            <div class="mt-12 flex justify-center">
+              <Pagination pages={pages} prev={prev} next={next} />
+            </div>
+          )}
         </div>
       </div>
     </div>

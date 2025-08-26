@@ -7,6 +7,7 @@ import { sortByDate } from '@utils/sortFunctions'
 import { getSinglePage } from '@/utils/contentParser.astro'
 import type { CollectionEntry } from 'astro:content'
 import { getEntry } from 'astro:content'
+import { makePaginationLinks } from '@/utils/pagination'
 
 const BLOG_FOLDER = 'blog'
 const postIndex = (await getEntry(BLOG_FOLDER, '-index')) as CollectionEntry<'blog'>
@@ -14,6 +15,7 @@ const posts = await getSinglePage(BLOG_FOLDER)
 const sortedPosts = sortByDate(posts)
 const totalPages = Math.ceil(posts.length / config.settings.pagination)
 const currentPosts = sortedPosts.slice(0, config.settings.pagination)
+const { pages, prev, next } = makePaginationLinks(BLOG_FOLDER, 1, totalPages)
 ---
 
 <BaseLayout
@@ -39,9 +41,11 @@ const currentPosts = sortedPosts.slice(0, config.settings.pagination)
             }
           </div>
           <!-- Pagination -->
-          <div class="mt-12 flex justify-center">
-            <Pagination section={BLOG_FOLDER} currentPage={1} totalPages={totalPages} />
-          </div>
+          {totalPages > 1 && (
+            <div class="mt-12 flex justify-center">
+              <Pagination pages={pages} prev={prev} next={next} />
+            </div>
+          )}
         </div>
 
         <!-- Sidebar (décommentez si vous voulez l'activer) -->
