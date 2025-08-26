@@ -125,7 +125,7 @@ src/
     toggleTheme.ts
 ```
 
-> **Note** : `contentParser.astro` / `taxonomyParser.astro` ont été **convertis en .ts** utilitaires purs (zéro rendu).
+> **Note** : `contentParser.ts` / `taxonomyParser.ts` sont des utilitaires purs (zéro rendu).
 
 ---
 

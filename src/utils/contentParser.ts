@@ -1,4 +1,3 @@
----
 import { getCollection, type CollectionEntry, type CollectionKey } from 'astro:content'
 
 type PageData = {
@@ -23,4 +22,3 @@ export const getSinglePage = async <C extends CollectionKey>(
 
   return removeDrafts
 }
----

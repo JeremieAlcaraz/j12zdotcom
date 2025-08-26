@@ -2,7 +2,7 @@
 import StyleGuideLayout from '@/layouts/StyleGuideLayout.astro'
 import ComponentGallery from '@/components/dev/ComponentGallery.astro'
 import BlogCardGallery from '@/components/dev/BlogCardGallery.astro'
-import { getSinglePage } from '@/utils/contentParser.astro'
+import { getSinglePage } from '@/utils/contentParser'
 import { sortByDate } from '@/utils/sortFunctions'
 
 const modules = import.meta.glob('@/components/organisms/**/*.astro', { eager: true })
