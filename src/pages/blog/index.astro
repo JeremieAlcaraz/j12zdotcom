@@ -4,7 +4,7 @@ import BlogCard from '@/components/organisms/BlogCard.astro'
 import Pagination from '@/components/molecules/Pagination.astro'
 import config from '@/config/siteConfig.ts'
 import { sortByDate } from '@utils/sortFunctions'
-import { getSinglePage } from '@/utils/contentParser.astro'
+import { getSinglePage } from '@/utils/contentParser'
 import type { CollectionEntry } from 'astro:content'
 import { getEntry } from 'astro:content'
 import { makePaginationLinks } from '@/utils/pagination'
@@ -41,11 +41,13 @@ const { pages, prev, next } = makePaginationLinks(BLOG_FOLDER, 1, totalPages)
             }
           </div>
           <!-- Pagination -->
-          {totalPages > 1 && (
-            <div class="mt-12 flex justify-center">
-              <Pagination pages={pages} prev={prev} next={next} />
-            </div>
-          )}
+          {
+            totalPages > 1 && (
+              <div class="mt-12 flex justify-center">
+                <Pagination pages={pages} prev={prev} next={next} />
+              </div>
+            )
+          }
         </div>
 
         <!-- Sidebar (décommentez si vous voulez l'activer) -->
