@@ -1,10 +1,12 @@
 ---
+import { FaRegUserCircle } from 'react-icons/fa'
+import type { CollectionEntry } from 'astro:content'
+
 import config from '@/config/siteConfig'
 import dateFormat from '@/utils/dateFormat'
 import { humanize, slugify, smartTruncate } from '@/utils/textConverter'
-import { FaRegUserCircle } from 'react-icons/fa'
 import ImageMod from '@/components/atoms/ImageMod.astro'
-import type { CollectionEntry } from 'astro:content'
+
 
 const { summaryLength, blogFolder }: { summaryLength: number; blogFolder: string } = config.settings
 
@@ -13,14 +15,7 @@ interface Props {
   base?: 100 | 200 | 300
 }
 
-const { data, base = 100 } = Astro.props as Props
-
-// Vérification que data existe et qu'il contient bien une propriété data
-if (!data || !data.data) {
-  throw new Error(
-    "BlogCard: Les données du blog sont manquantes. Vérifiez que vous passez bien une prop 'data' au composant."
-  )
-}
+const { data, base = 100 } = Astro.props
 
 const { title, image, date, author } = data.data
 const baseClasses = {
@@ -67,13 +62,9 @@ const baseClasses = {
       </div>
 
       <!-- Date -->
-      {
-        date && (
-          <time datetime={date} class="text-xs">
-            {dateFormat(date)}
-          </time>
-        )
-      }
+      <time datetime={date} class="text-xs">
+        {dateFormat(date)}
+      </time>
     </div>
 
     <!-- Résumé - prend l'espace restant -->

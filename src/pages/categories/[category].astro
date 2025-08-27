@@ -1,7 +1,8 @@
 ---
+import { getCollection } from 'astro:content'
+
 import BaseLayout from '@/layouts/BaseLayout.astro'
 import BlogCard from '@/components/organisms/BlogCard.astro'
-import { getCollection } from 'astro:content'
 
 export async function getStaticPaths() {
   const blogEntries = await getCollection('blog')
@@ -12,7 +13,13 @@ export async function getStaticPaths() {
 }
 
 const { category } = Astro.params
-const blogEntries = await getCollection('blog', ({ data }) => data.categories.includes(category!))
+if (category === undefined) {
+  return new Response(null, {
+    status: 404,
+    statusText: 'Not Found'
+  });
+}
+const blogEntries = await getCollection('blog', ({ data }) => data.categories.includes(category))
 ---
 
 <BaseLayout title={`Category: ${category}`}>

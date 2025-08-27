@@ -1,9 +1,15 @@
 ---
-import dateFormat from '@/utils/dateFormat'
-import { humanize, markdownify, slugify } from '@/utils/textConverter'
 import { render } from 'astro:content'
 import { FaRegClock, FaRegFolder, FaRegUserCircle } from 'react-icons/fa'
+import type { CollectionEntry } from 'astro:content'
+
+import dateFormat from '@/utils/dateFormat'
+import { humanize, markdownify, slugify } from '@/utils/textConverter'
 import ImageMod from '@/components/atoms/ImageMod.astro'
+
+interface Props {
+  post: CollectionEntry<'blog'>
+}
 
 const { post } = Astro.props
 const { Content } = await render(post)
@@ -51,24 +57,20 @@ const { title, author, categories, image, date, tags } = post.data
       </ul>
     </header>
     <Content />
-    {
-      tags && (
-        <div class="not-prose mt-10 flex flex-wrap items-center gap-2">
-          <h5 class="mr-2">Tags :</h5>
-          <ul class="flex flex-wrap gap-2">
-            {tags.map((tag: string) => (
-              <li>
-                <a
-                  class="bg-light hover:bg-primary dark:bg-darkmode-light dark:hover:bg-darkmode-primary m-1 inline-block rounded px-3 py-1 text-sm hover:text-white"
-                  href={`/tags/${slugify(tag)}`}
-                >
-                  {humanize(tag)}
-                </a>
-              </li>
-            ))}
-          </ul>
-        </div>
-      )
-    }
+    <div class="not-prose mt-10 flex flex-wrap items-center gap-2">
+      <h5 class="mr-2">Tags :</h5>
+      <ul class="flex flex-wrap gap-2">
+        {tags.map((tag: string) => (
+          <li>
+            <a
+              class="bg-light hover:bg-primary dark:bg-darkmode-light dark:hover:bg-darkmode-primary m-1 inline-block rounded px-3 py-1 text-sm hover:text-white"
+              href={`/tags/${slugify(tag)}`}
+            >
+              {humanize(tag)}
+            </a>
+          </li>
+        ))}
+      </ul>
+    </div>
   </article>
 </section>

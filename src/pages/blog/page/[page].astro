@@ -1,12 +1,13 @@
 ---
+import type { CollectionEntry } from 'astro:content'
+import { getEntry } from 'astro:content'
+
 import BaseLayout from '@/layouts/BaseLayout.astro'
 import BlogCard from '@/components/organisms/BlogCard.astro'
 import Pagination from '@/components/molecules/Pagination.astro'
 import config from '@/config/siteConfig'
 import { sortByDate } from '@utils/sortFunctions'
 import { getSinglePage } from '@/utils/contentParser'
-import type { CollectionEntry } from 'astro:content'
-import { getEntry } from 'astro:content'
 import { makePaginationLinks } from '@/utils/pagination'
 
 const COLLECTION = 'blog' // <-- utilisé hors getStaticPaths
