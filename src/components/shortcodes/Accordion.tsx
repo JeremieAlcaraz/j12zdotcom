@@ -15,7 +15,9 @@ const Accordion = ({
     <div className={`collapse collapse-arrow ${open ? 'collapse-open' : ''} ${className ?? ''}`}>
       <button
         className="collapse-title text-left"
-        onClick={() => setOpen(!open)}
+        onClick={() => {
+          setOpen(!open)
+        }}
       >
         {title}
       </button>

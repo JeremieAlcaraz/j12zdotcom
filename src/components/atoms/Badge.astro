@@ -3,7 +3,7 @@ interface Props {
   label: string
   variant?: 'primary' | 'secondary' | 'neutral'
 }
-const { label, variant = 'primary' } = Astro.props as Props
+const { label, variant = 'primary' } = Astro.props
 const base = 'inline-block rounded-full px-2 py-1 text-xs font-semibold'
 const variants = {
   primary: 'bg-blue-100 text-blue-800',

@@ -1,5 +1,8 @@
 ---
+import type { ComponentProps } from 'react'
+
 import ButtonComponent from './Button.tsx'
-const props = Astro.props as any
+
+const props = Astro.props as ComponentProps<typeof ButtonComponent>
 ---
 <ButtonComponent client:load {...props} />

@@ -1,26 +1,39 @@
 ---
 import Section from '@/components/atoms/Section.astro'
 
+type ComponentFactory = (
+  result: unknown,
+  props: Record<string, unknown>,
+  slots: Record<string, unknown>
+) => unknown
+
 interface ExtraComponent {
   name: string
-  Component: any
-  props?: Record<string, any>
+  Component: ComponentFactory
+  props?: Record<string, unknown>
   clientLoad?: boolean
   path?: string
 }
 
 interface Props {
-  modules: Record<string, any>
-  demoProps?: Record<string, any>
+  modules: Record<string, { default: ComponentFactory }>
+  demoProps?: Record<string, Record<string, unknown>>
   clientLoad?: string[]
   exclude?: string[]
   extra?: ExtraComponent[]
 }
 
-const { modules, demoProps = {}, clientLoad = [], exclude = [], extra = [] } = Astro.props as Props
+const {
+  modules,
+  demoProps = {},
+  clientLoad = [],
+  exclude = [],
+  extra = [],
+}: Props = Astro.props
 
-const autoComponents = Object.entries(modules)
-  .map(([path, mod]) => {
+const autoComponents = Object.keys(modules)
+  .map((path) => {
+    const mod = modules[path]
     const name =
       path
         .split('/')
@@ -28,7 +41,7 @@ const autoComponents = Object.entries(modules)
         ?.replace(/\.(astro|tsx|jsx|svelte)$/i, '') ?? ''
     return {
       name,
-      Component: (mod as any).default,
+      Component: mod.default,
       props: demoProps[name] ?? {},
       clientLoad: clientLoad.includes(name),
       path,

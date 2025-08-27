@@ -1,5 +1,5 @@
 ---
-import VideoComponent from './Video.tsx'
-const props = Astro.props as any
+import VideoComponent, { type VideoProps } from './Video.tsx'
+const props = Astro.props as VideoProps
 ---
 <VideoComponent client:load {...props} />

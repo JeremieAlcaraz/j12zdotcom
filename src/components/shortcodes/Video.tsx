@@ -1,19 +1,27 @@
-import React from 'react'
+import React, { type VideoHTMLAttributes } from 'react'
+
+export interface VideoProps extends VideoHTMLAttributes<HTMLVideoElement> {
+  title: string
+  width?: number
+  height?: number | 'auto'
+  src: string
+}
+
 function Video({
   title,
   width = 500,
   height = 'auto',
   src,
   ...rest
-}: {
-  title: string
-  width: number
-  height: number | 'auto'
-  src: string
-  [key: string]: any
-}) {
+}: VideoProps) {
   return (
-    <video className="overflow-hidden rounded-lg" width={width} height={height} controls {...rest}>
+    <video
+      className="overflow-hidden rounded-lg"
+      width={width}
+      height={height}
+      controls
+      {...rest}
+    >
       <source src={src.match(/^http/) ? src : `/videos/${src}`} type="video/mp4" />
       {title}
     </video>

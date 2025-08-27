@@ -2,10 +2,10 @@
 import BlogCard from '@/components/organisms/BlogCard.astro'
 
 interface Props {
-  posts: any[]
+  posts: Array<Record<string, unknown>>
 }
 
-const { posts } = Astro.props as Props
+const { posts } = Astro.props satisfies Props
 const bases = [100, 200, 300] as const
 ---
 <div class="grid w-full grid-cols-3 gap-4">

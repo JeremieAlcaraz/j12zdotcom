@@ -1,6 +1,11 @@
 import React, { useEffect } from 'react'
 
-const Youtube = ({ id, title, ...rest }: { id: string; title: string; [key: string]: any }) => {
+export interface YoutubeProps extends Record<string, unknown> {
+  id: string
+  title: string
+}
+
+const Youtube = ({ id, title, ...rest }: YoutubeProps) => {
   useEffect(() => {
     import('@justinribeiro/lite-youtube')
   }, [])

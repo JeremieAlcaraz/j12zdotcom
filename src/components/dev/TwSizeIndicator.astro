@@ -1,5 +1,7 @@
 ---
-const showIndicator = import.meta.env.DEV
+import { DEV } from 'astro:env'
+
+const showIndicator = Boolean(DEV)
 ---
 
 {

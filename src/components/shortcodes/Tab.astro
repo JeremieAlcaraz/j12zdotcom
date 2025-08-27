@@ -1,5 +1,8 @@
 ---
+import type { ComponentProps } from 'react'
+
 import TabComponent from './Tab.tsx'
-const props = Astro.props as any
+
+const props = Astro.props as ComponentProps<typeof TabComponent>
 ---
 <TabComponent client:load {...props} />

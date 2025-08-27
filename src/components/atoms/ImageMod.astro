@@ -35,21 +35,25 @@ const normalized = rawSrc.startsWith('/') ? rawSrc : `/${rawSrc}`
 const imageKey = `/src/assets${normalized}`
 
 /* 3️⃣  Import dynamique de toutes les images sous src/assets/ */
-const images = import.meta.glob<{ default: ImageMetadata }>(
+const glob = import.meta.glob as <T>(
+  pattern: string
+) => Record<string, () => Promise<T>>
+const images = glob<{ default: ImageMetadata }>(
   '/src/assets/**/*.{jpeg,jpg,png,gif,webp,avif}'
 )
 
-/* 4️⃣  Vérification et log dev convivial */
-const isValid = !!images[imageKey]
-if (!isValid) {
-  console.error(`\x1b[31mImage not found – ${imageKey}. Place it under src/assets.\x1b[0m`)
+/* 4️⃣  Récupération de l'image si elle existe */
+let image: ImageMetadata | undefined
+if (imageKey in images) {
+  const mod = await images[imageKey]()
+  image = mod.default
 }
 ---
 
 {
-  isValid && (
+  image && (
     <Image
-      src={images[imageKey]() as Promise<{ default: ImageMetadata }>}
+      src={image}
       alt={alt}
       width={width}
       height={height}

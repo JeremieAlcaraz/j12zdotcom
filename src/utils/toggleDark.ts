@@ -77,8 +77,8 @@ const toggleTheme = (event: MouseEvent) => {
   // document.startViewTransition = API expérimentale pour les transitions
   // prefers-reduced-motion = préférence utilisateur pour réduire les animations
   const isAppearanceTransition =
-    // @ts-expect-error: L'API View Transitions est expérimentale
-    document.startViewTransition && !window.matchMedia('(prefers-reduced-motion: reduce)').matches
+    typeof document.startViewTransition === 'function' &&
+    !window.matchMedia('(prefers-reduced-motion: reduce)').matches
 
   // CAS SIMPLE : pas de transition animée
   if (!isAppearanceTransition) {
@@ -126,9 +126,12 @@ const toggleTheme = (event: MouseEvent) => {
   })
 
   // ANIME la transition une fois qu'elle est prête
-  transition.ready.then(() => {
+  void transition.ready.then(() => {
     // DÉFINIT les keyframes de l'animation : cercle qui grandit
-    const clipPath = [`circle(0px at ${x}px ${y}px)`, `circle(${endRadius}px at ${x}px ${y}px)`]
+    const clipPath = [
+      `circle(0px at ${String(x)}px ${String(y)}px)`,
+      `circle(${String(endRadius)}px at ${String(x)}px ${String(y)}px)`
+    ]
 
     // LANCE l'animation sur la nouvelle vue qui apparaît
     const animation = document.documentElement.animate(

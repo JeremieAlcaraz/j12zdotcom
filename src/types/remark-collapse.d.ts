@@ -1,5 +1,6 @@
 // src/types/remark-collapse.d.ts
 declare module 'remark-collapse' {
-  const plugin: any
-  export default plugin
+  import type { Plugin } from 'unified'
+  const plugin: Plugin
+  export = plugin
 }

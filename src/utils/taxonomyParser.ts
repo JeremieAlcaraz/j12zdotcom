@@ -1,15 +1,23 @@
+import type { CollectionEntry, CollectionKey } from 'astro:content'
+
 import { getSinglePage } from '@/utils/contentParser'
 import { slugify } from '@/utils/textConverter'
 
 // get taxonomy from frontmatter
-export const getTaxonomy = async (collection: any, name: string) => {
-  const singlePages = await getSinglePage(collection)
-  const taxonomyPages = singlePages.map((page: any) => page.data[name])
+export const getTaxonomy = async <C extends CollectionKey>(
+  collection: C,
+  name: keyof CollectionEntry<C>['data'],
+) => {
+  const singlePages: CollectionEntry<C>[] = await getSinglePage(collection)
+  const taxonomyPages: string[][] = singlePages.map(page => {
+    const pageData = (page as unknown as { data: Record<string, unknown> }).data
+    const value = pageData[name as string]
+    return Array.isArray(value) ? value.map(item => String(item)) : []
+  })
   const taxonomies: string[] = []
-  for (let i = 0; i < taxonomyPages.length; i++) {
-    const categoryArray = taxonomyPages[i]
-    for (let j = 0; j < categoryArray.length; j++) {
-      taxonomies.push(slugify(categoryArray[j]))
+  for (const categoryArray of taxonomyPages) {
+    for (const category of categoryArray) {
+      taxonomies.push(slugify(category))
     }
   }
   const taxonomy = [...new Set(taxonomies)]
@@ -17,14 +25,20 @@ export const getTaxonomy = async (collection: any, name: string) => {
 }
 
 // get all taxonomies from frontmatter
-export const getAllTaxonomy = async (collection: any, name: string) => {
-  const singlePages = await getSinglePage(collection)
-  const taxonomyPages = singlePages.map((page: any) => page.data[name])
+export const getAllTaxonomy = async <C extends CollectionKey>(
+  collection: C,
+  name: keyof CollectionEntry<C>['data'],
+) => {
+  const singlePages: CollectionEntry<C>[] = await getSinglePage(collection)
+  const taxonomyPages: string[][] = singlePages.map(page => {
+    const pageData = (page as unknown as { data: Record<string, unknown> }).data
+    const value = pageData[name as string]
+    return Array.isArray(value) ? value.map(item => String(item)) : []
+  })
   const taxonomies: string[] = []
-  for (let i = 0; i < taxonomyPages.length; i++) {
-    const categoryArray = taxonomyPages[i]
-    for (let j = 0; j < categoryArray.length; j++) {
-      taxonomies.push(slugify(categoryArray[j]))
+  for (const categoryArray of taxonomyPages) {
+    for (const category of categoryArray) {
+      taxonomies.push(slugify(category))
     }
   }
   return taxonomies

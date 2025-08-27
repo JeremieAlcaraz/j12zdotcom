@@ -1,5 +1,6 @@
-import { humanize } from '@/utils/textConverter'
 import React from 'react'
+
+import { humanize } from '@/utils/textConverter'
 
 function Notice({ type, children }: { type: string; children: React.ReactNode }) {
   return (

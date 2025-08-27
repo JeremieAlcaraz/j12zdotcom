@@ -6,6 +6,6 @@ interface Props {
   alt?: string
   size?: number
 }
-const { src, alt = 'Avatar', size = 40 } = Astro.props as Props
+const { src, alt = 'Avatar', size = 40 } = Astro.props
 ---
 <ImageMod src={src} alt={alt} width={size} height={size} class="rounded-full object-cover" />

@@ -4,6 +4,7 @@ declare module '*.svg' {
 }
 
 declare module '*.astro' {
-  const Component: any
+  import type { AstroComponentFactory } from 'astro'
+  const Component: AstroComponentFactory
   export default Component
 }

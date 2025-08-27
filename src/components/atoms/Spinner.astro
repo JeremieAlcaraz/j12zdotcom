@@ -3,7 +3,7 @@ interface Props {
   size?: number
   color?: string
 }
-const { size = 24, color = 'currentColor' } = Astro.props as Props
+const { size = 24, color = 'currentColor' } = Astro.props satisfies Props
 ---
 <svg class="animate-spin" width={size} height={size} viewBox="0 0 24 24" fill="none">
   <circle class="opacity-25" cx="12" cy="12" r="10" stroke={color} stroke-width="4" />

@@ -1,14 +1,15 @@
 ---
-import config from '@/config/siteConfig.ts'
+import config from '@/config/siteConfig'
 import dateFormat from '@/utils/dateFormat'
-import { humanize, plainify, slugify, smartTruncate } from '@/utils/textConverter'
-import { FaRegFolder, FaRegUserCircle } from 'react-icons/fa'
+import { humanize, slugify, smartTruncate } from '@/utils/textConverter'
+import { FaRegUserCircle } from 'react-icons/fa'
 import ImageMod from '@/components/atoms/ImageMod.astro'
+import type { CollectionEntry } from 'astro:content'
 
 const { summaryLength, blogFolder }: { summaryLength: number; blogFolder: string } = config.settings
 
 interface Props {
-  data: any
+  data: CollectionEntry<'blog'>
   base?: 100 | 200 | 300
 }
 
@@ -21,7 +22,7 @@ if (!data || !data.data) {
   )
 }
 
-const { title, image, date, author, categories } = data.data
+const { title, image, date, author } = data.data
 const baseClasses = {
   100: 'bg-base-100',
   200: 'bg-base-200',

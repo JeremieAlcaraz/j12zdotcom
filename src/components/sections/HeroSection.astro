@@ -1,25 +1,21 @@
 ---
+import homepageEntry from '@/content/homepage/index.md'
 import Halo from '@/components/atoms/Halo.astro'
 import ImageMod from '@/components/atoms/ImageMod.astro'
-import { markdownify } from '@/utils/textConverter'
 import type { Button, Feature } from '@/types'
-import type { CollectionEntry } from 'astro:content'
-import { getEntry } from 'astro:content'
+import { markdownify } from '@/utils/textConverter'
 
 interface Homepage {
   banner: { title: string; content: string; image: string; button: Button }
   features: Feature[]
 }
 
-// Récupération des données
-const homepage = await getEntry('homepage', 'index')
-console.log('Homepage result:', homepage)
-
-if (!homepage) {
-  throw new Error('Homepage entry not found! Check src/content/homepage/index.md')
+interface HomepageEntry {
+  data: Homepage
 }
 
-const { banner } = homepage.data as Homepage
+// Récupération des données
+const { banner } = (homepageEntry as HomepageEntry).data
 ---
 
 <!-- Hero optimisé avec Tailwind CSS v4 + DaisyUI v5 -->

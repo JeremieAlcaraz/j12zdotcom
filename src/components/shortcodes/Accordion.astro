@@ -1,5 +1,8 @@
 ---
+import type { ComponentProps } from 'react'
+
 import AccordionComponent from './Accordion.tsx'
-const props = Astro.props as any
+
+const props = Astro.props as ComponentProps<typeof AccordionComponent>
 ---
 <AccordionComponent client:load {...props} />

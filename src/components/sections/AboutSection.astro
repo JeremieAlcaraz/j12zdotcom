@@ -1,7 +1,7 @@
 ---
+import aboutEntry from '@/content/about/index.mdx'
 import ImageMod from '@/components/atoms/ImageMod.astro'
 import { markdownify } from '@/utils/textConverter'
-import { getEntry } from 'astro:content'
 
 interface Section {
   title: string
@@ -16,12 +16,11 @@ interface AboutData {
   credentials: Section
 }
 
-const aboutEntry = await getEntry('about', 'index')
-if (!aboutEntry) {
-  throw new Error('About entry not found! Check src/content/about/index.mdx')
+interface AboutEntry {
+  data: AboutData
 }
 
-const { presentation, story, differences, credentials } = aboutEntry.data as AboutData
+const { presentation, story, differences, credentials } = (aboutEntry as AboutEntry).data
 ---
 
 <section class="space-y-24 py-16">

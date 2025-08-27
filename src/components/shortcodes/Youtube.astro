@@ -1,5 +1,5 @@
 ---
-import YoutubeComponent from './Youtube.tsx'
-const props = Astro.props as any
+import YoutubeComponent, { type YoutubeProps } from './Youtube.tsx'
+const props = Astro.props as YoutubeProps
 ---
 <YoutubeComponent client:load {...props} />

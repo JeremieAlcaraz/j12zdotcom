@@ -2,7 +2,24 @@
 // Testimonials.astro
 import { markdownify } from '@/utils/textConverter'
 import ImageMod from '@/components/atoms/ImageMod.astro'
-const { testimonial } = Astro.props
+
+interface TestimonialItem {
+  avatar: string
+  content: string
+  name: string
+  designation: string
+}
+
+interface TestimonialSectionData {
+  enable: boolean
+  title: string
+  description: string
+  testimonials: TestimonialItem[]
+}
+
+const { testimonial } = Astro.props as {
+  testimonial: { data: TestimonialSectionData }
+}
 ---
 
 {

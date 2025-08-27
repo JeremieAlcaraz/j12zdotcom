@@ -1,14 +1,16 @@
 ---
 // src/components/Navbar.astro
 // ✅ Imports
-import siteConfig from '@/config/siteConfig.ts'
+import { DEV } from 'astro:env'
+
+import siteConfig from '@/config/siteConfig'
 
 const { copyright } = siteConfig.params
 ---
 
 <footer class="footer footer-horizontal footer-center bg-base-300 text-base-content rounded p-10">
   <nav class="grid grid-flow-col gap-4">
-    {import.meta.env.DEV && (
+    {DEV && (
       <a class="link link-hover" href="/style-guide">UI</a>
     )}
     <a class="link link-hover">About us</a>

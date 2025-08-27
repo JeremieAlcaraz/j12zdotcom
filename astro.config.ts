@@ -1,15 +1,17 @@
+/* eslint-disable import/order -- order handled manually for clarity */
 // astro.config.ts
-import { defineConfig } from 'astro/config'
-import react from '@astrojs/react'
-import svelte from '@astrojs/svelte'
+import AutoImport from 'astro-auto-import'
 import mdx from '@astrojs/mdx'
+import react from '@astrojs/react'
 import sitemap from '@astrojs/sitemap'
+import svelte from '@astrojs/svelte'
 import tailwindcss from '@tailwindcss/vite'
+import { defineConfig } from 'astro/config'
 import tsconfigPaths from 'vite-tsconfig-paths'
-import AutoImport from 'astro-auto-import' // ⟵ NEW
-// import cloudflare from '@astrojs/cloudflare'
-import remarkCollapse from 'remark-collapse'
 import remarkToc from 'remark-toc'
+import remarkCollapse from 'remark-collapse'
+
+// import cloudflare from '@astrojs/cloudflare'
 
 export default defineConfig({
   // 1) Intégrations
