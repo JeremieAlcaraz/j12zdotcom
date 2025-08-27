@@ -13,12 +13,12 @@ export async function getStaticPaths() {
 }
 
 const { category } = Astro.params
-if (category === undefined) {
-  return new Response(null, {
-    status: 404,
-    statusText: 'Not Found'
-  });
+
+// Handle missing category parameter
+if (!category) {
+  throw new Error('Category parameter is required')
 }
+
 const blogEntries = await getCollection('blog', ({ data }) => data.categories.includes(category))
 ---
 
