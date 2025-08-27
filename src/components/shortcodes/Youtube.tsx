@@ -7,7 +7,7 @@ export interface YoutubeProps extends Record<string, unknown> {
 
 const Youtube = ({ id, title, ...rest }: YoutubeProps) => {
   useEffect(() => {
-    import('@justinribeiro/lite-youtube')
+    void import('@justinribeiro/lite-youtube')
   }, [])
 
   // @ts-expect-error - custom element provided by lite-youtube

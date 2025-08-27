@@ -42,8 +42,12 @@ const Tabs = ({
             role="tab"
             className={`tab ${index === active ? 'tab-active' : ''}`}
             tabIndex={index === active ? 0 : -1}
-            onKeyDown={event => handleKeyDown(event, index)}
-            onClick={() => setActive(index)}
+            onKeyDown={event => { 
+              handleKeyDown(event, index);
+            }}
+            onClick={() => { 
+              setActive(index);
+            }}
             ref={ref => {
               tabRefs.current[index] = ref
             }}

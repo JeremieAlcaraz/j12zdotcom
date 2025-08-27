@@ -40,14 +40,14 @@ const current = pages.find((p) => p.current)?.n
       <PaginationItem
         page={p.n}
         current
-        label={p.label ?? `Page ${p.n}`}
+        label={p.label ?? `Page ${String(p.n)}`}
         aria-current="page"
       />
     ) : (
       <PaginationItem
         page={p.n}
         href={p.href}
-        label={p.label ?? `Aller à la page ${p.n}`}
+        label={p.label ?? `Aller à la page ${String(p.n)}`}
         {...(current && p.n === current + 1 ? { rel: 'next' } : {})}
         {...(current && p.n === current - 1 ? { rel: 'prev' } : {})}
       />

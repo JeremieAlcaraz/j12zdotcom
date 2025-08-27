@@ -1,10 +1,11 @@
 ---
+import { getEntry } from 'astro:content'
+import type { CollectionEntry } from 'astro:content'
+
 import StyleGuideLayout from '@/layouts/StyleGuideLayout.astro'
 import ComponentGallery from '@/components/dev/ComponentGallery.astro'
 import Section from '@/components/atoms/Section.astro'
 import Footer from '@/components/layout/SiteFooter.astro'
-import { getEntry } from 'astro:content'
-import type { CollectionEntry } from 'astro:content'
 
 const modules = import.meta.glob('@/components/sections/**/*.astro', { eager: true })
 

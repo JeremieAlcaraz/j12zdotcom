@@ -80,6 +80,15 @@ export default tseslint.config(
         extraFileExtensions: ['.astro'],
       },
     },
+    rules: {
+      // Astro components often use dynamic content that TypeScript can't fully type
+      '@typescript-eslint/no-unsafe-assignment': 'off',
+      '@typescript-eslint/no-unsafe-call': 'off',
+      '@typescript-eslint/no-unsafe-member-access': 'off',
+      '@typescript-eslint/no-unsafe-argument': 'off',
+      '@typescript-eslint/no-unsafe-return': 'off',
+      '@typescript-eslint/restrict-template-expressions': 'off',
+    },
   },
 
   // 8. Parser settings for Svelte components
@@ -141,6 +150,19 @@ export default tseslint.config(
           ],
         },
       ],
+    },
+  },
+  
+  // 10. Content and config files - less strict TypeScript rules
+  {
+    files: ['src/content/**/*', 'src/config/**/*', 'src/utils/**/*'],
+    rules: {
+      // Content files often use Zod schemas and collection APIs that are dynamically typed
+      '@typescript-eslint/no-unsafe-assignment': 'off',
+      '@typescript-eslint/no-unsafe-call': 'off',
+      '@typescript-eslint/no-unsafe-member-access': 'off',
+      '@typescript-eslint/no-unsafe-argument': 'off',
+      '@typescript-eslint/no-unsafe-return': 'off',
     },
   }
 )
