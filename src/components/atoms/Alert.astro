@@ -23,20 +23,20 @@ const {
   ariaLabel,
 }: Props = Astro.props
 
-const palette: Record<NonNullable<Props['tone']>, { stroke: string; text: string }> = {
-  info: { stroke: '#076aad', text: 'text-[#076aad]' },
-  success: { stroke: '#16a34a', text: 'text-[#16a34a]' },
-  warning: { stroke: '#b45309', text: 'text-[#b45309]' },
-  error: { stroke: '#b91c1c', text: 'text-[#b91c1c]' },
+const toneClasses: Record<NonNullable<Props['tone']>, string> = {
+  info: 'text-info',
+  success: 'text-success',
+  warning: 'text-warning',
+  error: 'text-error',
 }
 
-const toneStyles = palette[tone]
+const toneClass = toneClasses[tone]
 ---
 
 <div
   role="status"
   aria-live="polite"
-  class={`inline-flex items-center gap-2 ${toneStyles.text} ${className}`.trim()}
+  class={`inline-flex items-center gap-2 ${toneClass} ${className}`.trim()}
   {...(ariaLabel ? { 'aria-label': ariaLabel } : {})}
 >
   {icon && (
@@ -49,9 +49,9 @@ const toneStyles = palette[tone]
       aria-hidden="true"
     >
       <!-- Circle outline -->
-      <circle cx="12" cy="12" r="10" fill="none" stroke={toneStyles.stroke} stroke-width="1.5" />
+      <circle cx="12" cy="12" r="10" fill="none" stroke="currentColor" stroke-width="1.5" />
       <!-- Check mark -->
-      <path d="M7.5 12.5l3 3 7-7" fill="none" stroke={toneStyles.stroke} stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+      <path d="M7.5 12.5l3 3 7-7" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
     </svg>
   )}
   <span class="text-[16px] leading-[1.2] font-light">
