@@ -24,10 +24,10 @@ const {
 }: Props = Astro.props
 
 const toneClasses: Record<NonNullable<Props['tone']>, string> = {
-  info: 'text-info',
-  success: 'text-success',
-  warning: 'text-warning',
-  error: 'text-error',
+  info: 'alert-info',
+  success: 'alert-success',
+  warning: 'alert-warning',
+  error: 'alert-error',
 }
 
 const iconPaths: Record<NonNullable<Props['tone']>, string> = {
@@ -45,7 +45,7 @@ const iconPath = iconPaths[tone]
 
 <div
   role="alert"
-  class={`alert border-l-4 border-current ${toneClass} ${className}`.trim()}
+  class={`alert ${toneClass} ${className}`.trim()}
   {...(ariaLabel ? { 'aria-label': ariaLabel } : {})}
 >
   {icon && (
