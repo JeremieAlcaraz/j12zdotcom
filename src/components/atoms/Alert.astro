@@ -1,0 +1,89 @@
+
+---
+// src/components/atoms/Alert.astro
+// Clean, reusable alert extracted from your Penpot export
+// Tailwind-friendly, no custom font-face, accessible, with a lightweight inline SVG.
+// Usage examples are at the bottom of this file (kept as comments).
+
+interface Props {
+  /** Visual tone (affects icon + text color) */
+  tone?: 'info' | 'success' | 'warning' | 'error'
+  /** Show the leading icon */
+  icon?: boolean
+  /** Extra classes to extend layout/spacing */
+  class?: string
+  /** Aria label for screen readers (fallbacks to the slot text) */
+  ariaLabel?: string
+}
+
+const {
+  tone = 'info',
+  icon = true,
+  class: className = '',
+  ariaLabel,
+}: Props = Astro.props
+
+const palette: Record<NonNullable<Props['tone']>, { stroke: string; text: string }> = {
+  info: { stroke: '#076aad', text: 'text-[#076aad]' },
+  success: { stroke: '#16a34a', text: 'text-[#16a34a]' },
+  warning: { stroke: '#b45309', text: 'text-[#b45309]' },
+  error: { stroke: '#b91c1c', text: 'text-[#b91c1c]' },
+}
+
+const toneStyles = palette[tone]
+---
+
+<div
+  role="status"
+  aria-live="polite"
+  class={`inline-flex items-center gap-2 ${toneStyles.text} ${className}`.trim()}
+  {...(ariaLabel ? { 'aria-label': ariaLabel } : {})}
+>
+  {icon && (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      viewBox="0 0 24 24"
+      width="24"
+      height="24"
+      class="shrink-0"
+      aria-hidden="true"
+    >
+      <!-- Circle outline -->
+      <circle cx="12" cy="12" r="10" fill="none" stroke={toneStyles.stroke} stroke-width="1.5" />
+      <!-- Check mark -->
+      <path d="M7.5 12.5l3 3 7-7" fill="none" stroke={toneStyles.stroke} stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+    </svg>
+  )}
+  <span class="text-[16px] leading-[1.2] font-light">
+    <slot>Information alert</slot>
+  </span>
+</div>
+
+<!--
+USAGE (Tailwind/DaisyUI friendly)
+
+1) Basic info alert (default tone)
+
+  <Alert>Information alert</Alert>
+
+2) Success alert
+
+  <Alert tone="success">All good! Changes saved.</Alert>
+
+3) Without icon + custom spacing (e.g., inside a form)
+
+  <Alert icon={false} class="mt-2">Please check your entries.</Alert>
+
+4) DaisyUI style wrapper (optional)
+   If you use DaisyUI, you can place the component inside any container;
+   the component itself is minimal and won’t fight your theme.
+
+  <div class="alert bg-base-100">
+    <Alert tone="warning">Heads up! Something needs your attention.</Alert>
+  </div>
+
+5) Internationalization / aria
+
+  <Alert ariaLabel="Information: updated billing.">Information: updated billing.</Alert>
+
+-->
