@@ -1,5 +1,13 @@
 /* Imports Tailwind et DaisyUI */
 @import 'tailwindcss';
+
+/* Safelist for dynamic DaisyUI classes */
+@source inline('loading-{spinner,dots,ring,ball,bars,infinity}');
+@source inline('loading-{xs,sm,md,lg,xl}');
+@source inline('text-{primary,secondary,accent,neutral,info,success,warning,error}');
+@source inline('checkbox-{xs,sm,md,lg,xl}');
+@source inline('checkbox-{primary,secondary,accent,neutral,success,warning,error}');
+
 @plugin "@tailwindcss/forms";
 @plugin "@tailwindcss/typography";
 @plugin "daisyui";

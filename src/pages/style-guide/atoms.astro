@@ -1,6 +1,9 @@
 ---
 import StyleGuideLayout from '@/layouts/StyleGuideLayout.astro'
 import ComponentGallery from '@/components/dev/ComponentGallery.astro'
+import Loading from '@/components/atoms/Loading.astro'
+import Checkbox from '@/components/atoms/Checkbox.astro'
+import Section from '@/components/atoms/Section.astro'
 
 const modules = import.meta.glob('@/components/atoms/**/*.astro', { eager: true })
 
@@ -24,8 +27,68 @@ const demoProps = {
     { tone: 'error', children: 'Something went wrong' },
   ],
 }
+
+const loadingVariants = ['spinner', 'dots', 'ring', 'ball', 'bars', 'infinity']
+const itemSizes = ['xs', 'sm', 'md', 'lg', 'xl']
+const itemColors = [
+  'primary',
+  'secondary',
+  'accent',
+  'neutral',
+  'info',
+  'success',
+  'warning',
+  'error',
+]
 ---
 
 <StyleGuideLayout title="Style Guide | Atoms">
-  <ComponentGallery modules={modules} demoProps={demoProps} exclude={['Section']} />
+  <ComponentGallery modules={modules} demoProps={demoProps} exclude={['Section', 'Loading', 'Checkbox']} />
+
+  <Section name="Loading">
+    <div class="grid grid-cols-1 gap-4">
+      <div>
+        <h3 class="mb-2 text-lg font-bold">Variants</h3>
+        <div class="flex flex-wrap items-center gap-4">
+          {loadingVariants.map(variant => <Loading variant={variant} />)}
+        </div>
+      </div>
+      <div>
+        <h3 class="mb-2 text-lg font-bold">Sizes</h3>
+        <div class="flex flex-wrap items-center gap-4">
+          {itemSizes.map(size => <Loading size={size} />)}
+        </div>
+      </div>
+      <div>
+        <h3 class="mb-2 text-lg font-bold">Colors</h3>
+        <div class="flex flex-wrap items-center gap-4">
+          {itemColors.map(color => <Loading color={color} />)}
+        </div>
+      </div>
+    </div>
+  </Section>
+
+  <Section name="Checkbox">
+    <div class="grid grid-cols-1 gap-4">
+      <div>
+        <h3 class="mb-2 text-lg font-bold">Sizes</h3>
+        <div class="flex flex-wrap items-center gap-4">
+          {itemSizes.map(size => <Checkbox size={size} checked />)}
+        </div>
+      </div>
+      <div>
+        <h3 class="mb-2 text-lg font-bold">Colors</h3>
+        <div class="flex flex-wrap items-center gap-4">
+          {itemColors.map(color => <Checkbox color={color} checked />)}
+        </div>
+      </div>
+      <div>
+        <h3 class="mb-2 text-lg font-bold">States</h3>
+        <div class="flex flex-wrap items-center gap-4">
+          <Checkbox checked />
+          <Checkbox disabled />
+        </div>
+      </div>
+    </div>
+  </Section>
 </StyleGuideLayout>

@@ -1,4 +1,7 @@
 ---
+import SunIcon from '@/components/atoms/icons/SunIcon.astro';
+import MoonIcon from '@/components/atoms/icons/MoonIcon.astro';
+
 const navItems = [
   { href: '/style-guide/atoms', label: 'Atoms' },
   { href: '/style-guide/molecules', label: 'Molecules' },
@@ -7,10 +10,20 @@ const navItems = [
   { href: '/style-guide/shortcodes-mdx', label: 'Shortcodes MDX' },
 ]
 ---
-<nav class="flex flex-wrap justify-center gap-4 bg-base-200 p-4">
+<nav class="flex flex-wrap items-center justify-center gap-4 bg-base-200 p-4">
   {navItems.map(item => (
     <a href={item.href} class="btn btn-sm sm:btn-md">
       {item.label}
     </a>
   ))}
+
+  <!-- BOUTON DE CHANGEMENT DE THÈME -->
+  <button id="theme-toggle" class="btn btn-ghost btn-circle">
+    <SunIcon id="sun-icon" title="Activer le mode clair" />
+    <MoonIcon id="moon-icon" class="hidden" title="Activer le mode sombre" />
+  </button>
 </nav>
+
+<script>
+  import '@/utils/toggleDark'
+</script>

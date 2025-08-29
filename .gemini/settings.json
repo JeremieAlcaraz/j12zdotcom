@@ -1,7 +1,9 @@
 {
   "mcpServers": {
-    "sse-server": {
-      "url": "https://api.example.com/sse/"
+    "daisyui Docs": {
+      "command": "npx",
+      "args": ["mcp-remote", "https://gitmcp.io/saadeghi/daisyui"]
     }
   }
 }
+
