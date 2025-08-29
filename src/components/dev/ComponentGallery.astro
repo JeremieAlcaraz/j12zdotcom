@@ -41,21 +41,37 @@ const components = [...autoComponents, ...extra]
 ---
 
 {
-  components.map(({ name, Component, props, clientLoad, path }) => (
-    <Section class="flex flex-col items-start">
-      <h2 class="mb-8 text-3xl font-bold">{name}</h2>
-      <div class="flex flex-col items-start gap-4">
-        <Component
-          {...props}
-          {...(clientLoad
-            ? {
-                'client:load': '',
-                'client:component-path': path,
-                'client:component-export': 'default',
-              }
-            : {})}
-        />
-      </div>
-    </Section>
-  ))
+  components.map(({ name, Component, props, clientLoad, path }) => {
+    const variations = Array.isArray(props)
+      ? props.length > 0
+        ? props
+        : [{}]
+      : [props ?? {}]
+    return (
+      <Section class="flex flex-col items-start">
+        <h2 class="mb-8 text-3xl font-bold">{name}</h2>
+        <div class="flex gap-4">
+          {variations.map((variant) => {
+            const { children, ...rest } = (variant ?? {}) as any
+            return (
+              <div class="flex flex-col">
+                <Component
+                  {...rest}
+                  {...(clientLoad
+                    ? {
+                        'client:load': '',
+                        'client:component-path': path,
+                        'client:component-export': 'default',
+                      }
+                    : {})}
+                >
+                  {children}
+                </Component>
+              </div>
+            )
+          })}
+        </div>
+      </Section>
+    )
+  })
 }
