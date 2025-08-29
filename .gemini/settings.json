@@ -1,0 +1,7 @@
+{
+  "mcpServers": {
+    "sse-server": {
+      "url": "https://api.example.com/sse/"
+    }
+  }
+}
