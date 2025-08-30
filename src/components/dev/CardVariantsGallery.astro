@@ -9,14 +9,16 @@ const text = 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.'
   {
     variants.map(variant => (
       <Card variant={variant} class="w-full">
-        <Fragment slot="image">
-          <img src="https://picsum.photos/400/250" alt="Placeholder" />
-        </Fragment>
-        <Fragment slot="title">{variant}</Fragment>
+        <img
+          slot="image"
+          src="https://img.daisyui.com/images/stock/photo-1606107557195-0e29a4b5b4aa.webp"
+          alt="Placeholder"
+        />
+        <span slot="title">{variant}</span>
         <p>{text}</p>
-        <Fragment slot="actions">
-          <button class="btn btn-primary btn-sm">Action</button>
-        </Fragment>
+        <button slot="actions" class="btn btn-primary btn-sm">
+          Action
+        </button>
       </Card>
     ))
   }

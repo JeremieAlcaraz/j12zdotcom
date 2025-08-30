@@ -154,14 +154,22 @@ const classes = ['card', baseClasses[base], variantClasses[variant], className]
     })()
   ) : (
     <div class={classes} {...rest}>
-      {Astro.slots.has('image') && <figure>{await Astro.slots.render('image')}</figure>}
+      {Astro.slots.has('image') && (
+        <figure>
+          <slot name="image" />
+        </figure>
+      )}
       <div class="card-body">
         {Astro.slots.has('title') && (
-          <h2 class="card-title">{await Astro.slots.render('title')}</h2>
+          <h2 class="card-title">
+            <slot name="title" />
+          </h2>
         )}
         <slot />
         {Astro.slots.has('actions') && (
-          <div class="card-actions justify-end">{await Astro.slots.render('actions')}</div>
+          <div class="card-actions justify-end">
+            <slot name="actions" />
+          </div>
         )}
       </div>
     </div>
