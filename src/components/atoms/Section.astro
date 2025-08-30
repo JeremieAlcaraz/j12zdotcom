@@ -2,10 +2,12 @@
 // Reusable Section wrapper to apply consistent margins and borders
 interface Props {
   class?: string
+  name?: string
 }
-const { class: className = '' } = Astro.props
+const { class: className = '', name } = Astro.props
 ---
 
 <section class={`mt-16 mb-12 border border-dotted border-primary p-4 ${className}`.trim()}>
+  {name && <h2 class="mb-4 text-2xl font-bold">{name}</h2>}
   <slot />
 </section>

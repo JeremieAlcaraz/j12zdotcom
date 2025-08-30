@@ -28,8 +28,8 @@ const demoProps = {
   ],
 }
 
-const loadingVariants = ['spinner', 'dots', 'ring', 'ball', 'bars', 'infinity']
-const itemSizes = ['xs', 'sm', 'md', 'lg', 'xl']
+const loadingVariants = ['spinner', 'dots', 'ring', 'ball', 'bars', 'infinity'] as const
+const itemSizes = ['xs', 'sm', 'md', 'lg', 'xl'] as const
 const itemColors = [
   'primary',
   'secondary',
@@ -39,11 +39,15 @@ const itemColors = [
   'success',
   'warning',
   'error',
-]
+] as const
 ---
 
 <StyleGuideLayout title="Style Guide | Atoms">
-  <ComponentGallery modules={modules} demoProps={demoProps} exclude={['Section', 'Loading', 'Checkbox']} />
+  <ComponentGallery
+    modules={modules}
+    demoProps={demoProps}
+    exclude={['Section', 'Loading', 'Checkbox']}
+  />
 
   <Section name="Loading">
     <div class="grid grid-cols-1 gap-4">
