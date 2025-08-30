@@ -1,6 +1,6 @@
 ---
 import BaseLayout from '@/layouts/BaseLayout.astro'
-import BlogCard from '@/components/organisms/BlogCard.astro'
+import Card from '@/components/organisms/Card.astro'
 import Pagination from '@/components/molecules/Pagination.astro'
 import config from '@/config/siteConfig.ts'
 import { sortByDate } from '@utils/sortFunctions'
@@ -35,7 +35,7 @@ const { pages, prev, next } = makePaginationLinks(BLOG_FOLDER, 1, totalPages)
             {
               currentPosts.map(post => (
                 <div class="w-full">
-                  <BlogCard data={post} />
+                  <Card variant="blog" data={post} />
                 </div>
               ))
             }

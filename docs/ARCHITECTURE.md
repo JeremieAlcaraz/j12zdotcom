@@ -1,24 +1,23 @@
-
 # Architecture Astro × Atomic Design — j12zdotcom
 
-*Version* : **1.2**  •  *Mise à jour* : **24 août 2025**  •  *Auteur* : **Jérémie** (avec IA)
+_Version_ : **1.2** • _Mise à jour_ : **24 août 2025** • _Auteur_ : **Jérémie** (avec IA)
 
 ---
 
 ## 0) TL;DR
 
-* **Pattern** : Atomic Design étendu → `atoms → molecules → organisms → sections`, complété par `layout` (composants structurels) + `layouts` (fichiers Astro) + `shortcodes` (MDX) + `dev`.
-* **Règle d’or** : *fetch uniquement dans `src/pages/`* (et **éventuellement** dans un `layout` Astro pour **données globales**). Tous les composants reçoivent **des props déjà prêtes**.
-* **Frontières** :
+- **Pattern** : Atomic Design étendu → `atoms → molecules → organisms → sections`, complété par `layout` (composants structurels) + `layouts` (fichiers Astro) + `shortcodes` (MDX) + `dev`.
+- **Règle d’or** : _fetch uniquement dans `src/pages/`_ (et **éventuellement** dans un `layout` Astro pour **données globales**). Tous les composants reçoivent **des props déjà prêtes**.
+- **Frontières** :
+  - `atoms` : UI unitaire, aucun import au-dessus.
+  - `molecules` : assemblages locaux d’atoms, aucun import depuis organisms/sections/layout.
+  - `organisms` : blocs riches, **layout interne seulement** (pas de container de page / fond / ancre), **pas de fetch**.
+  - `sections` : **orchestrent** la page (container/grid, fond, id/ancre) ; contiennent **organisms** et **peuvent** inclure **molecules/atoms** si nécessaire.
+  - `layout/` (composants) : Header/Footer globaux ; importent atoms/molecules (pas d’organisms/sections).
+  - `layouts` Astro (`src/layouts/*.astro`) : charpente `<html>/<head>` + **slots nommés** ; **n’importent pas de sections** → ce sont **les pages** qui injectent les sections dans les slots.
+  - `shortcodes` : composants React pour MDX ; **aucune logique globale** (pas de fetch, pas de state global), uniquement **interactivité locale** du contenu.
 
-  * `atoms` : UI unitaire, aucun import au-dessus.
-  * `molecules` : assemblages locaux d’atoms, aucun import depuis organisms/sections/layout.
-  * `organisms` : blocs riches, **layout interne seulement** (pas de container de page / fond / ancre), **pas de fetch**.
-  * `sections` : **orchestrent** la page (container/grid, fond, id/ancre) ; contiennent **organisms** et **peuvent** inclure **molecules/atoms** si nécessaire.
-  * `layout/` (composants) : Header/Footer globaux ; importent atoms/molecules (pas d’organisms/sections).
-  * `layouts` Astro (`src/layouts/*.astro`) : charpente `<html>/<head>` + **slots nommés** ; **n’importent pas de sections** → ce sont **les pages** qui injectent les sections dans les slots.
-  * `shortcodes` : composants React pour MDX ; **aucune logique globale** (pas de fetch, pas de state global), uniquement **interactivité locale** du contenu.
-* **Style Guide** : `/style-guide` affiche tous les niveaux ; lien visible **uniquement en dev**.
+- **Style Guide** : `/style-guide` affiche tous les niveaux ; lien visible **uniquement en dev**.
 
 ---
 
@@ -50,11 +49,10 @@ src/
     molecules/
       Pagination.astro
       NavMenu.astro        # Molecule (Option stricte)
-      Card.astro           # (gabarit générique proposé)
       FeatureList.astro    # (proposé)
       PriceInfo.astro      # (proposé)
     organisms/
-      BlogCard.astro
+      Card.astro           # gère les variantes DaisyUI (bordered, compact, side, glass, image-full) + variantes métier (blog, pricing)
       ContactForm.astro
       PostSidebar.astro
       TestimonialCard.astro
@@ -166,10 +164,7 @@ export default defineConfig({
   output: 'static',
   image: { service: { entrypoint: 'astro/assets/services/sharp' } },
   markdown: {
-    remarkPlugins: [
-      'remark-toc',
-      ['remark-collapse', { test: 'Table of contents' }],
-    ],
+    remarkPlugins: ['remark-toc', ['remark-collapse', { test: 'Table of contents' }]],
   },
 })
 ```
@@ -181,8 +176,8 @@ export default defineConfig({
 {
   "compilerOptions": {
     "baseUrl": ".",
-    "paths": { "@/*": ["src/*"] }
-  }
+    "paths": { "@/*": ["src/*"] },
+  },
 }
 ```
 
@@ -190,8 +185,8 @@ export default defineConfig({
 
 ### 3.3 Tailwind / DaisyUI (tokens & thèmes)
 
-* **Source de vérité tokens** : Tailwind (et overrides DaisyUI si utilisé).
-* Les thèmes exposent des **variables CSS** dans `styles/theme.css` (ou `styles/themes/douceur.css`).
+- **Source de vérité tokens** : Tailwind (et overrides DaisyUI si utilisé).
+- Les thèmes exposent des **variables CSS** dans `styles/theme.css` (ou `styles/themes/douceur.css`).
 
 ```css
 /* styles/theme.css (extrait) */
@@ -199,7 +194,7 @@ export default defineConfig({
   --color-primary: 35 97% 55%;
   --color-base-100: 0 0% 100%;
 }
-[data-theme="dark"] {
+[data-theme='dark'] {
   --color-primary: 35 97% 60%;
   --color-base-100: 222 47% 11%;
 }
@@ -211,14 +206,16 @@ export default defineConfig({
 
 ### 4.1 Atoms
 
-* **Quoi** : éléments UI unitaires (icône, bouton, image optimisée, halo décoratif…).
-* **Règles** : pas de container de page, pas de fetch, API minimale.
+- **Quoi** : éléments UI unitaires (icône, bouton, image optimisée, halo décoratif…).
+- **Règles** : pas de container de page, pas de fetch, API minimale.
 
 **Exemple** — `Halo.astro`
 
 ```astro
 ---
+
 ---
+
 <div class="halo-effect"><!-- gradients / SVG --></div>
 ```
 
@@ -226,16 +223,21 @@ export default defineConfig({
 
 ```astro
 ---
-interface Props { src: string; alt: string; class?: string }
+interface Props {
+  src: string
+  alt: string
+  class?: string
+}
 const { src, alt, class: cls } = Astro.props
 ---
+
 <img src={src} alt={alt} loading="lazy" decoding="async" class={cls} />
 ```
 
 ### 4.2 Molecules
 
-* **Quoi** : petits assemblages d’atoms, layout **local** (flex, gap…).
-* **Règles** : pas d’import depuis organisms/sections/layout ; pas de fetch.
+- **Quoi** : petits assemblages d’atoms, layout **local** (flex, gap…).
+- **Règles** : pas d’import depuis organisms/sections/layout ; pas de fetch.
 
 **Exemple** — `Pagination.astro`
 
@@ -243,6 +245,7 @@ const { src, alt, class: cls } = Astro.props
 ---
 const { section, currentPage = 1, totalPages = 1 } = Astro.props
 ---
+
 <nav class="join" aria-label="Pagination">
   <!-- boutons précédent/suivant + numéros -->
 </nav>
@@ -252,37 +255,67 @@ const { section, currentPage = 1, totalPages = 1 } = Astro.props
 
 ```astro
 ---
-interface Link { href: string; label: string }
+interface Link {
+  href: string
+  label: string
+}
 const { links }: { links: Link[] } = Astro.props
 ---
+
 <nav aria-label="Navigation principale">
   <ul class="flex items-center gap-6">
-    {links.map((l) => <li><a class="hover:underline" href={l.href}>{l.label}</a></li>)}
+    {
+      links.map(l => (
+        <li>
+          <a class="hover:underline" href={l.href}>
+            {l.label}
+          </a>
+        </li>
+      ))
+    }
   </ul>
 </nav>
 ```
 
 ### 4.3 Organisms
 
-* **Quoi** : blocs riches réutilisables.
-* **Règles** : **layout interne seulement** (pas de container de page / fond / ancre), pas de fetch.
+- **Quoi** : blocs riches réutilisables.
+- **Règles** : **layout interne seulement** (pas de container de page / fond / ancre), pas de fetch.
 
-**Exemple** — `BlogCard.astro`
+**Exemples** — `Card.astro`
 
-```astro
----
-import ImageMod from '@/components/atoms/ImageMod.astro'
-const { data } = Astro.props
----
-<article class="card bg-base-100 flex h-full flex-col shadow-sm">
-  <!-- image, meta, CTA "Lire la suite" -->
-</article>
-```
+- Variante **blog**
+
+  ```astro
+  ---
+  import Card from '@/components/organisms/Card.astro'
+  const { post } = Astro.props
+  ---
+
+  <Card variant="blog" data={post} />
+  ```
+
+- Variante **pricing**
+
+  ```astro
+  ---
+  import Card from '@/components/organisms/Card.astro'
+  const plan = {
+    title: 'Pro',
+    price: '29€',
+    period: 'mois',
+    features: ['Support prioritaire'],
+    cta: { label: 'Choisir', href: '#' },
+  }
+  ---
+
+  <Card variant="pricing" data={plan} />
+  ```
 
 ### 4.4 Sections (orchestration)
 
-* **Quoi** : conteneurs de page ; **orchestrent** la composition et la mise en page de haut niveau.
-* **Règles** : gèrent `container/grid`, fond, ID/ancre, mapping de listes ; **peuvent contenir organisms, et aussi molecules/atoms** si nécessaire ; pas de fetch.
+- **Quoi** : conteneurs de page ; **orchestrent** la composition et la mise en page de haut niveau.
+- **Règles** : gèrent `container/grid`, fond, ID/ancre, mapping de listes ; **peuvent contenir organisms, et aussi molecules/atoms** si nécessaire ; pas de fetch.
 
 **Exemple** — `HeroSection.astro`
 
@@ -290,13 +323,17 @@ const { data } = Astro.props
 ---
 import Halo from '@/components/atoms/Halo.astro'
 import ImageMod from '@/components/atoms/ImageMod.astro'
-interface Props { title: string; subtitle?: string }
+interface Props {
+  title: string
+  subtitle?: string
+}
 const { title, subtitle } = Astro.props
 ---
+
 <section id="hero" class="flex min-h-[max(85vh,500px)] items-center justify-center">
   <div class="container grid gap-8 lg:grid-cols-2">
     <header>
-      <h1 class="text-4xl font-bold mb-2">{title}</h1>
+      <h1 class="mb-2 text-4xl font-bold">{title}</h1>
       {subtitle && <p class="opacity-80">{subtitle}</p>}
     </header>
     <div class="flex items-center justify-center">
@@ -312,25 +349,37 @@ const { title, subtitle } = Astro.props
 ```astro
 ---
 import TestimonialCard from '@/components/organisms/TestimonialCard.astro'
-interface T { quote: string; authorName: string; authorTitle?: string; avatarUrl?: string }
+interface T {
+  quote: string
+  authorName: string
+  authorTitle?: string
+  avatarUrl?: string
+}
 const { items, title = 'Ils nous font confiance' }: { items: T[]; title?: string } = Astro.props
 ---
-<section id="testimonials" class="py-16 bg-base-200/50">
+
+<section id="testimonials" class="bg-base-200/50 py-16">
   <div class="container">
-    <h2 class="mb-8 text-3xl font-bold text-center">{title}</h2>
-    {items?.length ? (
-      <div class="grid gap-6 md:grid-cols-3">
-        {items.map((t) => <TestimonialCard {...t} />)}
-      </div>
-    ) : <p class="text-center opacity-70">Aucun témoignage pour le moment.</p>}
+    <h2 class="mb-8 text-center text-3xl font-bold">{title}</h2>
+    {
+      items?.length ? (
+        <div class="grid gap-6 md:grid-cols-3">
+          {items.map(t => (
+            <TestimonialCard {...t} />
+          ))}
+        </div>
+      ) : (
+        <p class="text-center opacity-70">Aucun témoignage pour le moment.</p>
+      )
+    }
   </div>
 </section>
 ```
 
 ### 4.5 Composants de layout (`components/layout`)
 
-* **Quoi** : Header/Footer globaux.
-* **Règles** : importent **atoms/molecules** (pas d’organisms/sections) ; pas de fetch métier.
+- **Quoi** : Header/Footer globaux.
+- **Règles** : importent **atoms/molecules** (pas d’organisms/sections) ; pas de fetch métier.
 
 **Exemple** — `SiteHeader.astro`
 
@@ -343,7 +392,8 @@ const links = [
   { href: '/contact', label: 'Contact' },
 ]
 ---
-<header class="sticky top-0 z-50 bg-background/80 backdrop-blur">
+
+<header class="bg-background/80 sticky top-0 z-50 backdrop-blur">
   <div class="container flex h-16 items-center justify-between">
     <a href="/" class="font-semibold">j12zdotcom</a>
     <NavMenu {links} />
@@ -353,9 +403,9 @@ const links = [
 
 ### 4.6 Layouts Astro (`src/layouts/*.astro`)
 
-* **Quoi** : charpente `<html>`, `<head>` + **slots nommés**.
-* **Règle clé** : **un layout n’importe pas de sections**. Il expose des slots ; **les pages importent les sections** et les injectent dans ces slots.
-* **Fetch** : seulement pour **données globales** (ex. navigation depuis `config/navigation.ts`).
+- **Quoi** : charpente `<html>`, `<head>` + **slots nommés**.
+- **Règle clé** : **un layout n’importe pas de sections**. Il expose des slots ; **les pages importent les sections** et les injectent dans ces slots.
+- **Fetch** : seulement pour **données globales** (ex. navigation depuis `config/navigation.ts`).
 
 **Exemple** — `BaseLayout.astro`
 
@@ -364,9 +414,12 @@ const links = [
 import SiteHeader from '@/components/layout/SiteHeader.astro'
 import SiteFooter from '@/components/layout/SiteFooter.astro'
 import { ClientRouter } from 'astro:transitions'
-interface Props { title?: string }
+interface Props {
+  title?: string
+}
 const { title = 'j12zdotcom' } = Astro.props
 ---
+
 <html lang="fr">
   <head>
     <meta charset="utf-8" />
@@ -390,9 +443,12 @@ const { title = 'j12zdotcom' } = Astro.props
 ```astro
 ---
 import BaseLayout from './BaseLayout.astro'
-export interface Props { title: string }
+export interface Props {
+  title: string
+}
 const { title } = Astro.props
 ---
+
 <BaseLayout title={title}>
   <slot name="hero" />
   <main class="container grid gap-8 lg:grid-cols-[1fr_320px]">
@@ -430,9 +486,10 @@ import PostSidebar from '@/components/organisms/PostSidebar.astro'
 import { getCollection } from 'astro:content'
 
 const posts = await getCollection('blog')
-const post = posts.find((p) => p.slug === Astro.params.slug)!
+const post = posts.find(p => p.slug === Astro.params.slug)!
 const { data, body } = post
 ---
+
 <PostSingle title={data.title}>
   <HeroSection slot="hero" title={data.title} subtitle={data.description} />
   <article class="prose mx-auto">{body}</article>
@@ -463,9 +520,9 @@ export const collections = { blog }
 
 ## 6) Shortcodes MDX — règles & exemples
 
-* **But** : enrichir le **contenu MD/MDX** avec un peu d’interactivité UI.
-* **Interdit** : logique globale (state global), **fetch**, side‑effects hors contenu.
-* **Autorisé** : interactivité **locale** (toggle, tabs, accordéon, lecteur vidéo simple…).
+- **But** : enrichir le **contenu MD/MDX** avec un peu d’interactivité UI.
+- **Interdit** : logique globale (state global), **fetch**, side‑effects hors contenu.
+- **Autorisé** : interactivité **locale** (toggle, tabs, accordéon, lecteur vidéo simple…).
 
 **Correct** — `Accordion.tsx`
 
@@ -474,8 +531,10 @@ import { useState } from 'react'
 const Accordion = ({ title, children, className }) => {
   const [open, setOpen] = useState(false)
   return (
-    <div className={`collapse collapse-arrow ${open ? 'collapse-open' : ''} ${className ?? ''}`}>
-      <button className="collapse-title text-left" onClick={() => setOpen(!open)}>{title}</button>
+    <div className={`collapse-arrow collapse ${open ? 'collapse-open' : ''} ${className ?? ''}`}>
+      <button className="collapse-title text-left" onClick={() => setOpen(!open)}>
+        {title}
+      </button>
       <div className="collapse-content">{children}</div>
     </div>
   )
@@ -526,7 +585,9 @@ import Tab from '@/components/shortcodes/Tab'
 
 <Tabs>
   <Tab title="Code">```js\nconsole.log('hello')\n```</Tab>
-  <Tab title="Vidéo"><Video src="https://www.w3schools.com/html/mov_bbb.mp4" width="100%" /></Tab>
+  <Tab title="Vidéo">
+    <Video src="https://www.w3schools.com/html/mov_bbb.mp4" width="100%" />
+  </Tab>
 </Tabs>
 ````
 
@@ -534,13 +595,19 @@ import Tab from '@/components/shortcodes/Tab'
 
 ## 7) Style Guide — `/style-guide`
 
-* **Objectif** : visualiser chaque niveau dans un environnement isolé.
-* **Layout dédié** : `StyleGuideLayout.astro` (header/pied de page de dev).
-* **Navigation** : 5 entrées — Atoms, Molecules, Organisms, Sections, Shortcodes.
-* **Lien** : visible dans le footer principal **uniquement en dev** :
+- **Objectif** : visualiser chaque niveau dans un environnement isolé.
+- **Layout dédié** : `StyleGuideLayout.astro` (header/pied de page de dev).
+- **Navigation** : 5 entrées — Atoms, Molecules, Organisms, Sections, Shortcodes.
+- **Lien** : visible dans le footer principal **uniquement en dev** :
 
 ```astro
-{import.meta.env.DEV && (<a class="link" href="/style-guide">UI</a>)}
+{
+  import.meta.env.DEV && (
+    <a class="link" href="/style-guide">
+      UI
+    </a>
+  )
+}
 ```
 
 **Exemple** — `pages/style-guide/index.astro`
@@ -549,8 +616,9 @@ import Tab from '@/components/shortcodes/Tab'
 ---
 import StyleGuideLayout from '@/layouts/StyleGuideLayout.astro'
 ---
+
 <StyleGuideLayout>
-  <ul class="list-disc pl-6 space-y-2">
+  <ul class="list-disc space-y-2 pl-6">
     <li><a href="/style-guide/atoms">Atoms</a></li>
     <li><a href="/style-guide/molecules">Molecules</a></li>
     <li><a href="/style-guide/organisms">Organisms</a></li>
@@ -564,18 +632,20 @@ import StyleGuideLayout from '@/layouts/StyleGuideLayout.astro'
 
 ## 8) Interactivité (îlots Astro) & performance
 
-* **Hydratation par défaut** : `client:visible` (hydrate quand le composant devient visible).
-* **Autres modes** : `client:idle`, `client:media` (cas spécifiques), `client:load` (rare).
-* **Images** : utiliser l’atom `ImageMod` (lazy, decoding async) pour uniformiser.
+- **Hydratation par défaut** : `client:visible` (hydrate quand le composant devient visible).
+- **Autres modes** : `client:idle`, `client:media` (cas spécifiques), `client:load` (rare).
+- **Images** : utiliser l’atom `ImageMod` (lazy, decoding async) pour uniformiser.
 
 **Gating DEV**
 
 ```astro
-{import.meta.env.DEV && (
-  <div class="fixed bottom-2 right-2 z-[9999]">
-    <TwSizeIndicator />
-  </div>
-)}
+{
+  import.meta.env.DEV && (
+    <div class="fixed right-2 bottom-2 z-[9999]">
+      <TwSizeIndicator />
+    </div>
+  )
+}
 ```
 
 ---
@@ -587,81 +657,85 @@ import StyleGuideLayout from '@/layouts/StyleGuideLayout.astro'
 ```ts
 // eslint.config.ts (extrait)
 import pluginImport from 'eslint-plugin-import'
-export default [{
-  plugins: { import: pluginImport },
-  rules: {
-    'import/no-restricted-paths': ['error', {
-      zones: [
-        // ATOMS: ne peuvent rien importer d'au-dessus
-        { target: 'src/components/atoms', from: 'src/components/molecules' },
-        { target: 'src/components/atoms', from: 'src/components/organisms' },
-        { target: 'src/components/atoms', from: 'src/components/sections' },
-        { target: 'src/components/atoms', from: 'src/components/layout' },
+export default [
+  {
+    plugins: { import: pluginImport },
+    rules: {
+      'import/no-restricted-paths': [
+        'error',
+        {
+          zones: [
+            // ATOMS: ne peuvent rien importer d'au-dessus
+            { target: 'src/components/atoms', from: 'src/components/molecules' },
+            { target: 'src/components/atoms', from: 'src/components/organisms' },
+            { target: 'src/components/atoms', from: 'src/components/sections' },
+            { target: 'src/components/atoms', from: 'src/components/layout' },
 
-        // MOLECULES: pas d’import vers organisms/sections/layout
-        { target: 'src/components/molecules', from: 'src/components/organisms' },
-        { target: 'src/components/molecules', from: 'src/components/sections' },
-        { target: 'src/components/molecules', from: 'src/components/layout' },
+            // MOLECULES: pas d’import vers organisms/sections/layout
+            { target: 'src/components/molecules', from: 'src/components/organisms' },
+            { target: 'src/components/molecules', from: 'src/components/sections' },
+            { target: 'src/components/molecules', from: 'src/components/layout' },
 
-        // ORGANISMS: pas d’import depuis sections/layout
-        { target: 'src/components/organisms', from: 'src/components/sections' },
-        { target: 'src/components/organisms', from: 'src/components/layout' },
+            // ORGANISMS: pas d’import depuis sections/layout
+            { target: 'src/components/organisms', from: 'src/components/sections' },
+            { target: 'src/components/organisms', from: 'src/components/layout' },
 
-        // SECTIONS: pas d’import depuis layout
-        { target: 'src/components/sections', from: 'src/components/layout' },
+            // SECTIONS: pas d’import depuis layout
+            { target: 'src/components/sections', from: 'src/components/layout' },
 
-        // LAYOUT components: peuvent importer atoms/molecules, pas organisms/sections
-        { target: 'src/components/layout', from: 'src/components/organisms' },
-        { target: 'src/components/layout', from: 'src/components/sections' },
+            // LAYOUT components: peuvent importer atoms/molecules, pas organisms/sections
+            { target: 'src/components/layout', from: 'src/components/organisms' },
+            { target: 'src/components/layout', from: 'src/components/sections' },
 
-        // DEV: ne doit pas fuiter vers le reste
-        { target: 'src/components/**/*', from: 'src/components/dev' },
-      ]
-    }]
-  }
-}]
+            // DEV: ne doit pas fuiter vers le reste
+            { target: 'src/components/**/*', from: 'src/components/dev' },
+          ],
+        },
+      ],
+    },
+  },
+]
 ```
 
 ### 9.2 Prettier
 
-* Plugins recommandés : `prettier-plugin-astro`, `prettier-plugin-tailwindcss`.
+- Plugins recommandés : `prettier-plugin-astro`, `prettier-plugin-tailwindcss`.
 
 ### 9.3 Tests & CI
 
-* **Typecheck** : `pnpm astro check && pnpm tsc --noEmit` (CI et local).
-* **Fumée** (Playwright) :
+- **Typecheck** : `pnpm astro check && pnpm tsc --noEmit` (CI et local).
+- **Fumée** (Playwright) :
+  - vérifie que la page charge,
+  - landmarks présents (`header`, `main`, `footer`),
+  - au moins 1 scénario de navigation (ex: blog listing → post).
 
-  * vérifie que la page charge,
-  * landmarks présents (`header`, `main`, `footer`),
-  * au moins 1 scénario de navigation (ex: blog listing → post).
-* **A11y** : axe devtools, focus visible, `alt` sur images, `aria-label` sur liens icône.
+- **A11y** : axe devtools, focus visible, `alt` sur images, `aria-label` sur liens icône.
 
 ---
 
 ## 10) FAQ — Layouts & Sections (clarification importante)
 
-* **Qui importe les sections ?** → **les pages**. Un layout expose des **slots** ; la page **injecte** les sections dans ces slots.
-* **Un layout peut-il importer des sections ?** → **Non (recommandé)**. Il doit rester générique et réutilisable. Il peut toutefois importer **des composants de layout** (Header/Footer) et **atoms/molecules** pour sa structure.
-* **Les sections peuvent-elles contenir des atoms/molecules directement ?** → **Oui**. Elles orchestrent le rendu et peuvent injecter des atoms/molecules si besoin, tout en composant principalement des organisms.
+- **Qui importe les sections ?** → **les pages**. Un layout expose des **slots** ; la page **injecte** les sections dans ces slots.
+- **Un layout peut-il importer des sections ?** → **Non (recommandé)**. Il doit rester générique et réutilisable. Il peut toutefois importer **des composants de layout** (Header/Footer) et **atoms/molecules** pour sa structure.
+- **Les sections peuvent-elles contenir des atoms/molecules directement ?** → **Oui**. Elles orchestrent le rendu et peuvent injecter des atoms/molecules si besoin, tout en composant principalement des organisms.
 
 ---
 
 ## 11) Checklist PR (rappel)
 
-* [ ] Fetch uniquement dans `pages/` (ou layout pour **global**).
-* [ ] Props typées & JSDoc.
-* [ ] Pas de texte dur dans atoms/organisms (passez via props, i18n‑ready).
-* [ ] Respect des niveaux & frontières (ESLint OK).
-* [ ] DEV components protégés (gating `import.meta.env.DEV`).
-* [ ] Images via `ImageMod` par défaut.
-* [ ] Tests fumée + `astro check` + `tsc --noEmit` verts.
-* [ ] Style Guide mis à jour si un nouveau composant est ajouté.
+- [ ] Fetch uniquement dans `pages/` (ou layout pour **global**).
+- [ ] Props typées & JSDoc.
+- [ ] Pas de texte dur dans atoms/organisms (passez via props, i18n‑ready).
+- [ ] Respect des niveaux & frontières (ESLint OK).
+- [ ] DEV components protégés (gating `import.meta.env.DEV`).
+- [ ] Images via `ImageMod` par défaut.
+- [ ] Tests fumée + `astro check` + `tsc --noEmit` verts.
+- [ ] Style Guide mis à jour si un nouveau composant est ajouté.
 
 ---
 
 ## 12) Décision
 
-> On verrouille cette architecture : **Pages** = *fetch & orchestration globale*, **Sections** = *container/grid & orchestration locale (peuvent inclure organisms, molecules, atoms)*, **Organisms** = *blocs riches sans fetch*, **Molecules** = *assemblages locaux*, **Atoms** = *UI pure*. **Layouts** = *charpente + slots (n’importent pas les sections)* ; **Shortcodes** = *interactivité locale MDX, sans logique globale*.
+> On verrouille cette architecture : **Pages** = _fetch & orchestration globale_, **Sections** = _container/grid & orchestration locale (peuvent inclure organisms, molecules, atoms)_, **Organisms** = _blocs riches sans fetch_, **Molecules** = _assemblages locaux_, **Atoms** = _UI pure_. **Layouts** = _charpente + slots (n’importent pas les sections)_ ; **Shortcodes** = _interactivité locale MDX, sans logique globale_.
 
-*Fin du document (v1.2).*
-
+_Fin du document (v1.2)._
