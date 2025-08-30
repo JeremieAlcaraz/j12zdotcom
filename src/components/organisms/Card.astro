@@ -132,6 +132,7 @@ const classes = ['card', baseClasses[base], variantClasses[variant], className]
             {features.length > 0 && (
               <ul class="mt-4 space-y-2">
                 {features.map((feature: string) => (
+                  // Astro doesn't use React's `key` attribute
                   <li class="flex items-center justify-center gap-2 text-sm">
                     <FaCheck className="text-success" /> {feature}
                   </li>
