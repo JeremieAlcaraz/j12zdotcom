@@ -32,23 +32,18 @@ const baseClasses = {
   300: 'bg-base-300',
 } as const
 
-const variantClasses: Record<Exclude<Variant, 'blog' | 'pricing'>, string> = {
+const variantClasses: Record<Variant, string> = {
   default: '',
   bordered: 'card-bordered',
   compact: 'card-compact',
   side: 'card-side',
   glass: 'glass',
   'image-full': 'image-full',
+  blog: '',
+  pricing: '',
 }
 
-const classes = [
-  'card',
-  baseClasses[base],
-  variant !== 'blog' &&
-    variant !== 'pricing' &&
-    variantClasses[variant as Exclude<Variant, 'blog' | 'pricing'>],
-  className,
-]
+const classes = ['card', baseClasses[base], variantClasses[variant], className]
   .filter(Boolean)
   .join(' ')
 ---
