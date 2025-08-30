@@ -7,15 +7,17 @@ import ImageMod from '@/components/atoms/ImageMod.astro'
 import { FaCheck, FaRegUserCircle } from 'react-icons/fa'
 
 // DaisyUI card variants + custom blog/pricing variants
-export type Variant =
-  | 'default'
-  | 'bordered'
-  | 'compact'
-  | 'side'
-  | 'glass'
-  | 'image-full'
-  | 'blog'
-  | 'pricing'
+const VARIANTS = [
+  'default',
+  'bordered',
+  'compact',
+  'side',
+  'glass',
+  'image-full',
+  'blog',
+  'pricing',
+] as const
+export type Variant = (typeof VARIANTS)[number]
 
 interface Props extends JSX.HTMLAttributes {
   variant?: Variant
