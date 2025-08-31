@@ -1,5 +1,5 @@
 ---
-import ImageMod from '@/components/atoms/ImageMod.astro'
+import ImageMod from '@/components/ui/atoms/ImageMod.astro'
 import { markdownify } from '@/utils/textConverter'
 import { getEntry } from 'astro:content'
 
@@ -31,13 +31,17 @@ const { presentation, story, differences, credentials } = aboutEntry.data as Abo
       <div
         class="mask mask-squircle h-64 w-64 overflow-hidden shadow-lg transition-transform duration-300 hover:scale-105"
       >
-        {presentation.image && <ImageMod
-          src={presentation.image}
-          alt={presentation.title}
-          width={512}
-          height={512}
-          class="h-full w-full object-cover"
-        />}
+        {
+          presentation.image && (
+            <ImageMod
+              src={presentation.image}
+              alt={presentation.title}
+              width={512}
+              height={512}
+              class="h-full w-full object-cover"
+            />
+          )
+        }
       </div>
     </div>
     <div>
@@ -56,13 +60,17 @@ const { presentation, story, differences, credentials } = aboutEntry.data as Abo
       <div
         class="mask mask-hexagon h-64 w-64 overflow-hidden shadow-lg transition-transform duration-300 hover:scale-105"
       >
-        {story.image && <ImageMod
-          src={story.image}
-          alt={story.title}
-          width={512}
-          height={512}
-          class="h-full w-full object-cover"
-        />}
+        {
+          story.image && (
+            <ImageMod
+              src={story.image}
+              alt={story.title}
+              width={512}
+              height={512}
+              class="h-full w-full object-cover"
+            />
+          )
+        }
       </div>
     </div>
   </div>
@@ -73,13 +81,17 @@ const { presentation, story, differences, credentials } = aboutEntry.data as Abo
       <div
         class="mask mask-diamond h-64 w-64 overflow-hidden shadow-lg transition-transform duration-300 hover:scale-105"
       >
-        {differences.image && <ImageMod
-          src={differences.image}
-          alt={differences.title}
-          width={512}
-          height={512}
-          class="h-full w-full object-cover"
-        />}
+        {
+          differences.image && (
+            <ImageMod
+              src={differences.image}
+              alt={differences.title}
+              width={512}
+              height={512}
+              class="h-full w-full object-cover"
+            />
+          )
+        }
       </div>
     </div>
     <div>

@@ -288,18 +288,18 @@ const { links }: { links: Link[] } = Astro.props
 
   ```astro
   ---
-  import Card from '@/components/organisms/Card.astro'
+  import BlogCard from '@/components/domain/blog/BlogCard.astro'
   const { post } = Astro.props
   ---
 
-  <Card variant="blog" data={post} />
+  <BlogCard data={post} />
   ```
 
 - Variante **pricing**
 
   ```astro
   ---
-  import Card from '@/components/organisms/Card.astro'
+  import PricingCard from '@/components/domain/pricing/PricingCard.astro'
   const plan = {
     title: 'Pro',
     price: '29€',
@@ -309,7 +309,7 @@ const { links }: { links: Link[] } = Astro.props
   }
   ---
 
-  <Card variant="pricing" data={plan} />
+  <PricingCard data={plan} />
   ```
 
 ### 4.4 Sections (orchestration)
@@ -321,8 +321,8 @@ const { links }: { links: Link[] } = Astro.props
 
 ```astro
 ---
-import Halo from '@/components/atoms/Halo.astro'
-import ImageMod from '@/components/atoms/ImageMod.astro'
+import Halo from '@/components/ui/atoms/Halo.astro'
+import ImageMod from '@/components/ui/atoms/ImageMod.astro'
 interface Props {
   title: string
   subtitle?: string
@@ -348,7 +348,7 @@ const { title, subtitle } = Astro.props
 
 ```astro
 ---
-import TestimonialCard from '@/components/organisms/TestimonialCard.astro'
+import TestimonialCard from '@/components/domain/formation/TestimonialCard.astro'
 interface T {
   quote: string
   authorName: string
@@ -385,7 +385,7 @@ const { items, title = 'Ils nous font confiance' }: { items: T[]; title?: string
 
 ```astro
 ---
-import NavMenu from '@/components/molecules/NavMenu.astro'
+import NavMenu from '@/components/ui/molecules/NavMenu.astro'
 const links = [
   { href: '/', label: 'Accueil' },
   { href: '/blog', label: 'Blog' },
@@ -482,7 +482,7 @@ Atom (UI pure)
 ---
 import PostSingle from '@/layouts/PostSingle.astro'
 import HeroSection from '@/components/sections/HeroSection.astro'
-import PostSidebar from '@/components/organisms/PostSidebar.astro'
+import PostSidebar from '@/components/domain/blog/PostSidebar.astro'
 import { getCollection } from 'astro:content'
 
 const posts = await getCollection('blog')

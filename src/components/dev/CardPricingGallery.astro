@@ -1,5 +1,5 @@
 ---
-import Card from '@/components/organisms/Card.astro'
+import PricingCard from '@/components/domain/pricing/PricingCard.astro'
 
 const plans = [
   {
@@ -28,7 +28,7 @@ const plans = [
 <div class="grid w-full grid-cols-1 gap-4 sm:grid-cols-3">
   {
     plans.map((plan, idx) => (
-      <Card variant="pricing" data={plan} base={((idx + 1) * 100) as 100 | 200 | 300} />
+      <PricingCard data={plan} base={((idx + 1) * 100) as 100 | 200 | 300} />
     ))
   }
 </div>

@@ -3,7 +3,7 @@ import dateFormat from '@/utils/dateFormat'
 import { humanize, markdownify, slugify } from '@/utils/textConverter'
 import { render } from 'astro:content'
 import { FaRegClock, FaRegFolder, FaRegUserCircle } from 'react-icons/fa'
-import ImageMod from '@/components/atoms/ImageMod.astro'
+import ImageMod from '@/components/ui/atoms/ImageMod.astro'
 
 const { post } = Astro.props
 const { Content } = await render(post)

@@ -1,16 +1,16 @@
 ---
-import type { NavLink } from './SiteHeader.types';
-import SunIcon from '@/components/atoms/icons/SunIcon.astro';
-import MoonIcon from '@/components/atoms/icons/MoonIcon.astro';
-import { defaultLogo, defaultLogoDark, defaultLinks } from '@/config/navigation'; // Valeurs par défaut pour logo et liens
+import type { NavLink } from './SiteHeader.types'
+import SunIcon from '@/components/ui/atoms/icons/SunIcon.astro'
+import MoonIcon from '@/components/ui/atoms/icons/MoonIcon.astro'
+import { defaultLogo, defaultLogoDark, defaultLinks } from '@/config/navigation' // Valeurs par défaut pour logo et liens
 
 interface Props {
-  logo?: string;
-  links?: NavLink[];
+  logo?: string
+  links?: NavLink[]
 }
 
 // ✅ DESTRUCTURATION DES PROPS avec valeurs par défaut
-const { logo = defaultLogo, links = defaultLinks } = Astro.props;
+const { logo = defaultLogo, links = defaultLinks } = Astro.props
 ---
 
 <!-- ==========================================

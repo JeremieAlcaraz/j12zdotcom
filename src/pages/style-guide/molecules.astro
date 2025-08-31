@@ -3,18 +3,12 @@ import StyleGuideLayout from '@/layouts/StyleGuideLayout.astro'
 import ComponentGallery from '@/components/dev/ComponentGallery.astro'
 import { makePaginationLinks } from '@/utils/pagination'
 
-const modules = import.meta.glob('@/components/molecules/**/*.astro', { eager: true })
+const modules = import.meta.glob('@/components/ui/molecules/**/*.astro', { eager: true })
 
 const { pages, prev, next } = makePaginationLinks('blog', 1, 5)
 
 const demoProps = {
   Pagination: { pages, prev, next },
-  UserCard: {
-    name: 'Jane Doe',
-    role: 'CEO',
-    avatar: 'img_opt/jeremie-hero.png',
-    status: 'Active',
-  },
   LoadingSection: { text: 'Chargement...' },
 }
 ---

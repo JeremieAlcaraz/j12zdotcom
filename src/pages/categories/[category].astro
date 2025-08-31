@@ -1,6 +1,6 @@
 ---
 import BaseLayout from '@/layouts/BaseLayout.astro'
-import Card from '@/components/organisms/Card.astro'
+import BlogCard from '@/components/domain/blog/BlogCard.astro'
 import { getCollection } from 'astro:content'
 
 export async function getStaticPaths() {
@@ -24,7 +24,7 @@ const blogEntries = await getCollection('blog', ({ data }) => data.categories.in
         >
       </h1>
       <div class="grid gap-14 md:grid-cols-2 lg:grid-cols-3">
-        {blogEntries.map(post => <Card variant="blog" data={post} />)}
+        {blogEntries.map(post => <BlogCard data={post} />)}
       </div>
     </div>
   </section>

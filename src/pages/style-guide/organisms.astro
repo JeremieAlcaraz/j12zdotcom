@@ -7,16 +7,12 @@ import CardVariantsGallery from '@/components/dev/CardVariantsGallery.astro'
 import { getSinglePage } from '@/utils/contentParser'
 import { sortByDate } from '@/utils/sortFunctions'
 
-const modules = import.meta.glob('@/components/organisms/**/*.astro', { eager: true })
+const modules = import.meta.glob('@/components/ui/organisms/**/*.astro', { eager: true })
 
 const BLOG_FOLDER = 'blog'
 const posts = await getSinglePage(BLOG_FOLDER)
 const sortedPosts = sortByDate(posts)
 const currentPosts = sortedPosts.slice(0, 3)
-
-const demoProps = {
-  PostSidebar: { categories: ['astro', 'dev'], allCategories: ['astro', 'dev', 'astro'] },
-}
 
 const extra = [
   {
@@ -24,22 +20,17 @@ const extra = [
     Component: CardVariantsGallery,
   },
   {
-    name: 'Card (blog variant)',
+    name: 'BlogCard',
     Component: CardBlogGallery,
     props: { posts: currentPosts },
   },
   {
-    name: 'Card (pricing variant)',
+    name: 'PricingCard',
     Component: CardPricingGallery,
   },
 ]
 ---
 
 <StyleGuideLayout title="Style Guide | Organisms">
-  <ComponentGallery
-    modules={modules}
-    demoProps={demoProps}
-    exclude={['TestimonialCard', 'Card']}
-    extra={extra}
-  />
+  <ComponentGallery modules={modules} exclude={['Card']} extra={extra} />
 </StyleGuideLayout>
