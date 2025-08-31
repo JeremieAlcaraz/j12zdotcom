@@ -1,0 +1,25 @@
+---
+import Card from '@/components/organisms/Card.astro'
+
+const variants = ['default', 'bordered', 'compact', 'side', 'glass', 'image-full'] as const
+const text = 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.'
+---
+
+<div class="grid w-full grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
+  {
+    variants.map(variant => (
+      <Card variant={variant} class="w-full">
+        <img
+          slot="image"
+          src="https://img.daisyui.com/images/stock/photo-1606107557195-0e29a4b5b4aa.webp"
+          alt="Placeholder"
+        />
+        <span slot="title">{variant}</span>
+        <p>{text}</p>
+        <button slot="actions" class="btn btn-primary btn-sm">
+          Action
+        </button>
+      </Card>
+    ))
+  }
+</div>

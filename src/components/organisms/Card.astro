@@ -1,0 +1,177 @@
+---
+import type { JSX } from 'astro/jsx-runtime'
+import config from '@/config/siteConfig.ts'
+import dateFormat from '@/utils/dateFormat'
+import { humanize, slugify, smartTruncate } from '@/utils/textConverter'
+import ImageMod from '@/components/atoms/ImageMod.astro'
+import { FaCheck, FaRegUserCircle } from 'react-icons/fa'
+
+// DaisyUI card variants + custom blog/pricing variants
+const VARIANTS = [
+  'default',
+  'bordered',
+  'compact',
+  'side',
+  'glass',
+  'image-full',
+  'blog',
+  'pricing',
+] as const
+export type Variant = (typeof VARIANTS)[number]
+
+interface Props extends JSX.HTMLAttributes {
+  variant?: Variant
+  base?: 100 | 200 | 300
+  // For blog/pricing variants
+  data?: any
+}
+
+const { variant = 'default', base = 100, data, class: className, ...rest } = Astro.props as Props
+
+const baseClasses = {
+  100: 'bg-base-100',
+  200: 'bg-base-200',
+  300: 'bg-base-300',
+} as const
+
+const variantClasses: Record<Variant, string> = {
+  default: '',
+  bordered: 'card-bordered',
+  compact: 'card-compact',
+  side: 'card-side',
+  glass: 'glass',
+  'image-full': 'image-full',
+  blog: '',
+  pricing: '',
+}
+
+const classes = ['card', baseClasses[base], variantClasses[variant], className]
+  .filter(Boolean)
+  .join(' ')
+---
+
+{
+  variant === 'blog' ? (
+    // Blog card variant for displaying blog posts
+    (() => {
+      const { summaryLength, blogFolder }: { summaryLength: number; blogFolder: string } =
+        config.settings
+
+      if (!data || !data.data) {
+        throw new Error(
+          "Card: Les données du blog sont manquantes. Vérifiez que vous passez bien une prop 'data' au composant."
+        )
+      }
+
+      const { title, image, date, author } = data.data
+      return (
+        <div class={`${classes} flex h-full flex-col shadow-sm`} {...rest}>
+          <figure class="flex-shrink-0">
+            {image && (
+              <ImageMod
+                class="h-48 w-full object-cover"
+                src={image}
+                alt={title}
+                width={445}
+                height={230}
+                format="webp"
+              />
+            )}
+          </figure>
+          <div class="card-body flex flex-grow flex-col">
+            <h2 class="card-title mb-3 text-lg leading-tight">
+              <a href={`/${blogFolder}/${data.id}`} class="link link-hover line-clamp-2">
+                {title}
+              </a>
+            </h2>
+            <div class="mb-3 flex flex-wrap items-center gap-3 text-sm opacity-70">
+              <div class="flex items-center gap-1.5">
+                <FaRegUserCircle className="shrink-0 text-xs" />
+                <a href={`/authors/${slugify(author)}`} class="link link-hover text-xs">
+                  {humanize(author)}
+                </a>
+              </div>
+              {date && (
+                <time datetime={date} class="text-xs">
+                  {dateFormat(date)}
+                </time>
+              )}
+            </div>
+            <div class="flex-grow">
+              <p class="text-base-content/70 line-clamp-3 text-sm leading-relaxed">
+                {smartTruncate(data.body || '', summaryLength || 150)}
+              </p>
+            </div>
+            <div class="card-actions mt-4 justify-end pt-3">
+              <a href={`/${blogFolder}/${data.id}`} class="btn btn-primary btn-sm">
+                Lire la suite
+              </a>
+            </div>
+          </div>
+        </div>
+      )
+    })()
+  ) : variant === 'pricing' ? (
+    // Pricing card variant
+    (() => {
+      if (!data) {
+        throw new Error(
+          "Card: Les données du pricing sont manquantes. Vérifiez que vous passez bien une prop 'data' au composant."
+        )
+      }
+
+      const { title, price, period, features = [], cta } = data
+      return (
+        <div class={`${classes} shadow-sm`} {...rest}>
+          <div class="card-body items-center text-center">
+            {title && <h2 class="card-title mb-2">{title}</h2>}
+            {price && (
+              <p class="text-4xl font-bold">
+                {price}
+                {period && <span class="text-sm font-normal opacity-60">/{period}</span>}
+              </p>
+            )}
+            {features.length > 0 && (
+              <ul class="mt-4 space-y-2">
+                {features.map((feature: string) => (
+                  // Astro doesn't use React's `key` attribute
+                  <li class="flex items-center justify-center gap-2 text-sm">
+                    <FaCheck className="text-success" /> {feature}
+                  </li>
+                ))}
+              </ul>
+            )}
+            {cta && (
+              <div class="card-actions mt-6">
+                <a href={cta.href} class="btn btn-primary w-full">
+                  {cta.label}
+                </a>
+              </div>
+            )}
+          </div>
+        </div>
+      )
+    })()
+  ) : (
+    <div class={classes} {...rest}>
+      {Astro.slots.has('image') && (
+        <figure>
+          <slot name="image" />
+        </figure>
+      )}
+      <div class="card-body">
+        {Astro.slots.has('title') && (
+          <h2 class="card-title">
+            <slot name="title" />
+          </h2>
+        )}
+        <slot />
+        {Astro.slots.has('actions') && (
+          <div class="card-actions justify-end">
+            <slot name="actions" />
+          </div>
+        )}
+      </div>
+    </div>
+  )
+}

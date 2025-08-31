@@ -1,7 +1,9 @@
 ---
 import StyleGuideLayout from '@/layouts/StyleGuideLayout.astro'
 import ComponentGallery from '@/components/dev/ComponentGallery.astro'
-import BlogCardGallery from '@/components/dev/BlogCardGallery.astro'
+import CardBlogGallery from '@/components/dev/CardBlogGallery.astro'
+import CardPricingGallery from '@/components/dev/CardPricingGallery.astro'
+import CardVariantsGallery from '@/components/dev/CardVariantsGallery.astro'
 import { getSinglePage } from '@/utils/contentParser'
 import { sortByDate } from '@/utils/sortFunctions'
 
@@ -16,14 +18,28 @@ const demoProps = {
   PostSidebar: { categories: ['astro', 'dev'], allCategories: ['astro', 'dev', 'astro'] },
 }
 
-const extra = [{ name: 'BlogCard', Component: BlogCardGallery, props: { posts: currentPosts } }]
+const extra = [
+  {
+    name: 'Card',
+    Component: CardVariantsGallery,
+  },
+  {
+    name: 'Card (blog variant)',
+    Component: CardBlogGallery,
+    props: { posts: currentPosts },
+  },
+  {
+    name: 'Card (pricing variant)',
+    Component: CardPricingGallery,
+  },
+]
 ---
 
 <StyleGuideLayout title="Style Guide | Organisms">
   <ComponentGallery
     modules={modules}
     demoProps={demoProps}
-    exclude={['TestimonialCard', 'BlogCard']}
+    exclude={['TestimonialCard', 'Card']}
     extra={extra}
   />
 </StyleGuideLayout>
