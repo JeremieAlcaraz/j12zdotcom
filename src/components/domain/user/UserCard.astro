@@ -1,7 +1,7 @@
 ---
-import Avatar from '@/components/atoms/Avatar.astro'
-import Badge from '@/components/atoms/Badge.astro'
-import Section from '@/components/atoms/Section.astro'
+import Avatar from '@/components/ui/atoms/Avatar.astro'
+import Badge from '@/components/ui/atoms/Badge.astro'
+import Section from '@/components/ui/atoms/Section.astro'
 
 interface Props {
   name: string
@@ -11,6 +11,7 @@ interface Props {
 }
 const { name, role, avatar, status } = Astro.props as Props
 ---
+
 <Section class="flex items-center space-x-4">
   <Avatar src={avatar} alt={name} size={64} />
   <div>

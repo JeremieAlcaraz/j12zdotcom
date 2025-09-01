@@ -1,0 +1,23 @@
+---
+import type { HTMLAttributes } from 'astro/types'
+
+type Props = {
+  variant?: 'spinner' | 'dots' | 'ring' | 'ball' | 'bars' | 'infinity'
+  size?: 'xs' | 'sm' | 'md' | 'lg' | 'xl'
+  color?: 'primary' | 'secondary' | 'accent' | 'neutral' | 'info' | 'success' | 'warning' | 'error'
+} & HTMLAttributes<'span'>
+
+const { variant = 'spinner', size, color, class: className, ...rest } = Astro.props
+
+const classes = [
+  'loading',
+  variant && `loading-${variant}`,
+  size && `loading-${size}`,
+  color && `text-${color}`,
+  className,
+]
+  .filter(Boolean)
+  .join(' ')
+---
+
+<span class={classes} {...rest}></span>

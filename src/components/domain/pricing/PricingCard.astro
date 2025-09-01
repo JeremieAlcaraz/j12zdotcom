@@ -1,0 +1,50 @@
+---
+import Card from '@/components/ui/organisms/Card.astro'
+import { FaCheck } from 'react-icons/fa'
+
+interface Props {
+  data: any
+  base?: 100 | 200 | 300
+}
+
+const { data, base = 100 } = Astro.props as Props
+const { title, price, period, features = [], cta } = data
+---
+
+<Card class="shadow-sm" base={base}>
+  {
+    title && (
+      <span slot="title" class="card-title mb-2">
+        {title}
+      </span>
+    )
+  }
+  {
+    price && (
+      <p class="text-4xl font-bold">
+        {price}
+        {period && <span class="text-sm font-normal opacity-60">/{period}</span>}
+      </p>
+    )
+  }
+  {
+    features.length > 0 && (
+      <ul class="mt-4 space-y-2">
+        {features.map((feature: string) => (
+          <li class="flex items-center justify-center gap-2 text-sm">
+            <FaCheck className="text-success" /> {feature}
+          </li>
+        ))}
+      </ul>
+    )
+  }
+  {
+    cta && (
+      <div slot="actions" class="card-actions mt-6">
+        <a href={cta.href} class="btn btn-primary w-full">
+          {cta.label}
+        </a>
+      </div>
+    )
+  }
+</Card>

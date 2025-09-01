@@ -1,0 +1,59 @@
+---
+import type { JSX } from 'astro/jsx-runtime'
+
+const VARIANTS = ['default', 'bordered', 'compact', 'side', 'glass', 'image-full'] as const
+export type Variant = (typeof VARIANTS)[number]
+
+interface Props extends JSX.HTMLAttributes {
+  variant?: Variant
+  base?: 100 | 200 | 300
+}
+
+const { variant = 'default', base = 100, class: className, ...rest } = Astro.props as Props
+
+const baseClasses = {
+  100: 'bg-base-100',
+  200: 'bg-base-200',
+  300: 'bg-base-300',
+} as const
+
+const variantClasses: Record<Variant, string> = {
+  default: '',
+  bordered: 'card-bordered',
+  compact: 'card-compact',
+  side: 'card-side',
+  glass: 'glass',
+  'image-full': 'image-full',
+}
+
+const classes = ['card', baseClasses[base], variantClasses[variant], className]
+  .filter(Boolean)
+  .join(' ')
+---
+
+<div class={classes} {...rest}>
+  {
+    Astro.slots.has('image') && (
+      <figure>
+        <slot name="image" />
+      </figure>
+    )
+  }
+  <div class="card-body">
+    {
+      Astro.slots.has('title') && (
+        <h2 class="card-title">
+          <slot name="title" />
+        </h2>
+      )
+    }
+    <slot />
+    {
+      Astro.slots.has('actions') && (
+        <div class="card-actions justify-end">
+          <slot name="actions" />
+        </div>
+      )
+    }
+  </div>
+</div>

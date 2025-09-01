@@ -1,5 +1,5 @@
 ---
-import Card from '@/components/organisms/Card.astro'
+import BlogCard from '@/components/domain/blog/BlogCard.astro'
 
 interface Props {
   posts: any[]
@@ -10,5 +10,5 @@ const bases = [100, 200, 300] as const
 ---
 
 <div class="grid w-full grid-cols-3 gap-4">
-  {posts.map((post, idx) => <Card variant="blog" data={post} base={bases[idx] ?? 100} />)}
+  {posts.map((post, idx) => <BlogCard data={post} base={bases[idx] ?? 100} />)}
 </div>
