@@ -1,0 +1,46 @@
+---
+export interface Props {
+  href?: string
+  variant?: 'primary' | 'secondary' | 'ghost' | 'link'
+  size?: 'sm' | 'md' | 'lg'
+  newTab?: boolean
+  ariaLabel?: string
+  disabled?: boolean
+}
+const {
+  href,
+  variant = 'primary',
+  size = 'md',
+  newTab = false,
+  ariaLabel,
+  disabled = false,
+} = Astro.props as Props
+
+const base = 'btn'
+const variants: Record<string, string> = {
+  primary: 'btn-primary',
+  secondary: 'btn-secondary',
+  ghost: 'btn-ghost',
+  link: 'btn-link',
+}
+const sizes: Record<string, string> = { sm: 'btn-sm', md: 'btn-md', lg: 'btn-lg' }
+const cls = `${base} ${variants[variant]} ${sizes[size]}`
+---
+
+{
+  href ? (
+    <a
+      class={cls}
+      href={href}
+      aria-label={ariaLabel}
+      target={newTab ? '_blank' : undefined}
+      rel={newTab ? 'noopener noreferrer' : undefined}
+    >
+      <slot />
+    </a>
+  ) : (
+    <button class={cls} aria-label={ariaLabel} disabled={disabled}>
+      <slot />
+    </button>
+  )
+}

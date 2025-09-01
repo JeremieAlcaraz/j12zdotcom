@@ -1,0 +1,29 @@
+---
+
+---
+
+<div data-tabs>
+  <slot />
+</div>
+<script>
+  const root = document.currentScript?.parentElement
+  if (root) {
+    const tabs = root.querySelectorAll('[data-tab]')
+    const panels = root.querySelectorAll('[data-panel]')
+    tabs.forEach((tab, i) => {
+      const panel = panels[i]
+      if (tab.getAttribute('aria-selected') === 'true') {
+        tab.classList.add('tab-active')
+        panel?.classList.remove('hidden')
+      }
+      tab.addEventListener('click', () => {
+        tabs.forEach((t, j) => {
+          const p = panels[j]
+          t.classList.toggle('tab-active', t === tab)
+          t.setAttribute('aria-selected', t === tab ? 'true' : 'false')
+          p?.classList.toggle('hidden', t !== tab)
+        })
+      })
+    })
+  }
+</script>

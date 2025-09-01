@@ -1,0 +1,30 @@
+---
+import StyleGuideLayout from '@/layouts/StyleGuideLayout.astro'
+import ComponentGallery from '@/components/playground/ComponentGallery.astro'
+
+const modules = {
+  ...import.meta.glob('@/components/ui/atoms/*.astro', { eager: true }),
+  ...import.meta.glob('@/components/ui/molecules/*.astro', { eager: true }),
+}
+
+const demoProps = {
+  Accordion: { title: 'Titre', children: "Contenu de l'accordéon." },
+  Button: { href: 'https://astro.build', children: 'Visiter Astro' },
+  Alert: { variant: 'info', children: 'Une petite astuce.' },
+  Video: {
+    title: 'Sample',
+    src: 'https://www.w3schools.com/html/mov_bbb.mp4',
+    width: 320,
+    height: 240,
+  },
+  Youtube: { id: 'dQw4w9WgXcQ', title: 'YouTube', width: 560, height: 315 },
+}
+---
+
+<StyleGuideLayout title="Style Guide | Shortcodes MDX">
+  <ComponentGallery
+    modules={modules}
+    demoProps={demoProps}
+    exclude={['Tabs', 'Tabs.Tab', 'Tabs.List', 'Tabs.Panel', 'ImageMod']}
+  />
+</StyleGuideLayout>

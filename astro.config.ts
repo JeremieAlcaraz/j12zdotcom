@@ -6,7 +6,6 @@ import mdx from '@astrojs/mdx'
 import sitemap from '@astrojs/sitemap'
 import tailwindcss from '@tailwindcss/vite'
 import tsconfigPaths from 'vite-tsconfig-paths'
-import AutoImport from 'astro-auto-import' // ⟵ NEW
 // import cloudflare from '@astrojs/cloudflare'
 import remarkCollapse from 'remark-collapse'
 import remarkToc from 'remark-toc'
@@ -16,24 +15,7 @@ export default defineConfig({
   // site: config.site.base_url ? config.site.base_url : 'http://examplesite.com',
   // base: config.site.base_path ? config.site.base_path : '/',
   // trailingSlash: config.site.trailing_slash ? 'always' : 'never',
-  integrations: [
-    react(),
-    svelte(),
-    sitemap(),
-    AutoImport({
-      // export default requis (ou map explicite, cf. ci-dessous)
-      imports: [
-        '@/components/shortcodes/Button.tsx',
-        '@/components/shortcodes/Accordion.tsx',
-        '@/components/shortcodes/Notice.tsx',
-        '@/components/shortcodes/Video.tsx',
-        '@/components/shortcodes/Youtube.tsx',
-        '@/components/shortcodes/Tabs.tsx',
-        '@/components/shortcodes/Tab.tsx',
-      ],
-    }),
-    mdx(),
-  ],
+  integrations: [react(), svelte(), sitemap(), mdx()],
 
   // 2) Vite
   vite: {

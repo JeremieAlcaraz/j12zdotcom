@@ -1,80 +1,25 @@
 ---
-// src/components/atoms/Alert.astro
-// Clean, reusable alert extracted from your Penpot export
-// Tailwind-friendly, no custom font-face, accessible, with a lightweight inline SVG.
-// Usage examples are at the bottom of this file (kept as comments).
-
-interface Props {
-  /** Visual tone (affects styling and icon) */
-  tone?: 'info' | 'success' | 'warning' | 'error'
-  /** Show the leading icon */
-  icon?: boolean
-  /** Extra classes to extend layout/spacing */
-  class?: string
-  /** Aria label for screen readers (fallbacks to the slot text) */
-  ariaLabel?: string
+export interface Props {
+  variant?: 'info' | 'success' | 'warning' | 'error'
+  title?: string
 }
-
-const { tone = 'info', icon = true, class: className = '', ariaLabel }: Props = Astro.props
-
-const toneClasses: Record<NonNullable<Props['tone']>, string> = {
+const { variant = 'info', title } = Astro.props as Props
+const variants: Record<string, string> = {
   info: 'alert-info',
   success: 'alert-success',
   warning: 'alert-warning',
   error: 'alert-error',
 }
-
-const iconPaths: Record<NonNullable<Props['tone']>, string> = {
-  info: 'M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z',
-  success: 'M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z',
-  warning:
-    'M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z',
-  error: 'M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z',
-}
-
-const toneClass = toneClasses[tone]
-const iconPath = iconPaths[tone]
+const cls = `alert ${variants[variant]}`
 ---
 
-<div
-  role="alert"
-  class={`alert ${toneClass} ${className}`.trim()}
-  {...ariaLabel ? { 'aria-label': ariaLabel } : {}}
->
+<div role="status" aria-live="polite" class={cls}>
   {
-    icon && (
-      <svg
-        xmlns="http://www.w3.org/2000/svg"
-        fill="none"
-        viewBox="0 0 24 24"
-        class="h-6 w-6 shrink-0 stroke-current"
-      >
-        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d={iconPath} />
-      </svg>
+    title && (
+      <span class="font-bold" slot="title">
+        {title}
+      </span>
     )
   }
-  <span>
-    <slot>Information alert</slot>
-  </span>
+  <slot />
 </div>
-
-<!--
-USAGE (Tailwind/DaisyUI friendly)
-
-1) Basic info alert (default tone)
-
-  <Alert>Information alert</Alert>
-
-2) Success alert
-
-  <Alert tone="success">All good! Changes saved.</Alert>
-
-3) Without icon + custom spacing (e.g., inside a form)
-
-  <Alert icon={false} class="mt-2">Please check your entries.</Alert>
-
-4) Internationalization / aria
-
-  <Alert ariaLabel="Information: updated billing.">Information: updated billing.</Alert>
-
--->

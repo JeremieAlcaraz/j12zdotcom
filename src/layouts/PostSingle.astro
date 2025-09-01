@@ -3,7 +3,16 @@ import dateFormat from '@/utils/dateFormat'
 import { humanize, markdownify, slugify } from '@/utils/textConverter'
 import { render } from 'astro:content'
 import { FaRegClock, FaRegFolder, FaRegUserCircle } from 'react-icons/fa'
-import ImageMod from '@/components/ui/atoms/ImageMod.astro'
+import ImageMod from '@ui/atoms/ImageMod.astro'
+import Button from '@ui/atoms/Button.astro'
+import Alert from '@ui/atoms/Alert.astro'
+import Accordion from '@ui/molecules/Accordion.astro'
+import Video from '@ui/atoms/Video.astro'
+import Youtube from '@ui/atoms/Youtube.astro'
+import Tabs from '@ui/molecules/Tabs.astro'
+import TabsList from '@ui/atoms/Tabs.List.astro'
+import TabsTab from '@ui/atoms/Tabs.Tab.astro'
+import TabsPanel from '@ui/atoms/Tabs.Panel.astro'
 
 const { post } = Astro.props
 const { Content } = await render(post)
@@ -50,7 +59,19 @@ const { title, author, categories, image, date, tags } = post.data
         </li>
       </ul>
     </header>
-    <Content />
+    <Content
+      components={{
+        Button,
+        Alert,
+        Accordion,
+        Video,
+        Youtube,
+        Tabs,
+        TabsList,
+        TabsTab,
+        TabsPanel,
+      }}
+    />
     {
       tags && (
         <div class="not-prose mt-10 flex flex-wrap items-center gap-2">

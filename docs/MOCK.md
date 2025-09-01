@@ -35,7 +35,7 @@ Dans le fichier de la page concernée, ajouter une entrée au dictionnaire `demo
 // src/pages/style-guide/atoms.astro
 const demoProps = {
   ImageMod: {
-    src: 'img_opt/jeremie-hero.png',
+    src: 'img_opt/jeremie-hero.webp',
     alt: 'Jérémie',
     width: 400,
     height: 400,

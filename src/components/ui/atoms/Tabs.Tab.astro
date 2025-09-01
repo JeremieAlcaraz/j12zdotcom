@@ -1,0 +1,17 @@
+---
+export interface Props {
+  panel: string
+  active?: boolean
+}
+const { panel, active = false } = Astro.props as Props
+---
+
+<button
+  role="tab"
+  data-tab
+  aria-controls={panel}
+  aria-selected={active}
+  class={`tab ${active ? 'tab-active' : ''}`}
+>
+  <slot />
+</button>

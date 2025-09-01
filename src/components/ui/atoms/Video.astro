@@ -1,0 +1,23 @@
+---
+export interface Props {
+  title: string
+  src: string
+  width?: number
+  height?: number | 'auto'
+  [key: string]: any
+}
+const { title, src, width = 500, height = 'auto', ...rest } = Astro.props as Props
+const finalSrc = /^http/.test(src) ? src : `/videos/${src}`
+---
+
+<video
+  class="overflow-hidden rounded-lg"
+  width={width}
+  height={height}
+  controls
+  preload="metadata"
+  {...rest}
+>
+  <source src={finalSrc} type="video/mp4" />
+  {title}
+</video>
