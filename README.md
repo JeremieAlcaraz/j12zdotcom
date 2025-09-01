@@ -21,7 +21,7 @@ Voici un aperçu des dossiers et fichiers les plus importants :
 │    ├─── assets/         # Images, polices et autres ressources statiques
 │    ├─── components/     # Composants d'UI réutilisables (Astro, React, Svelte)
 │    ├─── content/        # Collections de contenu (Markdown, MDX) pour le blog, les pages, etc.
-│    ├─── layouts/        # Mises en page de base (ex: BaseLayout.astro)
+│    ├─── layouts/        # Mises en page de base (ex: Base.astro)
 │    ├─── pages/          # Fichiers Astro qui définissent les routes du site
 │    └─── styles/         # Styles globaux CSS
 ├─── public/             # Fichiers servis directement à la racine du site (ex: robots.txt)

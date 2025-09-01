@@ -1,0 +1,114 @@
+---
+import type { NavLink } from '@/types/navigation'
+import SunIcon from '@/ui/atoms/icons/SunIcon.astro'
+import MoonIcon from '@/ui/atoms/icons/MoonIcon.astro'
+import { defaultLogo, defaultLogoDark, defaultLinks } from '@/config/navigation' // Valeurs par défaut pour logo et liens
+
+interface Props {
+  logo?: string
+  links?: NavLink[]
+}
+
+// ✅ DESTRUCTURATION DES PROPS avec valeurs par défaut
+const { logo = defaultLogo, links = defaultLinks } = Astro.props
+---
+
+<!-- ==========================================
+     SECTION TEMPLATE (HTML + COMPOSANTS)
+     ========================================== --><!-- Cette section définit la structure HTML du composant --><!-- CONTENEUR PRINCIPAL DE LA NAVBAR --><!-- Utilise les classes DaisyUI pour le styling (navbar, bg-base-100, shadow-md) -->
+<nav class="navbar bg-base-100 shadow-md">
+  <!-- PARTIE GAUCHE DE LA NAVBAR (logo + nom) -->
+  <div class="navbar-start">
+    <!-- LIEN LOGO - Retour à l'accueil -->
+    <a href="/" class="btn btn-ghost text-xl normal-case">
+      <!-- IMAGE DU LOGO -->
+      <img
+        id="main-logo"
+        src={logo}
+        data-logo-light={logo}
+        data-logo-dark={defaultLogoDark}
+        alt="Logo"
+        class="h-12 w-auto"
+      />
+    </a>
+  </div>
+
+  <!-- PARTIE CENTRALE DE LA NAVBAR (navigation principale) -->
+  <div class="navbar-center hidden overflow-visible lg:flex">
+    <!-- LISTE DE NAVIGATION HORIZONTALE -->
+    <ul class="menu menu-horizontal overflow-visible px-1">
+      {
+        /* BOUCLE JAVASCRIPT pour générer les liens de navigation */
+        links.map(({ href, label }: NavLink) => (
+          <li>
+            <a href={href} class="hover:bg-primary hover:text-primary-content rounded-lg">
+              {label}
+            </a>
+          </li>
+        ))
+      }
+    </ul>
+  </div>
+
+  <!-- PARTIE DROITE DE LA NAVBAR (bouton thème + menu mobile) -->
+  <div class="navbar-end">
+    <!-- BOUTON DE CHANGEMENT DE THÈME -->
+    <!-- btn-circle = bouton rond, id pour le ciblage JavaScript -->
+    <button id="theme-toggle" class="btn btn-ghost btn-circle">
+      <!-- ICÔNE SOLEIL (thème clair) -->
+      <SunIcon id="sun-icon" title="Activer le mode clair" />
+
+      <!-- ICÔNE LUNE (thème sombre) -->
+      <MoonIcon id="moon-icon" class="hidden" title="Activer le mode sombre" />
+    </button>
+
+    <!-- MENU MOBILE (hamburger menu) -->
+    <!-- dropdown-end = alignement à droite, lg:hidden = caché sur grands écrans -->
+    <div class="dropdown dropdown-end lg:hidden">
+      <!-- BOUTON HAMBURGER (3 lignes) -->
+      <!-- tabindex="0" = rend l'élément focusable au clavier -->
+      <label tabindex="0" class="btn btn-ghost btn-circle">
+        <!-- ICÔNE HAMBURGER (3 lignes horizontales) -->
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          class="h-5 w-5"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke="currentColor"
+        >
+          <!-- Path SVG pour dessiner les 3 lignes du menu hamburger -->
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M4 6h16M4 12h8m-8 6h16"></path>
+        </svg>
+      </label>
+
+      <!-- CONTENU DU DROPDOWN (menu déroulant mobile) -->
+      <!-- menu-sm = petite taille, dropdown-content = contenu du dropdown -->
+      <!-- mt-3 = marge top, z-[1] = z-index pour être au-dessus, p-2 = padding -->
+      <!-- shadow = ombre, bg-base-100 = couleur de fond, rounded-box = coins arrondis -->
+      <ul
+        tabindex="0"
+        class="menu menu-sm dropdown-content bg-base-100 rounded-box z-[1] mt-3 w-52 p-2 shadow"
+      >
+        {
+          /* MÊME BOUCLE que pour le menu desktop mais sans styling hover spécial */
+          links.map(({ href, label }: NavLink) => (
+            <li>
+              <a href={href}>{label}</a>
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+  </div>
+</nav>
+
+<!-- ==========================================
+     SECTION SCRIPT JAVASCRIPT CLIENT
+     ========================================== -->
+<script>
+  import '@/utils/toggleDark'
+</script>

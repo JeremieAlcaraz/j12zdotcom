@@ -1,11 +1,11 @@
 ---
-import StyleGuideLayout from '@/layouts/StyleGuideLayout.astro'
-import ComponentGallery from '@/components/dev/ComponentGallery.astro'
-import Loading from '@/components/ui/atoms/Loader.astro'
-import Checkbox from '@/components/ui/atoms/Checkbox.astro'
-import Section from '@/components/ui/atoms/Section.astro'
+import StyleGuideLayout from '@/domain/style-guide/layouts/StyleGuideLayout.astro'
+import ComponentGallery from '@/domain/dev/ComponentGallery.astro'
+import Loading from '@/ui/atoms/Loader.astro'
+import Checkbox from '@/ui/atoms/Checkbox.astro'
+import Section from '@/ui/atoms/Section.astro'
 
-const modules = import.meta.glob('@/components/ui/atoms/**/*.astro', { eager: true })
+const modules = import.meta.glob('@/ui/atoms/**/*.astro', { eager: true })
 
 const demoProps = {
   ImageMod: {

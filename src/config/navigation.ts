@@ -7,7 +7,7 @@
        2) defaultLinks  → tableau de liens réutilisable
 -------------------------------------------------------------------- */
 
-import type { NavLink } from '@/components/layout/SiteHeader.types'
+import type { NavLink } from '@/types/navigation'
 import logoDark from '@assets/logos/logo-dark.svg'
 import logoWhite from '@assets/logos/logo-white.svg'
 

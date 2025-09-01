@@ -1,0 +1,108 @@
+---
+import ImageMod from '@/ui/atoms/ImageMod.astro'
+import { markdownify } from '@/utils/textConverter'
+import { getEntry } from 'astro:content'
+
+interface Section {
+  title: string
+  content: string
+  image?: string
+}
+
+interface AboutData {
+  presentation: Section
+  story: Section
+  differences: Section
+  credentials: Section
+}
+
+const aboutEntry = await getEntry('about', 'index')
+if (!aboutEntry) {
+  throw new Error('About entry not found! Check src/content/about/index.mdx')
+}
+
+const { presentation, story, differences, credentials } = aboutEntry.data as AboutData
+---
+
+<section class="space-y-24 py-16">
+  <!-- Section 1: The Guy -->
+  <div class="grid grid-cols-1 items-center gap-8 lg:grid-cols-2">
+    <div class="flex justify-center lg:justify-start">
+      <div
+        class="mask mask-squircle h-64 w-64 overflow-hidden shadow-lg transition-transform duration-300 hover:scale-105"
+      >
+        {
+          presentation.image && (
+            <ImageMod
+              src={presentation.image}
+              alt={presentation.title}
+              width={512}
+              height={512}
+              class="h-full w-full object-cover"
+            />
+          )
+        }
+      </div>
+    </div>
+    <div>
+      <h2 class="mb-4 text-3xl font-bold">{presentation.title}</h2>
+      <p class="leading-relaxed" set:html={markdownify(presentation.content)} />
+    </div>
+  </div>
+
+  <!-- Section 2: Story -->
+  <div class="grid grid-cols-1 items-center gap-8 lg:grid-cols-2">
+    <div class="order-2 lg:order-1">
+      <h2 class="mb-4 text-3xl font-bold">{story.title}</h2>
+      <p class="leading-relaxed" set:html={markdownify(story.content)} />
+    </div>
+    <div class="order-1 flex justify-center lg:order-2 lg:justify-end">
+      <div
+        class="mask mask-hexagon h-64 w-64 overflow-hidden shadow-lg transition-transform duration-300 hover:scale-105"
+      >
+        {
+          story.image && (
+            <ImageMod
+              src={story.image}
+              alt={story.title}
+              width={512}
+              height={512}
+              class="h-full w-full object-cover"
+            />
+          )
+        }
+      </div>
+    </div>
+  </div>
+
+  <!-- Section 3: Differences -->
+  <div class="grid grid-cols-1 items-center gap-8 lg:grid-cols-2">
+    <div class="flex justify-center lg:justify-start">
+      <div
+        class="mask mask-diamond h-64 w-64 overflow-hidden shadow-lg transition-transform duration-300 hover:scale-105"
+      >
+        {
+          differences.image && (
+            <ImageMod
+              src={differences.image}
+              alt={differences.title}
+              width={512}
+              height={512}
+              class="h-full w-full object-cover"
+            />
+          )
+        }
+      </div>
+    </div>
+    <div>
+      <h2 class="mb-4 text-3xl font-bold">{differences.title}</h2>
+      <p class="leading-relaxed" set:html={markdownify(differences.content)} />
+    </div>
+  </div>
+
+  <!-- Section 4: Credentials -->
+  <div class="mx-auto max-w-2xl text-center">
+    <h2 class="mb-4 text-3xl font-bold">{credentials.title}</h2>
+    <div class="prose mx-auto" set:html={markdownify(credentials.content, true)} />
+  </div>
+</section>

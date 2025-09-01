@@ -1,0 +1,34 @@
+---
+import PricingCard from '@/domain/pricing/PricingCard.astro'
+
+const plans = [
+  {
+    title: 'Starter',
+    price: '9€',
+    period: 'mois',
+    features: ['Accès basique', 'Support communautaire'],
+    cta: { label: 'Choisir', href: '#' },
+  },
+  {
+    title: 'Pro',
+    price: '29€',
+    period: 'mois',
+    features: ['Tout du Starter', 'Support prioritaire'],
+    cta: { label: 'Choisir', href: '#' },
+  },
+  {
+    title: 'Entreprise',
+    price: 'Sur mesure',
+    features: ['Accompagnement dédié'],
+    cta: { label: 'Contactez-nous', href: '#' },
+  },
+] as const
+---
+
+<div class="grid w-full grid-cols-1 gap-4 sm:grid-cols-3">
+  {
+    plans.map((plan, idx) => (
+      <PricingCard data={plan} base={((idx + 1) * 100) as 100 | 200 | 300} />
+    ))
+  }
+</div>

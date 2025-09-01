@@ -150,7 +150,7 @@ const { threshold = 0.1, rootMargin = '100px' } = Astro.props
 
 ```astro
 ---
-// layouts/BaseLayout.astro
+// layouts/Base.astro
 ---
 
 <head>
@@ -218,7 +218,7 @@ npm run build -- --analyze
 
 ```astro
 ---
-// layouts/BaseLayout.astro
+// layouts/Base.astro
 ---
 
 <head>
@@ -400,7 +400,7 @@ self.addEventListener('fetch', event => {
 
 ```astro
 ---
-// layouts/BaseLayout.astro
+// layouts/Base.astro
 ---
 
 <script>

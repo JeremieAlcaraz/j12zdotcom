@@ -1,13 +1,13 @@
 ---
-import StyleGuideLayout from '@/layouts/StyleGuideLayout.astro'
-import ComponentGallery from '@/components/dev/ComponentGallery.astro'
-import CardBlogGallery from '@/components/dev/CardBlogGallery.astro'
-import CardPricingGallery from '@/components/dev/CardPricingGallery.astro'
-import CardVariantsGallery from '@/components/dev/CardVariantsGallery.astro'
+import StyleGuideLayout from '@/domain/style-guide/layouts/StyleGuideLayout.astro'
+import ComponentGallery from '@/domain/dev/ComponentGallery.astro'
+import CardBlogGallery from '@/domain/dev/CardBlogGallery.astro'
+import CardPricingGallery from '@/domain/dev/CardPricingGallery.astro'
+import CardVariantsGallery from '@/domain/dev/CardVariantsGallery.astro'
 import { getSinglePage } from '@/utils/contentParser'
 import { sortByDate } from '@/utils/sortFunctions'
 
-const modules = import.meta.glob('@/components/ui/organisms/**/*.astro', { eager: true })
+const modules = import.meta.glob('@/ui/organisms/**/*.astro', { eager: true })
 
 const BLOG_FOLDER = 'blog'
 const posts = await getSinglePage(BLOG_FOLDER)

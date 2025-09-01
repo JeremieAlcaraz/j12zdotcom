@@ -1,3 +1,5 @@
+import type { NavLink } from '@/types/navigation'
+
 export const getPageList = (total: number): number[] =>
   Array.from({ length: total }, (_, i) => i + 1)
 
@@ -21,7 +23,6 @@ export const getNextHref = (
 
 // Types pour Option A
 export type PageLink = { n: number; href?: string; current?: boolean; label?: string }
-export type NavLink = { href?: string; label?: string }
 export type PaginationLinks = { pages: PageLink[]; prev?: NavLink; next?: NavLink }
 
 /**
