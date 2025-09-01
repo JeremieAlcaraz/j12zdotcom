@@ -27,18 +27,19 @@ L'architecture en îles (Islands Architecture) représente un **changement de pa
 ```astro
 ---
 // Composant Astro - Rendu côté serveur par défaut
-const posts = await fetch('/api/posts').then(r => r.json());
+const posts = await fetch('/api/posts').then(r => r.json())
 ---
 
 <section class="blog-grid">
-  {posts.map(post => (
-    <article class="post-card">
-      <h2>{post.title}</h2>
-      <p>{post.excerpt}</p>
-      <!-- Île interactive uniquement si nécessaire -->
-      <LikeButton client:visible postId={post.id} />
-    </article>
-  ))}
+  {
+    posts.map(post => (
+      <article class="post-card">
+        <h2>{post.title}</h2>
+        <p>{post.excerpt}</p>
+        <LikeButton client:visible postId={post.id} />
+      </article>
+    ))
+  }
 </section>
 ```
 
@@ -46,13 +47,13 @@ const posts = await fetch('/api/posts').then(r => r.json());
 
 Astro offre un **contrôle granulaire** sur le moment et la manière dont vos composants s'hydratent :
 
-| Directive | Comportement | Cas d'usage |
-|-----------|--------------|-------------|
-| `client:load` | Hydratation immédiate | Composants critiques |
-| `client:idle` | Hydratation quand le navigateur est inactif | Widgets non-critiques |
-| `client:visible` | Hydratation lors de l'apparition à l'écran | Composants below-the-fold |
-| `client:media` | Hydratation conditionnelle (media queries) | Composants responsive |
-| `client:only` | Rendu côté client uniquement | Composants incompatibles SSR |
+| Directive        | Comportement                                | Cas d'usage                  |
+| ---------------- | ------------------------------------------- | ---------------------------- |
+| `client:load`    | Hydratation immédiate                       | Composants critiques         |
+| `client:idle`    | Hydratation quand le navigateur est inactif | Widgets non-critiques        |
+| `client:visible` | Hydratation lors de l'apparition à l'écran  | Composants below-the-fold    |
+| `client:media`   | Hydratation conditionnelle (media queries)  | Composants responsive        |
+| `client:only`    | Rendu côté client uniquement                | Composants incompatibles SSR |
 
 ## 🚀 Performance : Les Métriques qui Comptent
 
@@ -61,14 +62,14 @@ Astro offre un **contrôle granulaire** sur le moment et la manière dont vos co
 Les **Core Web Vitals** sont devenus le standard de facto pour mesurer la performance web. Astro excelle naturellement sur ces métriques :
 
 - **LCP (Largest Contentful Paint)** : < 2.5s
-- **FID (First Input Delay)** : < 100ms  
+- **FID (First Input Delay)** : < 100ms
 - **CLS (Cumulative Layout Shift)** : < 0.1
 
 ```astro
 ---
 // Optimisation automatique des images
-import { Image } from 'astro:assets';
-import heroImage from '../assets/hero.jpg';
+import { Image } from 'astro:assets'
+import heroImage from '../assets/hero.jpg'
 ---
 
 <Image
@@ -106,20 +107,20 @@ L'une des forces d'Astro réside dans sa capacité à **unifier différents fram
 ```astro
 ---
 // Mélange React, Vue, et Svelte dans la même page
-import ReactCounter from './ReactCounter.jsx';
-import VueChart from './VueChart.vue';
-import SvelteWidget from './SvelteWidget.svelte';
+import ReactCounter from './ReactCounter.jsx'
+import VueChart from './VueChart.vue'
+import SvelteWidget from './SvelteWidget.svelte'
 ---
 
 <main>
   <h1>Dashboard Multi-Framework</h1>
-  
+
   <!-- React pour la logique complexe -->
   <ReactCounter client:load initialCount={0} />
-  
+
   <!-- Vue pour les visualisations -->
   <VueChart client:visible data={chartData} />
-  
+
   <!-- Svelte pour les animations fluides -->
   <SvelteWidget client:idle />
 </main>
@@ -142,7 +143,7 @@ Les Content Collections d'Astro introduisent une approche **schema-driven** pour
 
 ```typescript
 // src/content/config.ts
-import { defineCollection, z } from 'astro:content';
+import { defineCollection, z } from 'astro:content'
 
 const blogCollection = defineCollection({
   schema: z.object({
@@ -158,46 +159,52 @@ const blogCollection = defineCollection({
     tags: z.array(z.string()),
     featured: z.boolean().default(false),
     draft: z.boolean().default(false),
-    seo: z.object({
-      canonical: z.string().url().optional(),
-      openGraph: z.object({
-        type: z.enum(['article', 'website']),
-        image: z.string().url().optional(),
-      }).optional(),
-    }).optional(),
+    seo: z
+      .object({
+        canonical: z.string().url().optional(),
+        openGraph: z
+          .object({
+            type: z.enum(['article', 'website']),
+            image: z.string().url().optional(),
+          })
+          .optional(),
+      })
+      .optional(),
   }),
-});
+})
 
 export const collections = {
   blog: blogCollection,
-};
+}
 ```
 
 ### Querying Intelligent
 
 ```astro
 ---
-import { getCollection } from 'astro:content';
+import { getCollection } from 'astro:content'
 
 // Récupération avec filtrage et tri
 const featuredPosts = await getCollection('blog', ({ data }) => {
-  return data.featured && !data.draft;
-});
+  return data.featured && !data.draft
+})
 
 // Tri par date décroissante
-featuredPosts.sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
+featuredPosts.sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf())
 ---
 
 <section class="featured-posts">
-  {featuredPosts.slice(0, 3).map(async (post) => {
-    const { Content } = await post.render();
-    return (
-      <article>
-        <h2>{post.data.title}</h2>
-        <Content />
-      </article>
-    );
-  })}
+  {
+    featuredPosts.slice(0, 3).map(async post => {
+      const { Content } = await post.render()
+      return (
+        <article>
+          <h2>{post.data.title}</h2>
+          <Content />
+        </article>
+      )
+    })
+  }
 </section>
 ```
 
@@ -218,28 +225,28 @@ Astro utilise **Vite** sous le capot, offrant une expérience de développement 
 ---
 // Support TypeScript natif
 interface BlogPost {
-  title: string;
-  slug: string;
-  publishedAt: Date;
+  title: string
+  slug: string
+  publishedAt: Date
   author: {
-    name: string;
-    avatar: string;
-  };
+    name: string
+    avatar: string
+  }
 }
 
 // Inférence de type automatique
-const posts: BlogPost[] = await getCollection('blog');
+const posts: BlogPost[] = await getCollection('blog')
 ---
 
 <script>
   // TypeScript dans les scripts côté client
   const initializeAnalytics = (): void => {
     if (typeof gtag !== 'undefined') {
-      gtag('config', 'GA_TRACKING_ID');
+      gtag('config', 'GA_TRACKING_ID')
     }
-  };
-  
-  document.addEventListener('DOMContentLoaded', initializeAnalytics);
+  }
+
+  document.addEventListener('DOMContentLoaded', initializeAnalytics)
 </script>
 ```
 
@@ -249,7 +256,7 @@ const posts: BlogPost[] = await getCollection('blog');
 
 ```javascript
 // src/utils/vitals.js
-import { getCLS, getFID, getFCP, getLCP, getTTFB } from 'web-vitals';
+import { getCLS, getFID, getFCP, getLCP, getTTFB } from 'web-vitals'
 
 function sendToAnalytics(metric) {
   // Envoi vers votre service d'analytics
@@ -258,15 +265,15 @@ function sendToAnalytics(metric) {
     value: metric.value,
     id: metric.id,
     url: window.location.href,
-  });
+  })
 }
 
 // Collecte automatique des métriques
-getCLS(sendToAnalytics);
-getFID(sendToAnalytics);
-getFCP(sendToAnalytics);
-getLCP(sendToAnalytics);
-getTTFB(sendToAnalytics);
+getCLS(sendToAnalytics)
+getFID(sendToAnalytics)
+getFCP(sendToAnalytics)
+getLCP(sendToAnalytics)
+getTTFB(sendToAnalytics)
 ```
 
 ### Performance Budget
@@ -297,14 +304,14 @@ getTTFB(sendToAnalytics);
 ```astro
 ---
 export interface Props {
-  title: string;
-  description: string;
-  image?: string;
-  type?: 'website' | 'article';
+  title: string
+  description: string
+  image?: string
+  type?: 'website' | 'article'
 }
 
-const { title, description, image, type = 'website' } = Astro.props;
-const canonicalURL = new URL(Astro.url.pathname, Astro.site);
+const { title, description, image, type = 'website' } = Astro.props
+const canonicalURL = new URL(Astro.url.pathname, Astro.site)
 ---
 
 <head>
@@ -312,29 +319,32 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site);
   <title>{title}</title>
   <meta name="description" content={description} />
   <link rel="canonical" href={canonicalURL} />
-  
+
   <!-- Open Graph -->
   <meta property="og:type" content={type} />
   <meta property="og:title" content={title} />
   <meta property="og:description" content={description} />
   <meta property="og:url" content={canonicalURL} />
   {image && <meta property="og:image" content={new URL(image, Astro.site)} />}
-  
+
   <!-- Twitter Card -->
   <meta name="twitter:card" content="summary_large_image" />
   <meta name="twitter:title" content={title} />
   <meta name="twitter:description" content={description} />
   {image && <meta name="twitter:image" content={new URL(image, Astro.site)} />}
-  
+
   <!-- Schema.org -->
-  <script type="application/ld+json" set:html={JSON.stringify({
-    "@context": "https://schema.org",
-    "@type": type === 'article' ? 'BlogPosting' : 'WebSite',
-    "headline": title,
-    "description": description,
-    "url": canonicalURL.href,
-    ...(image && { "image": new URL(image, Astro.site).href })
-  })} />
+  <script
+    type="application/ld+json"
+    set:html={JSON.stringify({
+      '@context': 'https://schema.org',
+      '@type': type === 'article' ? 'BlogPosting' : 'WebSite',
+      headline: title,
+      description: description,
+      url: canonicalURL.href,
+      ...(image && { image: new URL(image, Astro.site).href }),
+    })}
+  />
 </head>
 ```
 
@@ -344,14 +354,14 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site);
 ---
 // Composant AccessibleImage
 export interface Props {
-  src: string;
-  alt: string;
-  width?: number;
-  height?: number;
-  loading?: 'eager' | 'lazy';
+  src: string
+  alt: string
+  width?: number
+  height?: number
+  loading?: 'eager' | 'lazy'
 }
 
-const { src, alt, width, height, loading = 'lazy' } = Astro.props;
+const { src, alt, width, height, loading = 'lazy' } = Astro.props
 ---
 
 <img
@@ -396,19 +406,19 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-      
+
       - name: Setup Node.js
         uses: actions/setup-node@v3
         with:
           node-version: '18'
           cache: 'npm'
-      
+
       - name: Install dependencies
         run: npm ci
-      
+
       - name: Build
         run: npm run build
-      
+
       - name: Deploy to Cloudflare Pages
         uses: cloudflare/pages-action@v1
         with:
@@ -422,8 +432,8 @@ jobs:
 
 ```javascript
 // astro.config.mjs
-import { defineConfig } from 'astro/config';
-import vercel from '@astrojs/vercel/serverless';
+import { defineConfig } from 'astro/config'
+import vercel from '@astrojs/vercel/serverless'
 
 export default defineConfig({
   output: 'hybrid', // SSG par défaut, SSR sur demande
@@ -431,16 +441,16 @@ export default defineConfig({
   experimental: {
     hybridOutput: true,
   },
-});
+})
 ```
 
 ```astro
 ---
 // Page avec rendu hybride
-export const prerender = false; // Force le SSR pour cette page
+export const prerender = false // Force le SSR pour cette page
 
-const userLocation = Astro.request.headers.get('cf-ipcountry');
-const personalizedContent = await getPersonalizedContent(userLocation);
+const userLocation = Astro.request.headers.get('cf-ipcountry')
+const personalizedContent = await getPersonalizedContent(userLocation)
 ---
 
 <main>
@@ -469,7 +479,7 @@ gantt
     section Core Features
     Streaming SSR           :done,    des1, 2025-01-01, 2025-03-31
     Enhanced Islands        :active,  des2, 2025-02-01, 2025-05-31
-    section Developer Experience  
+    section Developer Experience
     Better TypeScript       :         des3, 2025-04-01, 2025-06-30
     Advanced Debugging      :         des4, 2025-05-01, 2025-07-31
     section Performance
@@ -521,7 +531,7 @@ Dans le contexte du développement web, cette beauté réside dans la **simplici
 
 ---
 
-*Cet article vous a plu ? Partagez-le avec vos collègues développeurs et n'hésitez pas à me faire part de vos expériences avec Astro dans les commentaires !*
+_Cet article vous a plu ? Partagez-le avec vos collègues développeurs et n'hésitez pas à me faire part de vos expériences avec Astro dans les commentaires !_
 
 ### Ressources Complémentaires
 
