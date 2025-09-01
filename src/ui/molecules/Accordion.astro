@@ -1,0 +1,15 @@
+---
+interface Props {
+  title: string
+  class?: string
+  children: any
+}
+
+const { title, class: className = '', children } = Astro.props as Props
+---
+
+<div class={`collapse collapse-arrow ${className}`}>
+  <input type="checkbox" />
+  <div class="collapse-title text-left">{title}</div>
+  <div class="collapse-content">{children}</div>
+</div>

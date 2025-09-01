@@ -23,13 +23,13 @@ export default defineConfig({
     AutoImport({
       // export default requis (ou map explicite, cf. ci-dessous)
       imports: [
-        '@/shortcodes/generic/Button.tsx',
-        '@/shortcodes/generic/Accordion.tsx',
-        '@/shortcodes/generic/Notice.tsx',
-        '@/shortcodes/generic/Video.tsx',
-        '@/shortcodes/generic/Youtube.tsx',
-        '@/shortcodes/generic/Tabs.tsx',
-        '@/shortcodes/generic/Tab.tsx',
+        {
+          '@/shortcodes/generic/Accordion.shortcode.astro': [['default', 'Accordion']],
+          '@/shortcodes/generic/Button.shortcode.astro': [['default', 'Button']],
+          '@/shortcodes/generic/Notice.shortcode.astro': [['default', 'Notice']],
+          '@/shortcodes/generic/Video.shortcode.astro': [['default', 'Video']],
+          '@/shortcodes/generic/Youtube.shortcode.astro': [['default', 'Youtube']],
+        },
       ],
     }),
     mdx(),

@@ -1,0 +1,21 @@
+---
+interface Props {
+  label: string
+  link: string
+  style?: 'outline'
+  rel?: string
+}
+
+const { label, link, style, rel } = Astro.props as Props
+const relValue = `noopener noreferrer ${rel ? (rel === 'follow' ? '' : rel) : 'nofollow'}`
+const variantClass = style === 'outline' ? 'btn-outline btn-primary' : 'btn-primary'
+---
+
+<a
+  href={link}
+  target="_blank"
+  rel={relValue}
+  class={`btn me-4 mb-4 hover:no-underline ${variantClass}`}
+>
+  {label}
+</a>

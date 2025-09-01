@@ -4,9 +4,15 @@ import { humanize, markdownify, slugify } from '@/utils/textConverter'
 import { render } from 'astro:content'
 import { FaRegClock, FaRegFolder, FaRegUserCircle } from 'react-icons/fa'
 import ImageMod from '@/ui/atoms/ImageMod.astro'
+import Accordion from '@/shortcodes/generic/Accordion.shortcode.astro'
+import Button from '@/shortcodes/generic/Button.shortcode.astro'
+import Notice from '@/shortcodes/generic/Notice.shortcode.astro'
+import Video from '@/shortcodes/generic/Video.shortcode.astro'
+import Youtube from '@/shortcodes/generic/Youtube.shortcode.astro'
 
 const { post } = Astro.props
 const { Content } = await render(post)
+const components = { Accordion, Button, Notice, Video, Youtube }
 const { title, author, categories, image, date, tags } = post.data
 ---
 
@@ -50,7 +56,7 @@ const { title, author, categories, image, date, tags } = post.data
         </li>
       </ul>
     </header>
-    <Content />
+    <Content components={components} />
     {
       tags && (
         <div class="not-prose mt-10 flex flex-wrap items-center gap-2">
