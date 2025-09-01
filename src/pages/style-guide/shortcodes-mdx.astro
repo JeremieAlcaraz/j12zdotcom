@@ -1,8 +1,8 @@
 ---
 import StyleGuideLayout from '@/layouts/StyleGuideLayout.astro'
-import ComponentGallery from '@/components/dev/ComponentGallery.astro'
+import ComponentGallery from '@/domain/dev/ComponentGallery.astro'
 
-const modules = import.meta.glob('@/components/shortcodes/*.astro', { eager: true })
+const modules = import.meta.glob('@/shortcodes/generic/*.astro', { eager: true })
 
 const demoProps = {
   Accordion: { title: 'Titre', children: "Contenu de l'accordéon." },

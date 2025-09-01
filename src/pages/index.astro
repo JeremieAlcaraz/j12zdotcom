@@ -1,9 +1,9 @@
 ---
 import BaseLayout from '@/layouts/BaseLayout.astro'
-import Hero from '@/components/sections/HeroSection.astro'
+import Hero from '@/domain/shared/sections/HeroSection.astro'
 import { getEntry } from 'astro:content'
-import Testimonial from '@/components/domain/formation/TestimonialSection.astro'
-import Section from '@/components/ui/atoms/Section.astro'
+import Testimonial from '@/domain/formation/TestimonialSection.astro'
+import Section from '@/ui/atoms/Section.astro'
 import type { CollectionEntry } from 'astro:content'
 
 const testimonial = (await getEntry(
