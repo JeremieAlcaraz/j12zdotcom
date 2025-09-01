@@ -1,0 +1,23 @@
+---
+import { humanize } from '@/utils/textConverter'
+
+interface Props {
+  type?: string
+  children: any
+}
+
+const { type, children } = Astro.props as Props
+const typeClass =
+  {
+    tip: 'alert-success',
+    info: 'alert-info',
+    warning: 'alert-warning',
+    danger: 'alert-error',
+  }[type as 'tip' | 'info' | 'warning' | 'danger'] || 'alert-info'
+const label = type ? humanize(type) : ''
+---
+
+<div role="alert" class={`alert ${typeClass}`}>
+  {label && <span class="mr-2 font-semibold">{label}</span>}
+  <span>{children}</span>
+</div>

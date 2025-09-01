@@ -25,7 +25,8 @@ const autoComponents = Object.entries(modules)
       path
         .split('/')
         .pop()
-        ?.replace(/\.(astro|tsx|jsx|svelte)$/i, '') ?? ''
+        ?.replace(/\.(astro|tsx|jsx|svelte)$/i, '')
+        .replace(/\.shortcode$/i, '') ?? ''
     return {
       name,
       Component: (mod as any).default,

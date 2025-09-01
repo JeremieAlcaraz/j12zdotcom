@@ -2,7 +2,7 @@
 import StyleGuideLayout from '@/domain/style-guide/layouts/StyleGuideLayout.astro'
 import ComponentGallery from '@/domain/dev/ComponentGallery.astro'
 
-const modules = import.meta.glob('@/shortcodes/generic/*.astro', { eager: true })
+const modules = import.meta.glob('@/shortcodes/generic/*.shortcode.astro', { eager: true })
 
 const demoProps = {
   Accordion: { title: 'Titre', children: "Contenu de l'accordéon." },
@@ -14,15 +14,10 @@ const demoProps = {
     width: 320,
     height: 240,
   },
-  Youtube: { id: 'dQw4w9WgXcQ', title: 'YouTube', style: { maxWidth: '560px' } },
+  Youtube: { id: 'C0DPdy98e4c', title: 'YouTube' },
 }
-
 ---
 
 <StyleGuideLayout title="Style Guide | Shortcodes MDX">
-  <ComponentGallery
-    modules={modules}
-    demoProps={demoProps}
-    exclude={['Tab', 'Tabs']}
-  />
+  <ComponentGallery modules={modules} demoProps={demoProps} />
 </StyleGuideLayout>

@@ -1,0 +1,22 @@
+---
+interface Props {
+  id?: string
+  title?: string
+  [key: string]: any
+}
+
+const { id = '', title = '', ...rest } = Astro.props as Props
+---
+
+<lite-youtube videoid={id} videotitle={title} {...rest}></lite-youtube>
+
+<style>
+  lite-youtube {
+    width: 100%;
+    max-width: 100%;
+  }
+</style>
+
+<script>
+  import '@justinribeiro/lite-youtube'
+</script>
