@@ -8,7 +8,7 @@
       "@types/*": ["src/types/*"],
       "@playground/*": ["src/playground/*"],
       "@styles/*": ["src/styles/*"],
-      "@ui/*": ["src/components/ui/*"],
+      "@ui/*": ["src/ui/*"],
       "@domain/*": ["src/components/domain/*"],
       "@sections/*": ["src/components/sections/*"],
       "@layouts/*": ["src/layouts/*"],

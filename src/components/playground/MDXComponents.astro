@@ -3,8 +3,8 @@ import StyleGuideLayout from '@/layouts/StyleGuideLayout.astro'
 import ComponentGallery from '@/components/playground/ComponentGallery.astro'
 
 const modules = {
-  ...import.meta.glob('@/components/ui/atoms/*.astro', { eager: true }),
-  ...import.meta.glob('@/components/ui/molecules/*.astro', { eager: true }),
+  ...import.meta.glob('@ui/atoms/*.astro', { eager: true }),
+  ...import.meta.glob('@ui/molecules/*.astro', { eager: true }),
 }
 
 const demoProps = {

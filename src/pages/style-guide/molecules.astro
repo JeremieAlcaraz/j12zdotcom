@@ -3,7 +3,7 @@ import StyleGuideLayout from '@/layouts/StyleGuideLayout.astro'
 import ComponentGallery from '@/components/playground/ComponentGallery.astro'
 import { makePaginationLinks } from '@/utils/pagination'
 
-const modules = import.meta.glob('@/components/ui/molecules/**/*.astro', { eager: true })
+const modules = import.meta.glob('@ui/molecules/**/*.astro', { eager: true })
 
 const { pages, prev, next } = makePaginationLinks('blog', 1, 5)
 

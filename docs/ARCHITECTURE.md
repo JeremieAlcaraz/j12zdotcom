@@ -40,12 +40,12 @@ Clarifier les règles d’organisation du projet pour éviter les zones d’ambi
 
 ```
 src/
-  components/
-    ui/                      # Design system générique
-      atoms/
-      molecules/
-      organisms/
-    domain/                  # Composants métier
+  ui/                        # Design system générique
+    atoms/
+    molecules/
+    organisms/
+  components/                # Composants applicatifs
+    domain/
       blog/
         BlogCard.astro
       …
@@ -79,7 +79,6 @@ public/
 
 - Déplacer `TestimonialSection.astro` → `sections/Testimonial.section.astro`.
 - Renommer tous les fichiers `sections/*` en `.section.astro`.
-- Déplacer `components/dev/*` → `components/playground/`.
 - Exposer les composants `ui` aux fichiers MDX via `components={{…}}`.
 - Documenter la règle `public/` vs `assets/` avec 2 exemples concrets.
 

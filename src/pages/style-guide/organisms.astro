@@ -7,7 +7,7 @@ import CardVariantsGallery from '@/components/playground/CardVariantsGallery.ast
 import { getSinglePage } from '@/utils/contentParser'
 import { sortByDate } from '@/utils/sortFunctions'
 
-const modules = import.meta.glob('@/components/ui/organisms/**/*.astro', { eager: true })
+const modules = import.meta.glob('@ui/organisms/**/*.astro', { eager: true })
 
 const BLOG_FOLDER = 'blog'
 const posts = await getSinglePage(BLOG_FOLDER)
