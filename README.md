@@ -17,15 +17,21 @@ Voici un aperçu des dossiers et fichiers les plus importants :
 
 ```
 /
-├─── src/
-│    ├─── assets/         # Images, polices et autres ressources statiques
-│    ├─── components/     # Composants d'UI réutilisables (Astro, React, Svelte)
-│    ├─── content/        # Collections de contenu (Markdown, MDX) pour le blog, les pages, etc.
-│    ├─── layouts/        # Mises en page de base (ex: Base.astro)
-│    ├─── pages/          # Fichiers Astro qui définissent les routes du site
-│    └─── styles/         # Styles globaux CSS
-├─── public/             # Fichiers servis directement à la racine du site (ex: robots.txt)
-└─── astro.config.mjs   # Fichier de configuration principal d'Astro
+├── src/
+│   ├── assets/       # Images, polices et autres ressources statiques
+│   ├── config/       # Configuration du site (navigation, SEO...)
+│   ├── content/      # Collections de contenu (Markdown, MDX)
+│   ├── domain/       # Fonctionnalités métier (blog, contact, etc.)
+│   ├── layouts/      # Mises en page de base
+│   ├── pages/        # Fichiers Astro qui définissent les routes du site
+│   ├── shortcodes/   # Composants MDX/Astro réutilisables
+│   ├── styles/       # Styles globaux CSS
+│   ├── types/        # Types TypeScript partagés
+│   ├── ui/           # Composants UI (atoms, molecules, organisms)
+│   └── utils/        # Fonctions utilitaires
+├── public/           # Fichiers servis directement à la racine du site (ex: robots.txt)
+├── docs/             # Documentation du projet
+└── astro.config.ts   # Fichier de configuration principal d'Astro
 ```
 
 ## Commandes Disponibles
