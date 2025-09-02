@@ -25,10 +25,10 @@ const updateTheme = (isDarkValue: boolean) => {
 
   // AFFICHE/CACHE les icônes selon le thème
   if (sunIcon && moonIcon) {
-    // Si thème sombre : cache soleil, montre lune
-    // Si thème clair : montre soleil, cache lune
-    sunIcon.classList.toggle('hidden', isDarkValue) // Cache si sombre
-    moonIcon.classList.toggle('hidden', !isDarkValue) // Cache si clair
+    // Si thème sombre : montre soleil (pour revenir en clair)
+    // Si thème clair : montre lune (pour passer en sombre)
+    sunIcon.classList.toggle('hidden', !isDarkValue) // Montre si sombre
+    moonIcon.classList.toggle('hidden', isDarkValue) // Cache si sombre
   }
 
   // MET À JOUR LE LOGO PRINCIPAL
@@ -53,8 +53,8 @@ const setupIcons = () => {
   const moonIcon = document.getElementById('moon-icon')
 
   if (sunIcon && moonIcon) {
-    sunIcon.classList.toggle('hidden', currentThemeIsDark)
-    moonIcon.classList.toggle('hidden', !currentThemeIsDark)
+    sunIcon.classList.toggle('hidden', !currentThemeIsDark)
+    moonIcon.classList.toggle('hidden', currentThemeIsDark)
   }
 
   const mainLogo = document.getElementById('main-logo') as HTMLImageElement | null
@@ -158,12 +158,52 @@ const toggleTheme = (event: MouseEvent) => {
 // ATTACHE l'événement de clic au bouton de changement de thème
 // ?. = optional chaining (évite l'erreur si l'élément n'existe pas)
 function initThemeButton() {
+  // D'abord, on nettoie les anciens event listeners pour éviter les doublons
+  const themeButton = document.getElementById('theme-toggle')
+  if (themeButton) {
+    // Supprime l'ancien listener s'il existe
+    themeButton.removeEventListener('click', toggleTheme)
+    // Ajoute le nouveau listener
+    themeButton.addEventListener('click', toggleTheme)
+  }
+
+  // Configure les icônes selon le thème actuel
   setupIcons()
-  document.getElementById('theme-toggle')?.addEventListener('click', toggleTheme)
+
+  // Force une vérification du localStorage au cas où
+  const savedTheme = localStorage.getItem(THEME_STORAGE_KEY)
+  if (savedTheme) {
+    const shouldBeDark = savedTheme === 'dark'
+    const currentIsDark = isDark()
+
+    // Si le thème sauvegardé ne correspond pas au thème actuel, on corrige
+    if (shouldBeDark !== currentIsDark) {
+      updateTheme(shouldBeDark)
+    }
+  }
 }
 
-// Initialisation au chargement
-initThemeButton()
+// Fonction d'initialisation avec délai pour éviter les problèmes de timing
+const initWithDelay = () => {
+  // Petit délai pour s'assurer que le DOM est complètement mis à jour
+  setTimeout(() => {
+    initThemeButton()
+  }, 10)
+}
 
-// Réinitialisation après chaque navigation ViewTransition
-document.addEventListener('astro:after-swap', initThemeButton)
+// Initialisation au chargement de la page
+document.addEventListener('DOMContentLoaded', initWithDelay)
+
+// Réinitialisation après chaque navigation Astro
+document.addEventListener('astro:after-swap', initWithDelay)
+
+// Événement de fallback au cas où les autres ne fonctionnent pas
+document.addEventListener('astro:page-load', initWithDelay)
+
+// Initialisation immédiate si le DOM est déjà chargé
+if (document.readyState === 'loading') {
+  // DOM pas encore chargé, on attend DOMContentLoaded
+} else {
+  // DOM déjà chargé, on initialise tout de suite
+  initThemeButton()
+}
