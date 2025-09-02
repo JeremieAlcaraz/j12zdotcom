@@ -105,17 +105,60 @@ const toggleTheme = (event: MouseEvent) => {
     Math.max(y, window.innerHeight - y) // Distance verticale max
   )
 
-  // DÉSACTIVE temporairement les animations ClientRouter via JavaScript
+  // AJOUTE les styles CSS pour l'effet gradient magique ✨
   const style = document.createElement('style')
-  style.id = 'temp-disable-transitions'
+  style.id = 'magical-theme-transition'
   style.textContent = `
     ::view-transition-old(root),
     ::view-transition-new(root) {
       animation: none !important;
       mix-blend-mode: normal !important;
     }
+
+    /* EFFET GRADIENT ROSE-BLEU SPECTACULAIRE */
+    .theme-gradient-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 9999;
+      background: conic-gradient(
+        from 0deg at ${x}px ${y}px,
+        #ff69b4,     /* Rose vif */
+        #9d4edd,     /* Violet */
+        #3b82f6,     /* Bleu */
+        #06b6d4,     /* Cyan */
+        #10b981,     /* Emerald */
+        #f59e0b,     /* Ambre */
+        #ef4444,     /* Rouge */
+        #ff69b4      /* Rose vif (boucle) */
+      );
+      opacity: 0;
+      transition: opacity 0.1s ease;
+    }
+
+    .theme-gradient-overlay.active {
+      opacity: 0.15;
+    }
+
+    /* ANIMATION PULSE SUBTILE */
+    @keyframes magical-pulse {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.05); }
+    }
+
+    .theme-gradient-overlay.pulse {
+      animation: magical-pulse 0.6s ease-in-out;
+    }
   `
   document.head.appendChild(style)
+
+  // CRÉE l'overlay gradient magique ✨
+  const gradientOverlay = document.createElement('div')
+  gradientOverlay.className = 'theme-gradient-overlay'
+  document.body.appendChild(gradientOverlay)
 
   // DÉMARRE la transition avec l'API View Transitions
   const transition = document.startViewTransition(() => {
@@ -127,6 +170,11 @@ const toggleTheme = (event: MouseEvent) => {
 
   // ANIME la transition une fois qu'elle est prête
   transition.ready.then(() => {
+    // ACTIVE l'overlay gradient avec un petit délai pour l'effet
+    setTimeout(() => {
+      gradientOverlay.classList.add('active', 'pulse')
+    }, 50)
+
     // DÉFINIT les keyframes de l'animation : cercle qui grandit
     const clipPath = [`circle(0px at ${x}px ${y}px)`, `circle(${endRadius}px at ${x}px ${y}px)`]
 
@@ -136,17 +184,23 @@ const toggleTheme = (event: MouseEvent) => {
         clipPath: clipPath, // Animation du cercle qui s'agrandit
       },
       {
-        duration: 500, // Durée : 500ms
-        easing: 'ease-in-out', // Courbe d'animation
+        duration: 600, // Durée un peu plus longue pour profiter de l'effet : 600ms
+        easing: 'cubic-bezier(0.4, 0, 0.2, 1)', // Courbe plus douce
         pseudoElement: '::view-transition-new(root)', // Cible la nouvelle vue
       }
     )
 
-    // RÉACTIVE les transitions ClientRouter avec un petit délai pour éviter le flash
+    // NETTOIE tout à la fin
     animation.addEventListener('finish', () => {
+      // Fade out du gradient
+      gradientOverlay.style.transition = 'opacity 0.3s ease-out'
+      gradientOverlay.style.opacity = '0'
+
       setTimeout(() => {
-        document.getElementById('temp-disable-transitions')?.remove()
-      }, 50) // Délai de 50ms pour stabiliser
+        // Supprime les éléments
+        gradientOverlay.remove()
+        document.getElementById('magical-theme-transition')?.remove()
+      }, 300) // Attend la fin du fade out
     })
   })
 }
