@@ -1,0 +1,180 @@
+---
+import ImageMod from '@/ui/atoms/ImageMod.astro'
+import Badge from '@/ui/atoms/Badge.astro'
+import Checkbox from '@/ui/atoms/Checkbox.astro'
+import { markdownify } from '@/utils/textConverter'
+import { getEntry } from 'astro:content'
+
+interface Section {
+  title: string
+  content: string
+  image?: string
+}
+
+const aboutEntry = await getEntry('about', 'index')
+if (!aboutEntry) {
+  throw new Error('About entry not found! Check src/content/about/index.mdx')
+}
+
+const { differences } = aboutEntry.data as { differences: Section }
+---
+
+<section class="section-sm">
+  <div class="container">
+    <div class="grid grid-cols-1 items-center gap-8 lg:grid-cols-[5fr_8fr] lg:gap-12 xl:gap-16">
+      <!-- Content avec avantages concrets -->
+      <div class="order-2 space-y-8 lg:order-2 lg:pl-8">
+        <div class="space-y-6">
+          <h2 class="text-3xl font-bold leading-tight text-base-content md:text-4xl lg:text-5xl">
+            {differences.title}
+          </h2>
+
+          <div class="space-y-4">
+            <p class="text-lg text-base-content/80 leading-relaxed">
+              Travailler avec moi, c'est choisir une approche <strong class="text-primary">différente</strong>.
+              Une approche où votre <em class="text-secondary">bien-être mental</em> est aussi important
+              que votre productivité. 🌸
+            </p>
+
+            <p class="text-base text-base-content/70 leading-relaxed">
+              Je ne vous propose pas de recettes miracle, mais des <strong>solutions personnalisées</strong>
+              qui respectent votre rythme et votre personnalité.
+            </p>
+          </div>
+        </div>
+
+        <!-- Mes forces uniques -->
+        <div class="space-y-6">
+          <h3 class="text-xl font-semibold text-base-content">Ce qui fait la différence :</h3>
+
+          <div class="space-y-4">
+            <!-- Empathie et écoute -->
+            <div class="group p-4 rounded-xl bg-gradient-to-r from-primary/5 to-transparent border border-primary/10 hover:border-primary/20 transition-colors">
+              <div class="flex items-start space-x-3">
+                <Checkbox checked disabled color="primary" size="sm" />
+                <div class="space-y-2">
+                  <h4 class="font-semibold text-base-content flex items-center gap-2">
+                    💜 Approche empathique
+                    <Badge label="Unique" variant="primary" />
+                  </h4>
+                  <p class="text-sm text-base-content/70">
+                    Je comprends vos blocages parce que je les ai vécus. Pas de jugement,
+                    juste de l'accompagnement bienveillant.
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            <!-- Simplicité -->
+            <div class="group p-4 rounded-xl bg-gradient-to-r from-secondary/5 to-transparent border border-secondary/10 hover:border-secondary/20 transition-colors">
+              <div class="flex items-start space-x-3">
+                <Checkbox checked disabled color="secondary" size="sm" />
+                <div class="space-y-2">
+                  <h4 class="font-semibold text-base-content flex items-center gap-2">
+                    🎯 Simplicité radicale
+                    <Badge label="Efficace" variant="secondary" />
+                  </h4>
+                  <p class="text-sm text-base-content/70">
+                    Des solutions élégantes qui éliminent le superflu.
+                    Moins d'outils, plus de résultats.
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            <!-- Innovation douce -->
+            <div class="group p-4 rounded-xl bg-gradient-to-r from-accent/5 to-transparent border border-accent/10 hover:border-accent/20 transition-colors">
+              <div class="flex items-start space-x-3">
+                <Checkbox checked disabled color="accent" size="sm" />
+                <div class="space-y-2">
+                  <h4 class="font-semibold text-base-content flex items-center gap-2">
+                    🌸 Innovation douce
+                    <Badge label="Révolutionnaire" variant="neutral" />
+                  </h4>
+                  <p class="text-sm text-base-content/70">
+                    J'invente des méthodes qui respectent votre rythme naturel.
+                    Pas de course contre la montre, mais de l'efficacité sereine.
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            <!-- Suivi personnalisé -->
+            <div class="group p-4 rounded-xl bg-gradient-to-r from-success/5 to-transparent border border-success/10 hover:border-success/20 transition-colors">
+              <div class="flex items-start space-x-3">
+                <Checkbox checked disabled color="success" size="sm" />
+                <div class="space-y-2">
+                  <h4 class="font-semibold text-base-content flex items-center gap-2">
+                    ⚡ Résultats durables
+                    <Badge label="Prouvé" variant="secondary" />
+                  </h4>
+                  <p class="text-sm text-base-content/70">
+                    Mes clients gardent leurs systèmes des années.
+                    Parce qu'ils sont conçus pour évoluer avec vous.
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Témoignage subtil -->
+        <div class="relative">
+          <div class="bg-base-200/50 rounded-2xl p-6 backdrop-blur-sm">
+            <p class="text-base italic text-base-content/80 mb-3">
+              "Enfin quelqu'un qui comprend que productivité ≠ stress !
+              Jérémie a transformé ma façon de voir l'organisation."
+            </p>
+            <div class="flex items-center justify-between">
+              <footer class="text-sm text-base-content/60">
+                — Sarah, entrepreneure
+              </footer>
+              <div class="flex space-x-1">
+                <span class="text-yellow-400">⭐</span>
+                <span class="text-yellow-400">⭐</span>
+                <span class="text-yellow-400">⭐</span>
+                <span class="text-yellow-400">⭐</span>
+                <span class="text-yellow-400">⭐</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Image avec badges flottants -->
+      <div class="order-1 flex justify-center lg:order-1 lg:justify-start">
+        <div class="relative">
+          <div
+            class="mask mask-diamond h-80 w-80 overflow-hidden shadow-xl transition-all duration-300 hover:scale-105 hover:shadow-2xl md:h-96 md:w-96 lg:h-[400px] lg:w-[400px]"
+          >
+            {
+              differences.image && (
+                <ImageMod
+                  src={differences.image}
+                  alt={differences.title}
+                  width={600}
+                  height={600}
+                  format="webp"
+                  class="h-full w-full object-cover"
+                />
+              )
+            }
+          </div>
+          <!-- Subtle accent background -->
+          <div class="absolute -inset-4 -z-10 rounded-3xl bg-gradient-to-br from-secondary/10 to-accent/10 blur-xl"></div>
+
+          <!-- Floating achievement badges -->
+          <div class="absolute -top-6 -left-4">
+            <Badge label="🏆 Expert" variant="primary" />
+          </div>
+          <div class="absolute -bottom-4 -right-6">
+            <Badge label="💡 Innovateur" variant="secondary" />
+          </div>
+          <div class="absolute top-1/2 -right-8 -translate-y-1/2">
+            <Badge label="🤝 Bienveillant" variant="neutral" />
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

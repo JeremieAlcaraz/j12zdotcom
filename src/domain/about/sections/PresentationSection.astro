@@ -1,0 +1,115 @@
+---
+import ImageMod from '@/ui/atoms/ImageMod.astro'
+import Badge from '@/ui/atoms/Badge.astro'
+import Checkbox from '@/ui/atoms/Checkbox.astro'
+import { markdownify } from '@/utils/textConverter'
+import { getEntry } from 'astro:content'
+
+interface Section {
+  title: string
+  content: string
+  image?: string
+}
+
+const aboutEntry = await getEntry('about', 'index')
+if (!aboutEntry) {
+  throw new Error('About entry not found! Check src/content/about/index.mdx')
+}
+
+const { presentation } = aboutEntry.data as { presentation: Section }
+---
+
+<section class="section-sm">
+  <div class="container">
+    <div class="grid grid-cols-1 items-center gap-8 lg:grid-cols-[5fr_8fr] lg:gap-12 xl:gap-16">
+      <!-- Image avec proportions harmonieuses -->
+      <div class="flex justify-center lg:justify-start">
+        <div class="relative">
+          <div
+            class="mask mask-squircle h-80 w-80 overflow-hidden shadow-xl transition-all duration-300 hover:scale-105 hover:shadow-2xl md:h-96 md:w-96 lg:h-[400px] lg:w-[400px]"
+          >
+            {
+              presentation.image && (
+                <ImageMod
+                  src={presentation.image}
+                  alt={presentation.title}
+                  width={600}
+                  height={600}
+                  format="webp"
+                  class="h-full w-full object-cover"
+                />
+              )
+            }
+          </div>
+          <!-- Subtle accent background -->
+          <div class="absolute -inset-4 -z-10 rounded-3xl bg-gradient-to-br from-primary/10 to-secondary/10 blur-xl"></div>
+
+          <!-- Floating badges -->
+          <div class="absolute -top-4 -right-4">
+            <Badge label="💜 Douceur" variant="primary" />
+          </div>
+          <div class="absolute -bottom-4 -left-4">
+            <Badge label="🌸 Productivité" variant="secondary" />
+          </div>
+        </div>
+      </div>
+
+      <!-- Content avec typographie harmonieuse -->
+      <div class="space-y-8 lg:pl-8">
+        <div class="space-y-6">
+          <h2 class="text-3xl font-bold leading-tight text-base-content md:text-4xl lg:text-5xl">
+            {presentation.title}
+          </h2>
+
+          <div class="space-y-4">
+            <p class="text-lg text-base-content/80 leading-relaxed md:text-xl">
+              Salut ! Je m'appelle <strong class="text-primary font-semibold">Jérémie</strong>,
+              créateur du concept de <em class="text-secondary font-medium">Productivité et d'Organisation douce</em>. 🌸
+            </p>
+
+            <p class="text-base text-base-content/70 leading-relaxed">
+              Ma mission ? Vous aider à créer des <strong>outils numériques qui réduisent votre charge mentale</strong>
+              plutôt que de l'augmenter. Parce que la technologie devrait être un allié, pas un tyran ! 💜
+            </p>
+          </div>
+        </div>
+
+        <!-- Mes valeurs avec checkboxes -->
+        <div class="space-y-4">
+          <h3 class="text-xl font-semibold text-base-content mb-4">Ce qui me guide au quotidien :</h3>
+
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+            <div class="flex items-center space-x-3">
+              <Checkbox checked disabled color="primary" size="sm" />
+              <span class="text-base-content/80">Simplicité avant tout</span>
+            </div>
+
+            <div class="flex items-center space-x-3">
+              <Checkbox checked disabled color="secondary" size="sm" />
+              <span class="text-base-content/80">Écoute et empathie</span>
+            </div>
+
+            <div class="flex items-center space-x-3">
+              <Checkbox checked disabled color="accent" size="sm" />
+              <span class="text-base-content/80">Innovation douce</span>
+            </div>
+
+            <div class="flex items-center space-x-3">
+              <Checkbox checked disabled color="success" size="sm" />
+              <span class="text-base-content/80">Impact positif</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Call to action subtil -->
+        <div class="mt-8 p-6 rounded-2xl bg-gradient-to-r from-primary/5 to-secondary/5 border border-primary/10">
+          <p class="text-base text-base-content/80 leading-relaxed">
+            <strong>Mon rêve ?</strong> Un monde où chacun peut s'organiser sans stress,
+            avec des outils qui s'adaptent à <em>votre</em> façon de penser,
+            pas l'inverse. ✨
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

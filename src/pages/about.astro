@@ -1,8 +1,16 @@
 ---
 import BaseLayout from '@/layouts/Base.astro'
-import AboutMe from '@/domain/shared/sections/AboutSection.astro'
+import PresentationSection from '@/domain/about/sections/PresentationSection.astro'
+import StorySection from '@/domain/about/sections/StorySection.astro'
+import DifferencesSection from '@/domain/about/sections/DifferencesSection.astro'
+import CredentialsSection from '@/domain/about/sections/CredentialsSection.astro'
 ---
 
 <BaseLayout title="À propos – Mon Site">
-  <AboutMe />
+  <section class="space-y-24 py-16">
+    <PresentationSection />
+    <StorySection />
+    <DifferencesSection />
+    <CredentialsSection />
+  </section>
 </BaseLayout>
