@@ -1,0 +1,42 @@
+---
+import ImageMod from '@/ui/atoms/ImageMod.astro'
+import { markdownify } from '@/utils/textConverter'
+import { getEntry } from 'astro:content'
+
+interface Section {
+  title: string
+  content: string
+  image?: string
+}
+
+const aboutEntry = await getEntry('about', 'index')
+if (!aboutEntry) {
+  throw new Error('About entry not found! Check src/content/about/index.mdx')
+}
+
+const { story } = aboutEntry.data as { story: Section }
+---
+
+<div class="grid grid-cols-1 items-center gap-8 lg:grid-cols-2">
+  <div class="order-2 lg:order-1">
+    <h2 class="mb-4 text-3xl font-bold">{story.title}</h2>
+    <p class="leading-relaxed" set:html={markdownify(story.content)} />
+  </div>
+  <div class="order-1 flex justify-center lg:order-2 lg:justify-end">
+    <div
+      class="mask mask-hexagon h-64 w-64 overflow-hidden shadow-lg transition-transform duration-300 hover:scale-105"
+    >
+      {
+        story.image && (
+          <ImageMod
+            src={story.image}
+            alt={story.title}
+            width={512}
+            height={512}
+            class="h-full w-full object-cover"
+          />
+        )
+      }
+    </div>
+  </div>
+</div>
