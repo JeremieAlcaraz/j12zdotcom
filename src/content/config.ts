@@ -57,23 +57,193 @@ const aboutCollection = defineCollection({
   schema: z.object({
     presentation: z.object({
       title: z.string(),
-      content: z.string(),
       image: z.string(),
-    }),
-    story: z.object({
-      title: z.string(),
-      content: z.string(),
-      image: z.string(),
+      introduction: z.object({
+        greeting: z.string(),
+        mission: z.string(),
+      }),
+      values: z.object({
+        title: z.string(),
+        items: z.array(
+          z.object({
+            label: z.string(),
+            color: z.enum([
+              'primary',
+              'secondary',
+              'accent',
+              'success',
+              'warning',
+              'error',
+              'info',
+              'neutral',
+            ]),
+          })
+        ),
+      }),
+      callToAction: z.object({
+        title: z.string(),
+        content: z.string(),
+      }),
     }),
     differences: z.object({
       title: z.string(),
-      content: z.string(),
       image: z.string(),
+      introduction: z.object({
+        main: z.string(),
+        secondary: z.string(),
+      }),
+      strengths: z.object({
+        title: z.string(),
+        items: z.array(
+          z.object({
+            icon: z.string(),
+            title: z.string(),
+            badge: z.string(),
+            badgeVariant: z.enum(['primary', 'secondary', 'neutral']),
+            description: z.string(),
+            color: z.enum([
+              'primary',
+              'secondary',
+              'accent',
+              'success',
+              'warning',
+              'error',
+              'info',
+              'neutral',
+            ]),
+          })
+        ),
+      }),
+      testimonial: z.object({
+        quote: z.string(),
+        author: z.string(),
+        stars: z.number(),
+      }),
+    }),
+    story: z.object({
+      title: z.string(),
+      image: z.string(),
+      introduction: z.object({
+        frustration: z.string(),
+        realization: z.string(),
+      }),
+      revelations: z.object({
+        title: z.string(),
+        items: z.array(
+          z.object({
+            title: z.string(),
+            description: z.string(),
+            color: z.enum([
+              'primary',
+              'secondary',
+              'accent',
+              'success',
+              'warning',
+              'error',
+              'info',
+              'neutral',
+            ]),
+          })
+        ),
+      }),
+      evolution: z.object({
+        approach: z.string(),
+        mission: z.string(),
+      }),
+      quote: z.object({
+        text: z.string(),
+        author: z.string(),
+      }),
     }),
     credentials: z.object({
       title: z.string(),
-      content: z.string(),
-      image: z.string().optional(),
+      description: z.string(),
+      accomplishments: z.array(
+        z.object({
+          icon: z.string(),
+          title: z.string(),
+          description: z.string(),
+          badge: z.string(),
+          badgeVariant: z.enum(['primary', 'secondary', 'neutral']),
+          action: z
+            .object({
+              label: z.string(),
+              url: z.string(),
+            })
+            .optional(),
+        })
+      ),
+      statistics: z.object({
+        title: z.string(),
+        items: z.array(
+          z.object({
+            value: z.string(),
+            label: z.string(),
+            color: z.enum([
+              'primary',
+              'secondary',
+              'accent',
+              'success',
+              'warning',
+              'error',
+              'info',
+              'neutral',
+            ]),
+          })
+        ),
+      }),
+      skills: z.object({
+        technical: z.object({
+          title: z.string(),
+          items: z.array(
+            z.object({
+              label: z.string(),
+              color: z.enum([
+                'primary',
+                'secondary',
+                'accent',
+                'success',
+                'warning',
+                'error',
+                'info',
+                'neutral',
+              ]),
+            })
+          ),
+        }),
+        human: z.object({
+          title: z.string(),
+          items: z.array(
+            z.object({
+              label: z.string(),
+              color: z.enum([
+                'primary',
+                'secondary',
+                'accent',
+                'success',
+                'warning',
+                'error',
+                'info',
+                'neutral',
+              ]),
+            })
+          ),
+        }),
+      }),
+      continuousLearning: z.object({
+        title: z.string(),
+        description: z.string(),
+        badges: z.array(
+          z.object({
+            label: z.string(),
+            variant: z.enum(['primary', 'secondary', 'neutral']),
+          })
+        ),
+        quote: z.object({
+          text: z.string(),
+          author: z.string(),
+        }),
+      }),
     }),
   }),
 })

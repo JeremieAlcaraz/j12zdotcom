@@ -5,18 +5,12 @@ import Checkbox from '@/ui/atoms/Checkbox.astro'
 import { markdownify } from '@/utils/textConverter'
 import { getEntry } from 'astro:content'
 
-interface Section {
-  title: string
-  content: string
-  image?: string
-}
-
 const aboutEntry = await getEntry('about', 'index')
 if (!aboutEntry) {
   throw new Error('About entry not found! Check src/content/about/index.mdx')
 }
 
-const { presentation } = aboutEntry.data as { presentation: Section }
+const { presentation } = aboutEntry.data
 ---
 
 <section class="section-sm">
@@ -62,51 +56,32 @@ const { presentation } = aboutEntry.data as { presentation: Section }
           </h2>
 
           <div class="space-y-4">
-            <p class="text-lg text-base-content/80 leading-relaxed md:text-xl">
-              Salut ! Je m'appelle <strong class="text-primary font-semibold">Jérémie</strong>,
-              créateur du concept de <em class="text-secondary font-medium">Productivité et d'Organisation douce</em>. 🌸
+            <p class="text-lg text-base-content/80 leading-relaxed md:text-xl" set:html={markdownify(presentation.introduction.greeting)}>
             </p>
 
-            <p class="text-base text-base-content/70 leading-relaxed">
-              Ma mission ? Vous aider à créer des <strong>outils numériques qui réduisent votre charge mentale</strong>
-              plutôt que de l'augmenter. Parce que la technologie devrait être un allié, pas un tyran ! 💜
+            <p class="text-base text-base-content/70 leading-relaxed" set:html={markdownify(presentation.introduction.mission)}>
             </p>
           </div>
         </div>
 
         <!-- Mes valeurs avec checkboxes -->
         <div class="space-y-4">
-          <h3 class="text-xl font-semibold text-base-content mb-4">Ce qui me guide au quotidien :</h3>
+          <h3 class="text-xl font-semibold text-base-content mb-4">{presentation.values.title}</h3>
 
           <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
-            <div class="flex items-center space-x-3">
-              <Checkbox checked disabled color="primary" size="sm" />
-              <span class="text-base-content/80">Simplicité avant tout</span>
-            </div>
-
-            <div class="flex items-center space-x-3">
-              <Checkbox checked disabled color="secondary" size="sm" />
-              <span class="text-base-content/80">Écoute et empathie</span>
-            </div>
-
-            <div class="flex items-center space-x-3">
-              <Checkbox checked disabled color="accent" size="sm" />
-              <span class="text-base-content/80">Innovation douce</span>
-            </div>
-
-            <div class="flex items-center space-x-3">
-              <Checkbox checked disabled color="success" size="sm" />
-              <span class="text-base-content/80">Impact positif</span>
-            </div>
+            {presentation.values.items.map((value) => (
+              <div class="flex items-center space-x-3">
+                <Checkbox checked disabled color={value.color} size="sm" />
+                <span class="text-base-content/80">{value.label}</span>
+              </div>
+            ))}
           </div>
         </div>
 
         <!-- Call to action subtil -->
         <div class="mt-8 p-6 rounded-2xl bg-gradient-to-r from-primary/5 to-secondary/5 border border-primary/10">
           <p class="text-base text-base-content/80 leading-relaxed">
-            <strong>Mon rêve ?</strong> Un monde où chacun peut s'organiser sans stress,
-            avec des outils qui s'adaptent à <em>votre</em> façon de penser,
-            pas l'inverse. ✨
+            <strong>{presentation.callToAction.title}</strong> <span set:html={markdownify(presentation.callToAction.content)}></span>
           </p>
         </div>
       </div>
