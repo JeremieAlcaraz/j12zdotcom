@@ -26,6 +26,7 @@ export default defineConfig({
         {
           '@/shortcodes/generic/Accordion.shortcode.astro': [['default', 'Accordion']],
           '@/shortcodes/generic/Button.shortcode.astro': [['default', 'Button']],
+          '@/shortcodes/generic/DotLottiePlayer.shortcode.astro': [['default', 'DotLottiePlayer']],
           '@/shortcodes/generic/Icon.shortcode.astro': [['default', 'Icon']],
           '@/shortcodes/generic/LottiePlayer.shortcode.astro': [['default', 'LottiePlayer']],
           '@/shortcodes/generic/Notice.shortcode.astro': [['default', 'Notice']],

@@ -2,12 +2,23 @@
 import StyleGuideLayout from '@/domain/style-guide/layouts/StyleGuideLayout.astro'
 import ComponentGallery from '@/domain/dev/ComponentGallery.astro'
 import Icon from '@/ui/atoms/Icon.astro'
+import LottiePlayer from '@/ui/atoms/LottiePlayer.astro'
+import DotLottiePlayer from '@/ui/atoms/DotLottiePlayer.astro'
 
 const modules = import.meta.glob('@/shortcodes/generic/*.shortcode.astro', { eager: true })
 
 const demoProps = {
   Accordion: { title: 'Titre', children: "Contenu de l'accordéon." },
   Button: { label: 'Visiter Astro', link: 'https://astro.build' },
+  DotLottiePlayer: {
+    src: '/animations/watermelon-loader.lottie',
+    width: 150,
+    height: 150,
+    loop: true,
+    autoplay: true,
+    controls: true,
+    class: 'bg-base-200 rounded-lg'
+  },
   Icon: { name: 'cat', size: 24, class: 'text-primary', title: 'Chat mignon' },
   LottiePlayer: {
     src: '/animations/watermelon-simple.json',
@@ -58,6 +69,47 @@ const demoProps = {
           <Icon name="cat" class="mr-2" title="Chat" />
           <Icon name="music" title="Musique" />
         </p>
+      </div>
+    </div>
+  </div>
+
+  <div class="mt-12 p-6 bg-base-100 rounded-lg">
+    <h2 class="text-2xl font-bold mb-6">Test des animations Lottie dans différents formats</h2>
+
+    <div class="space-y-6">
+      <div>
+        <h3 class="text-lg font-bold mb-3">Animation JSON classique</h3>
+        <p class="mb-3">Format standard supporté par lottie-web :</p>
+        <LottiePlayer
+          src="/animations/watermelon-simple.json"
+          width={120}
+          height={120}
+          loop={true}
+          autoplay={true}
+          class="bg-base-200 rounded-lg mx-auto"
+        />
+      </div>
+
+      <div>
+        <h3 class="text-lg font-bold mb-3">Animation .lottie (dotLottie)</h3>
+        <p class="mb-3">Format compressé supporté par @lottiefiles/dotlottie-web :</p>
+        <DotLottiePlayer
+          src="/animations/watermelon-loader.lottie"
+          width={120}
+          height={120}
+          loop={true}
+          autoplay={true}
+          controls={true}
+          class="bg-base-200 rounded-lg mx-auto"
+        />
+      </div>
+
+      <div class="bg-info/10 p-4 rounded-lg">
+        <h4 class="font-semibold mb-2">📝 Différences entre les formats :</h4>
+        <ul class="text-sm space-y-1">
+          <li><strong>.json</strong> : Format texte standard, plus lourd mais universel</li>
+          <li><strong>.lottie</strong> : Format binaire compressé, plus léger, peut contenir plusieurs animations</li>
+        </ul>
       </div>
     </div>
   </div>

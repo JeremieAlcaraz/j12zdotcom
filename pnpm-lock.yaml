@@ -35,6 +35,9 @@ importers:
       '@justinribeiro/lite-youtube':
         specifier: ^1.8.0
         version: 1.8.2
+      '@lottiefiles/dotlottie-web':
+        specifier: ^0.50.2
+        version: 0.50.2
       astro:
         specifier: 5.7.8
         version: 5.7.8(@types/node@24.0.10)(jiti@2.4.2)(lightningcss@1.30.1)(rollup@4.44.1)(sass@1.89.2)(typescript@5.8.3)(yaml@2.8.0)
@@ -1065,6 +1068,9 @@ packages:
 
   '@justinribeiro/lite-youtube@1.8.2':
     resolution: {integrity: sha512-wayU5sYA/e5J/1j7zFk8Hoi72Hk67Axy7Za2OFRzsytd9gvtv7ZeWhmdi2lOGbnXwMZHkeMsqxRGFxH60lo5bg==}
+
+  '@lottiefiles/dotlottie-web@0.50.2':
+    resolution: {integrity: sha512-CKABl0kI9yY48FamEMDsYWKQQWP4VgInhwOSG/1Q2I7gOSHGv6YalNiOkiYRjVznEjavuRvfarX6cMKhcbZKew==}
 
   '@mdx-js/mdx@3.1.0':
     resolution: {integrity: sha512-/QxEhPAvGwbQmy1Px8F899L5Uc2KZ6JtXwlCgJmjSTBedwOZkByYcBG4GceIGPXRDsmfxhHazuS+hlOShRLeDw==}
@@ -5667,6 +5673,8 @@ snapshots:
       '@jridgewell/sourcemap-codec': 1.5.4
 
   '@justinribeiro/lite-youtube@1.8.2': {}
+
+  '@lottiefiles/dotlottie-web@0.50.2': {}
 
   '@mdx-js/mdx@3.1.0(acorn@8.15.0)':
     dependencies:

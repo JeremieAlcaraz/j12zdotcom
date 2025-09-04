@@ -54,3 +54,24 @@ Voici une animation Lottie intégrée dans du contenu MDX :
 />
 
 Cette animation se charge automatiquement et fonctionne parfaitement dans du contenu MDX !
+
+## Animation .lottie (DotLottie)
+
+Et voici le fichier .lottie original avec le lecteur spécialisé :
+
+<DotLottiePlayer 
+  src="/animations/watermelon-loader.lottie"
+  width={120}
+  height={120}
+  loop={true}
+  autoplay={true}
+  controls={true}
+  class="mx-auto bg-base-200 rounded-lg"
+/>
+
+### Comparaison des formats
+
+- **JSON (.json)** : Format texte lisible, universel, plus lourd
+- **DotLottie (.lottie)** : Format binaire compressé, plus léger, peut contenir plusieurs animations
+
+Les deux formats fonctionnent parfaitement dans MDX avec leurs composants respectifs !

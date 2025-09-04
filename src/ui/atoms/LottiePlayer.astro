@@ -129,7 +129,7 @@ const uniqueId = id || `lottie-${Math.random().toString(36).substring(2, 11)}`;
 
     } catch (error) {
       console.error(`[LottiePlayer] Erreur d'initialisation pour ${src}:`, error);
-      container.innerHTML = `<div class="text-error text-center p-4">❌ Erreur d'initialisation<br>${error.message}</div>`;
+      container.innerHTML = `<div class="text-error text-center p-4">❌ Erreur d'initialisation<br>${error instanceof Error ? error.message : 'Erreur inconnue'}</div>`;
     }
   }
 

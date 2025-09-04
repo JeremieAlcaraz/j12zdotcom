@@ -6,6 +6,7 @@ import Checkbox from '@/ui/atoms/Checkbox.astro'
 import Section from '@/ui/atoms/Section.astro'
 import Icon from '@/ui/atoms/Icon.astro'
 import LottiePlayer from '@/ui/atoms/LottiePlayer.astro'
+import DotLottiePlayer from '@/ui/atoms/DotLottiePlayer.astro'
 
 const modules = import.meta.glob('@/ui/atoms/**/*.astro', { eager: true })
 
@@ -49,7 +50,7 @@ const itemColors = [
   <ComponentGallery
     modules={modules}
     demoProps={demoProps}
-    exclude={['Section', 'Loading', 'Checkbox', 'Icon', 'LottiePlayer']}
+    exclude={['Section', 'Loading', 'Checkbox', 'Icon', 'LottiePlayer', 'DotLottiePlayer']}
   />
 
   <Section name="Loading">
@@ -217,6 +218,23 @@ const itemColors = [
             class="bg-base-200 rounded-lg"
           />
         </div>
+      </div>
+      <div>
+        <h3 class="mb-2 text-lg font-bold">Animation .lottie (DotLottie)</h3>
+        <div class="flex flex-wrap items-center gap-4">
+          <DotLottiePlayer
+            src="/animations/watermelon-loader.lottie"
+            width={150}
+            height={150}
+            loop={true}
+            autoplay={true}
+            controls={true}
+            class="bg-base-200 rounded-lg"
+          />
+        </div>
+        <p class="text-sm text-base-content/70 mt-2">
+          Test avec le fichier .lottie original utilisant @lottiefiles/dotlottie-web
+        </p>
       </div>
     </div>
   </Section>

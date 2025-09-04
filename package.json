@@ -38,6 +38,7 @@
     "@astrojs/svelte": "^7.1.0",
     "@digi4care/astro-google-tagmanager": "1.4.0",
     "@justinribeiro/lite-youtube": "^1.8.0",
+    "@lottiefiles/dotlottie-web": "^0.50.2",
     "astro": "5.7.8",
     "astro-font": "1.1.0",
     "daisyui": "^5.0.43",
