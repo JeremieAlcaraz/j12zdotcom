@@ -1,6 +1,5 @@
 ---
-import SunIcon from '@/ui/atoms/icons/SunIcon.astro'
-import MoonIcon from '@/ui/atoms/icons/MoonIcon.astro'
+import Icon from '@/ui/atoms/Icon.astro'
 
 const navItems = [
   { href: '/style-guide/atoms', label: 'Atoms' },
@@ -22,8 +21,8 @@ const navItems = [
 
   <!-- BOUTON DE CHANGEMENT DE THÈME -->
   <button id="theme-toggle" class="btn btn-ghost btn-circle">
-    <SunIcon id="sun-icon" title="Activer le mode clair" />
-    <MoonIcon id="moon-icon" class="hidden" title="Activer le mode sombre" />
+    <Icon name="sun" id="sun-icon" size={20} class="inline-block" title="Activer le mode clair" />
+    <Icon name="moon" id="moon-icon" size={20} class="inline-block hidden" title="Activer le mode sombre" />
   </button>
 </nav>
 

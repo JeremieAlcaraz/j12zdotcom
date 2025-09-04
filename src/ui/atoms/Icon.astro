@@ -1,0 +1,55 @@
+---
+/**
+ * Icon.astro
+ * - Utilise `import.meta.glob` pour importer tous les SVG du dossier `./icons` en tant que composants Astro.
+ * - Affiche le composant SVG importé dynamiquement.
+ * - Cette méthode est robuste et compatible avec MDX.
+ */
+import type { AstroComponentFactory } from 'astro/runtime/server/index.js';
+
+// Importer les SVG en tant que composants Astro
+const modules = import.meta.glob('./icons/*.svg', { eager: true }) as Record<
+  string,
+  { default: AstroComponentFactory }
+>;
+
+const registry = Object.fromEntries(
+  Object.entries(modules).map(([path, astroComponent]) => {
+    const name = path.split('/').pop()!.replace('.svg', '');
+    return [name, astroComponent.default];
+  })
+) as Record<string, AstroComponentFactory>;
+
+type IconName = keyof typeof registry;
+
+interface Props {
+  name: IconName;
+  size?: number | string;   // ex: 24 | "1.5rem"
+  title?: string;           // accessibilité
+  class?: string;
+  id?: string;              // pour ciblage JavaScript
+}
+
+const { name, size = 24, title, class: klass, id, ...rest } = Astro.props as Props & Record<string, unknown>;
+
+const SvgComponent = registry[name];
+
+if (!SvgComponent) {
+  console.warn(`[Icon] Unknown icon: ${String(name)}`);
+}
+---
+
+{SvgComponent ? (
+  <span
+    class:list={['inline-block', klass]}
+    style={`width:${typeof size === 'number' ? size + 'px' : size};height:${typeof size === 'number' ? size + 'px' : size};`}
+    role={title ? 'img' : 'presentation'}
+    aria-label={title || undefined}
+    {...id && { id }}
+    {...rest}
+  >
+    <SvgComponent />
+  </span>
+) : (
+  <span class="inline-block w-[1em] h-[1em]" aria-hidden="true"></span>
+)}

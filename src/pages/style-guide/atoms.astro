@@ -4,6 +4,7 @@ import ComponentGallery from '@/domain/dev/ComponentGallery.astro'
 import Loading from '@/ui/atoms/Loader.astro'
 import Checkbox from '@/ui/atoms/Checkbox.astro'
 import Section from '@/ui/atoms/Section.astro'
+import Icon from '@/ui/atoms/Icon.astro'
 
 const modules = import.meta.glob('@/ui/atoms/**/*.astro', { eager: true })
 
@@ -26,6 +27,7 @@ const demoProps = {
     { tone: 'warning', children: 'Heads up!' },
     { tone: 'error', children: 'Something went wrong' },
   ],
+  Icon: { name: 'cat', size: 24, class: 'text-primary', title: 'Chat mignon' },
 }
 
 const loadingVariants = ['spinner', 'dots', 'ring', 'ball', 'bars', 'infinity'] as const
@@ -46,7 +48,7 @@ const itemColors = [
   <ComponentGallery
     modules={modules}
     demoProps={demoProps}
-    exclude={['Section', 'Loading', 'Checkbox']}
+    exclude={['Section', 'Loading', 'Checkbox', 'Icon']}
   />
 
   <Section name="Loading">
@@ -91,6 +93,44 @@ const itemColors = [
         <div class="flex flex-wrap items-center gap-4">
           <Checkbox checked />
           <Checkbox disabled />
+        </div>
+      </div>
+    </div>
+  </Section>
+
+  <Section name="Icon">
+    <div class="grid grid-cols-1 gap-4">
+      <div>
+        <h3 class="mb-2 text-lg font-bold">Icônes disponibles</h3>
+        <div class="flex flex-wrap items-center gap-4">
+          <Icon name="cat" size="24" class="text-base-content" title="Chat" />
+          <Icon name="music" size="24" class="text-base-content" title="Musique" />
+          <Icon name="sun" size="24" class="text-base-content" title="Soleil" />
+          <Icon name="moon" size="24" class="text-base-content" title="Lune" />
+          <Icon name="chevron-left" size="24" class="text-base-content" title="Précédent" />
+          <Icon name="chevron-right" size="24" class="text-base-content" title="Suivant" />
+        </div>
+      </div>
+      <div>
+        <h3 class="mb-2 text-lg font-bold">Tailles</h3>
+        <div class="flex flex-wrap items-center gap-4">
+          <Icon name="cat" size="16" class="text-base-content" title="Petit" />
+          <Icon name="cat" size="20" class="text-base-content" title="Moyen" />
+          <Icon name="cat" size="24" class="text-base-content" title="Normal" />
+          <Icon name="cat" size="32" class="text-base-content" title="Grand" />
+          <Icon name="cat" size="48" class="text-base-content" title="Très grand" />
+        </div>
+      </div>
+      <div>
+        <h3 class="mb-2 text-lg font-bold">Couleurs</h3>
+        <div class="flex flex-wrap items-center gap-4">
+          <Icon name="music" size="24" class="text-primary" title="Primaire" />
+          <Icon name="music" size="24" class="text-secondary" title="Secondaire" />
+          <Icon name="music" size="24" class="text-accent" title="Accent" />
+          <Icon name="music" size="24" class="text-info" title="Info" />
+          <Icon name="music" size="24" class="text-success" title="Succès" />
+          <Icon name="music" size="24" class="text-warning" title="Attention" />
+          <Icon name="music" size="24" class="text-error" title="Erreur" />
         </div>
       </div>
     </div>

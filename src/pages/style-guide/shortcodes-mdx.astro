@@ -1,12 +1,14 @@
 ---
 import StyleGuideLayout from '@/domain/style-guide/layouts/StyleGuideLayout.astro'
 import ComponentGallery from '@/domain/dev/ComponentGallery.astro'
+import Icon from '@/ui/atoms/Icon.astro'
 
 const modules = import.meta.glob('@/shortcodes/generic/*.shortcode.astro', { eager: true })
 
 const demoProps = {
   Accordion: { title: 'Titre', children: "Contenu de l'accordéon." },
   Button: { label: 'Visiter Astro', link: 'https://astro.build' },
+  Icon: { name: 'cat', size: 24, class: 'text-primary', title: 'Chat mignon' },
   Notice: { type: 'tip', children: 'Une petite astuce.' },
   Video: {
     title: 'Sample',
@@ -20,4 +22,34 @@ const demoProps = {
 
 <StyleGuideLayout title="Style Guide | Shortcodes MDX">
   <ComponentGallery modules={modules} demoProps={demoProps} />
+
+  <div class="mt-12 p-6 bg-base-100 rounded-lg">
+    <h2 class="text-2xl font-bold mb-6">Test des icônes dans différents contextes</h2>
+
+    <div class="space-y-4">
+      <p>Icônes avec différentes tailles :
+        <Icon name="cat" size="16" class="text-primary" title="Petit chat" />
+        <Icon name="music" size="24" class="text-secondary ml-2" title="Musique" />
+        <Icon name="sun" size="32" class="text-warning ml-2" title="Soleil" />
+      </p>
+
+      <p>Icônes de navigation :
+        <Icon name="chevron-left" class="text-info mr-2" title="Précédent" />
+        Navigation
+        <Icon name="chevron-right" class="text-info ml-2" title="Suivant" />
+      </p>
+
+      <p>Mode sombre/clair :
+        <Icon name="moon" class="text-base-content mr-2" title="Mode sombre" />
+        <Icon name="sun" class="text-base-content" title="Mode clair" />
+      </p>
+
+      <div class="bg-primary text-primary-content p-4 rounded">
+        <p>Icônes héritent de la couleur du conteneur :
+          <Icon name="cat" class="mr-2" title="Chat" />
+          <Icon name="music" title="Musique" />
+        </p>
+      </div>
+    </div>
+  </div>
 </StyleGuideLayout>

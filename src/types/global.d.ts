@@ -1,9 +1,5 @@
 declare module '*.svg' {
-  const src: string
-  export default src
-}
-
-declare module '*.astro' {
-  const Component: any
-  export default Component
+  import type { AstroComponentFactory } from 'astro/runtime/server/index.js';
+  const content: AstroComponentFactory;
+  export default content;
 }

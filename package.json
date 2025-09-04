@@ -21,6 +21,7 @@
     "img:webp": "mkdir -p src/assets/img_opt src/assets/img_raw && { ls src/assets/img_raw/*.png src/assets/img_raw/*.jpg src/assets/img_raw/*.jpeg >/dev/null 2>&1 && pnpm exec sharp -i src/assets/img_raw/*.png -i src/assets/img_raw/*.jpg -i src/assets/img_raw/*.jpeg -o src/assets/img_opt/{name}.webp -f webp -q 75 resize 1500 || echo \"No raw images to convert (webp)\"; }",
     "img:png": "mkdir -p src/assets/img_opt src/assets/img_raw && { ls src/assets/img_raw/*.png src/assets/img_raw/*.jpg src/assets/img_raw/*.jpeg >/dev/null 2>&1 && pnpm exec sharp -i src/assets/img_raw/*.png -i src/assets/img_raw/*.jpg -i src/assets/img_raw/*.jpeg -o src/assets/img_opt/{name}.png  -f png  -q 80 resize 1500 || echo \"No raw images to convert (png)\"; }",
     "img:opt": "pnpm run img:avif && pnpm run img:webp && pnpm run img:png",
+    "verify:icons": "node scripts/verify-icons.mjs",
     "build": "pnpm run img:opt && astro check && astro build",
     "build:prod": "pnpm run clean && pnpm run build",
     "preview:static": "pnpm dlx serve dist",
