@@ -1,0 +1,39 @@
+---
+import Base from '../layouts/Base.astro';
+import Button from '../ui/atoms/Button.astro';
+import Section from '../ui/atoms/Section.astro';
+---
+
+<Base title="404: Page introuvable" description="La page que vous cherchez n'existe pas.">
+  <Section className="flex flex-col items-center justify-center text-center">
+    <canvas id="rive-canvas" width="500" height="500" class="max-w-full"></canvas>
+    <h1 class="mb-4">404 - Oups, vous êtes perdu !</h1>
+    <p class="mb-8">
+      Il semble que l'animation ait bien fonctionné, mais la page que vous cherchez est introuvable.
+    </p>
+    <Button href="/" text="Retour à l'accueil" />
+  </Section>
+</Base>
+
+<script>
+  import { Rive, Layout, Fit, Alignment } from '@rive-app/canvas';
+
+  const rive = new Rive({
+    src: '/animations/404.riv',
+    canvas: document.getElementById('rive-canvas'),
+    layout: new Layout({
+      fit: Fit.Contain,
+      alignment: Alignment.Center,
+    }),
+    autoplay: true,
+    stateMachines: 'State Machine 1',
+    onLoad: () => {
+      rive.resizeDrawingSurfaceToCanvas();
+    },
+  });
+
+  // Resize the canvas to maintain aspect ratio
+  window.addEventListener('resize', () => {
+    rive.resizeDrawingSurfaceToCanvas();
+  });
+</script>

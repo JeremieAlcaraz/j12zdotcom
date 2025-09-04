@@ -38,6 +38,9 @@ importers:
       '@lottiefiles/dotlottie-web':
         specifier: ^0.50.2
         version: 0.50.2
+      '@rive-app/canvas':
+        specifier: ^2.31.4
+        version: 2.31.4
       astro:
         specifier: 5.7.8
         version: 5.7.8(@types/node@24.0.10)(jiti@2.4.2)(lightningcss@1.30.1)(rollup@4.44.1)(sass@1.89.2)(typescript@5.8.3)(yaml@2.8.0)
@@ -1187,6 +1190,9 @@ packages:
 
   '@poppinss/exception@1.2.2':
     resolution: {integrity: sha512-m7bpKCD4QMlFCjA/nKTs23fuvoVFoA83brRKmObCUNmi/9tVu8Ve3w4YQAnJu4q3Tjf5fr685HYIC/IA2zHRSg==}
+
+  '@rive-app/canvas@2.31.4':
+    resolution: {integrity: sha512-9arqipGRBhoqbbGsxZri4X+uh7SNEl3gXGpDQQao3CbtZvhAFK5Y6PBUwkH7LFSQEJ5Qann2QiHLuYE+Gp5Dvw==}
 
   '@rolldown/pluginutils@1.0.0-beta.19':
     resolution: {integrity: sha512-3FL3mnMbPu0muGOCaKAhhFEYmqv9eTfPSJRJmANrCwtgK8VuxpsZDGK+m0LYAGoyO8+0j5uRe4PeyPDK1yA/hA==}
@@ -5801,6 +5807,8 @@ snapshots:
       supports-color: 10.2.0
 
   '@poppinss/exception@1.2.2': {}
+
+  '@rive-app/canvas@2.31.4': {}
 
   '@rolldown/pluginutils@1.0.0-beta.19': {}
 
