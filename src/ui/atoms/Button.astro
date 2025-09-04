@@ -4,16 +4,17 @@ interface Props {
   link: string
   style?: 'outline'
   rel?: string
+  target?: '_blank' | '_self' | '_parent' | '_top'
 }
 
-const { label, link, style, rel } = Astro.props as Props
-const relValue = `noopener noreferrer ${rel ? (rel === 'follow' ? '' : rel) : 'nofollow'}`
+const { label, link, style, rel, target } = Astro.props as Props
+const relValue = target === '_blank' ? `noopener noreferrer ${rel ? (rel === 'follow' ? '' : rel) : 'nofollow'}` : rel
 const variantClass = style === 'outline' ? 'btn-outline btn-primary' : 'btn-primary'
 ---
 
 <a
   href={link}
-  target="_blank"
+  target={target}
   rel={relValue}
   class={`btn me-4 mb-4 hover:no-underline ${variantClass}`}
 >

@@ -1,39 +1,62 @@
 ---
-import Base from '../layouts/Base.astro';
 import Button from '../ui/atoms/Button.astro';
-import Section from '../ui/atoms/Section.astro';
+import '@styles/index.css';
 ---
 
-<Base title="404: Page introuvable" description="La page que vous cherchez n'existe pas.">
-  <Section className="flex flex-col items-center justify-center text-center">
-    <canvas id="rive-canvas" width="500" height="500" class="max-w-full"></canvas>
-    <h1 class="mb-4">404 - Oups, vous êtes perdu !</h1>
-    <p class="mb-8">
-      Il semble que l'animation ait bien fonctionné, mais la page que vous cherchez est introuvable.
-    </p>
-    <Button href="/" text="Retour à l'accueil" />
-  </Section>
-</Base>
+<!doctype html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <title>404: Page introuvable</title>
+    <meta name="description" content="La page que vous cherchez n'existe pas." />
+    
+    <script is:inline>
+      function initTheme() {
+        const THEME_STORAGE_KEY = 'theme';
+        const savedTheme = localStorage.getItem(THEME_STORAGE_KEY);
+        const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+        const initialThemeIsDark = savedTheme === 'dark' || (!savedTheme && prefersDark);
+        document.documentElement.setAttribute('data-theme', initialThemeIsDark ? 'dark' : 'douceurLight');
+      }
+      initTheme();
+      document.addEventListener('astro:after-swap', initTheme);
+    </script>
+  </head>
+  <body class="min-h-screen">
+    <main class="relative flex h-screen w-screen flex-col items-center justify-center overflow-hidden">
+      <div class="absolute inset-0">
+        <canvas id="rive-canvas" class="h-full w-full"></canvas>
+      </div>
+      <div class="absolute top-10 left-10 z-10">
+        <Button link="/" label="Back 😹" />
+      </div>
+    </main>
 
-<script>
-  import { Rive, Layout, Fit, Alignment } from '@rive-app/canvas';
+    <script>
+      import { Rive, Layout, Fit, Alignment } from '@rive-app/canvas';
 
-  const rive = new Rive({
-    src: '/animations/404.riv',
-    canvas: document.getElementById('rive-canvas'),
-    layout: new Layout({
-      fit: Fit.Contain,
-      alignment: Alignment.Center,
-    }),
-    autoplay: true,
-    stateMachines: 'State Machine 1',
-    onLoad: () => {
-      rive.resizeDrawingSurfaceToCanvas();
-    },
-  });
+      const canvas = document.getElementById('rive-canvas');
+      if (canvas) {
+        const rive = new Rive({
+          src: '/animations/404.riv',
+          canvas: canvas,
+          layout: new Layout({
+            fit: Fit.Cover, // Cover the entire area
+            alignment: Alignment.Center,
+          }),
+          autoplay: true,
+          stateMachines: 'State Machine 1',
+          onLoad: () => {
+            rive.resizeDrawingSurfaceToCanvas();
+          },
+        });
 
-  // Resize the canvas to maintain aspect ratio
-  window.addEventListener('resize', () => {
-    rive.resizeDrawingSurfaceToCanvas();
-  });
-</script>
+        window.addEventListener('resize', () => {
+          rive.resizeDrawingSurfaceToCanvas();
+        });
+      }
+    </script>
+  </body>
+</html>
