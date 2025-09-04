@@ -1,0 +1,213 @@
+---
+/**
+ * LottiePlayer.astro
+ * Composant pour afficher des animations Lottie
+ * - Support des fichiers .lottie et .json
+ * - Contrôles optionnels (play, pause, loop)
+ * - Dimensions personnalisables
+ * - Auto-play par défaut
+ */
+
+export interface Props {
+  src: string;           // Chemin vers le fichier .lottie ou .json
+  width?: number | string; // Largeur (px ou string CSS)
+  height?: number | string; // Hauteur (px ou string CSS)
+  loop?: boolean;        // Animation en boucle
+  autoplay?: boolean;    // Démarrage automatique
+  controls?: boolean;    // Afficher les contrôles
+  speed?: number;        // Vitesse de l'animation (1 = normale)
+  class?: string;        // Classes CSS supplémentaires
+  id?: string;           // ID unique pour ciblage JavaScript
+}
+
+const {
+  src,
+  width = 300,
+  height = 300,
+  loop = true,
+  autoplay = true,
+  controls = false,
+  speed = 1,
+  class: className,
+  id,
+  ...rest
+} = Astro.props;
+
+// Génère un ID unique si non fourni
+const uniqueId = id || `lottie-${Math.random().toString(36).substring(2, 11)}`;
+---
+
+<div
+  id={uniqueId}
+  class={`lottie-container ${className || ''}`}
+  style={`width: ${typeof width === 'number' ? width + 'px' : width}; height: ${typeof height === 'number' ? height + 'px' : height};`}
+  data-src={src}
+  data-loop={loop}
+  data-autoplay={autoplay}
+  data-speed={speed}
+  {...rest}
+></div>
+
+{controls && (
+  <div class="lottie-controls mt-2 flex gap-2 justify-center">
+    <button
+      class="btn btn-sm btn-primary lottie-play"
+      data-target={uniqueId}
+      aria-label="Lecture"
+    >
+      ▶️
+    </button>
+    <button
+      class="btn btn-sm btn-secondary lottie-pause"
+      data-target={uniqueId}
+      aria-label="Pause"
+    >
+      ⏸️
+    </button>
+    <button
+      class="btn btn-sm btn-accent lottie-stop"
+      data-target={uniqueId}
+      aria-label="Arrêt"
+    >
+      ⏹️
+    </button>
+  </div>
+)}
+
+<script>
+  import lottie from 'lottie-web';
+
+  // Map pour stocker les instances Lottie
+  const lottieInstances = new Map();
+
+  // Fonction pour initialiser une animation Lottie
+  function initLottie(container: HTMLElement) {
+    const src = container.dataset.src;
+    const loop = container.dataset.loop === 'true';
+    const autoplay = container.dataset.autoplay === 'true';
+    const speed = parseFloat(container.dataset.speed || '1');
+
+    if (!src) return;
+
+    console.log(`[LottiePlayer] Tentative de chargement: ${src}`);
+
+    try {
+      const animation = lottie.loadAnimation({
+        container: container,
+        renderer: 'svg', // ou 'canvas' ou 'html'
+        loop: loop,
+        autoplay: autoplay,
+        path: src
+      });
+
+      // Définir la vitesse
+      animation.setSpeed(speed);
+
+      // Stocker l'instance pour les contrôles
+      lottieInstances.set(container.id, animation);
+
+      // Gestion d'erreur
+      animation.addEventListener('data_failed', (error) => {
+        console.error(`[LottiePlayer] Erreur de chargement: ${src}`, error);
+        container.innerHTML = `<div class="text-error text-center p-4">❌ Erreur: ${src}<br>Vérifiez que le fichier existe et est accessible</div>`;
+      });
+
+      // Event de succès
+      animation.addEventListener('data_ready', () => {
+        console.log(`[LottiePlayer] ✅ Animation chargée avec succès: ${src}`);
+      });
+
+      // Event de chargement complet
+      animation.addEventListener('DOMLoaded', () => {
+        console.log(`[LottiePlayer] ✅ DOM chargé pour: ${src}`);
+      });
+
+      // Event d'erreur config
+      animation.addEventListener('config_ready', () => {
+        console.log(`[LottiePlayer] Configuration prête pour: ${src}`);
+      });
+
+    } catch (error) {
+      console.error(`[LottiePlayer] Erreur d'initialisation pour ${src}:`, error);
+      container.innerHTML = `<div class="text-error text-center p-4">❌ Erreur d'initialisation<br>${error.message}</div>`;
+    }
+  }
+
+  // Fonction pour initialiser toutes les animations Lottie
+  function initAllLotties() {
+    const containers = document.querySelectorAll('.lottie-container');
+    containers.forEach(container => {
+      if (container instanceof HTMLElement) {
+        initLottie(container);
+      }
+    });
+  }
+
+  // Gestion des contrôles
+  function setupControls() {
+    // Bouton Play
+    document.querySelectorAll('.lottie-play').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const target = btn.getAttribute('data-target');
+        const animation = lottieInstances.get(target);
+        if (animation) animation.play();
+      });
+    });
+
+    // Bouton Pause
+    document.querySelectorAll('.lottie-pause').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const target = btn.getAttribute('data-target');
+        const animation = lottieInstances.get(target);
+        if (animation) animation.pause();
+      });
+    });
+
+    // Bouton Stop
+    document.querySelectorAll('.lottie-stop').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const target = btn.getAttribute('data-target');
+        const animation = lottieInstances.get(target);
+        if (animation) {
+          animation.stop();
+        }
+      });
+    });
+  }
+
+  // Initialisation au chargement de la page
+  document.addEventListener('DOMContentLoaded', () => {
+    initAllLotties();
+    setupControls();
+  });
+
+  // Réinitialisation après navigation Astro
+  document.addEventListener('astro:after-swap', () => {
+    // Nettoyer les anciennes instances
+    lottieInstances.clear();
+
+    // Réinitialiser
+    initAllLotties();
+    setupControls();
+  });
+
+  // Initialisation immédiate si le DOM est déjà chargé
+  if (document.readyState === 'loading') {
+    // DOM pas encore chargé, les event listeners ci-dessus s'en chargeront
+  } else {
+    // DOM déjà chargé, initialiser immédiatement
+    initAllLotties();
+    setupControls();
+  }
+</script>
+
+<style>
+  .lottie-container {
+    background: transparent;
+    border-radius: 8px;
+  }
+
+  .lottie-controls button {
+    min-width: 44px; /* Accessibilité - taille minimale de clic */
+  }
+</style>

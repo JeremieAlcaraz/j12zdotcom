@@ -5,6 +5,7 @@ import Loading from '@/ui/atoms/Loader.astro'
 import Checkbox from '@/ui/atoms/Checkbox.astro'
 import Section from '@/ui/atoms/Section.astro'
 import Icon from '@/ui/atoms/Icon.astro'
+import LottiePlayer from '@/ui/atoms/LottiePlayer.astro'
 
 const modules = import.meta.glob('@/ui/atoms/**/*.astro', { eager: true })
 
@@ -48,7 +49,7 @@ const itemColors = [
   <ComponentGallery
     modules={modules}
     demoProps={demoProps}
-    exclude={['Section', 'Loading', 'Checkbox', 'Icon']}
+    exclude={['Section', 'Loading', 'Checkbox', 'Icon', 'LottiePlayer']}
   />
 
   <Section name="Loading">
@@ -135,6 +136,86 @@ const itemColors = [
           <Icon name="music" size="24" class="text-success" title="Succès" />
           <Icon name="music" size="24" class="text-warning" title="Attention" />
           <Icon name="music" size="24" class="text-error" title="Erreur" />
+        </div>
+      </div>
+    </div>
+  </Section>
+
+  <Section name="Animation (Lottie)">
+    <div class="grid grid-cols-1 gap-4">
+      <div>
+        <h3 class="mb-2 text-lg font-bold">Animation Test Simple (JSON)</h3>
+        <div class="flex flex-wrap items-center gap-4">
+          <LottiePlayer
+            src="/animations/test-simple.json"
+            width={150}
+            height={150}
+            loop={true}
+            autoplay={true}
+            controls={false}
+            class="bg-base-200 rounded-lg"
+          />
+        </div>
+      </div>
+      <div>
+        <h3 class="mb-2 text-lg font-bold">Animation Watermelon Loader (JSON)</h3>
+        <div class="flex flex-wrap items-center gap-4">
+          <LottiePlayer
+            src="/animations/watermelon-simple.json"
+            width={150}
+            height={150}
+            loop={true}
+            autoplay={true}
+            controls={false}
+            class="bg-base-200 rounded-lg"
+          />
+        </div>
+      </div>
+      <div>
+        <h3 class="mb-2 text-lg font-bold">Avec contrôles</h3>
+        <div class="flex flex-wrap items-center gap-4">
+          <LottiePlayer
+            src="/animations/watermelon-simple.json"
+            width={200}
+            height={200}
+            loop={true}
+            autoplay={false}
+            controls={true}
+            speed={0.8}
+            class="bg-base-200 rounded-lg"
+          />
+        </div>
+      </div>
+      <div>
+        <h3 class="mb-2 text-lg font-bold">Différentes tailles</h3>
+        <div class="flex flex-wrap items-center gap-4">
+          <LottiePlayer
+            src="/animations/watermelon-simple.json"
+            width={100}
+            height={100}
+            loop={true}
+            autoplay={true}
+            speed={1.5}
+            class="bg-base-200 rounded-lg"
+          />
+          <LottiePlayer
+            src="/animations/watermelon-simple.json"
+            width={150}
+            height={150}
+            loop={true}
+            autoplay={true}
+            speed={1}
+            class="bg-base-200 rounded-lg"
+          />
+          <LottiePlayer
+            src="/animations/watermelon-simple.json"
+            width={250}
+            height={250}
+            loop={true}
+            autoplay={true}
+            speed={0.5}
+            class="bg-base-200 rounded-lg"
+          />
         </div>
       </div>
     </div>
