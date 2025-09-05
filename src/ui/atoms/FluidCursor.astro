@@ -824,7 +824,73 @@
         const range = max - min; if (range === 0) return min; return ((v - min) % range) + min;
       }
 
-      // ---- Input handlers ----
+      // ---- Variables pour la désactivation progressive ----
+      let fluidOpacity = 1.0;
+      let targetOpacity = 1.0;
+      const FADE_SPEED = 0.1;
+      const PROXIMITY_DISTANCE = 80; // Distance en pixels pour commencer le fade
+      
+      // ---- Fonction pour détecter les éléments cliquables ----
+      function isClickableElement(element) {
+        if (!element) return false;
+        const tagName = element.tagName?.toLowerCase();
+        const clickableTags = ['button', 'a', 'input', 'select', 'textarea', 'label'];
+        const hasClickableRole = element.getAttribute('role') === 'button';
+        const hasClickListener = element.onclick || element.style.cursor === 'pointer';
+        const hasClickableClass = element.classList.contains('btn') || element.classList.contains('button');
+        return clickableTags.includes(tagName) || hasClickableRole || hasClickListener || hasClickableClass;
+      }
+      
+      function getDistanceToNearestClickable(x, y) {
+        const elements = document.elementsFromPoint(x, y) || [];
+        let minDistance = Infinity;
+        
+        // Vérifier l'élément directement sous le curseur
+        const topElement = elements[0];
+        if (isClickableElement(topElement)) {
+          return 0; // Survol direct
+        }
+        
+        // Chercher les éléments cliquables dans un rayon
+        const clickableElements = document.querySelectorAll(
+          'button, a, input[type="button"], input[type="submit"], [role="button"], .btn, .button, [onclick]'
+        );
+        
+        clickableElements.forEach(element => {
+          const rect = element.getBoundingClientRect();
+          const centerX = rect.left + rect.width / 2;
+          const centerY = rect.top + rect.height / 2;
+          const distance = Math.sqrt((x - centerX) ** 2 + (y - centerY) ** 2);
+          minDistance = Math.min(minDistance, distance);
+        });
+        
+        return minDistance;
+      }
+      
+      function updateFluidOpacity(mouseX, mouseY) {
+        const distanceToClickable = getDistanceToNearestClickable(mouseX, mouseY);
+        
+        if (distanceToClickable === 0) {
+          // Survol direct d'un élément cliquable
+          targetOpacity = 0;
+        } else if (distanceToClickable < PROXIMITY_DISTANCE) {
+          // Proche d'un élément cliquable - fade progressif
+          const fadeRatio = 1 - (PROXIMITY_DISTANCE - distanceToClickable) / PROXIMITY_DISTANCE;
+          targetOpacity = Math.max(0, fadeRatio);
+        } else {
+          // Loin des éléments cliquables - opacité normale
+          targetOpacity = 1.0;
+        }
+        
+        // Interpolation douce vers la target
+        fluidOpacity += (targetOpacity - fluidOpacity) * FADE_SPEED;
+        fluidOpacity = Math.max(0, Math.min(1, fluidOpacity));
+        
+        // Appliquer l'opacité au canvas
+        canvas.style.opacity = fluidOpacity.toString();
+      }
+
+      // ---- Input handlers (modifiés pour inclure la détection) ----
       window.addEventListener('mousedown', (e) => {
         const p = pointers[0];
         const x = scaleByPixelRatio(e.clientX);
@@ -839,6 +905,7 @@
         const color = generateColor();
         updateFrame();
         updatePointerMoveData(p, x, y, color);
+        updateFluidOpacity(e.clientX, e.clientY);
         document.body.removeEventListener('mousemove', handleFirstMouseMove);
       }
       document.body.addEventListener('mousemove', handleFirstMouseMove);
@@ -848,6 +915,7 @@
         const y = scaleByPixelRatio(e.clientY);
         const color = p.color;
         updatePointerMoveData(p, x, y, color);
+        updateFluidOpacity(e.clientX, e.clientY);
       });
 
       function handleFirstTouchStart(e) {
