@@ -37,7 +37,7 @@ import '@styles/index.css';
     <script>
       import { Rive, Layout, Fit, Alignment } from '@rive-app/canvas';
 
-      const canvas = document.getElementById('rive-canvas');
+      const canvas = document.getElementById('rive-canvas') as HTMLCanvasElement;
       if (canvas) {
         const rive = new Rive({
           src: '/animations/404.riv',
