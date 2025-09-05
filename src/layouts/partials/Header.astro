@@ -1,7 +1,6 @@
 ---
 import type { NavLink } from '@/types/navigation'
-import SunIcon from '@/ui/atoms/icons/SunIcon.astro'
-import MoonIcon from '@/ui/atoms/icons/MoonIcon.astro'
+import Icon from '@/ui/atoms/Icon.astro'
 import { defaultLogo, defaultLogoDark, defaultLinks } from '@/config/navigation' // Valeurs par défaut pour logo et liens
 
 interface Props {
@@ -56,10 +55,10 @@ const { logo = defaultLogo, links = defaultLinks } = Astro.props
     <!-- btn-circle = bouton rond, id pour le ciblage JavaScript -->
     <button id="theme-toggle" class="btn btn-ghost btn-circle">
       <!-- ICÔNE SOLEIL (thème clair) -->
-      <SunIcon id="sun-icon" title="Activer le mode clair" />
+      <Icon name="sun" id="sun-icon" size={20} class="inline-block" title="Activer le mode clair" />
 
       <!-- ICÔNE LUNE (thème sombre) -->
-      <MoonIcon id="moon-icon" class="hidden" title="Activer le mode sombre" />
+      <Icon name="moon" id="moon-icon" size={20} class="inline-block hidden" title="Activer le mode sombre" />
     </button>
 
     <!-- MENU MOBILE (hamburger menu) -->

@@ -1,0 +1,62 @@
+---
+import Button from '../ui/atoms/Button.astro';
+import '@styles/index.css';
+---
+
+<!doctype html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <title>404: Page introuvable</title>
+    <meta name="description" content="La page que vous cherchez n'existe pas." />
+    
+    <script is:inline>
+      function initTheme() {
+        const THEME_STORAGE_KEY = 'theme';
+        const savedTheme = localStorage.getItem(THEME_STORAGE_KEY);
+        const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+        const initialThemeIsDark = savedTheme === 'dark' || (!savedTheme && prefersDark);
+        document.documentElement.setAttribute('data-theme', initialThemeIsDark ? 'dark' : 'douceurLight');
+      }
+      initTheme();
+      document.addEventListener('astro:after-swap', initTheme);
+    </script>
+  </head>
+  <body class="min-h-screen">
+    <main class="relative flex h-screen w-screen flex-col items-center justify-center overflow-hidden">
+      <div class="absolute inset-0">
+        <canvas id="rive-canvas" class="h-full w-full"></canvas>
+      </div>
+      <div class="absolute top-10 left-10 z-10">
+        <Button link="/" label="Back 😹" />
+      </div>
+    </main>
+
+    <script>
+      import { Rive, Layout, Fit, Alignment } from '@rive-app/canvas';
+
+      const canvas = document.getElementById('rive-canvas') as HTMLCanvasElement;
+      if (canvas) {
+        const rive = new Rive({
+          src: '/animations/404.riv',
+          canvas: canvas,
+          layout: new Layout({
+            fit: Fit.Cover, // Cover the entire area
+            alignment: Alignment.Center,
+          }),
+          autoplay: true,
+          stateMachines: 'State Machine 1',
+          onLoad: () => {
+            rive.resizeDrawingSurfaceToCanvas();
+          },
+        });
+
+        window.addEventListener('resize', () => {
+          rive.resizeDrawingSurfaceToCanvas();
+        });
+      }
+    </script>
+  </body>
+</html>

@@ -1,0 +1,77 @@
+---
+title: "Test des icônes en MDX"
+description: "Page de test pour démontrer l'utilisation des icônes dans du contenu MDX"
+layout: "@/layouts/Base.astro"
+---
+
+# Test du système d'icônes
+
+Cette page démontre l'utilisation du composant `<Icon>` dans du contenu MDX.
+
+## Utilisation basique
+
+Voici une icône de chat : <Icon name="cat" size="24" class="text-primary" title="Chat mignon" />
+
+Et voici une icône de musique : <Icon name="music" size="20" class="text-secondary" title="Musique" />
+
+## Différentes tailles
+
+Petit <Icon name="sun" size="16" class="text-warning" title="Petit soleil" /> 
+Moyen <Icon name="sun" size="24" class="text-warning" title="Soleil moyen" />
+Grand <Icon name="sun" size="32" class="text-warning" title="Grand soleil" />
+
+## Intégration dans du texte
+
+Pour naviguer, utilisez les flèches <Icon name="chevron-left" size="18" class="text-info" title="Précédent" /> et <Icon name="chevron-right" size="18" class="text-info" title="Suivant" /> 
+
+Le mode sombre <Icon name="moon" size="20" class="text-base-content" title="Mode sombre" /> est disponible via le bouton en haut à droite.
+
+## Dans une liste
+
+- <Icon name="cat" size="16" class="text-primary mr-2" title="Chat" /> Chats adorables
+- <Icon name="music" size="16" class="text-secondary mr-2" title="Musique" /> Playlist personnalisée  
+- <Icon name="sun" size="16" class="text-warning mr-2" title="Soleil" /> Météo ensoleillée
+
+## Accessibilité
+
+Les icônes avec un `title` sont considérées comme des images (`role="img"`) et ont un `aria-label`.
+Les icônes sans `title` sont décoratives (`role="presentation"`).
+
+Exemple décoratif : <Icon name="music" size="20" class="text-accent" />
+Exemple informatif : <Icon name="music" size="20" class="text-accent" title="Écouter de la musique" />
+
+## Animations Lottie
+
+Voici une animation Lottie intégrée dans du contenu MDX :
+
+<LottiePlayer 
+  src="/animations/watermelon-simple.json"
+  width={120}
+  height={120}
+  loop={true}
+  autoplay={true}
+  class="mx-auto bg-base-200 rounded-lg"
+/>
+
+Cette animation se charge automatiquement et fonctionne parfaitement dans du contenu MDX !
+
+## Animation .lottie (DotLottie)
+
+Et voici le fichier .lottie original avec le lecteur spécialisé :
+
+<DotLottiePlayer 
+  src="/animations/watermelon-loader.lottie"
+  width={120}
+  height={120}
+  loop={true}
+  autoplay={true}
+  controls={true}
+  class="mx-auto bg-base-200 rounded-lg"
+/>
+
+### Comparaison des formats
+
+- **JSON (.json)** : Format texte lisible, universel, plus lourd
+- **DotLottie (.lottie)** : Format binaire compressé, plus léger, peut contenir plusieurs animations
+
+Les deux formats fonctionnent parfaitement dans MDX avec leurs composants respectifs !

@@ -27,8 +27,8 @@ const updateTheme = (isDarkValue: boolean) => {
   if (sunIcon && moonIcon) {
     // Si thème sombre : montre soleil (pour revenir en clair)
     // Si thème clair : montre lune (pour passer en sombre)
-    sunIcon.classList.toggle('hidden', !isDarkValue) // Montre si sombre
-    moonIcon.classList.toggle('hidden', isDarkValue) // Cache si sombre
+    sunIcon.style.display = isDarkValue ? 'inline-block' : 'none';
+    moonIcon.style.display = isDarkValue ? 'none' : 'inline-block';
   }
 
   // MET À JOUR LE LOGO PRINCIPAL
@@ -53,8 +53,8 @@ const setupIcons = () => {
   const moonIcon = document.getElementById('moon-icon')
 
   if (sunIcon && moonIcon) {
-    sunIcon.classList.toggle('hidden', !currentThemeIsDark)
-    moonIcon.classList.toggle('hidden', currentThemeIsDark)
+    sunIcon.style.display = currentThemeIsDark ? 'inline-block' : 'none';
+    moonIcon.style.display = currentThemeIsDark ? 'none' : 'inline-block';
   }
 
   const mainLogo = document.getElementById('main-logo') as HTMLImageElement | null

@@ -1,0 +1,220 @@
+---
+/**
+ * DotLottiePlayer.astro
+ * Composant spécialisé pour les fichiers .lottie (dotLottie)
+ * - Support natif des fichiers .lottie
+ * - Contrôles optionnels (play, pause, loop)
+ * - Dimensions personnalisables
+ * - Auto-play par défaut
+ */
+
+export interface Props {
+  src: string;           // Chemin vers le fichier .lottie
+  width?: number | string; // Largeur (px ou string CSS)
+  height?: number | string; // Hauteur (px ou string CSS)
+  loop?: boolean;        // Animation en boucle
+  autoplay?: boolean;    // Démarrage automatique
+  controls?: boolean;    // Afficher les contrôles
+  speed?: number;        // Vitesse de l'animation (1 = normale)
+  class?: string;        // Classes CSS supplémentaires
+  id?: string;           // ID unique pour ciblage JavaScript
+}
+
+const {
+  src,
+  width = 300,
+  height = 300,
+  loop = true,
+  autoplay = true,
+  controls = false,
+  speed = 1,
+  class: className,
+  id,
+  ...rest
+} = Astro.props;
+
+// Génère un ID unique si non fourni
+const uniqueId = id || `dotlottie-${Math.random().toString(36).substring(2, 11)}`;
+---
+
+<div
+  id={uniqueId}
+  class={`dotlottie-container ${className || ''}`}
+  style={`width: ${typeof width === 'number' ? width + 'px' : width}; height: ${typeof height === 'number' ? height + 'px' : height};`}
+  data-src={src}
+  data-loop={loop}
+  data-autoplay={autoplay}
+  data-speed={speed}
+  {...rest}
+></div>
+
+{controls && (
+  <div class="dotlottie-controls mt-2 flex gap-2 justify-center">
+    <button
+      class="btn btn-sm btn-primary dotlottie-play"
+      data-target={uniqueId}
+      aria-label="Lecture"
+    >
+      ▶️
+    </button>
+    <button
+      class="btn btn-sm btn-secondary dotlottie-pause"
+      data-target={uniqueId}
+      aria-label="Pause"
+    >
+      ⏸️
+    </button>
+    <button
+      class="btn btn-sm btn-accent dotlottie-stop"
+      data-target={uniqueId}
+      aria-label="Arrêt"
+    >
+      ⏹️
+    </button>
+  </div>
+)}
+
+<script>
+  import { DotLottie } from '@lottiefiles/dotlottie-web';
+
+  // Map pour stocker les instances DotLottie
+  const dotLottieInstances = new Map();
+
+
+
+  // Fonction pour initialiser toutes les animations DotLottie
+  function initAllDotLotties() {
+    const containers = document.querySelectorAll('.dotlottie-container');
+    containers.forEach(container => {
+      if (container instanceof HTMLElement) {
+        // Créer un canvas pour DotLottie
+        const canvas = document.createElement('canvas');
+        canvas.style.width = '100%';
+        canvas.style.height = '100%';
+        container.appendChild(canvas);
+
+        // Initialiser avec le canvas
+        initDotLottieWithCanvas(canvas, container);
+      }
+    });
+  }
+
+  function initDotLottieWithCanvas(canvas: HTMLCanvasElement, container: HTMLElement) {
+    const src = container.dataset.src;
+    const loop = container.dataset.loop === 'true';
+    const autoplay = container.dataset.autoplay === 'true';
+    const speed = parseFloat(container.dataset.speed || '1');
+
+    if (!src) return;
+
+    console.log(`[DotLottiePlayer] Tentative de chargement: ${src}`);
+
+    try {
+      const dotLottie = new DotLottie({
+        canvas: canvas,
+        src: src,
+        loop: loop,
+        autoplay: autoplay,
+        speed: speed,
+        renderConfig: {
+          devicePixelRatio: window.devicePixelRatio || 1,
+        }
+      });
+
+      // Stocker l'instance pour les contrôles
+      dotLottieInstances.set(container.id, dotLottie);
+
+      // Gestion des événements
+      dotLottie.addEventListener('load', () => {
+        console.log(`[DotLottiePlayer] ✅ Animation chargée avec succès: ${src}`);
+      });
+
+      dotLottie.addEventListener('loadError', (error) => {
+        console.error(`[DotLottiePlayer] Erreur de chargement: ${src}`, error);
+        container.innerHTML = `<div class="text-error text-center p-4">❌ Erreur: ${src}<br>Vérifiez que le fichier .lottie existe</div>`;
+      });
+
+    } catch (error) {
+      console.error(`[DotLottiePlayer] Erreur d'initialisation pour ${src}:`, error);
+      container.innerHTML = `<div class="text-error text-center p-4">❌ Erreur d'initialisation<br>${error instanceof Error ? error.message : 'Erreur inconnue'}</div>`;
+    }
+  }
+
+  // Gestion des contrôles
+  function setupDotLottieControls() {
+    // Bouton Play
+    document.querySelectorAll('.dotlottie-play').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const target = btn.getAttribute('data-target');
+        const dotLottie = dotLottieInstances.get(target);
+        if (dotLottie) dotLottie.play();
+      });
+    });
+
+    // Bouton Pause
+    document.querySelectorAll('.dotlottie-pause').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const target = btn.getAttribute('data-target');
+        const dotLottie = dotLottieInstances.get(target);
+        if (dotLottie) dotLottie.pause();
+      });
+    });
+
+    // Bouton Stop
+    document.querySelectorAll('.dotlottie-stop').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const target = btn.getAttribute('data-target');
+        const dotLottie = dotLottieInstances.get(target);
+        if (dotLottie) dotLottie.stop();
+      });
+    });
+  }
+
+  // Initialisation au chargement de la page
+  document.addEventListener('DOMContentLoaded', () => {
+    initAllDotLotties();
+    setupDotLottieControls();
+  });
+
+  // Réinitialisation après navigation Astro
+  document.addEventListener('astro:after-swap', () => {
+    // Nettoyer les anciennes instances
+    dotLottieInstances.forEach(dotLottie => {
+      if (dotLottie && typeof dotLottie.destroy === 'function') {
+        dotLottie.destroy();
+      }
+    });
+    dotLottieInstances.clear();
+
+    // Réinitialiser
+    initAllDotLotties();
+    setupDotLottieControls();
+  });
+
+  // Initialisation immédiate si le DOM est déjà chargé
+  if (document.readyState === 'loading') {
+    // DOM pas encore chargé, les event listeners ci-dessus s'en chargeront
+  } else {
+    // DOM déjà chargé, initialiser immédiatement
+    initAllDotLotties();
+    setupDotLottieControls();
+  }
+</script>
+
+<style>
+  .dotlottie-container {
+    background: transparent;
+    border-radius: 8px;
+    position: relative;
+  }
+
+  .dotlottie-container canvas {
+    display: block;
+    width: 100%;
+    height: 100%;
+  }
+
+  .dotlottie-controls button {
+    min-width: 44px; /* Accessibilité - taille minimale de clic */
+  }
+</style>

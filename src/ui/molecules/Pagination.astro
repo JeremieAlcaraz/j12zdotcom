@@ -1,8 +1,7 @@
 ---
 // src/ui/molecules/Pagination.astro
 import PaginationItem from '@/ui/atoms/PaginationItem.astro'
-import ChevronLeftIcon from '@/ui/atoms/icons/ChevronLeftIcon.astro'
-import ChevronRightIcon from '@/ui/atoms/icons/ChevronRightIcon.astro'
+import Icon from '@/ui/atoms/Icon.astro'
 import type { NavLink } from '@/types/navigation'
 
 type PageLink = {
@@ -28,7 +27,7 @@ const current = pages.find(p => p.current)?.n
     label={prev?.label ?? 'Page précédente'}
     rel="prev"
   >
-    <ChevronLeftIcon aria-hidden="true" />
+    <Icon name="chevron-left" size={20} />
   </PaginationItem>
 
   {
@@ -52,6 +51,6 @@ const current = pages.find(p => p.current)?.n
     label={next?.label ?? 'Page suivante'}
     rel="next"
   >
-    <ChevronRightIcon aria-hidden="true" />
+    <Icon name="chevron-right" size={20} />
   </PaginationItem>
 </nav>
