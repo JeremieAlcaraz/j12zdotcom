@@ -66,10 +66,10 @@ const itemColors = [
       <div>
         <h3 class="mb-2 text-lg font-bold">Sizes</h3>
         <div class="flex flex-wrap items-center gap-4">
-          <Avatar src="img_opt/jeremie-hero.png" alt="Jérémie" size={40} />
-          <Avatar src="img_opt/jeremie-hero.png" alt="Jérémie" size={60} />
-          <Avatar src="img_opt/jeremie-hero.png" alt="Jérémie" size={80} />
-          <Avatar src="img_opt/jeremie-hero.png" alt="Jérémie" size={100} />
+<Avatar src="img_opt/jeremie-hero" alt="Jérémie" size={40} />
+          <Avatar src="img_opt/jeremie-hero" alt="Jérémie" size={60} />
+          <Avatar src="img_opt/jeremie-hero" alt="Jérémie" size={80} />
+          <Avatar src="img_opt/jeremie-hero" alt="Jérémie" size={100} />
         </div>
       </div>
     </div>
@@ -276,8 +276,8 @@ const itemColors = [
       <div>
         <h3 class="mb-2 text-lg font-bold">Image avec optimisations</h3>
         <div class="flex flex-wrap items-center gap-4">
-          <ImageMod
-            src="img_opt/jeremie-hero.png"
+<ImageMod
+            src="img_opt/jeremie-hero"
             alt="Jérémie"
             width={400}
             height={400}
@@ -438,7 +438,9 @@ const itemColors = [
       <div>
         <h3 class="mb-2 text-lg font-bold">Video Player</h3>
         <div class="flex flex-wrap items-center gap-4">
-          <Video title="Sample Video" width={300} height={200} src="" />
+          <div class="w-3/4 mx-auto">
+            <Video title="Sample Video" width="100%" height="auto" src="https://www.w3schools.com/html/mov_bbb.mp4" />
+          </div>
         </div>
       </div>
     </div>

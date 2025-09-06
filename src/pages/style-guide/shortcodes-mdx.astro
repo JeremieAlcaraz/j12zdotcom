@@ -1,47 +1,61 @@
 ---
 import StyleGuideLayout from '@/domain/style-guide/layouts/StyleGuideLayout.astro'
-import ComponentGallery from '@/domain/dev/ComponentGallery.astro'
+import Section from '@/ui/atoms/Section.astro'
+import Divider from '@/ui/atoms/Divider.astro'
 import Icon from '@/ui/atoms/Icon.astro'
 import LottiePlayer from '@/ui/atoms/LottiePlayer.astro'
 import DotLottiePlayer from '@/ui/atoms/DotLottiePlayer.astro'
-
-const modules = import.meta.glob('@/shortcodes/generic/*.shortcode.astro', { eager: true })
-
-const demoProps = {
-  Accordion: { title: 'Titre', children: "Contenu de l'accordéon." },
-  Button: { label: 'Visiter Astro', link: 'https://astro.build' },
-  DotLottiePlayer: {
-    src: '/animations/watermelon-loader.lottie',
-    width: 150,
-    height: 150,
-    loop: true,
-    autoplay: true,
-    controls: true,
-    class: 'bg-base-200 rounded-lg'
-  },
-  Icon: { name: 'cat', size: 24, class: 'text-primary', title: 'Chat mignon' },
-  LottiePlayer: {
-    src: '/animations/watermelon-simple.json',
-    width: 150,
-    height: 150,
-    loop: true,
-    autoplay: true,
-    controls: true,
-    class: 'bg-base-200 rounded-lg'
-  },
-  Notice: { type: 'tip', children: 'Une petite astuce.' },
-  Video: {
-    title: 'Sample',
-    src: 'https://www.w3schools.com/html/mov_bbb.mp4',
-    width: 320,
-    height: 240,
-  },
-  Youtube: { id: 'C0DPdy98e4c', title: 'YouTube' },
-}
+import Accordion from '@/ui/molecules/Accordion.astro'
+import Button from '@/ui/atoms/Button.astro'
+import Notice from '@/ui/atoms/Notice.astro'
+import Video from '@/ui/atoms/Video.astro'
+import Youtube from '@/ui/atoms/Youtube.astro'
 ---
 
 <StyleGuideLayout title="Style Guide | Shortcodes MDX">
-  <ComponentGallery modules={modules} demoProps={demoProps} />
+  <!-- Accordion (shortcode equivalent) -->
+  <Section>
+    <Divider variant="default" label="Accordion" />
+    <h2 class="sr-only">Accordion</h2>
+    <div class="grid grid-cols-1 gap-4">
+      <Accordion title="Titre">
+        <p>Contenu de l'accordéon.</p>
+      </Accordion>
+      <Accordion title="Autre titre">
+        <p>Contenu additionnel.</p>
+      </Accordion>
+    </div>
+  </Section>
+
+  <!-- Button (shortcode equivalent) -->
+  <Section>
+    <Divider variant="default" label="Button" />
+    <h2 class="sr-only">Button</h2>
+    <div class="flex gap-4">
+      <Button label="Visiter Astro" link="https://astro.build" />
+      <Button label="Outline" link="#" style="outline" />
+    </div>
+  </Section>
+
+  <!-- Notice (shortcode equivalent) -->
+  <Section>
+    <Divider variant="default" label="Notice" />
+    <h2 class="sr-only">Notice</h2>
+    <div class="flex flex-col gap-3">
+      <Notice type="tip">Une petite astuce.</Notice>
+      <Notice type="info">Une info utile.</Notice>
+    </div>
+  </Section>
+
+  <!-- Video & Youtube (shortcode equivalent) -->
+  <Section>
+    <Divider variant="default" label="Video & Youtube" />
+    <h2 class="sr-only">Video & Youtube</h2>
+    <div class="grid grid-cols-1 gap-6">
+      <Video title="Sample" src="https://www.w3schools.com/html/mov_bbb.mp4" width={320} height={240} />
+      <Youtube id="C0DPdy98e4c" title="YouTube" />
+    </div>
+  </Section>
 
   <div class="mt-12 p-6 bg-base-100 rounded-lg">
     <h2 class="text-2xl font-bold mb-6">Test des icônes dans différents contextes</h2>
