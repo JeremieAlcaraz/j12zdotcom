@@ -1,36 +1,24 @@
 ---
 import StyleGuideLayout from '@/domain/style-guide/layouts/StyleGuideLayout.astro'
-import ComponentGallery from '@/domain/dev/ComponentGallery.astro'
-import Loading from '@/ui/atoms/Loader.astro'
-import Checkbox from '@/ui/atoms/Checkbox.astro'
 import Section from '@/ui/atoms/Section.astro'
-import Icon from '@/ui/atoms/Icon.astro'
-import LottiePlayer from '@/ui/atoms/LottiePlayer.astro'
+import Alert from '@/ui/atoms/Alert.astro'
+import Avatar from '@/ui/atoms/Avatar.astro'
+import Badge from '@/ui/atoms/Badge.astro'
+import Button from '@/ui/atoms/Button.astro'
+import Checkbox from '@/ui/atoms/Checkbox.astro'
+import Divider from '@/ui/atoms/Divider.astro'
 import DotLottiePlayer from '@/ui/atoms/DotLottiePlayer.astro'
-
-const modules = import.meta.glob('@/ui/atoms/**/*.astro', { eager: true })
-
-const demoProps = {
-  ImageMod: {
-    src: 'img_opt/jeremie-hero.png',
-    alt: 'Jérémie',
-    width: 400,
-    height: 400,
-  },
-  Avatar: {
-    src: 'img_opt/jeremie-hero.png',
-    alt: 'Jérémie',
-    size: 80,
-  },
-  Badge: { label: 'New' },
-  Alert: [
-    { tone: 'info', children: 'Information alert' },
-    { tone: 'success', children: 'All good!' },
-    { tone: 'warning', children: 'Heads up!' },
-    { tone: 'error', children: 'Something went wrong' },
-  ],
-  Icon: { name: 'cat', size: 24, class: 'text-primary', title: 'Chat mignon' },
-}
+import FluidCursor from '@/ui/atoms/FluidCursor.astro'
+import Halo from '@/ui/atoms/Halo.astro'
+import Icon from '@/ui/atoms/Icon.astro'
+import ImageMod from '@/ui/atoms/ImageMod.astro'
+import Loader from '@/ui/atoms/Loader.astro'
+import LottiePlayer from '@/ui/atoms/LottiePlayer.astro'
+import Notice from '@/ui/atoms/Notice.astro'
+import PaginationItem from '@/ui/atoms/PaginationItem.astro'
+import Spinner from '@/ui/atoms/Spinner.astro'
+import Video from '@/ui/atoms/Video.astro'
+import Youtube from '@/ui/atoms/Youtube.astro'
 
 const loadingVariants = ['spinner', 'dots', 'ring', 'ball', 'bars', 'infinity'] as const
 const itemSizes = ['xs', 'sm', 'md', 'lg', 'xl'] as const
@@ -47,35 +35,78 @@ const itemColors = [
 ---
 
 <StyleGuideLayout title="Style Guide | Atoms">
-  <ComponentGallery
-    modules={modules}
-    demoProps={demoProps}
-    exclude={['Section', 'Loading', 'Checkbox', 'Icon', 'LottiePlayer', 'DotLottiePlayer']}
-  />
-
-  <Section name="Loading">
+  <!-- Alert -->
+  <Section name="Alert">
     <div class="grid grid-cols-1 gap-4">
       <div>
         <h3 class="mb-2 text-lg font-bold">Variants</h3>
-        <div class="flex flex-wrap items-center gap-4">
-          {loadingVariants.map(variant => <Loading variant={variant} />)}
+        <div class="flex flex-col gap-4">
+          <Alert tone="info">Information alert</Alert>
+          <Alert tone="success">All good!</Alert>
+          <Alert tone="warning">Heads up!</Alert>
+          <Alert tone="error">Something went wrong</Alert>
         </div>
       </div>
       <div>
-        <h3 class="mb-2 text-lg font-bold">Sizes</h3>
-        <div class="flex flex-wrap items-center gap-4">
-          {itemSizes.map(size => <Loading size={size} />)}
-        </div>
-      </div>
-      <div>
-        <h3 class="mb-2 text-lg font-bold">Colors</h3>
-        <div class="flex flex-wrap items-center gap-4">
-          {itemColors.map(color => <Loading color={color} />)}
+        <h3 class="mb-2 text-lg font-bold">Sans icône</h3>
+        <div class="flex flex-col gap-4">
+          <Alert tone="info" icon={false}>Information alert</Alert>
+          <Alert tone="success" icon={false}>All good!</Alert>
         </div>
       </div>
     </div>
   </Section>
 
+  <!-- Avatar -->
+  <Section name="Avatar">
+    <div class="grid grid-cols-1 gap-4">
+      <div>
+        <h3 class="mb-2 text-lg font-bold">Sizes</h3>
+        <div class="flex flex-wrap items-center gap-4">
+          <Avatar src="img_opt/jeremie-hero.png" alt="Jérémie" size={40} />
+          <Avatar src="img_opt/jeremie-hero.png" alt="Jérémie" size={60} />
+          <Avatar src="img_opt/jeremie-hero.png" alt="Jérémie" size={80} />
+          <Avatar src="img_opt/jeremie-hero.png" alt="Jérémie" size={100} />
+        </div>
+      </div>
+    </div>
+  </Section>
+
+  <!-- Badge -->
+  <Section name="Badge">
+    <div class="grid grid-cols-1 gap-4">
+      <div>
+        <h3 class="mb-2 text-lg font-bold">Variants</h3>
+        <div class="flex flex-wrap items-center gap-4">
+          <Badge label="Primary" variant="primary" />
+          <Badge label="Secondary" variant="secondary" />
+          <Badge label="Neutral" variant="neutral" />
+        </div>
+      </div>
+    </div>
+  </Section>
+
+  <!-- Button -->
+  <Section name="Button">
+    <div class="grid grid-cols-1 gap-4">
+      <div>
+        <h3 class="mb-2 text-lg font-bold">Variants</h3>
+        <div class="flex flex-wrap items-center gap-4">
+          <Button label="Primary" link="#" />
+          <Button label="Outline" link="#" style="outline" />
+        </div>
+      </div>
+      <div>
+        <h3 class="mb-2 text-lg font-bold">Targets</h3>
+        <div class="flex flex-wrap items-center gap-4">
+          <Button label="Self" link="#" target="_self" />
+          <Button label="Blank" link="#" target="_blank" />
+        </div>
+      </div>
+    </div>
+  </Section>
+
+  <!-- Checkbox -->
   <Section name="Checkbox">
     <div class="grid grid-cols-1 gap-4">
       <div>
@@ -100,17 +131,92 @@ const itemColors = [
     </div>
   </Section>
 
+  <!-- Divider -->
+  <Section name="Divider">
+    <div class="grid grid-cols-1 gap-4">
+      <div>
+        <h3 class="mb-2 text-lg font-bold">Variants</h3>
+        <div class="flex flex-col gap-4">
+          <Divider variant="default" label="Default" />
+          <Divider variant="neutral" label="Neutral" />
+          <Divider variant="primary" label="Primary" />
+          <Divider variant="secondary" label="Secondary" />
+          <Divider variant="accent" label="Accent" />
+          <Divider variant="success" label="Success" />
+          <Divider variant="warning" label="Warning" />
+          <Divider variant="info" label="Info" />
+          <Divider variant="error" label="Error" />
+        </div>
+      </div>
+      <div>
+        <h3 class="mb-2 text-lg font-bold">Sans label</h3>
+        <div class="flex flex-col gap-4">
+          <Divider variant="default" />
+          <Divider variant="primary" />
+          <Divider variant="accent" />
+        </div>
+      </div>
+    </div>
+  </Section>
+
+  <!-- DotLottiePlayer -->
+  <Section name="DotLottiePlayer">
+    <div class="grid grid-cols-1 gap-4">
+      <div>
+        <h3 class="mb-2 text-lg font-bold">Animation .lottie (DotLottie)</h3>
+        <div class="flex flex-wrap items-center gap-4">
+          <DotLottiePlayer
+            src="/animations/watermelon-loader.lottie"
+            width={150}
+            height={150}
+            loop={true}
+            autoplay={true}
+            controls={true}
+            class="bg-base-200 rounded-lg"
+          />
+        </div>
+        <p class="text-sm text-base-content/70 mt-2">
+          Test avec le fichier .lottie original utilisant @lottiefiles/dotlottie-web
+        </p>
+      </div>
+    </div>
+  </Section>
+
+  <!-- FluidCursor -->
+  <Section name="FluidCursor">
+    <div class="grid grid-cols-1 gap-4">
+      <div>
+        <h3 class="mb-2 text-lg font-bold">Fluid Cursor</h3>
+        <p class="mb-4 text-sm text-base-content/70">
+          Effet de curseur fluide WebGL limité à cette section. Bougez votre souris dans la zone ci-dessous.
+        </p>
+        <div class="flex flex-wrap items-center gap-4">
+          <FluidCursor container="fluid-cursor-demo" />
+        </div>
+      </div>
+    </div>
+  </Section>
+
+  <!-- Halo -->
+  <Section name="Halo">
+    <div class="grid grid-cols-1 gap-4">
+      <div>
+        <h3 class="mb-2 text-lg font-bold">Halo Effect</h3>
+        <div class="flex flex-wrap items-center gap-4">
+          <Halo />
+        </div>
+      </div>
+    </div>
+  </Section>
+
+  <!-- Icon -->
   <Section name="Icon">
     <div class="grid grid-cols-1 gap-4">
-      <Icon name="sun" id="sun-icon" size={20} class="inline-block" title="Activer le mode clair" />
-      <Icon name="cat" id="cat-icon" size={20} class="inline-block" title="Activer le mode clair" />
-      <Icon name="music" id="music-icon" size={20} class="inline-block" title="Activer le mode clair" />
       <div>
         <h3 class="mb-2 text-lg font-bold">Icônes disponibles</h3>
         <div class="flex flex-wrap items-center gap-4">
-          <Icon name="cat" id="cat-icon" size={20}  class="text-base-content" title="Chat" />
-          <Icon name="cat" id="cat-icon" size={20} class="inline-block" title="Activer le mode clair" />
-          <Icon name="music" size={20}  class="text-base-content" title="Musique" />
+          <Icon name="cat" id="cat-icon" size={20} class="text-base-content" title="Chat" />
+          <Icon name="music" size={20} class="text-base-content" title="Musique" />
           <Icon name="sun" size="24" class="text-base-content" title="Soleil" />
           <Icon name="moon" size="24" class="text-base-content" title="Lune" />
           <Icon name="chevron-left" size="24" class="text-base-content" title="Précédent" />
@@ -142,7 +248,49 @@ const itemColors = [
     </div>
   </Section>
 
-  <Section name="Animation (Lottie)">
+  <!-- ImageMod -->
+  <Section name="ImageMod">
+    <div class="grid grid-cols-1 gap-4">
+      <div>
+        <h3 class="mb-2 text-lg font-bold">Image avec optimisations</h3>
+        <div class="flex flex-wrap items-center gap-4">
+          <ImageMod
+            src="img_opt/jeremie-hero.png"
+            alt="Jérémie"
+            width={400}
+            height={400}
+          />
+        </div>
+      </div>
+    </div>
+  </Section>
+
+  <!-- Loader -->
+  <Section name="Loader">
+    <div class="grid grid-cols-1 gap-4">
+      <div>
+        <h3 class="mb-2 text-lg font-bold">Variants</h3>
+        <div class="flex flex-wrap items-center gap-4">
+          {loadingVariants.map(variant => <Loader variant={variant} />)}
+        </div>
+      </div>
+      <div>
+        <h3 class="mb-2 text-lg font-bold">Sizes</h3>
+        <div class="flex flex-wrap items-center gap-4">
+          {itemSizes.map(size => <Loader size={size} />)}
+        </div>
+      </div>
+      <div>
+        <h3 class="mb-2 text-lg font-bold">Colors</h3>
+        <div class="flex flex-wrap items-center gap-4">
+          {itemColors.map(color => <Loader color={color} />)}
+        </div>
+      </div>
+    </div>
+  </Section>
+
+  <!-- LottiePlayer -->
+  <Section name="LottiePlayer">
     <div class="grid grid-cols-1 gap-4">
       <div>
         <h3 class="mb-2 text-lg font-bold">Animation Test Simple (JSON)</h3>
@@ -219,22 +367,83 @@ const itemColors = [
           />
         </div>
       </div>
+    </div>
+  </Section>
+
+  <!-- Notice -->
+  <Section name="Notice">
+    <div class="grid grid-cols-1 gap-4">
       <div>
-        <h3 class="mb-2 text-lg font-bold">Animation .lottie (DotLottie)</h3>
-        <div class="flex flex-wrap items-center gap-4">
-          <DotLottiePlayer
-            src="/animations/watermelon-loader.lottie"
-            width={150}
-            height={150}
-            loop={true}
-            autoplay={true}
-            controls={true}
-            class="bg-base-200 rounded-lg"
-          />
+        <h3 class="mb-2 text-lg font-bold">Types</h3>
+        <div class="flex flex-col gap-4">
+          <Notice type="tip">This is a tip notice</Notice>
+          <Notice type="info">This is an info notice</Notice>
+          <Notice type="warning">This is a warning notice</Notice>
+          <Notice type="danger">This is a danger notice</Notice>
         </div>
-        <p class="text-sm text-base-content/70 mt-2">
-          Test avec le fichier .lottie original utilisant @lottiefiles/dotlottie-web
-        </p>
+      </div>
+    </div>
+  </Section>
+
+  <!-- PaginationItem -->
+  <Section name="PaginationItem">
+    <div class="grid grid-cols-1 gap-4">
+      <div>
+        <h3 class="mb-2 text-lg font-bold">States</h3>
+        <div class="flex flex-wrap items-center gap-4">
+          <PaginationItem label="1" page={1} href="#" />
+          <PaginationItem label="2" page={2} current />
+          <PaginationItem label="3" page={3} href="#" />
+          <PaginationItem label="..." disabled />
+        </div>
+      </div>
+    </div>
+  </Section>
+
+  <!-- Spinner -->
+  <Section name="Spinner">
+    <div class="grid grid-cols-1 gap-4">
+      <div>
+        <h3 class="mb-2 text-lg font-bold">Sizes</h3>
+        <div class="flex flex-wrap items-center gap-4">
+          <Spinner size={16} />
+          <Spinner size={24} />
+          <Spinner size={32} />
+          <Spinner size={48} />
+        </div>
+      </div>
+      <div>
+        <h3 class="mb-2 text-lg font-bold">Colors</h3>
+        <div class="flex flex-wrap items-center gap-4">
+          <Spinner color="currentColor" />
+          <Spinner color="#3b82f6" />
+          <Spinner color="#10b981" />
+          <Spinner color="#f59e0b" />
+        </div>
+      </div>
+    </div>
+  </Section>
+
+  <!-- Video -->
+  <Section name="Video">
+    <div class="grid grid-cols-1 gap-4">
+      <div>
+        <h3 class="mb-2 text-lg font-bold">Video Player</h3>
+        <div class="flex flex-wrap items-center gap-4">
+          <Video title="Sample Video" width={300} height={200} src="" />
+        </div>
+      </div>
+    </div>
+  </Section>
+
+  <!-- Youtube -->
+  <Section name="Youtube">
+    <div class="grid grid-cols-1 gap-4">
+      <div>
+        <h3 class="mb-2 text-lg font-bold">Youtube Player</h3>
+        <div class="flex flex-wrap items-center gap-4">
+          <Youtube id="dQw4w9WgXcQ" title="Sample YouTube Video" />
+        </div>
       </div>
     </div>
   </Section>

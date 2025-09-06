@@ -47,7 +47,7 @@ const components = [...autoComponents, ...extra]
     return (
       <Section class="flex flex-col items-start">
         <h2 class="mb-8 text-3xl font-bold">{name}</h2>
-        <div class="flex gap-4">
+        <div class={name === 'Divider' ? 'flex flex-col gap-4 w-full' : 'flex gap-4'}>
           {variations.map(variant => {
             const { children, ...rest } = (variant ?? {}) as any
             return (
