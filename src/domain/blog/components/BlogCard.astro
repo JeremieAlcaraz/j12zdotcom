@@ -13,7 +13,7 @@ interface Props {
 
 const { data, base = 100 } = Astro.props as Props
 const { summaryLength, blogFolder }: { summaryLength: number; blogFolder: string } = config.settings
-const { title, image, date, author } = data.data
+const { title, image, date, author, description } = data.data
 ---
 
 <Card class="flex h-full flex-col shadow-sm" base={base}>
@@ -49,7 +49,7 @@ const { title, image, date, author } = data.data
     }
   </div>
   <p class="text-base-content/70 line-clamp-3 text-sm leading-relaxed">
-    {smartTruncate(data.body || '', summaryLength || 150)}
+    {description || smartTruncate(data.body || '', summaryLength || 150)}
   </p>
   <div slot="actions" class="mt-4 justify-end pt-3">
     <a href={`/${blogFolder}/${data.id}`} class="btn btn-primary btn-sm"> Lire la suite </a>
