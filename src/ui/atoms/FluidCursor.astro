@@ -2,6 +2,7 @@
 // FluidCursor.astro — Overlay WebGL fluide, utilisé uniquement sur la home.
 // Implémente le web component <jz-fluid-cursor> à partir de implement/splash.html
 // et l’instancie côté client.
+const props = Astro.props;
 ---
 
 <script is:inline>
@@ -21,9 +22,52 @@
       wrap.appendChild(canvas);
       root.appendChild(wrap);
       this._canvas = canvas;
+      this._wrap = wrap;
+      this._scoped = false;
+      this._containerEl = null;
     }
 
     connectedCallback() {
+      // Détecter le mode scoped et le container cible
+      const containerAttr = this.getAttribute('container');
+      const hasScopedAttr = this.hasAttribute('scoped');
+      let containerEl = null;
+      if (containerAttr) {
+        if (containerAttr.startsWith('#') || containerAttr.startsWith('.')) {
+          containerEl = document.querySelector(containerAttr);
+        } else {
+          containerEl = document.getElementById(containerAttr) || document.querySelector(containerAttr);
+        }
+      }
+      if (!containerEl && hasScopedAttr) {
+        // Par défaut, utiliser le parent direct si scoped
+        containerEl = this.parentElement || undefined;
+      }
+      if (containerEl) {
+        this._scoped = true;
+        this._containerEl = containerEl;
+        // Adapter le style pour couvrir uniquement le container
+        // 1) Le host occupe tout le container
+        const style = document.createElement('style');
+        style.textContent = `:host{position:absolute;inset:0;display:block;pointer-events:none;}`;
+        this.shadowRoot && this.shadowRoot.appendChild(style);
+        // 2) Le wrap et le canvas prennent 100% de l'espace du host
+        this._wrap.style.position = 'absolute';
+        this._wrap.style.inset = '0';
+        this._wrap.style.width = '100%';
+        this._wrap.style.height = '100%';
+        this._canvas.style.width = '100%';
+        this._canvas.style.height = '100%';
+        // S'assurer que le container est positionné
+        const cs = window.getComputedStyle(containerEl);
+        if (cs.position === 'static') {
+          containerEl.style.position = 'relative';
+        }
+        // S'assurer que le host est enfant du container pour z-index correct
+        if (this.parentElement !== containerEl) {
+          containerEl.appendChild(this);
+        }
+      }
       this._start();
     }
     disconnectedCallback() {
@@ -32,6 +76,8 @@
 
     _start() {
       const canvas = this._canvas;
+      const scoped = this._scoped;
+      const containerEl = this._containerEl;
       // ---- Config par défaut ----
       let pointers = [pointerPrototype()];
       let config = {
@@ -642,8 +688,9 @@
         return dt;
       }
       function resizeCanvas() {
-        const w = scaleByPixelRatio(canvas.clientWidth);
-        const h = scaleByPixelRatio(canvas.clientHeight);
+        const target = scoped && containerEl ? containerEl : canvas;
+        const w = scaleByPixelRatio(target.clientWidth);
+        const h = scaleByPixelRatio(target.clientHeight);
         if (canvas.width !== w || canvas.height !== h) {
           canvas.width = w;
           canvas.height = h;
@@ -890,62 +937,82 @@
         canvas.style.opacity = fluidOpacity.toString();
       }
 
-      // ---- Input handlers (modifiés pour inclure la détection) ----
-      window.addEventListener('mousedown', (e) => {
+      // ---- Helpers coord pour scoped ----
+      function getScopedXY(clientX, clientY) {
+        if (!scoped || !containerEl) return { x: scaleByPixelRatio(clientX), y: scaleByPixelRatio(clientY) };
+        const rect = containerEl.getBoundingClientRect();
+        const x = clientX - rect.left;
+        const y = clientY - rect.top;
+        return { x: scaleByPixelRatio(x), y: scaleByPixelRatio(y) };
+      }
+
+      // ---- Input handlers (scoped vs global) ----
+      const mouseDownTarget = scoped && containerEl ? containerEl : window;
+      const mouseMoveFirstTarget = scoped && containerEl ? containerEl : document.body;
+      const mouseMoveTarget = scoped && containerEl ? containerEl : window;
+      const touchFirstTarget = scoped && containerEl ? containerEl : document.body;
+      const touchTarget = scoped && containerEl ? containerEl : window;
+
+      mouseDownTarget.addEventListener('mousedown', (e) => {
         const p = pointers[0];
-        const x = scaleByPixelRatio(e.clientX);
-        const y = scaleByPixelRatio(e.clientY);
+        const { x, y } = getScopedXY(e.clientX, e.clientY);
         updatePointerDownData(p, -1, x, y);
         clickSplat(p);
       });
       function handleFirstMouseMove(e) {
         const p = pointers[0];
-        const x = scaleByPixelRatio(e.clientX);
-        const y = scaleByPixelRatio(e.clientY);
+        const { x, y } = getScopedXY(e.clientX, e.clientY);
         const color = generateColor();
         updateFrame();
         updatePointerMoveData(p, x, y, color);
         updateFluidOpacity(e.clientX, e.clientY);
-        document.body.removeEventListener('mousemove', handleFirstMouseMove);
+        mouseMoveFirstTarget.removeEventListener('mousemove', handleFirstMouseMove);
       }
-      document.body.addEventListener('mousemove', handleFirstMouseMove);
-      window.addEventListener('mousemove', (e) => {
+      mouseMoveFirstTarget.addEventListener('mousemove', handleFirstMouseMove);
+      mouseMoveTarget.addEventListener('mousemove', (e) => {
         const p = pointers[0];
-        const x = scaleByPixelRatio(e.clientX);
-        const y = scaleByPixelRatio(e.clientY);
+        const { x, y } = getScopedXY(e.clientX, e.clientY);
         const color = p.color;
         updatePointerMoveData(p, x, y, color);
         updateFluidOpacity(e.clientX, e.clientY);
       });
+      if (scoped && containerEl) {
+        containerEl.addEventListener('mouseenter', () => {
+          targetOpacity = 1;
+        });
+        containerEl.addEventListener('mouseleave', () => {
+          // Masquer quand on sort de la zone
+          targetOpacity = 0;
+          const p = pointers[0];
+          updatePointerUpData(p);
+        });
+      }
 
       function handleFirstTouchStart(e) {
         const touches = e.targetTouches; const p = pointers[0];
         for (let i = 0; i < touches.length; i++) {
-          const x = scaleByPixelRatio(touches[i].clientX);
-          const y = scaleByPixelRatio(touches[i].clientY);
+          const { x, y } = getScopedXY(touches[i].clientX, touches[i].clientY);
           updateFrame();
           updatePointerDownData(p, touches[i].identifier, x, y);
         }
-        document.body.removeEventListener('touchstart', handleFirstTouchStart);
+        touchFirstTarget.removeEventListener('touchstart', handleFirstTouchStart);
       }
-      document.body.addEventListener('touchstart', handleFirstTouchStart);
-      window.addEventListener('touchstart', (e) => {
+      touchFirstTarget.addEventListener('touchstart', handleFirstTouchStart);
+      touchTarget.addEventListener('touchstart', (e) => {
         const touches = e.targetTouches; const p = pointers[0];
         for (let i = 0; i < touches.length; i++) {
-          const x = scaleByPixelRatio(touches[i].clientX);
-          const y = scaleByPixelRatio(touches[i].clientY);
+          const { x, y } = getScopedXY(touches[i].clientX, touches[i].clientY);
           updatePointerDownData(p, touches[i].identifier, x, y);
         }
       }, false);
-      window.addEventListener('touchmove', (e) => {
+      touchTarget.addEventListener('touchmove', (e) => {
         const touches = e.targetTouches; const p = pointers[0];
         for (let i = 0; i < touches.length; i++) {
-          const x = scaleByPixelRatio(touches[i].clientX);
-          const y = scaleByPixelRatio(touches[i].clientY);
+          const { x, y } = getScopedXY(touches[i].clientX, touches[i].clientY);
           updatePointerMoveData(p, x, y, p.color);
         }
       }, false);
-      window.addEventListener('touchend', () => {
+      touchTarget.addEventListener('touchend', () => {
         const p = pointers[0]; updatePointerUpData(p);
       });
 
@@ -960,5 +1027,5 @@
   }
 </script>
 
-<jz-fluid-cursor />
+<jz-fluid-cursor {...props} />
 
