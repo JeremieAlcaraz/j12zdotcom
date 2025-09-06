@@ -1,36 +1,37 @@
 ---
 import StyleGuideLayout from '@/domain/style-guide/layouts/StyleGuideLayout.astro'
-import ComponentGallery from '@/domain/dev/ComponentGallery.astro'
+import Section from '@/ui/atoms/Section.astro'
+import Divider from '@/ui/atoms/Divider.astro'
+import CardVariantsGallery from '@/domain/dev/CardVariantsGallery.astro'
 import CardBlogGallery from '@/domain/dev/CardBlogGallery.astro'
 import CardPricingGallery from '@/domain/dev/CardPricingGallery.astro'
-import CardVariantsGallery from '@/domain/dev/CardVariantsGallery.astro'
 import { getSinglePage } from '@/utils/contentParser'
 import { sortByDate } from '@/utils/sortFunctions'
-
-const modules = import.meta.glob('@/ui/organisms/**/*.astro', { eager: true })
 
 const BLOG_FOLDER = 'blog'
 const posts = await getSinglePage(BLOG_FOLDER)
 const sortedPosts = sortByDate(posts)
 const currentPosts = sortedPosts.slice(0, 3)
-
-const extra = [
-  {
-    name: 'Card',
-    Component: CardVariantsGallery,
-  },
-  {
-    name: 'BlogCard',
-    Component: CardBlogGallery,
-    props: { posts: currentPosts },
-  },
-  {
-    name: 'PricingCard',
-    Component: CardPricingGallery,
-  },
-]
 ---
 
 <StyleGuideLayout title="Style Guide | Organisms">
-  <ComponentGallery modules={modules} exclude={['Card']} extra={extra} />
+  <Section>
+    <Divider variant="default" label="Card" />
+    <h2 class="sr-only">Card</h2>
+    <CardVariantsGallery />
+  </Section>
+
+
+  <Section>
+    <Divider variant="default" label="BlogCard" />
+    <h2 class="sr-only">BlogCard</h2>
+    <CardBlogGallery posts={currentPosts} />
+  </Section>
+
+
+  <Section>
+    <Divider variant="default" label="PricingCard" />
+    <h2 class="sr-only">PricingCard</h2>
+    <CardPricingGallery />
+  </Section>
 </StyleGuideLayout>

@@ -1,18 +1,44 @@
 ---
 import StyleGuideLayout from '@/domain/style-guide/layouts/StyleGuideLayout.astro'
-import ComponentGallery from '@/domain/dev/ComponentGallery.astro'
+import Section from '@/ui/atoms/Section.astro'
+import Divider from '@/ui/atoms/Divider.astro'
+import Accordion from '@/ui/molecules/Accordion.astro'
+import Loading from '@/ui/molecules/Loading.astro'
+import Pagination from '@/ui/molecules/Pagination.astro'
 import { makePaginationLinks } from '@/utils/pagination'
 
-const modules = import.meta.glob('@/ui/molecules/**/*.astro', { eager: true })
-
 const { pages, prev, next } = makePaginationLinks('blog', 1, 5)
-
-const demoProps = {
-  Pagination: { pages, prev, next },
-  LoadingSection: { text: 'Chargement...' },
-}
 ---
 
 <StyleGuideLayout title="Style Guide | Molecules">
-  <ComponentGallery modules={modules} demoProps={demoProps} />
+  <Section>
+    <Divider variant="default" label="Accordion" />
+    <h2 class="sr-only">Accordion</h2>
+    <div class="grid grid-cols-1 gap-4">
+      <Accordion title="Titre de l'accordion">
+        <p>Contenu de démonstration pour l'accordion.</p>
+      </Accordion>
+      <Accordion title="Un autre accordion">
+        <p>Encore un peu de contenu.</p>
+      </Accordion>
+    </div>
+  </Section>
+
+
+  <Section>
+    <Divider variant="default" label="Loading" />
+    <h2 class="sr-only">Loading</h2>
+    <div class="grid grid-cols-1 gap-4">
+      <Loading text="Chargement..." />
+    </div>
+  </Section>
+
+
+  <Section>
+    <Divider variant="default" label="Pagination" />
+    <h2 class="sr-only">Pagination</h2>
+    <div class="grid grid-cols-1 gap-4">
+      <Pagination pages={pages} prev={prev} next={next} />
+    </div>
+  </Section>
 </StyleGuideLayout>
