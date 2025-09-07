@@ -15,7 +15,9 @@ import Youtube from '@/ui/atoms/Youtube.astro'
 <StyleGuideLayout title="Style Guide | Shortcodes MDX">
   <!-- Accordion (shortcode equivalent) -->
   <Section>
-    <Divider variant="default" label="Accordion" />
+    <div id="accordion" class="scroll-mt-[5rem]">
+      <Divider variant="default" label="Accordion" />
+    </div>
     <h2 class="sr-only">Accordion</h2>
     <div class="grid grid-cols-1 gap-4">
       <Accordion title="Titre">
@@ -29,7 +31,9 @@ import Youtube from '@/ui/atoms/Youtube.astro'
 
   <!-- Button (shortcode equivalent) -->
   <Section>
-    <Divider variant="default" label="Button" />
+    <div id="button" class="scroll-mt-[5rem]">
+      <Divider variant="default" label="Button" />
+    </div>
     <h2 class="sr-only">Button</h2>
     <div class="flex gap-4">
       <Button label="Visiter Astro" link="https://astro.build" />
@@ -39,7 +43,9 @@ import Youtube from '@/ui/atoms/Youtube.astro'
 
   <!-- Notice (shortcode equivalent) -->
   <Section>
-    <Divider variant="default" label="Notice" />
+    <div id="notice" class="scroll-mt-[5rem]">
+      <Divider variant="default" label="Notice" />
+    </div>
     <h2 class="sr-only">Notice</h2>
     <div class="flex flex-col gap-3">
       <Notice type="tip">Une petite astuce.</Notice>
@@ -49,7 +55,9 @@ import Youtube from '@/ui/atoms/Youtube.astro'
 
   <!-- Video & Youtube (shortcode equivalent) -->
   <Section>
-    <Divider variant="default" label="Video & Youtube" />
+    <div id="video-youtube" class="scroll-mt-[5rem]">
+      <Divider variant="default" label="Video & Youtube" />
+    </div>
     <h2 class="sr-only">Video & Youtube</h2>
     <div class="grid grid-cols-1 gap-6">
       <Video title="Sample" src="https://www.w3schools.com/html/mov_bbb.mp4" width={320} height={240} />

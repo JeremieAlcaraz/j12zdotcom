@@ -16,21 +16,27 @@ const testimonial = (await getEntry(
 
 <StyleGuideLayout title="Style Guide | Sections">
   <Section>
-    <Divider variant="default" label="HeroSection" />
+    <div id="herosection" class="scroll-mt-[5rem]">
+      <Divider variant="default" label="HeroSection" />
+    </div>
     <h2 class="sr-only">HeroSection</h2>
     <HeroSection />
   </Section>
 
 
   <Section>
-    <Divider variant="default" label="TestimonialSection" />
+    <div id="testimonialsection" class="scroll-mt-[5rem]">
+      <Divider variant="default" label="TestimonialSection" />
+    </div>
     <h2 class="sr-only">TestimonialSection</h2>
     <TestimonialSection testimonial={testimonial} />
   </Section>
 
 
   <Section>
-    <Divider variant="default" label="Calendrier Luma" />
+    <div id="calendrier-luma" class="scroll-mt-[5rem]">
+      <Divider variant="default" label="Calendrier Luma" />
+    </div>
     <h2 class="sr-only">Calendrier Luma</h2>
     <div class="flex justify-center">
       <iframe
@@ -46,7 +52,9 @@ const testimonial = (await getEntry(
 
 
   <Section>
-    <Divider variant="default" label="Footer" />
+    <div id="footer" class="scroll-mt-[5rem]">
+      <Divider variant="default" label="Footer" />
+    </div>
     <h2 class="sr-only">Footer</h2>
     <Footer />
   </Section>

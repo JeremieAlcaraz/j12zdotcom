@@ -1,10 +1,10 @@
 ---
-interface Props {
+interface Props extends astro.HTMLAttributes {
   variant?: 'default' | 'neutral' | 'primary' | 'secondary' | 'accent' | 'success' | 'warning' | 'info' | 'error'
   label?: string
 }
 
-const { variant = 'default', label } = Astro.props as Props
+const { variant = 'default', label, ...attrs } = Astro.props as Props
 
 const base = 'divider'
 const variants = {
@@ -20,6 +20,6 @@ const variants = {
 }
 ---
 
-<div class={`${base} ${variants[variant]}`}>
+<div class={`${base} ${variants[variant]}`} {...attrs}>
   {label && <span>{label}</span>}
 </div>

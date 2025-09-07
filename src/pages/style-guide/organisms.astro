@@ -16,21 +16,27 @@ const currentPosts = sortedPosts.slice(0, 3)
 
 <StyleGuideLayout title="Style Guide | Organisms">
   <Section>
-    <Divider variant="default" label="Card" />
+    <div id="card" class="scroll-mt-[5rem]">
+      <Divider variant="default" label="Card" />
+    </div>
     <h2 class="sr-only">Card</h2>
     <CardVariantsGallery />
   </Section>
 
 
   <Section>
-    <Divider variant="default" label="BlogCard" />
+    <div id="blogcard" class="scroll-mt-[5rem]">
+      <Divider variant="default" label="BlogCard" />
+    </div>
     <h2 class="sr-only">BlogCard</h2>
     <CardBlogGallery posts={currentPosts} />
   </Section>
 
 
   <Section>
-    <Divider variant="default" label="PricingCard" />
+    <div id="pricingcard" class="scroll-mt-[5rem]">
+      <Divider variant="default" label="PricingCard" />
+    </div>
     <h2 class="sr-only">PricingCard</h2>
     <CardPricingGallery />
   </Section>

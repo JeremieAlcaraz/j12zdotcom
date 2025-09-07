@@ -12,7 +12,9 @@ const { pages, prev, next } = makePaginationLinks('blog', 1, 5)
 
 <StyleGuideLayout title="Style Guide | Molecules">
   <Section>
-    <Divider variant="default" label="Accordion" />
+    <div id="accordion" class="scroll-mt-[5rem]">
+      <Divider variant="default" label="Accordion" />
+    </div>
     <h2 class="sr-only">Accordion</h2>
     <div class="grid grid-cols-1 gap-4">
       <Accordion title="Titre de l'accordion">
@@ -26,7 +28,9 @@ const { pages, prev, next } = makePaginationLinks('blog', 1, 5)
 
 
   <Section>
-    <Divider variant="default" label="Loading" />
+    <div id="loading" class="scroll-mt-[5rem]">
+      <Divider variant="default" label="Loading" />
+    </div>
     <h2 class="sr-only">Loading</h2>
     <div class="grid grid-cols-1 gap-4">
       <Loading text="Chargement..." />
@@ -35,7 +39,9 @@ const { pages, prev, next } = makePaginationLinks('blog', 1, 5)
 
 
   <Section>
-    <Divider variant="default" label="Pagination" />
+    <div id="pagination" class="scroll-mt-[5rem]">
+      <Divider variant="default" label="Pagination" />
+    </div>
     <h2 class="sr-only">Pagination</h2>
     <div class="grid grid-cols-1 gap-4">
       <Pagination pages={pages} prev={prev} next={next} />
