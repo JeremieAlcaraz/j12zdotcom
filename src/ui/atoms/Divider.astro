@@ -1,10 +1,10 @@
 ---
-interface Props extends Astro.HTMLAttributes {
+interface Props {
   variant?: 'default' | 'neutral' | 'primary' | 'secondary' | 'accent' | 'success' | 'warning' | 'info' | 'error'
   label?: string
 }
 
-const { variant = 'default', label, ...attrs } = Astro.props as Props
+const { variant = 'default', label, ...attrs } = Astro.props as Props & Record<string, unknown>
 
 const base = 'divider'
 const variants = {
