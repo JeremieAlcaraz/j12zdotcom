@@ -17,15 +17,31 @@ const { pages, prev, next } = makePaginationLinks('blog', 1, 5)
     </div>
     <h2 class="sr-only">Accordion</h2>
     <div class="grid grid-cols-1 gap-4">
-      <Accordion title="Titre de l'accordion">
-        <p>Contenu de démonstration pour l'accordion.</p>
+      <Accordion title="Variante par défaut (flèche)" groupName="demo" open={true}>
+        <p>Contenu de démonstration pour l'accordion par défaut avec icône flèche.</p>
       </Accordion>
-      <Accordion title="Un autre accordion">
-        <p>Encore un peu de contenu.</p>
+
+      <Accordion title="Variante avec icône plus" variant="plus" groupName="demo">
+        <p>Ce contenu utilise l'icône plus au lieu de la flèche.</p>
+      </Accordion>
+
+      <Accordion title="Variante colorée (info)" color="info" groupName="demo">
+        <p>Accordéon avec couleur info pour un style informatif.</p>
+      </Accordion>
+
+      <Accordion title="Variante combinée (plus + warning)" variant="plus" color="warning" groupName="demo">
+        <p>Combinaison d'icône plus et couleur warning pour alertes.</p>
+      </Accordion>
+
+      <Accordion title="Accordion Secondaire" color="secondary" groupName="demo">
+        <p>Un accordéon avec la couleur secondaire.</p>
+      </Accordion>
+
+      <Accordion title="Accordion Succès" color="success" groupName="demo">
+        <p>Parfait pour les messages de succès.</p>
       </Accordion>
     </div>
   </Section>
-
 
   <Section>
     <div id="loading" class="scroll-mt-[5rem]">
@@ -36,7 +52,6 @@ const { pages, prev, next } = makePaginationLinks('blog', 1, 5)
       <Loading text="Chargement..." />
     </div>
   </Section>
-
 
   <Section>
     <div id="pagination" class="scroll-mt-[5rem]">
