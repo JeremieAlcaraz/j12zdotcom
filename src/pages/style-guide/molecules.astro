@@ -6,6 +6,7 @@ import Accordion from '@/ui/molecules/Accordion.astro'
 import Loading from '@/ui/molecules/Loading.astro'
 import Pagination from '@/ui/molecules/Pagination.astro'
 import { makePaginationLinks } from '@/utils/pagination'
+import FabSpeedDial from '@/ui/molecules/FabSpeedDial.astro'
 
 const { pages, prev, next } = makePaginationLinks('blog', 1, 5)
 ---
@@ -61,5 +62,14 @@ const { pages, prev, next } = makePaginationLinks('blog', 1, 5)
     <div class="grid grid-cols-1 gap-4">
       <Pagination pages={pages} prev={prev} next={next} />
     </div>
+  </Section>
+
+  <Section>
+    <div id="fab" class="scroll-mt-[5rem]">
+      <Divider variant="default" label="FAB / Speed Dial" />
+    </div>
+    <h2 class="sr-only">FAB / Speed Dial</h2>
+    <!-- The FAB is fixed to the viewport bottom-right -->
+    <FabSpeedDial />
   </Section>
 </StyleGuideLayout>

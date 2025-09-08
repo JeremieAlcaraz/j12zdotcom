@@ -1,0 +1,86 @@
+---
+import Icon from '@/ui/atoms/Icon.astro'
+
+const fabId = `fab-${Math.random().toString(36).slice(2, 9)}`
+---
+
+<!-- Floating Action Button (FAB) + Speed Dial using daisyUI 5 -->
+<div id={fabId} class="fab fixed bottom-6 right-6 z-50">
+  <!-- Focusable trigger: required for accessibility and to open the Speed Dial -->
+  <div
+    tabindex="0"
+    role="button"
+    aria-label="Actions rapides"
+    aria-expanded="false"
+    class="btn btn-lg btn-circle btn-secondary"
+    data-fab-main
+  >
+    <!-- Plus icon (inline SVG) -->
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      fill="none"
+      viewBox="0 0 24 24"
+      stroke-width="2"
+      stroke="currentColor"
+      aria-hidden="true"
+      class="size-6"
+    >
+      <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
+    </svg>
+  </div>
+
+  <!-- Buttons that show up when FAB is open -->
+  <button type="button" class="btn btn-lg btn-circle" aria-label="Focus" data-fab-item>
+    <Icon name="eye" size={24} class="text-base-content" title="Focus" />
+  </button>
+  <button type="button" class="btn btn-lg btn-circle" aria-label="Musique" data-fab-item>
+    <Icon name="music" size={24} class="text-base-content" title="Musique" />
+  </button>
+</div>
+
+<script is:inline>
+  (() => {
+    const root = document.getElementById("{fabId}")
+    if (!root) return
+    const main = root.querySelector('[data-fab-main]')
+    const items = root.querySelectorAll('[data-fab-item]')
+    if (!main) return
+
+    const setExpanded = (val) => {
+      main.setAttribute('aria-expanded', val ? 'true' : 'false')
+    }
+
+    const open = () => {
+      setExpanded(true)
+      main.focus()
+    }
+    const close = () => {
+      setExpanded(false)
+      // Blur to remove focus-within so daisyUI closes the Speed Dial
+      if (document.activeElement === main) {
+        main.blur()
+      }
+    }
+
+    main.addEventListener('click', (e) => {
+      e.preventDefault()
+      const expanded = main.getAttribute('aria-expanded') === 'true'
+      expanded ? close() : open()
+    })
+
+    // Close when selecting any menu item
+    items.forEach((btn) => {
+      btn.addEventListener('click', () => close())
+    })
+
+    // Close on Escape
+    main.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') close()
+    })
+
+    // Close on click outside
+    document.addEventListener('click', (e) => {
+      if (!root.contains(e.target)) close()
+    })
+  })()
+</script>
