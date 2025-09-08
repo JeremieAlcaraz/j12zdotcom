@@ -62,8 +62,8 @@ export interface SiteConfig {
 
 export const siteConfig: SiteConfig = {
   site: {
-    title: 'Astroplate',
-    baseUrl: 'https://astroplate.netlify.app',
+    title: 'j12zdotcom - Portfolio Jeremie Alcaraz',
+    baseUrl: 'https://j12zdotcom.com',
     basePath: '/',
     trailingSlash: false,
     favicon: '/images/favicon.png',
@@ -71,7 +71,7 @@ export const siteConfig: SiteConfig = {
     logoDarkmode: '/images/logo-darkmode.png',
     logoWidth: 150,
     logoHeight: 30,
-    logoText: 'Astroplate',
+    logoText: 'j12zdotcom',
   },
   settings: {
     search: true,
@@ -102,9 +102,9 @@ export const siteConfig: SiteConfig = {
     settings: {},
   },
   metadata: {
-    author: 'zeon.studio',
+    author: 'Jeremie Alcaraz',
     image: '/images/og-image.png',
-    description: 'astro and tailwind boilerplate',
+    description: 'Portfolio et blog de Jeremie Alcaraz - Formations et services en développement web avec Astro, React et Svelte',
   },
 } as const // « as const » fige les valeurs littérales
 
