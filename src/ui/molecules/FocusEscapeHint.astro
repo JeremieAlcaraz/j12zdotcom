@@ -1,0 +1,145 @@
+---
+// src/ui/molecules/FocusEscapeHint.astro
+// Component to show ESC key hint in focus mode with arrow and fade animations
+import Kbd from '@/ui/atoms/Kbd.astro'
+---
+
+<div id="focus-escape-hint" class="focus-escape-hint opacity-0 pointer-events-none">
+  <div class="flex items-center gap-2 bg-white dark:bg-gray-800 px-3 py-2 rounded-lg shadow-lg border border-gray-200 dark:border-gray-700">
+    <span class="text-sm text-gray-600 dark:text-gray-400">Tu peux utiliser</span>
+    <Kbd>ESC</Kbd>
+    <span class="arrow-up text-gray-400">↗</span>
+  </div>
+</div>
+
+<style>
+  .focus-escape-hint {
+    position: fixed;
+    bottom: 1rem;
+    left: 1rem;
+    z-index: 50;
+    transition: opacity 0.3s ease-in-out, transform 0.3s ease-in-out;
+    transform: translateY(10px);
+  }
+  
+  .focus-escape-hint.show {
+    opacity: 1;
+    pointer-events: auto;
+    transform: translateY(0);
+  }
+  
+  .focus-escape-hint.fade-out {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  
+  .arrow-up {
+    font-size: 0.875rem;
+    transform: rotate(-45deg);
+    display: inline-block;
+    animation: pulse 2s infinite;
+  }
+  
+  @keyframes pulse {
+    0%, 100% { 
+      opacity: 0.6;
+      transform: rotate(-45deg) scale(1);
+    }
+    50% { 
+      opacity: 1;
+      transform: rotate(-45deg) scale(1.1);
+    }
+  }
+  
+  /* Hide by default, only show in focus mode */
+  :not(.focus-mode) .focus-escape-hint {
+    display: none;
+  }
+</style>
+
+<script>
+  (() => {
+    let hintElement: HTMLElement | null = null;
+    let showTimeout: number | null = null;
+    let hideTimeout: number | null = null;
+    
+    function initHint() {
+      hintElement = document.getElementById('focus-escape-hint');
+      if (!hintElement) return;
+      
+      // Show hint when entering focus mode
+      const observer = new MutationObserver((mutations) => {
+        mutations.forEach((mutation) => {
+          if (mutation.type === 'attributes' && mutation.attributeName === 'class') {
+            const target = mutation.target as Element;
+            if (target === document.body) {
+              if (document.body.classList.contains('focus-mode')) {
+                showHint();
+              } else {
+                hideHint();
+              }
+            }
+          }
+        });
+      });
+      
+      observer.observe(document.body, {
+        attributes: true,
+        attributeFilter: ['class']
+      });
+      
+      // Listen for keydown events to show hint temporarily
+      document.addEventListener('keydown', handleKeyDown);
+      
+      // If already in focus mode on load, show hint
+      if (document.body.classList.contains('focus-mode')) {
+        showHint();
+      }
+    }
+    
+    function showHint() {
+      if (!hintElement) return;
+      
+      // Clear any pending hide timeout
+      if (hideTimeout) {
+        clearTimeout(hideTimeout);
+        hideTimeout = null;
+      }
+      
+      hintElement.classList.remove('fade-out');
+      hintElement.classList.add('show');
+      
+      // Auto-hide after 3 seconds
+      hideTimeout = setTimeout(() => {
+        hideHint();
+      }, 3000);
+    }
+    
+    function hideHint() {
+      if (!hintElement) return;
+      
+      hintElement.classList.remove('show');
+      hintElement.classList.add('fade-out');
+      
+      if (hideTimeout) {
+        clearTimeout(hideTimeout);
+        hideTimeout = null;
+      }
+    }
+    
+    function handleKeyDown(e: KeyboardEvent) {
+      // Only respond to non-ESC keys when in focus mode
+      if (e.key !== 'Escape' && document.body.classList.contains('focus-mode')) {
+        // Show hint briefly when user presses any key except ESC
+        showHint();
+      }
+    }
+    
+    // Initialize when DOM is ready
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', initHint);
+    } else {
+      initHint();
+    }
+  })();
+</script>
