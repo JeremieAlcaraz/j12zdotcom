@@ -22,20 +22,28 @@
       } catch (_) {}
     }
 
-    // Handle events from the UI FAB
-    document.addEventListener('fab:action', (e) => {
-      let detail = {}
-      try {
-        if (typeof CustomEvent !== 'undefined' && e instanceof CustomEvent) {
-          detail = e.detail || {}
-        }
-      } catch (_) {}
-      if (detail && detail.action === 'focus') {
-        toggleFocus()
-      }
-    })
-
-    // Initialize state on load
-    applyInitial()
-  })()
-</script>
+        // Handle events from the UI FAB
+        document.addEventListener('fab:action', (e) => {
+          let detail = {}
+          try {
+            if (typeof CustomEvent !== 'undefined' && e instanceof CustomEvent) {
+              detail = e.detail || {}
+            }
+          } catch (_) {}
+          if (detail && detail.action === 'focus') {
+            toggleFocus()
+          }
+        })
+    
+        // Handle Escape key to exit focus mode
+        document.addEventListener('keydown', (e) => {
+          if (e.key === 'Escape' && document.body.classList.contains('focus-mode')) {
+            e.preventDefault()
+            toggleFocus()
+          }
+        })
+    
+        // Initialize state on load
+        applyInitial()
+      })()
+    </script>

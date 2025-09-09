@@ -112,8 +112,13 @@ body.focus-mode main {
 /* Centre et améliore la lisibilité du contenu textuel */
 body.focus-mode .prose {
   max-width: 75ch !important;
-  font-size: 1.15rem;
+  font-size: 1.5rem;
   line-height: 1.85;
+}
+
+body.focus-mode .prose p,
+body.focus-mode .prose li {
+  font-size: 1.5rem;
 }
 
 /* Images plus contenues en mode lecture */
