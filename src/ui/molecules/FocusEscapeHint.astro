@@ -60,8 +60,7 @@ import Kbd from '@/ui/atoms/Kbd.astro'
 <script>
   (() => {
     let hintElement: HTMLElement | null = null;
-    let showTimeout: number | null = null;
-    let hideTimeout: number | null = null;
+    let hideTimeout: ReturnType<typeof setTimeout> | null = null;
     
     function initHint() {
       hintElement = document.getElementById('focus-escape-hint');
