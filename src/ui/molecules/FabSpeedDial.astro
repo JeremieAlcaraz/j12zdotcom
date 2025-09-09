@@ -50,22 +50,28 @@ import Icon from '@/ui/atoms/Icon.astro'
       main.setAttribute('aria-expanded', val ? 'true' : 'false')
     }
 
-    const open = () => {
-      setExpanded(true)
-      main.focus()
-    }
     const close = () => {
       setExpanded(false)
-      // Blur to remove focus-within so daisyUI closes the Speed Dial
-      if (document.activeElement === main) {
+      // Blur the active element inside the FAB to remove :focus-within
+      const active = document.activeElement
+      if (active && root.contains(active)) {
+        ;(active instanceof HTMLElement) && active.blur()
+      } else {
         main.blur()
       }
     }
 
-    main.addEventListener('click', (e) => {
-      e.preventDefault()
-      const expanded = main.getAttribute('aria-expanded') === 'true'
-      expanded ? close() : open()
+    // Keep the FAB open purely by focus-within logic
+    main.addEventListener('click', () => {
+      main.focus()
+      setExpanded(true)
+    })
+
+    // Reflect open state for a11y based on focus transitions
+    root.addEventListener('focusin', () => setExpanded(true))
+    root.addEventListener('focusout', (e) => {
+      const next = e.relatedTarget
+      if (!next || !root.contains(next)) setExpanded(false)
     })
 
     // Close when selecting any menu item and emit a generic event
@@ -87,11 +93,6 @@ import Icon from '@/ui/atoms/Icon.astro'
     // Close on Escape
     main.addEventListener('keydown', (e) => {
       if (e.key === 'Escape') close()
-    })
-
-    // Close on click outside
-    document.addEventListener('click', (e) => {
-      if (!root.contains(e.target)) close()
     })
   })()
 </script>
