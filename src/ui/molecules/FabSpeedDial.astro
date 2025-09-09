@@ -1,11 +1,10 @@
 ---
 import Icon from '@/ui/atoms/Icon.astro'
 
-const fabId = `fab-${Math.random().toString(36).slice(2, 9)}`
 ---
 
 <!-- Floating Action Button (FAB) + Speed Dial using daisyUI 5 -->
-<div id={fabId} class="fab fixed bottom-6 right-6 z-50">
+<div class="fab fixed bottom-6 right-6 z-50">
   <!-- Focusable trigger: required for accessibility and to open the Speed Dial -->
   <div
     tabindex="0"
@@ -40,7 +39,8 @@ const fabId = `fab-${Math.random().toString(36).slice(2, 9)}`
 
 <script is:inline>
   (() => {
-    const root = document.getElementById("{fabId}")
+    // The script is placed right after the .fab element, so we can reliably select it
+    const root = (document.currentScript && document.currentScript.previousElementSibling) || null
     if (!root) return
     const main = root.querySelector('[data-fab-main]')
     const items = root.querySelectorAll('[data-fab-item]')
