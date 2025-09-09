@@ -1,0 +1,15 @@
+---
+// src/shortcodes/generic/Kbd.shortcode.astro
+import KbdComponent from '../../ui/atoms/Kbd.astro';
+
+interface Props {
+  size?: 'xs' | 'sm' | 'md' | 'lg' | 'xl';
+}
+
+const { size } = Astro.props as Props;
+const defaultSlot = Astro.slots.render('default') ?? '';
+---
+
+<KbdComponent size={size}>
+  {defaultSlot}
+</KbdComponent>

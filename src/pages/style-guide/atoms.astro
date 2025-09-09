@@ -12,6 +12,7 @@ import FluidCursor from '@/ui/atoms/FluidCursor.astro'
 import Halo from '@/ui/atoms/Halo.astro'
 import Icon from '@/ui/atoms/Icon.astro'
 import ImageMod from '@/ui/atoms/ImageMod.astro'
+import Kbd from '@/ui/atoms/Kbd.astro'
 import Loader from '@/ui/atoms/Loader.astro'
 import LottiePlayer from '@/ui/atoms/LottiePlayer.astro'
 import Notice from '@/ui/atoms/Notice.astro'
@@ -489,6 +490,42 @@ const itemColors = [
         <h3 class="mb-2 text-lg font-bold">Youtube Player</h3>
         <div class="flex flex-wrap items-center gap-4">
           <Youtube id="dQw4w9WgXcQ" title="Sample YouTube Video" />
+        </div>
+      </div>
+    </div>
+  </Section>
+
+  <!-- Kbd -->
+  <Section>
+    <div id="kbd" class="scroll-mt-[5rem]">
+      <Divider variant="default" label="Kbd" />
+    </div>
+    <h2 class="sr-only">Kbd</h2>
+    <div class="grid grid-cols-1 gap-4">
+      <div>
+        <h3 class="mb-2 text-lg font-bold">Tailles</h3>
+        <div class="flex flex-wrap items-center gap-4">
+          <Kbd size="xs">K</Kbd>
+          <Kbd size="sm">K</Kbd>
+          <Kbd size="md">K</Kbd>
+          <Kbd size="lg">K</Kbd>
+          <Kbd size="xl">K</Kbd>
+        </div>
+      </div>
+      <div>
+        <h3 class="mb-2 text-lg font-bold">Test Daisy UI direct</h3>
+        <div class="flex flex-wrap items-center gap-4">
+          <kbd class="kbd">K</kbd>
+          <kbd class="kbd kbd-lg">K</kbd>
+        </div>
+      </div>
+      <div>
+        <h3 class="mb-2 text-lg font-bold">Exemple d'utilisation avec composant</h3>
+        <div class="flex flex-wrap items-center gap-4">
+          <Kbd size="md">Ctrl</Kbd>
+          <Kbd size="md">+</Kbd>
+          <Kbd size="md">K</Kbd>
+          <span class="text-sm">pour ouvrir les raccourcis clavier</span>
         </div>
       </div>
     </div>
