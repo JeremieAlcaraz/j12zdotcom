@@ -10,6 +10,7 @@ import Notice from '@/shortcodes/generic/Notice.shortcode.astro'
 import Video from '@/shortcodes/generic/Video.shortcode.astro'
 import Youtube from '@/shortcodes/generic/Youtube.shortcode.astro'
 import FabSpeedDial from '@/ui/molecules/FabSpeedDial.astro'
+import FocusModeController from '@/domain/shared/controllers/FocusModeController.astro'
 
 const { post } = Astro.props
 const { Content } = await render(post)
@@ -81,4 +82,5 @@ const { title, author, categories, image, date, tags } = post.data
 
   <!-- FAB / Speed Dial fixed in the viewport for blog posts -->
   <FabSpeedDial />
+  <FocusModeController />
 </section>

@@ -30,10 +30,10 @@ const fabId = `fab-${Math.random().toString(36).slice(2, 9)}`
   </div>
 
   <!-- Buttons that show up when FAB is open -->
-  <button type="button" class="btn btn-lg btn-circle" aria-label="Focus" data-fab-item>
+  <button type="button" class="btn btn-lg btn-circle" aria-label="Focus" data-fab-item data-fab-action="focus">
     <Icon name="eye" size={24} class="text-base-content" title="Focus" />
   </button>
-  <button type="button" class="btn btn-lg btn-circle" aria-label="Musique" data-fab-item>
+  <button type="button" class="btn btn-lg btn-circle" aria-label="Musique" data-fab-item data-fab-action="music">
     <Icon name="music" size={24} class="text-base-content" title="Musique" />
   </button>
 </div>
@@ -68,9 +68,20 @@ const fabId = `fab-${Math.random().toString(36).slice(2, 9)}`
       expanded ? close() : open()
     })
 
-    // Close when selecting any menu item
+    // Close when selecting any menu item and emit a generic event
     items.forEach((btn) => {
-      btn.addEventListener('click', () => close())
+      btn.addEventListener('click', () => {
+        const action = btn.getAttribute('data-fab-action')
+        if (action) {
+          // Emit a generic event for domain controllers to handle
+          const ev = new CustomEvent('fab:action', {
+            detail: { action },
+            bubbles: true,
+          })
+          btn.dispatchEvent(ev)
+        }
+        close()
+      })
     })
 
     // Close on Escape
