@@ -1,6 +1,11 @@
 ---
 import AccordionComponent from '@/ui/molecules/Accordion.astro'
-const props = Astro.props as any
+import type { Props } from '@/ui/molecules/Accordion.astro'
+
+const { ...props } = Astro.props as Props
 ---
 
-<AccordionComponent {...props} />
+<AccordionComponent {...props}>
+  <slot />
+</AccordionComponent>
+

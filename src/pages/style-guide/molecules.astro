@@ -1,18 +1,75 @@
 ---
 import StyleGuideLayout from '@/domain/style-guide/layouts/StyleGuideLayout.astro'
-import ComponentGallery from '@/domain/dev/ComponentGallery.astro'
+import Section from '@/ui/atoms/Section.astro'
+import Divider from '@/ui/atoms/Divider.astro'
+import Accordion from '@/ui/molecules/Accordion.astro'
+import Loading from '@/ui/molecules/Loading.astro'
+import Pagination from '@/ui/molecules/Pagination.astro'
 import { makePaginationLinks } from '@/utils/pagination'
-
-const modules = import.meta.glob('@/ui/molecules/**/*.astro', { eager: true })
+import FabSpeedDial from '@/ui/molecules/FabSpeedDial.astro'
 
 const { pages, prev, next } = makePaginationLinks('blog', 1, 5)
-
-const demoProps = {
-  Pagination: { pages, prev, next },
-  LoadingSection: { text: 'Chargement...' },
-}
 ---
 
 <StyleGuideLayout title="Style Guide | Molecules">
-  <ComponentGallery modules={modules} demoProps={demoProps} />
+  <Section>
+    <div id="accordion" class="scroll-mt-[5rem]">
+      <Divider variant="default" label="Accordion" />
+    </div>
+    <h2 class="sr-only">Accordion</h2>
+    <div class="grid grid-cols-1 gap-4">
+      <Accordion title="Variante par défaut (flèche)" groupName="demo" open={true}>
+        <p>Contenu de démonstration pour l'accordion par défaut avec icône flèche.</p>
+      </Accordion>
+
+      <Accordion title="Variante avec icône plus" variant="plus" groupName="demo">
+        <p>Ce contenu utilise l'icône plus au lieu de la flèche.</p>
+      </Accordion>
+
+      <Accordion title="Variante colorée (info)" color="info" groupName="demo">
+        <p>Accordéon avec couleur info pour un style informatif.</p>
+      </Accordion>
+
+      <Accordion title="Variante combinée (plus + warning)" variant="plus" color="warning" groupName="demo">
+        <p>Combinaison d'icône plus et couleur warning pour alertes.</p>
+      </Accordion>
+
+      <Accordion title="Accordion Secondaire" color="secondary" groupName="demo">
+        <p>Un accordéon avec la couleur secondaire.</p>
+      </Accordion>
+
+      <Accordion title="Accordion Succès" color="success" groupName="demo">
+        <p>Parfait pour les messages de succès.</p>
+      </Accordion>
+    </div>
+  </Section>
+
+  <Section>
+    <div id="loading" class="scroll-mt-[5rem]">
+      <Divider variant="default" label="Loading" />
+    </div>
+    <h2 class="sr-only">Loading</h2>
+    <div class="grid grid-cols-1 gap-4">
+      <Loading text="Chargement..." />
+    </div>
+  </Section>
+
+  <Section>
+    <div id="pagination" class="scroll-mt-[5rem]">
+      <Divider variant="default" label="Pagination" />
+    </div>
+    <h2 class="sr-only">Pagination</h2>
+    <div class="grid grid-cols-1 gap-4">
+      <Pagination pages={pages} prev={prev} next={next} />
+    </div>
+  </Section>
+
+  <Section>
+    <div id="fab" class="scroll-mt-[5rem]">
+      <Divider variant="default" label="FAB / Speed Dial" />
+    </div>
+    <h2 class="sr-only">FAB / Speed Dial</h2>
+    <!-- The FAB is fixed to the viewport bottom-right -->
+    <FabSpeedDial />
+  </Section>
 </StyleGuideLayout>

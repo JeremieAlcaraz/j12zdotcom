@@ -2,15 +2,7 @@
 import BaseLayout from '@/layouts/Base.astro'
 import Hero from '@/domain/shared/sections/HeroSection.astro'
 import FluidCursor from '@/ui/atoms/FluidCursor.astro'
-import { getEntry } from 'astro:content'
-import Testimonial from '@/domain/formation/TestimonialSection.astro'
-import Section from '@/ui/atoms/Section.astro'
-import type { CollectionEntry } from 'astro:content'
 
-const testimonial = (await getEntry(
-  'testimonialSection',
-  'testimonial'
-)) as CollectionEntry<'testimonialSection'>
 ---
 
 <BaseLayout title="Accueil – Mon Site">

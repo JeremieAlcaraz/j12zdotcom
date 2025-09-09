@@ -1,0 +1,25 @@
+---
+interface Props {
+  variant?: 'default' | 'neutral' | 'primary' | 'secondary' | 'accent' | 'success' | 'warning' | 'info' | 'error'
+  label?: string
+}
+
+const { variant = 'default', label, ...attrs } = Astro.props as Props & Record<string, unknown>
+
+const base = 'divider'
+const variants = {
+  default: '',
+  neutral: 'divider-neutral',
+  primary: 'divider-primary',
+  secondary: 'divider-secondary',
+  accent: 'divider-accent',
+  success: 'divider-success',
+  warning: 'divider-warning',
+  info: 'divider-info',
+  error: 'divider-error',
+}
+---
+
+<div class={`${base} ${variants[variant]}`} {...attrs}>
+  {label && <span>{label}</span>}
+</div>

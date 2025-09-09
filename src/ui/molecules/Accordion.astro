@@ -1,15 +1,35 @@
 ---
-interface Props {
+import type { HTMLAttributes } from 'astro/types'
+
+export interface Props extends HTMLAttributes<'div'> {
   title: string
-  class?: string
-  children: any
+  variant?: 'arrow' | 'plus'
+  color?: 'primary' | 'secondary' | 'accent' | 'neutral' | 'info' | 'success' | 'warning' | 'error'
+  groupName?: string
+  open?: boolean
 }
 
-const { title, class: className = '', children } = Astro.props as Props
+const { title, class: className, variant = 'arrow', color, groupName, open = false, ...rest } = Astro.props
+
+const colorClasses = {
+  primary: 'bg-primary text-primary-content',
+  secondary: 'bg-secondary text-secondary-content',
+  accent: 'bg-accent text-accent-content',
+  neutral: 'bg-neutral text-neutral-content',
+  info: 'bg-info text-info-content',
+  success: 'bg-success text-success-content',
+  warning: 'bg-warning text-warning-content',
+  error: 'bg-error text-error-content',
+}
+
+const collapseVariant = variant === 'plus' ? 'collapse-plus' : 'collapse-arrow'
+const collapseColor = color ? colorClasses[color] : 'bg-base-200'
 ---
 
-<div class={`collapse collapse-arrow ${className}`}>
-  <input type="checkbox" />
-  <div class="collapse-title text-left">{title}</div>
-  <div class="collapse-content">{children}</div>
+<div class:list={['collapse', 'relative', collapseVariant, collapseColor, className]} {...rest}>
+  <input type={groupName ? 'radio' : 'checkbox'} name={groupName} checked={open} class="absolute inset-0 h-full w-full cursor-pointer opacity-0" />
+  <div class="collapse-title text-xl font-medium">{title}</div>
+  <div class="collapse-content">
+    <slot />
+  </div>
 </div>

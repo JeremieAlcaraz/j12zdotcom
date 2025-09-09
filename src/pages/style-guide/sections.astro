@@ -1,9 +1,10 @@
 ---
 import StyleGuideLayout from '@/domain/style-guide/layouts/StyleGuideLayout.astro'
-import ComponentGallery from '@/domain/dev/ComponentGallery.astro'
 import Section from '@/ui/atoms/Section.astro'
+import Divider from '@/ui/atoms/Divider.astro'
 import Footer from '@/layouts/partials/Footer.astro'
 import TestimonialSection from '@/domain/formation/TestimonialSection.astro'
+import HeroSection from '@/domain/shared/sections/HeroSection.astro'
 import { getEntry } from 'astro:content'
 import type { CollectionEntry } from 'astro:content'
 
@@ -11,19 +12,32 @@ const testimonial = (await getEntry(
   'testimonialSection',
   'testimonial'
 )) as CollectionEntry<'testimonialSection'>
-
-const modules = import.meta.glob('@/domain/shared/sections/**/*.astro', { eager: true })
-
-const extra = [
-  { name: 'Footer', Component: Footer },
-  { name: 'TestimonialSection', Component: TestimonialSection, props: { testimonial } },
-]
 ---
 
 <StyleGuideLayout title="Style Guide | Sections">
-  <ComponentGallery modules={modules} extra={extra} />
   <Section>
-    <h2 class="mb-8 text-center text-3xl font-bold">Calendrier Luma</h2>
+    <div id="herosection" class="scroll-mt-[5rem]">
+      <Divider variant="default" label="HeroSection" />
+    </div>
+    <h2 class="sr-only">HeroSection</h2>
+    <HeroSection />
+  </Section>
+
+
+  <Section>
+    <div id="testimonialsection" class="scroll-mt-[5rem]">
+      <Divider variant="default" label="TestimonialSection" />
+    </div>
+    <h2 class="sr-only">TestimonialSection</h2>
+    <TestimonialSection testimonial={testimonial} />
+  </Section>
+
+
+  <Section>
+    <div id="calendrier-luma" class="scroll-mt-[5rem]">
+      <Divider variant="default" label="Calendrier Luma" />
+    </div>
+    <h2 class="sr-only">Calendrier Luma</h2>
     <div class="flex justify-center">
       <iframe
         src="https://lu.ma/embed/calendar/cal-Ocr3w6Nc4xGsrHH/events"
@@ -34,5 +48,14 @@ const extra = [
         aria-hidden="false"
         tabindex="0"></iframe>
     </div>
+  </Section>
+
+
+  <Section>
+    <div id="footer" class="scroll-mt-[5rem]">
+      <Divider variant="default" label="Footer" />
+    </div>
+    <h2 class="sr-only">Footer</h2>
+    <Footer />
   </Section>
 </StyleGuideLayout>

@@ -1,0 +1,49 @@
+---
+// FocusModeController: listens to UI events and toggles a global "focus-mode" class
+// This keeps UI components dumb and pushes behavior to the domain layer.
+---
+
+<script is:inline>
+  (() => {
+    const STORAGE_KEY = 'focus-mode'
+
+    function applyInitial() {
+      try {
+        const saved = localStorage.getItem(STORAGE_KEY)
+        if (saved === '1') document.body.classList.add('focus-mode')
+      } catch (_) {}
+    }
+
+    function toggleFocus() {
+      const willEnable = !document.body.classList.contains('focus-mode')
+      document.body.classList.toggle('focus-mode', willEnable)
+      try {
+        localStorage.setItem(STORAGE_KEY, willEnable ? '1' : '0')
+      } catch (_) {}
+    }
+
+        // Handle events from the UI FAB
+        document.addEventListener('fab:action', (e) => {
+          let detail = {}
+          try {
+            if (typeof CustomEvent !== 'undefined' && e instanceof CustomEvent) {
+              detail = e.detail || {}
+            }
+          } catch (_) {}
+          if (detail && detail.action === 'focus') {
+            toggleFocus()
+          }
+        })
+    
+        // Handle Escape key to exit focus mode
+        document.addEventListener('keydown', (e) => {
+          if (e.key === 'Escape' && document.body.classList.contains('focus-mode')) {
+            e.preventDefault()
+            toggleFocus()
+          }
+        })
+    
+        // Initialize state on load
+        applyInitial()
+      })()
+    </script>

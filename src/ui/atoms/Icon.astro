@@ -10,7 +10,7 @@ import type { AstroComponentFactory } from 'astro/runtime/server/index.js'
 // Importer les SVG en tant que composants Astro
 // Utiliser un chemin absolu pour que Vite puisse résoudre correctement les icônes
 // peu importe l'emplacement du composant, et les charger comme composants Astro.
-const modules = import.meta.glob('@/ui/atoms/icons/*.svg', { eager: true }) as Record<
+const modules = import.meta.glob('@/assets/icons/*.svg', { eager: true }) as Record<
   string,
   { default: AstroComponentFactory }
 >

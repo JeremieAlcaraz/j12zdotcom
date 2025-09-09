@@ -89,3 +89,45 @@
     @apply prose-td:relative prose-td:z-10 prose-td:px-3 prose-td:py-[18px];
   }
 }
+
+/* Focus (lecture épurée) – domain behavior styles */
+body {
+  transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+/* Masquer l'habillage en mode focus */
+body.focus-mode header,
+body.focus-mode nav,
+body.focus-mode footer,
+body.focus-mode .navbar,
+body.focus-mode .site-aside {
+  display: none !important;
+}
+
+/* Supprimer l'offset du header fixe en mode focus */
+body.focus-mode main {
+  padding-top: 0 !important;
+}
+
+/* Centre et améliore la lisibilité du contenu textuel */
+body.focus-mode .prose {
+  max-width: 75ch !important;
+  font-size: 1.5rem;
+  line-height: 1.85;
+}
+
+body.focus-mode .prose p,
+body.focus-mode .prose li {
+  font-size: 1.5rem;
+}
+
+/* Images plus contenues en mode lecture */
+body.focus-mode .prose img {
+  max-height: 70vh;
+  object-fit: contain;
+}
+
+/* Conserve la pillule FAB visible pour sortir du mode focus */
+body.focus-mode .fab {
+  display: block;
+}
