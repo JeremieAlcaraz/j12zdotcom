@@ -18,6 +18,7 @@
 
 @layer base {
   @import "./base.css";
+  @import "./typography.css";
 }
 
 @layer components {

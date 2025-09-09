@@ -1,0 +1,91 @@
+---
+import Layout from '@/layouts/Base.astro'
+---
+
+<Layout title="Test des Polices">
+  <main class="container mx-auto p-8">
+    <h1 class="text-4xl font-bold mb-8">Test des Polices : Nunito et Excalidraw</h1>
+    
+    <section class="mb-8">
+      <h2 class="text-2xl font-semibold mb-4">1. Police par défaut : Nunito</h2>
+      <p class="text-lg">
+        Ceci est du texte en <strong>Nunito</strong> (police principale du site). 
+        Nunito est une police sans-serif moderne et arrondie. 
+        Elle est appliquée globalement via <code>body &#123; font-family: var(--font-family-sans); &#125;</code>.
+      </p>
+      <p class="text-xl mt-4">
+        Exemple plus grand : The quick brown fox jumps over the lazy dog. 123 ABCGJQY.
+      </p>
+      
+      <div class="mt-6 p-4 bg-gray-100 rounded">
+        <p class="text-sm">Astuce : Inspectez cet élément (F12) pour voir <code>font-family: "Nunito", system-ui, sans-serif;</code> dans les styles calculés.</p>
+      </div>
+    </section>
+
+    <section class="mb-8">
+      <h2 class="text-2xl font-semibold mb-4">2. Police occasionnelle : Excalidraw</h2>
+      <p class="excalidraw-font text-xl">
+        Ceci est du texte en <strong>Excalidraw</strong> (appliqué via la classe <code>.excalidraw-font</code>). 
+        Excalidraw a un style plus technique/manuscrit. Utilisez <code class="excalidraw-font">class="excalidraw-font"</code> pour l'appliquer ponctuellement.
+      </p>
+      <p class="excalidraw-font text-2xl mt-4">
+        Exemple plus grand : The quick brown fox jumps over the lazy dog. 123 ABCGJQY.
+      </p>
+      
+      <div class="mt-6 p-4 bg-blue-100 rounded">
+        <p class="text-sm">Astuce : Inspectez ce paragraphe pour voir <code>font-family: "Excalidraw", "Nunito", system-ui, sans-serif;</code>.</p>
+      </div>
+    </section>
+
+    <section class="mb-8">
+      <h2 class="text-2xl font-semibold mb-4">3. Vérification du chargement</h2>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div class="p-4 bg-green-100 rounded">
+          <h3 class="font-bold">✅ Vérifiez dans Network (F12)</h3>
+          <ul class="list-disc list-inside text-sm">
+            <li><code>nunito.woff2</code> (statut 200)</li>
+            <li><code>excalidraw.woff2</code> (statut 200)</li>
+          </ul>
+        </div>
+        <div class="p-4 bg-yellow-100 rounded">
+          <h3 class="font-bold">🔍 Inspectez les styles (F12 > Elements)</h3>
+          <p class="text-sm">Computed > font-family doit montrer "Nunito" en premier pour le texte normal.</p>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <h2 class="text-2xl font-semibold mb-4">4. Comparaison avec l'ancienne police</h2>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+        <div>
+          <h3 class="font-bold mb-2">Ancienne police (system-ui)</h3>
+          <p style="font-family: system-ui, sans-serif !important; border: 1px solid #ccc; padding: 16px;">
+            Texte en system-ui : The quick brown fox jumps over the lazy dog.
+          </p>
+        </div>
+        <div>
+          <h3 class="font-bold mb-2">Nouvelle police : Nunito</h3>
+          <p style="border: 1px solid #ccc; padding: 16px;">
+            Texte en Nunito : The quick brown fox jumps over the lazy dog.
+          </p>
+        </div>
+      </div>
+      <p class="text-sm mt-4 text-gray-600">
+        Comparez les deux : Nunito a des lettres plus arrondies (a, g, y, q). La différence est subtile mais visible sur du texte long.
+      </p>
+    </section>
+
+    <div class="mt-12 text-center">
+      <a href="/" class="btn btn-primary">← Retour à l'accueil</a>
+    </div>
+  </main>
+</Layout>
+
+<style>
+  /* Styles additionnels pour la page de test */
+  .excalidraw-font {
+    border-left: 4px solid #3b82f6; /* Bordure bleue pour identifier facilement */
+    background-color: #f0f9ff;
+    padding-left: 12px;
+  }
+</style>
