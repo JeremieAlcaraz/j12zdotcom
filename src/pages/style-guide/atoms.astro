@@ -19,6 +19,12 @@ import Notice from '@/ui/atoms/Notice.astro'
 import PaginationItem from '@/ui/atoms/PaginationItem.astro'
 import Video from '@/ui/atoms/Video.astro'
 import Youtube from '@/ui/atoms/Youtube.astro'
+// import AstroLogo from "~icons/logos/astro";
+import MdiStore24Hour from "~icons/mdi/store-24-hour";
+import MdiAlarmOff from "~icons/mdi/alarm-off";
+import IconParkAbnormal from "~icons/icon-park/abnormal";
+import RawMdiAlarmOff from "~icons/mdi/alarm-off?raw&width=4em&height=4em";
+import RawMdiAlarmOff2 from "~icons/mdi/alarm-off?raw&width=1em&height=1em";
 
 const loadingVariants = ['spinner', 'dots', 'ring', 'ball', 'bars', 'infinity'] as const
 const itemSizes = ['xs', 'sm', 'md', 'lg', 'xl'] as const
@@ -286,6 +292,14 @@ const itemColors = [
           <Icon name="music" size="24" class="text-error" title="Erreur" />
         </div>
       </div>
+    <!-- <AstroLogo style="font-size:2em" /> -->
+    <br />
+    <br />
+    <MdiStore24Hour />
+    <MdiAlarmOff />
+    <IconParkAbnormal />
+    <Fragment set:html={RawMdiAlarmOff} />
+    <Fragment set:html={RawMdiAlarmOff2} />
     </div>
   </Section>
 

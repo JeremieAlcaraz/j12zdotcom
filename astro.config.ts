@@ -11,6 +11,8 @@ import AutoImport from 'astro-auto-import' // ⟵ NEW
 import remarkCollapse from 'remark-collapse'
 import remarkToc from 'remark-toc'
 
+import Icons from 'unplugin-icons/vite'
+
 export default defineConfig({
   // 1) Intégrations
   // site: config.site.base_url ? config.site.base_url : 'http://examplesite.com',
@@ -40,7 +42,7 @@ export default defineConfig({
 
   // 2) Vite
   vite: {
-    plugins: [tsconfigPaths(), tailwindcss()],
+    plugins: [tsconfigPaths(), tailwindcss(), Icons({ compiler: 'astro' })],
   },
 
   // 3) Sortie : statique (recommandé)
