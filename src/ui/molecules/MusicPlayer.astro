@@ -1,11 +1,16 @@
 ---
-// Composant MusicPlayer - Lecteur de musique simple (dumb component)
+// Composant MusicPlayer - Lecteur de musique avec logique
 ---
 
 <div class="card bg-base-100 card-border border-base-300 card-sm overflow-hidden">
+  <!-- Élément audio caché -->
+  <audio id="audio-player" preload="metadata">
+    <source src="/musics/jeremie-theme.mp3" type="audio/mpeg">
+    Votre navigateur ne supporte pas l'élément audio.
+  </audio>
   <div class="card-body my-2">
     <div class="flex items-center justify-around">
-      <button class="btn btn-square btn-neutral">
+      <button class="btn btn-square btn-neutral" data-action="prev">
         <svg
           xmlns="http://www.w3.org/2000/svg"
           fill="none"
@@ -21,7 +26,7 @@
           />
         </svg>
       </button>
-      <button class="btn btn-square btn-neutral btn-lg">
+      <button class="btn btn-square btn-neutral btn-lg" data-action="play">
         <svg
           xmlns="http://www.w3.org/2000/svg"
           fill="none"
@@ -37,7 +42,7 @@
           />
         </svg>
       </button>
-      <button class="btn btn-square btn-neutral">
+      <button class="btn btn-square btn-neutral" data-action="next">
         <svg
           xmlns="http://www.w3.org/2000/svg"
           fill="none"
@@ -66,15 +71,15 @@
         style="inset-inline-start:10%"
         data-tip="13:39"
       ></div>
-      <progress class="progress" value="10" max="100"></progress>
+      <progress class="progress" value="0" max="100"></progress>
     </div>
     <div class="flex justify-between text-xs opacity-50">
-      <span>13:39</span>
-      <span>120:00</span>
+      <span data-time="current">13:39</span>
+      <span data-time="duration">120:00</span>
     </div>
   </div>
   <div class="flex items-center justify-around px-2 pb-6">
-    <button class="btn btn-square">
+    <button class="btn btn-square btn-volume" data-action="volume">
       <svg
         width="16"
         height="16"
@@ -98,7 +103,7 @@
         />
       </svg>
     </button>
-    <button class="btn btn-square">
+    <button class="btn btn-square btn-shuffle" data-action="shuffle">
       <svg
         width="16"
         height="16"
@@ -127,7 +132,7 @@
         />
       </svg>
     </button>
-    <button class="btn btn-square">
+    <button class="btn btn-square btn-repeat" data-action="repeat">
       <svg
         width="16"
         height="16"
@@ -206,3 +211,241 @@
     </button>
   </div>
 </div>
+
+<script>
+  class MusicPlayer {
+    audio: HTMLAudioElement;
+    playBtn: HTMLElement | null;
+    prevBtn: HTMLElement | null;
+    nextBtn: HTMLElement | null;
+    volumeBtn: HTMLElement | null;
+    repeatBtn: HTMLElement | null;
+    shuffleBtn: HTMLElement | null;
+    progressBar: HTMLElement | null;
+    progressContainer: HTMLElement | null;
+    currentTimeEl: HTMLElement | null;
+    durationEl: HTMLElement | null;
+    tooltip: HTMLElement | null;
+    isPlaying: boolean;
+    isMuted: boolean;
+    isRepeating: boolean;
+    isShuffling: boolean;
+    volume: number;
+    constructor() {
+      this.audio = document.getElementById('audio-player') as HTMLAudioElement;
+      this.playBtn = document.querySelector('[data-action="play"]');
+      this.prevBtn = document.querySelector('[data-action="prev"]');
+      this.nextBtn = document.querySelector('[data-action="next"]');
+      this.volumeBtn = document.querySelector('[data-action="volume"]');
+      this.repeatBtn = document.querySelector('[data-action="repeat"]');
+      this.shuffleBtn = document.querySelector('[data-action="shuffle"]');
+      this.progressBar = document.querySelector('.progress');
+      const progressEl = document.querySelector('.progress');
+      this.progressContainer = progressEl ? progressEl.parentElement : null;
+      this.currentTimeEl = document.querySelector('[data-time="current"]');
+      this.durationEl = document.querySelector('[data-time="duration"]');
+      this.tooltip = document.querySelector('.tooltip');
+
+      this.isPlaying = false;
+      this.isMuted = false;
+      this.isRepeating = false;
+      this.isShuffling = false;
+      this.volume = 1;
+
+      this.init();
+    }
+
+    init() {
+      this.setupEventListeners();
+      this.updateDuration();
+      this.updateVolumeButton();
+      this.updateRepeatButton();
+      this.updateShuffleButton();
+    }
+
+    setupEventListeners() {
+      // Boutons de contrôle
+      if (this.playBtn) {
+        this.playBtn.addEventListener('click', () => this.togglePlay());
+      }
+      if (this.prevBtn) {
+        this.prevBtn.addEventListener('click', () => this.prevTrack());
+      }
+      if (this.nextBtn) {
+        this.nextBtn.addEventListener('click', () => this.nextTrack());
+      }
+      if (this.volumeBtn) {
+        this.volumeBtn.addEventListener('click', () => this.toggleMute());
+      }
+      if (this.repeatBtn) {
+        this.repeatBtn.addEventListener('click', () => this.toggleRepeat());
+      }
+      if (this.shuffleBtn) {
+        this.shuffleBtn.addEventListener('click', () => this.toggleShuffle());
+      }
+
+      // Barre de progression
+      if (this.progressContainer) {
+        this.progressContainer.addEventListener('click', (e) => this.seek(e));
+      }
+
+      // Événements audio
+      this.audio.addEventListener('timeupdate', () => this.updateProgress());
+      this.audio.addEventListener('loadedmetadata', () => this.updateDuration());
+      this.audio.addEventListener('ended', () => this.handleTrackEnd());
+      this.audio.addEventListener('play', () => this.updatePlayButton(true));
+      this.audio.addEventListener('pause', () => this.updatePlayButton(false));
+    }
+
+    togglePlay() {
+      if (this.isPlaying) {
+        this.audio.pause();
+      } else {
+        this.audio.play();
+      }
+      this.isPlaying = !this.isPlaying;
+    }
+
+    prevTrack() {
+      // Pour l'instant, recommence la piste
+      this.audio.currentTime = 0;
+    }
+
+    nextTrack() {
+      // Pour l'instant, recommence la piste
+      this.audio.currentTime = 0;
+    }
+
+    toggleMute() {
+      this.isMuted = !this.isMuted;
+      this.audio.muted = this.isMuted;
+      this.updateVolumeButton();
+    }
+
+    toggleRepeat() {
+      this.isRepeating = !this.isRepeating;
+      this.audio.loop = this.isRepeating;
+      this.updateRepeatButton();
+    }
+
+    toggleShuffle() {
+      this.isShuffling = !this.isShuffling;
+      this.updateShuffleButton();
+    }
+
+    seek(e: MouseEvent) {
+      if (!this.progressContainer) return;
+      const rect = this.progressContainer.getBoundingClientRect();
+      const percent = (e.clientX - rect.left) / rect.width;
+      this.audio.currentTime = percent * this.audio.duration;
+    }
+
+    updateProgress() {
+      const percent = (this.audio.currentTime / this.audio.duration) * 100;
+      if (this.progressBar) {
+        (this.progressBar as HTMLProgressElement).value = percent;
+      }
+
+      // Mettre à jour le tooltip
+      if (this.tooltip) {
+        const tooltipPercent = (this.audio.currentTime / this.audio.duration) * 100;
+        this.tooltip.style.left = `${tooltipPercent}%`;
+        this.tooltip.setAttribute('data-tip', this.formatTime(this.audio.currentTime));
+      }
+
+      // Mettre à jour le temps actuel
+      if (this.currentTimeEl) {
+        this.currentTimeEl.textContent = this.formatTime(this.audio.currentTime);
+      }
+    }
+
+    updateDuration() {
+      if (this.durationEl && !isNaN(this.audio.duration)) {
+        this.durationEl.textContent = this.formatTime(this.audio.duration);
+      }
+    }
+
+    handleTrackEnd() {
+      if (!this.isRepeating) {
+        this.isPlaying = false;
+        this.updatePlayButton(false);
+      }
+    }
+
+    updatePlayButton(isPlaying: boolean) {
+      const playIcon = this.playBtn?.querySelector('svg');
+      if (playIcon) {
+        if (isPlaying) {
+          // Changer l'icône en pause
+          playIcon.innerHTML = `
+            <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 5.25v13.5M8.25 5.25v13.5" />
+          `;
+        } else {
+          // Remettre l'icône play
+          playIcon.innerHTML = `
+            <path stroke-linecap="round" stroke-linejoin="round" d="M5.25 5.653c0-.856.917-1.398 1.667-.986l11.54 6.347a1.125 1.125 0 0 1 0 1.972l-11.54 6.347a1.125 1.125 0 0 1-1.667-.986V5.653Z" />
+          `;
+        }
+      }
+    }
+
+    updateVolumeButton() {
+      if (!this.volumeBtn) return;
+      const volumeIcon = this.volumeBtn.querySelector('svg');
+      if (volumeIcon) {
+        if (this.isMuted) {
+          // Icône mute avec barre diagonale plus visible
+          volumeIcon.innerHTML = `
+            <path d="M24 6V42C17 42 11.7985 32.8391 11.7985 32.8391H6C4.89543 32.8391 4 31.9437 4 30.8391V17.0108C4 15.9062 4.89543 15.0108 6 15.0108H11.7985C11.7985 15.0108 17 6 24 6Z" fill="none" stroke="currentColor" stroke-width="4" stroke-linejoin="round"/>
+            <path d="M32 15L32 15C32.6232 15.5565 33.1881 16.1797 33.6841 16.8588C35.1387 18.8504 36 21.3223 36 24C36 26.6545 35.1535 29.1067 33.7218 31.0893C33.2168 31.7885 32.6391 32.4293 32 33" stroke="currentColor" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M35 12L45 22" stroke="currentColor" stroke-width="6" stroke-linecap="round"/>
+            <path d="M45 12L35 22" stroke="currentColor" stroke-width="6" stroke-linecap="round"/>
+          `;
+        } else {
+          // Icône volume normale
+          volumeIcon.innerHTML = `
+            <path d="M24 6V42C17 42 11.7985 32.8391 11.7985 32.8391H6C4.89543 32.8391 4 31.9437 4 30.8391V17.0108C4 15.9062 4.89543 15.0108 6 15.0108H11.7985C11.7985 15.0108 17 6 24 6Z" fill="none" stroke="currentColor" stroke-width="4" stroke-linejoin="round"/>
+            <path d="M32 15L32 15C32.6232 15.5565 33.1881 16.1797 33.6841 16.8588C35.1387 18.8504 36 21.3223 36 24C36 26.6545 35.1535 29.1067 33.7218 31.0893C33.2168 31.7885 32.6391 32.4293 32 33" stroke="currentColor" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+          `;
+        }
+      }
+      // Utiliser bg-primary pour un contraste plus visible
+      this.volumeBtn.classList.toggle('bg-primary', this.isMuted);
+    }
+
+    updateRepeatButton() {
+      if (!this.repeatBtn) return;
+      this.repeatBtn.classList.toggle('bg-primary', this.isRepeating);
+    }
+
+    updateShuffleButton() {
+      if (!this.shuffleBtn) return;
+      this.shuffleBtn.classList.toggle('bg-primary', this.isShuffling);
+    }
+
+    formatTime(seconds: number) {
+      if (isNaN(seconds)) return '0:00';
+      const mins = Math.floor(seconds / 60);
+      const secs = Math.floor(seconds % 60);
+      return `${mins}:${secs.toString().padStart(2, '0')}`;
+    }
+  }
+
+  // Initialiser le lecteur quand le DOM est chargé
+  document.addEventListener('DOMContentLoaded', () => {
+    new MusicPlayer();
+  });
+
+  // Support pour les composants dynamiques (si le composant est ajouté après le chargement)
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', () => {
+      if (document.getElementById('audio-player')) {
+        new MusicPlayer();
+      }
+    });
+  } else {
+    if (document.getElementById('audio-player')) {
+      new MusicPlayer();
+    }
+  }
+</script>
