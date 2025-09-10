@@ -5,58 +5,35 @@
 <div class="card bg-base-100 card-border border-base-300 card-sm overflow-hidden">
   <!-- Élément audio caché -->
   <audio id="audio-player" preload="metadata">
-    <source src="/musics/jeremie-theme.mp3" type="audio/mpeg">
+    <source src="/musics/jeremie-theme.mp3" type="audio/mpeg" />
     Votre navigateur ne supporte pas l'élément audio.
   </audio>
   <div class="card-body my-2">
     <div class="flex items-center justify-around">
-      <button class="btn btn-square btn-neutral" data-action="prev">
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          fill="none"
-          viewBox="0 0 24 24"
-          stroke-width="1.5"
-          stroke="currentColor"
-          class="size-4 shrink-0"
-        >
-          <path
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            d="M21 16.811c0 .864-.933 1.406-1.683.977l-7.108-4.061a1.125 1.125 0 0 1 0-1.954l7.108-4.061A1.125 1.125 0 0 1 21 8.689v8.122ZM11.25 16.811c0 .864-.933 1.406-1.683.977l-7.108-4.061a1.125 1.125 0 0 1 0-1.954l7.108-4.061a1.125 1.125 0 0 1 1.683.977v8.122Z"
-          />
-        </svg>
+      <button
+        class="btn btn-square btn-neutral"
+        data-action="prev"
+        aria-label="Previous track"
+        title="Previous track"
+      >
+        <i-lucide-skip-back class="size-4 shrink-0"></i-lucide-skip-back>
       </button>
-      <button class="btn btn-square btn-neutral btn-lg" data-action="play">
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          fill="none"
-          viewBox="0 0 24 24"
-          stroke-width="1.5"
-          stroke="currentColor"
-          class="size-6 shrink-0"
-        >
-          <path
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            d="M5.25 5.653c0-.856.917-1.398 1.667-.986l11.54 6.347a1.125 1.125 0 0 1 0 1.972l-11.54 6.347a1.125 1.125 0 0 1-1.667-.986V5.653Z"
-          />
-        </svg>
+      <button
+        class="btn btn-square btn-neutral btn-lg"
+        data-action="play"
+        aria-label="Play"
+        title="Play"
+      >
+        <i-lucide-play class="icon-play size-6 shrink-0"></i-lucide-play>
+        <i-lucide-pause class="icon-pause hidden size-6 shrink-0"></i-lucide-pause>
       </button>
-      <button class="btn btn-square btn-neutral" data-action="next">
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          fill="none"
-          viewBox="0 0 24 24"
-          stroke-width="1.5"
-          stroke="currentColor"
-          class="size-4 shrink-0"
-        >
-          <path
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            d="M3 8.689c0-.864.933-1.406 1.683-.977l7.108 4.061a1.125 1.125 0 0 1 0 1.954l-7.108 4.061A1.125 1.125 0 0 1 3 16.811V8.69ZM12.75 8.689c0-.864.933-1.406 1.683-.977l7.108 4.061a1.125 1.125 0 0 1 0 1.954l-7.108 4.061a1.125 1.125 0 0 1-1.683-.977V8.69Z"
-          />
-        </svg>
+      <button
+        class="btn btn-square btn-neutral"
+        data-action="next"
+        aria-label="Next track"
+        title="Next track"
+      >
+        <i-lucide-skip-forward class="size-4 shrink-0"></i-lucide-skip-forward>
       </button>
     </div>
     <div class="mt-2 text-center">
@@ -70,7 +47,8 @@
         class="tooltip tooltip-open absolute top-2 before:text-xs"
         style="inset-inline-start:10%"
         data-tip="13:39"
-      ></div>
+      >
+      </div>
       <progress class="progress" value="0" max="100"></progress>
     </div>
     <div class="flex justify-between text-xs opacity-50">
@@ -79,373 +57,194 @@
     </div>
   </div>
   <div class="flex items-center justify-around px-2 pb-6">
-    <button class="btn btn-square btn-volume" data-action="volume">
-      <svg
-        width="16"
-        height="16"
-        viewBox="0 0 48 48"
-        fill="none"
-        xmlns="http://www.w3.org/2000/svg"
-      >
-        <path
-          d="M24 6V42C17 42 11.7985 32.8391 11.7985 32.8391H6C4.89543 32.8391 4 31.9437 4 30.8391V17.0108C4 15.9062 4.89543 15.0108 6 15.0108H11.7985C11.7985 15.0108 17 6 24 6Z"
-          fill="none"
-          stroke="currentColor"
-          stroke-width="4"
-          stroke-linejoin="round"
-        />
-        <path
-          d="M32 15L32 15C32.6232 15.5565 33.1881 16.1797 33.6841 16.8588C35.1387 18.8504 36 21.3223 36 24C36 26.6545 35.1535 29.1067 33.7218 31.0893C33.2168 31.7885 32.6391 32.4293 32 33"
-          stroke="currentColor"
-          stroke-width="4"
-          stroke-linecap="round"
-          stroke-linejoin="round"
-        />
-      </svg>
+    <button class="btn btn-square btn-volume" data-action="volume" aria-label="Mute" title="Mute">
+      <i-lucide-volume-2 class="icon-volume size-4"></i-lucide-volume-2>
+      <i-lucide-volume-x class="icon-mute hidden size-4"></i-lucide-volume-x>
     </button>
-    <button class="btn btn-square btn-shuffle" data-action="shuffle">
-      <svg
-        width="16"
-        height="16"
-        viewBox="0 0 48 48"
-        fill="none"
-        xmlns="http://www.w3.org/2000/svg"
-      >
-        <path
-          d="M40 33L44 37L40 41"
-          stroke="currentColor"
-          stroke-width="4"
-          stroke-linecap="round"
-          stroke-linejoin="round"
-        />
-        <path
-          d="M44 11H37C29.8203 11 24 16.8203 24 24C24 31.1797 29.8203 37 37 37H44"
-          stroke="currentColor"
-          stroke-width="4"
-          stroke-linecap="round"
-        />
-        <path
-          d="M4 37H11C18.1797 37 24 31.1797 24 24C24 16.8203 18.1797 11 11 11H4"
-          stroke="currentColor"
-          stroke-width="4"
-          stroke-linecap="round"
-        />
-      </svg>
+    <button
+      class="btn btn-square btn-shuffle"
+      data-action="shuffle"
+      aria-label="Shuffle"
+      title="Shuffle"
+    >
+      <i-lucide-shuffle class="size-4"></i-lucide-shuffle>
     </button>
-    <button class="btn btn-square btn-repeat" data-action="repeat">
-      <svg
-        width="16"
-        height="16"
-        viewBox="0 0 48 48"
-        fill="none"
-        xmlns="http://www.w3.org/2000/svg"
-      >
-        <path
-          d="M4 25C4 18.3502 9.39624 13 16 13H44"
-          stroke="currentColor"
-          stroke-width="4"
-          stroke-linecap="round"
-          stroke-linejoin="round"
-        />
-        <path
-          d="M38 7L44 13L38 19"
-          stroke="currentColor"
-          stroke-width="4"
-          stroke-linecap="round"
-          stroke-linejoin="round"
-        />
-        <path
-          d="M44 23C44 29.6498 38.6038 35 32 35H4"
-          stroke="currentColor"
-          stroke-width="4"
-          stroke-linecap="round"
-          stroke-linejoin="round"
-        />
-        <path
-          d="M10 41L4 35L10 29"
-          stroke="currentColor"
-          stroke-width="4"
-          stroke-linecap="round"
-          stroke-linejoin="round"
-        />
-      </svg>
+    <button
+      class="btn btn-square btn-repeat"
+      data-action="repeat"
+      aria-label="Repeat"
+      title="Repeat"
+    >
+      <i-lucide-repeat class="size-4"></i-lucide-repeat>
     </button>
-    <button class="btn btn-square">
-      <svg
-        width="16"
-        height="16"
-        viewBox="0 0 48 48"
-        fill="none"
-        xmlns="http://www.w3.org/2000/svg"
-      >
-        <path
-          d="M42 30V24.4615C42 14.2655 33.9411 6 24 6C14.0589 6 6 14.2655 6 24.4615V30"
-          stroke="currentColor"
-          stroke-width="4"
-          stroke-linecap="round"
-          stroke-linejoin="round"
-        />
-        <path
-          d="M34 32C34 29.7909 35.7909 28 38 28H42V42H38C35.7909 42 34 40.2091 34 38V32Z"
-          fill="none"
-          stroke="currentColor"
-          stroke-width="4"
-          stroke-linejoin="round"
-        />
-        <path
-          d="M42 32H44C45.1046 32 46 32.8954 46 34V36C46 37.1046 45.1046 38 44 38H42V32Z"
-          fill="currentColor"
-        />
-        <path
-          d="M6 32H4C2.89543 32 2 32.8954 2 34V36C2 37.1046 2.89543 38 4 38H6V32Z"
-          fill="currentColor"
-        />
-        <path
-          d="M6 28H10C12.2091 28 14 29.7909 14 32V38C14 40.2091 12.2091 42 10 42H6V28Z"
-          fill="none"
-          stroke="currentColor"
-          stroke-width="4"
-          stroke-linejoin="round"
-        />
-      </svg>
+    <button class="btn btn-square" aria-label="Headphones" title="Headphones">
+      <i-lucide-headphones class="size-4"></i-lucide-headphones>
     </button>
   </div>
 </div>
 
-<script>
+<script type="module">
   class MusicPlayer {
-    audio: HTMLAudioElement;
-    playBtn: HTMLElement | null;
-    prevBtn: HTMLElement | null;
-    nextBtn: HTMLElement | null;
-    volumeBtn: HTMLElement | null;
-    repeatBtn: HTMLElement | null;
-    shuffleBtn: HTMLElement | null;
-    progressBar: HTMLElement | null;
-    progressContainer: HTMLElement | null;
-    currentTimeEl: HTMLElement | null;
-    durationEl: HTMLElement | null;
-    tooltip: HTMLElement | null;
-    isPlaying: boolean;
-    isMuted: boolean;
-    isRepeating: boolean;
-    isShuffling: boolean;
-    volume: number;
     constructor() {
-      this.audio = document.getElementById('audio-player') as HTMLAudioElement;
-      this.playBtn = document.querySelector('[data-action="play"]');
-      this.prevBtn = document.querySelector('[data-action="prev"]');
-      this.nextBtn = document.querySelector('[data-action="next"]');
-      this.volumeBtn = document.querySelector('[data-action="volume"]');
-      this.repeatBtn = document.querySelector('[data-action="repeat"]');
-      this.shuffleBtn = document.querySelector('[data-action="shuffle"]');
-      this.progressBar = document.querySelector('.progress');
-      const progressEl = document.querySelector('.progress');
-      this.progressContainer = progressEl ? progressEl.parentElement : null;
-      this.currentTimeEl = document.querySelector('[data-time="current"]');
-      this.durationEl = document.querySelector('[data-time="duration"]');
-      this.tooltip = document.querySelector('.tooltip');
+      this.audio = document.getElementById('audio-player')
+      this.playBtn = document.querySelector('[data-action="play"]')
+      this.prevBtn = document.querySelector('[data-action="prev"]')
+      this.nextBtn = document.querySelector('[data-action="next"]')
+      this.volumeBtn = document.querySelector('[data-action="volume"]')
+      this.repeatBtn = document.querySelector('[data-action="repeat"]')
+      this.shuffleBtn = document.querySelector('[data-action="shuffle"]')
+      this.progressBar = document.querySelector('.progress')
+      const progressEl = document.querySelector('.progress')
+      this.progressContainer = progressEl ? progressEl.parentElement : null
+      this.currentTimeEl = document.querySelector('[data-time="current"]')
+      this.durationEl = document.querySelector('[data-time="duration"]')
+      this.tooltip = document.querySelector('.tooltip')
 
-      this.isPlaying = false;
-      this.isMuted = false;
-      this.isRepeating = false;
-      this.isShuffling = false;
-      this.volume = 1;
+      this.isPlaying = false
+      this.isMuted = false
+      this.isRepeating = false
+      this.isShuffling = false
+      this.volume = 1
 
-      this.init();
+      this.init()
     }
 
     init() {
-      this.setupEventListeners();
-      this.updateDuration();
-      this.updateVolumeButton();
-      this.updateRepeatButton();
-      this.updateShuffleButton();
+      this.setupEventListeners()
+      this.updateDuration()
+      this.updateVolumeButton()
+      this.updateRepeatButton()
+      this.updateShuffleButton()
     }
 
     setupEventListeners() {
-      // Boutons de contrôle
-      if (this.playBtn) {
-        this.playBtn.addEventListener('click', () => this.togglePlay());
-      }
-      if (this.prevBtn) {
-        this.prevBtn.addEventListener('click', () => this.prevTrack());
-      }
-      if (this.nextBtn) {
-        this.nextBtn.addEventListener('click', () => this.nextTrack());
-      }
-      if (this.volumeBtn) {
-        this.volumeBtn.addEventListener('click', () => this.toggleMute());
-      }
-      if (this.repeatBtn) {
-        this.repeatBtn.addEventListener('click', () => this.toggleRepeat());
-      }
-      if (this.shuffleBtn) {
-        this.shuffleBtn.addEventListener('click', () => this.toggleShuffle());
-      }
+      this.playBtn?.addEventListener('click', () => this.togglePlay())
+      this.prevBtn?.addEventListener('click', () => this.prevTrack())
+      this.nextBtn?.addEventListener('click', () => this.nextTrack())
+      this.volumeBtn?.addEventListener('click', () => this.toggleMute())
+      this.repeatBtn?.addEventListener('click', () => this.toggleRepeat())
+      this.shuffleBtn?.addEventListener('click', () => this.toggleShuffle())
 
-      // Barre de progression
-      if (this.progressContainer) {
-        this.progressContainer.addEventListener('click', (e) => this.seek(e));
-      }
+      this.progressContainer?.addEventListener('click', e => this.seek(e))
 
-      // Événements audio
-      this.audio.addEventListener('timeupdate', () => this.updateProgress());
-      this.audio.addEventListener('loadedmetadata', () => this.updateDuration());
-      this.audio.addEventListener('ended', () => this.handleTrackEnd());
-      this.audio.addEventListener('play', () => this.updatePlayButton(true));
-      this.audio.addEventListener('pause', () => this.updatePlayButton(false));
+      this.audio.addEventListener('timeupdate', () => this.updateProgress())
+      this.audio.addEventListener('loadedmetadata', () => this.updateDuration())
+      this.audio.addEventListener('ended', () => this.handleTrackEnd())
+      this.audio.addEventListener('play', () => {
+        this.isPlaying = true
+        this.updatePlayButton(true)
+      })
+      this.audio.addEventListener('pause', () => {
+        this.isPlaying = false
+        this.updatePlayButton(false)
+      })
     }
 
     togglePlay() {
       if (this.isPlaying) {
-        this.audio.pause();
+        this.audio.pause()
       } else {
-        this.audio.play();
+        this.audio.play()
       }
-      this.isPlaying = !this.isPlaying;
     }
 
     prevTrack() {
-      // Pour l'instant, recommence la piste
-      this.audio.currentTime = 0;
+      this.audio.currentTime = 0
     }
 
     nextTrack() {
-      // Pour l'instant, recommence la piste
-      this.audio.currentTime = 0;
+      this.audio.currentTime = 0
     }
 
     toggleMute() {
-      this.isMuted = !this.isMuted;
-      this.audio.muted = this.isMuted;
-      this.updateVolumeButton();
+      this.isMuted = !this.isMuted
+      this.audio.muted = this.isMuted
+      this.updateVolumeButton()
     }
 
     toggleRepeat() {
-      this.isRepeating = !this.isRepeating;
-      this.audio.loop = this.isRepeating;
-      this.updateRepeatButton();
+      this.isRepeating = !this.isRepeating
+      this.audio.loop = this.isRepeating
+      this.updateRepeatButton()
     }
 
     toggleShuffle() {
-      this.isShuffling = !this.isShuffling;
-      this.updateShuffleButton();
+      this.isShuffling = !this.isShuffling
+      this.updateShuffleButton()
     }
 
-    seek(e: MouseEvent) {
-      if (!this.progressContainer) return;
-      const rect = this.progressContainer.getBoundingClientRect();
-      const percent = (e.clientX - rect.left) / rect.width;
-      this.audio.currentTime = percent * this.audio.duration;
+    seek(e) {
+      if (!this.progressContainer || isNaN(this.audio.duration)) return
+      const rect = this.progressContainer.getBoundingClientRect()
+      const percent = (e.clientX - rect.left) / rect.width
+      this.audio.currentTime = percent * this.audio.duration
     }
 
     updateProgress() {
-      const percent = (this.audio.currentTime / this.audio.duration) * 100;
-      if (this.progressBar) {
-        (this.progressBar as HTMLProgressElement).value = percent;
-      }
-
-      // Mettre à jour le tooltip
+      const percent = (this.audio.currentTime / this.audio.duration) * 100
+      if (!isFinite(percent)) return
+      if (this.progressBar) this.progressBar.value = percent
       if (this.tooltip) {
-        const tooltipPercent = (this.audio.currentTime / this.audio.duration) * 100;
-        this.tooltip.style.left = `${tooltipPercent}%`;
-        this.tooltip.setAttribute('data-tip', this.formatTime(this.audio.currentTime));
+        const p = (this.audio.currentTime / this.audio.duration) * 100
+        this.tooltip.style.left = `${p}%`
+        this.tooltip.setAttribute('data-tip', this.formatTime(this.audio.currentTime))
       }
-
-      // Mettre à jour le temps actuel
-      if (this.currentTimeEl) {
-        this.currentTimeEl.textContent = this.formatTime(this.audio.currentTime);
-      }
+      if (this.currentTimeEl)
+        this.currentTimeEl.textContent = this.formatTime(this.audio.currentTime)
     }
 
     updateDuration() {
       if (this.durationEl && !isNaN(this.audio.duration)) {
-        this.durationEl.textContent = this.formatTime(this.audio.duration);
+        this.durationEl.textContent = this.formatTime(this.audio.duration)
       }
     }
 
     handleTrackEnd() {
-      if (!this.isRepeating) {
-        this.isPlaying = false;
-        this.updatePlayButton(false);
-      }
+      if (!this.isRepeating) this.updatePlayButton(false)
     }
 
-    updatePlayButton(isPlaying: boolean) {
-      const playIcon = this.playBtn?.querySelector('svg');
-      if (playIcon) {
-        if (isPlaying) {
-          // Changer l'icône en pause
-          playIcon.innerHTML = `
-            <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 5.25v13.5M8.25 5.25v13.5" />
-          `;
-        } else {
-          // Remettre l'icône play
-          playIcon.innerHTML = `
-            <path stroke-linecap="round" stroke-linejoin="round" d="M5.25 5.653c0-.856.917-1.398 1.667-.986l11.54 6.347a1.125 1.125 0 0 1 0 1.972l-11.54 6.347a1.125 1.125 0 0 1-1.667-.986V5.653Z" />
-          `;
-        }
+    updatePlayButton(isPlaying) {
+      const playIcon = this.playBtn?.querySelector('.icon-play')
+      const pauseIcon = this.playBtn?.querySelector('.icon-pause')
+      if (playIcon && pauseIcon) {
+        playIcon.classList.toggle('hidden', isPlaying)
+        pauseIcon.classList.toggle('hidden', !isPlaying)
       }
+      this.playBtn?.setAttribute('aria-label', isPlaying ? 'Pause' : 'Play')
+      this.playBtn?.setAttribute('title', isPlaying ? 'Pause' : 'Play')
     }
 
     updateVolumeButton() {
-      if (!this.volumeBtn) return;
-      const volumeIcon = this.volumeBtn.querySelector('svg');
-      if (volumeIcon) {
-        if (this.isMuted) {
-          // Icône mute avec barre diagonale plus visible
-          volumeIcon.innerHTML = `
-            <path d="M24 6V42C17 42 11.7985 32.8391 11.7985 32.8391H6C4.89543 32.8391 4 31.9437 4 30.8391V17.0108C4 15.9062 4.89543 15.0108 6 15.0108H11.7985C11.7985 15.0108 17 6 24 6Z" fill="none" stroke="currentColor" stroke-width="4" stroke-linejoin="round"/>
-            <path d="M32 15L32 15C32.6232 15.5565 33.1881 16.1797 33.6841 16.8588C35.1387 18.8504 36 21.3223 36 24C36 26.6545 35.1535 29.1067 33.7218 31.0893C33.2168 31.7885 32.6391 32.4293 32 33" stroke="currentColor" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
-            <path d="M35 12L45 22" stroke="currentColor" stroke-width="6" stroke-linecap="round"/>
-            <path d="M45 12L35 22" stroke="currentColor" stroke-width="6" stroke-linecap="round"/>
-          `;
-        } else {
-          // Icône volume normale
-          volumeIcon.innerHTML = `
-            <path d="M24 6V42C17 42 11.7985 32.8391 11.7985 32.8391H6C4.89543 32.8391 4 31.9437 4 30.8391V17.0108C4 15.9062 4.89543 15.0108 6 15.0108H11.7985C11.7985 15.0108 17 6 24 6Z" fill="none" stroke="currentColor" stroke-width="4" stroke-linejoin="round"/>
-            <path d="M32 15L32 15C32.6232 15.5565 33.1881 16.1797 33.6841 16.8588C35.1387 18.8504 36 21.3223 36 24C36 26.6545 35.1535 29.1067 33.7218 31.0893C33.2168 31.7885 32.6391 32.4293 32 33" stroke="currentColor" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
-          `;
-        }
+      const volumeIcon = this.volumeBtn?.querySelector('.icon-volume')
+      const muteIcon = this.volumeBtn?.querySelector('.icon-mute')
+      if (volumeIcon && muteIcon) {
+        volumeIcon.classList.toggle('hidden', this.isMuted)
+        muteIcon.classList.toggle('hidden', !this.isMuted)
       }
-      // Utiliser bg-primary pour un contraste plus visible
-      this.volumeBtn.classList.toggle('bg-primary', this.isMuted);
+      this.volumeBtn?.classList.toggle('bg-primary', this.isMuted)
+      this.volumeBtn?.setAttribute('aria-label', this.isMuted ? 'Unmute' : 'Mute')
+      this.volumeBtn?.setAttribute('title', this.isMuted ? 'Unmute' : 'Mute')
     }
 
     updateRepeatButton() {
-      if (!this.repeatBtn) return;
-      this.repeatBtn.classList.toggle('bg-primary', this.isRepeating);
+      this.repeatBtn?.classList.toggle('bg-primary', this.isRepeating)
     }
 
     updateShuffleButton() {
-      if (!this.shuffleBtn) return;
-      this.shuffleBtn.classList.toggle('bg-primary', this.isShuffling);
+      this.shuffleBtn?.classList.toggle('bg-primary', this.isShuffling)
     }
 
-    formatTime(seconds: number) {
-      if (isNaN(seconds)) return '0:00';
-      const mins = Math.floor(seconds / 60);
-      const secs = Math.floor(seconds % 60);
-      return `${mins}:${secs.toString().padStart(2, '0')}`;
+    formatTime(seconds) {
+      if (isNaN(seconds)) return '0:00'
+      const mins = Math.floor(seconds / 60)
+      const secs = Math.floor(seconds % 60)
+        .toString()
+        .padStart(2, '0')
+      return `${mins}:${secs}`
     }
   }
 
-  // Initialiser le lecteur quand le DOM est chargé
   document.addEventListener('DOMContentLoaded', () => {
-    new MusicPlayer();
-  });
-
-  // Support pour les composants dynamiques (si le composant est ajouté après le chargement)
-  if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', () => {
-      if (document.getElementById('audio-player')) {
-        new MusicPlayer();
-      }
-    });
-  } else {
-    if (document.getElementById('audio-player')) {
-      new MusicPlayer();
-    }
-  }
+    new MusicPlayer()
+  })
 </script>

@@ -7,6 +7,8 @@ import sitemap from '@astrojs/sitemap'
 import tailwindcss from '@tailwindcss/vite'
 import tsconfigPaths from 'vite-tsconfig-paths'
 import AutoImport from 'astro-auto-import' // ⟵ NEW
+import Icons from 'unplugin-icons/vite'
+import { FileSystemIconLoader } from 'unplugin-icons/loaders'
 // import cloudflare from '@astrojs/cloudflare'
 import remarkCollapse from 'remark-collapse'
 import remarkToc from 'remark-toc'
@@ -40,7 +42,18 @@ export default defineConfig({
 
   // 2) Vite
   vite: {
-    plugins: [tsconfigPaths(), tailwindcss()],
+    plugins: [
+      tsconfigPaths(),
+      tailwindcss(),
+      Icons({
+        compiler: 'astro',
+        customCollections: {
+          custom: FileSystemIconLoader('./src/assets/icons', svg =>
+            svg.replace(/^<svg\s/, '<svg fill="currentColor" ')
+          ),
+        },
+      }),
+    ],
   },
 
   // 3) Sortie : statique (recommandé)

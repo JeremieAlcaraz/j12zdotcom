@@ -1,7 +1,7 @@
 import { readFileSync, readdirSync } from 'node:fs'
 import { join } from 'node:path'
 
-const ICONS_DIR = 'src/ui/atoms/icons'
+const ICONS_DIR = 'src/assets/icons'
 const CONTENT_DIRS = ['src/content', 'src/pages', 'src/domain'] // adapte si besoin
 
 const svgNames = new Set(
@@ -15,7 +15,7 @@ let missing = new Set()
 
 for (const dir of CONTENT_DIRS) {
   // lecture naïve récursive (simplifiée) : adapter avec globby si besoin
-  const walk = (d) => {
+  const walk = d => {
     try {
       for (const f of readdirSync(d, { withFileTypes: true })) {
         const p = join(d, f.name)
