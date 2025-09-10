@@ -7,6 +7,7 @@ import Loading from '@/ui/molecules/Loading.astro'
 import Pagination from '@/ui/molecules/Pagination.astro'
 import { makePaginationLinks } from '@/utils/pagination'
 import FabSpeedDial from '@/ui/molecules/FabSpeedDial.astro'
+import MusicPlayer from '@/ui/molecules/MusicPlayer.astro'
 
 const { pages, prev, next } = makePaginationLinks('blog', 1, 5)
 ---
@@ -71,5 +72,15 @@ const { pages, prev, next } = makePaginationLinks('blog', 1, 5)
     <h2 class="sr-only">FAB / Speed Dial</h2>
     <!-- The FAB is fixed to the viewport bottom-right -->
     <FabSpeedDial />
+  </Section>
+
+  <Section>
+    <div id="music-player" class="scroll-mt-[5rem]">
+      <Divider variant="default" label="Music Player" />
+    </div>
+    <h2 class="sr-only">Music Player</h2>
+    <div class="grid grid-cols-1 gap-4">
+      <MusicPlayer />
+    </div>
   </Section>
 </StyleGuideLayout>
