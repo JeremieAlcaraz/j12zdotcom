@@ -56,7 +56,9 @@ const pageTitle = meta_title || title
       <!-- MAIN avec Hero full-width -->
       <main class="overflow-x-hidden pt-16">
         <!-- Hero full-width -->
-        <slot name="hero" />
+        <div id="hero-container" class="relative">
+          <slot name="hero" />
+        </div>
         <!-- Contenu centré pour les autres sections -->
         <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <slot />
