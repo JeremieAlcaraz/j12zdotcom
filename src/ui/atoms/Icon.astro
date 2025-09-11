@@ -1,85 +1,95 @@
+
+
+
+
 ---
 /**
- * Icon.astro
- * - Composant unifié pour gérer toutes les sources d'icônes
- * - Supporte les icônes Iconify (Lucide, Heroicons, etc.) via unplugin-icons
- * - Supporte les icônes personnalisées depuis src/assets/icons/
- * - Utilisation: <Icon name="lucide:play" /> ou <Icon name="custom:cat" />
+ * Icon.astro — simple & DRY
+ * - Custom locaux: src/assets/icons/*.svg → <Icon name="custom:cat" /> ou <Icon name="cat" />
+ * - Registry statique: 5 Lucide + 5 Heroicons Outline
  */
-
-// Pour les icônes personnalisées locales
 import type { AstroComponentFactory } from 'astro/runtime/server/index.js'
 
-// Importer les SVG personnalisés
+// ✅ Lucide
+import LucidePlay from '~icons/lucide/play'
+import LucidePause from '~icons/lucide/pause'
+import LucideHeart from '~icons/lucide/heart'
+import LucideStar from '~icons/lucide/star'
+import LucideHome from '~icons/lucide/home'
+
+// ✅ Heroicons Outline (ATTENTION: collection = heroicons-outline)
+import HiHomeO from '~icons/heroicons-outline/home'
+import HiUserO from '~icons/heroicons-outline/user'
+import HiBellO from '~icons/heroicons-outline/bell'
+import HiSearchO from '~icons/heroicons-outline/magnifying-glass'
+import HiCog6O from '~icons/heroicons-outline/cog-6-tooth'
+
+// Registry minimal
+const BUILTIN_ICONS: Record<string, AstroComponentFactory> = {
+  // Lucide
+  'lucide:play': LucidePlay,
+  'lucide:pause': LucidePause,
+  'lucide:heart': LucideHeart,
+  'lucide:star': LucideStar,
+  'lucide:home': LucideHome,
+
+  // Heroicons Outline (clé officielle)
+  'heroicons-outline:home': HiHomeO,
+  'heroicons-outline:user': HiUserO,
+  'heroicons-outline:bell': HiBellO,
+  'heroicons-outline:magnifying-glass': HiSearchO,
+  'heroicons-outline:cog-6-tooth': HiCog6O,
+
+  // Alias conviviaux (tu peux taper heroicons:…)
+  'heroicons:home': HiHomeO,
+  'heroicons:user': HiUserO,
+  'heroicons:bell': HiBellO,
+  'heroicons:magnifying-glass': HiSearchO,
+  'heroicons:cog-6-tooth': HiCog6O,
+}
+
+// Custom locaux
 const modules = import.meta.glob('@/assets/icons/*.svg', { eager: true }) as Record<
   string,
   { default: AstroComponentFactory }
 >
-
-// Créer un registre d'icônes personnalisées
 const customRegistry = Object.fromEntries(
-  Object.entries(modules).map(([path, astroComponent]) => {
-    const name = path.split('/').pop()!.replace('.svg', '')
-    return [name, astroComponent.default]
-  })
+  Object.entries(modules).map(([path, mod]) => [path.split('/').pop()!.replace('.svg', ''), mod.default]),
 ) as Record<string, AstroComponentFactory>
 
-interface Props {
-  name: string // format: "prefix:name" ou simplement "name" pour les icônes personnalisées
-  size?: number | string // ex: 24 | "1.5rem"
-  title?: string // accessibilité
-  class?: string
-  id?: string // pour ciblage JavaScript
-}
+interface Props { name: string; size?: number | string; title?: string; class?: string; id?: string }
+const { name, size = 24, title, class: klass, id, ...rest } = Astro.props as Props & Record<string, unknown>
 
-const {
-  name,
-  size = 24,
-  title,
-  class: klass,
-  id,
-  ...rest
-} = Astro.props as Props & Record<string, unknown>
+// Parse
+let prefix = 'custom', icon = name
+if (name.includes(':')) { const [p, n] = name.split(':'); prefix = p; icon = n }
 
-// Analyser le nom pour déterminer le préfixe et le nom de l'icône
-let iconSource: string | null = null;
-let iconName: string;
+// Normalise quelques alias
+const prefixAliases: Record<string, string> = { heroicon: 'heroicons', 'heroicons-outline': 'heroicons' }
+const normalized = prefixAliases[prefix] ?? prefix
+const key = normalized === 'custom' ? icon : `${normalized}:${icon}`
 
-if (name.includes(':')) {
-  const [prefix, iconPart] = name.split(':');
-  iconSource = prefix;
-  iconName = iconPart;
-} else {
-  // Si pas de préfixe, on considère que c'est une icône personnalisée du répertoire local
-  iconSource = 'custom';
-  iconName = name;
-}
+// Resolve: custom > builtin
+let IconComponent: AstroComponentFactory | null =
+  normalized === 'custom' ? (customRegistry[icon] ?? null) : (BUILTIN_ICONS[key] ?? null)
 
-// Récupération de l'icône personnalisée si nécessaire
-let IconComponent: any = null;
+if (!IconComponent) console.warn(`[Icon] Icône non déclarée dans le registre: ${key}`)
 
-if (iconSource === 'custom') {
-  // Icône personnalisée depuis notre répertoire local
-  IconComponent = customRegistry[iconName];
-  if (!IconComponent) {
-    console.warn(`[Icon] Icône personnalisée inconnue: ${iconName}`);
-  }
-}
+const style = typeof size === 'number' ? `width:${size}px;height:${size}px;` : `width:${size};height:${size};`
 ---
 
-{
-  IconComponent ? (
-    <span
-      class:list={['inline-block', klass]}
-      style={`width:${typeof size === 'number' ? size + 'px' : size};height:${typeof size === 'number' ? size + 'px' : size};`}
-      role={title ? 'img' : 'presentation'}
-      aria-label={title || undefined}
-      {...(id && { id })}
-      {...rest}
-    >
-      <IconComponent />
-    </span>
-  ) : (
-    <span class="inline-block h-[1em] w-[1em]" aria-hidden="true" />
-  )
-}
+{ IconComponent ? (
+  <span
+    class:list={['inline-block align-middle', klass]}
+    style={style}
+    role={title ? 'img' : 'presentation'}
+    aria-label={title || undefined}
+    {...(id && { id })}
+    {...rest}
+  >
+    <IconComponent />
+  </span>
+) : (
+  <span class="inline-block h-[1em] w-[1em]" aria-hidden="true" />
+) }
+

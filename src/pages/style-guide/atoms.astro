@@ -252,88 +252,142 @@ const itemColors = [
     </div>
   </Section>
 
-  <!-- Icon -->
+
+<!-- Icon -->
 <Section>
+
+<h3 class="mb-2 text-lg font-bold">Système d'icônes (démo)</h3>
+<div class="flex flex-wrap items-center gap-4">
+  <!-- Custom -->
+  <Icon name="custom:cat" class="size-8 text-pink-500" title="Custom · cat" />
+
+  <!-- Lucide (5) -->
+  <Icon name="lucide:play" class="size-8 text-base-content" title="Lucide · play" />
+  <Icon name="lucide:pause" class="size-8 text-base-content" title="Lucide · pause" />
+  <Icon name="lucide:heart" class="size-8 text-error" title="Lucide · heart" />
+  <Icon name="lucide:star" class="size-8 text-warning" title="Lucide · star" />
+  <Icon name="lucide:home" class="size-8 text-primary" title="Lucide · home" />
+
+  <!-- Heroicons Outline (5) — alias "heroicons:*" géré -->
+  <Icon name="heroicons:home" class="size-8 text-primary" title="Heroicons · home" />
+  <Icon name="heroicons:user" class="size-8 text-base-content" title="Heroicons · user" />
+  <Icon name="heroicons:bell" class="size-8 text-warning" title="Heroicons · bell" />
+  <Icon name="heroicons:magnifying-glass" class="size-8 text-info" title="Heroicons · search" />
+  <Icon name="heroicons:cog-6-tooth" class="size-8 text-secondary" title="Heroicons · settings" />
+</div>
+
+<div class="mt-3 p-3 bg-base-200 rounded-lg">
+  <p class="text-sm mb-2">Syntaxes :</p>
+  <pre class="text-xs overflow-x-auto">
+&lt;Icon name="custom:nom-fichier" /&gt;
+&lt;Icon name="lucide:icon-name" /&gt;
+&lt;Icon name="heroicons:icon-name" /&gt;  (alias interne de heroicons-outline)
+  </pre>
+  <p class="text-xs mt-2">
+    <code>size</code> accepte un nombre (px) ou une valeur CSS (ex&nbsp;: <code>"1.5rem"</code>).
+    Couleurs via classes utilitaires (ex&nbsp;: <code>text-primary</code>).
+  </p>
+</div>
+<h3 class="mb-2 text-lg font-bold">Système d'icônes (démo rapide)</h3>
+<div class="flex flex-wrap items-center gap-4">
+  <!-- Custom -->
+  <Icon name="custom:cat" class="size-8 text-pink-500" title="Custom · cat" />
+
+  <!-- Lucide (5) -->
+  <Icon name="lucide:play" class="size-8 text-base-content" title="Lucide · play" />
+  <Icon name="lucide:pause" class="size-8 text-base-content" title="Lucide · pause" />
+  <Icon name="lucide:heart" class="size-8 text-error" title="Lucide · heart" />
+  <Icon name="lucide:star" class="size-8 text-warning" title="Lucide · star" />
+  <Icon name="lucide:home" class="size-8 text-primary" title="Lucide · home" />
+
+  <!-- Heroicons Outline (5) — alias possible "heroicons:*" -->
+  <Icon name="heroicons:home" class="size-8 text-primary" title="Heroicons · home" />
+  <Icon name="heroicons:user" class="size-8 text-base-content" title="Heroicons · user" />
+  <Icon name="heroicons:bell" class="size-8 text-warning" title="Heroicons · bell" />
+  <Icon name="heroicons:magnifying-glass" class="size-8 text-info" title="Heroicons · search" />
+  <Icon name="heroicons:cog-6-tooth" class="size-8 text-secondary" title="Heroicons · settings" />
+</div>
+
+<div class="mt-3 p-3 bg-base-200 rounded-lg">
+  <p class="text-sm mb-2">Syntaxes :</p>
+  <p class="text-xs mt-2">
+    <code>size</code> accepte un nombre (px) ou une valeur CSS (ex&nbsp;: <code>"1.5rem"</code>).
+    Les couleurs suivent les classes utilitaires (<code>text-primary</code>, etc.).
+  </p>
+</div>
   <div id="icon" class="scroll-mt-[5rem]">
     <Divider variant="default" label="Icon" />
   </div>
   <h2 class="sr-only">Icon</h2>
-    <div class="grid grid-cols-1 gap-4">
-      <div>
-        <h3 class="mb-2 text-lg font-bold">Système d'icônes</h3>
-        <div class="flex flex-wrap items-center gap-4">
-          <Icon name="custom:cat" class="size-8 text-pink-500" title="Chat custom" />
-        </div>
-        <div class="mt-3 p-3 bg-base-200 rounded-lg">
-          <p class="text-sm mb-2">Syntaxe pour les icônes personnalisées :</p>
-          <pre class="text-xs overflow-x-auto">&lt;Icon name="custom:nom-fichier" /&gt;</pre>
-          <p class="text-xs mt-2">Les icônes personnalisées sont stockées dans <code>src/assets/icons/</code></p>
-        </div>
+
+  <div class="grid grid-cols-1 gap-6">
+    <!-- Système unifié -->
+    <div>
+      <h3 class="mb-2 text-lg font-bold">Système d'icônes unifié</h3>
+      <div class="flex flex-wrap items-center gap-4">
+        <!-- Custom (depuis src/assets/icons) -->
+        <Icon name="custom:cat" class="size-8 text-pink-500" title="Custom · cat" />
+
+        <!-- Lucide (Iconify) -->
+        <Icon name="lucide:play" class="size-8 text-base-content" title="Lucide · play" />
+        <Icon name="lucide:music" class="size-8 text-primary" title="Lucide · music" />
+
+        <!-- Heroicons Outline (Iconify) -->
+        <Icon name="heroicons-outline:bolt" class="size-8 text-warning" title="Heroicons Outline · bolt" />
+
+        <!-- Heroicons Solid (Iconify) -->
+        <Icon name="heroicons-solid:heart" class="size-8 text-error" title="Heroicons Solid · heart" />
       </div>
 
-      <div>
-        <h3 class="mb-2 text-lg font-bold">Icônes personnalisées</h3>
-        <div class="flex flex-wrap items-center gap-4">
-          <Icon name="custom:cat" id="cat-icon" size={20} class="text-base-content" title="Chat" />
-          <Icon name="custom:music" size={20} class="text-base-content" title="Musique" />
-          <Icon name="custom:sun" size="24" class="text-base-content" title="Soleil" />
-          <Icon name="custom:moon" size="24" class="text-base-content" title="Lune" />
-          <Icon name="custom:chevron-left" size="24" class="text-base-content" title="Précédent" />
-          <Icon name="custom:chevron-right" size="24" class="text-base-content" title="Suivant" />
-        </div>
-      </div>
-      
-      <div>
-        <h3 class="mb-2 text-lg font-bold">Tailles</h3>
-        <div class="flex flex-wrap items-center gap-4">
-          <Icon name="custom:cat" size={16} class="text-base-content" title="Petit" />
-          <Icon name="custom:cat" size="20" class="text-base-content" title="Moyen" />
-          <Icon name="custom:cat" size="24" class="text-base-content" title="Normal" />
-          <Icon name="custom:cat" size="32" class="text-base-content" title="Grand" />
-          <Icon name="custom:cat" size="48" class="text-base-content" title="Très grand" />
-        </div>
-      </div>
-      
-      <div>
-        <h3 class="mb-2 text-lg font-bold">Couleurs</h3>
-        <div class="flex flex-wrap items-center gap-4">
-          <Icon name="custom:music" size="24" class="text-primary" title="Primaire" />
-          <Icon name="custom:music" size="24" class="text-secondary" title="Secondaire" />
-          <Icon name="custom:music" size="24" class="text-accent" title="Accent" />
-          <Icon name="custom:music" size="24" class="text-info" title="Info" />
-          <Icon name="custom:music" size="24" class="text-success" title="Succès" />
-          <Icon name="custom:music" size="24" class="text-warning" title="Attention" />
-          <Icon name="custom:music" size="24" class="text-error" title="Erreur" />
-        </div>
-      </div>
-      
-      <div>
-        <h3 class="mb-2 text-lg font-bold">Iconify (utilisation directe)</h3>
-        <div class="flex flex-wrap items-center gap-4">
-          <MdiStore24Hour class="w-6 h-6 text-base-content" />
-          <MdiAlarmOff class="w-6 h-6 text-base-content" />
-          <IconParkAbnormal class="w-6 h-6 text-base-content" />
-        </div>
-        <div class="mt-3 p-3 bg-base-200 rounded-lg">
-          <p class="text-sm mb-2">Pour utiliser les icônes Iconify :</p>
-          <pre class="text-xs overflow-x-auto">import NomIcone from "~icons/source/nom-icone";</pre>
-          <p class="text-xs mt-2">Puis utilisez le composant directement : <code>&lt;NomIcone /&gt;</code></p>
-        </div>
-      </div>
-      
-      <!-- Garder les anciennes références pour compatibilité -->
-      <div class="border-t border-base-300 pt-4 mt-4">
-        <h3 class="mb-2 text-lg font-bold">Références directes (anciennes méthodes)</h3>
-        <div class="flex flex-wrap items-center gap-4">
-          <MdiStore24Hour />
-          <MdiAlarmOff />
-          <IconParkAbnormal />
-          <Fragment set:html={RawMdiAlarmOff} />
-          <Fragment set:html={RawMdiAlarmOff2} />
-        </div>
+      <div class="mt-3 p-3 bg-base-200 rounded-lg">
+        <p class="text-sm mb-2">Syntaxes :</p>
+        <p class="text-xs mt-2">
+          <code>size</code> accepte un nombre (px) ou une valeur CSS (ex : <code>"1.5rem"</code>).
+          Les couleurs suivent vos classes utilitaires (ex : <code>text-primary</code>).
+        </p>
       </div>
     </div>
-  </Section>
+
+    <!-- Tailles -->
+    <div>
+      <h3 class="mb-2 text-lg font-bold">Tailles</h3>
+      <div class="flex flex-wrap items-center gap-4">
+        <Icon name="lucide:cat" size="16" class="text-base-content" title="16px" />
+        <Icon name="lucide:cat" size="20" class="text-base-content" title="20px" />
+        <Icon name="lucide:cat" size="24" class="text-base-content" title="24px" />
+        <Icon name="lucide:cat" size="32" class="text-base-content" title="32px" />
+        <Icon name="lucide:cat" size="48" class="text-base-content" title="48px" />
+      </div>
+    </div>
+
+    <!-- Couleurs -->
+    <div>
+      <h3 class="mb-2 text-lg font-bold">Couleurs</h3>
+      <div class="flex flex-wrap items-center gap-4">
+        <Icon name="heroicons-outline:musical-note" size="24" class="text-primary" title="Primaire" />
+        <Icon name="heroicons-outline:musical-note" size="24" class="text-secondary" title="Secondaire" />
+        <Icon name="heroicons-outline:musical-note" size="24" class="text-accent" title="Accent" />
+        <Icon name="heroicons-outline:musical-note" size="24" class="text-info" title="Info" />
+        <Icon name="heroicons-outline:musical-note" size="24" class="text-success" title="Succès" />
+        <Icon name="heroicons-outline:musical-note" size="24" class="text-warning" title="Attention" />
+        <Icon name="heroicons-outline:musical-note" size="24" class="text-error" title="Erreur" />
+      </div>
+    </div>
+
+    <!-- (Optionnel) réfs directes existantes pour compat -->
+    <div class="border-t border-base-300 pt-4 mt-4">
+      <h3 class="mb-2 text-lg font-bold">Références directes (anciennes méthodes)</h3>
+      <div class="flex flex-wrap items-center gap-4">
+        <MdiStore24Hour class="w-6 h-6 text-base-content" />
+        <MdiAlarmOff class="w-6 h-6 text-base-content" />
+        <IconParkAbnormal class="w-6 h-6 text-base-content" />
+        <Fragment set:html={RawMdiAlarmOff} />
+        <Fragment set:html={RawMdiAlarmOff2} />
+      </div>
+    </div>
+  </div>
+</Section>
+
 
   <!-- ImageMod -->
 <Section>

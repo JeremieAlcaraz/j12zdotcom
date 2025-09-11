@@ -50,9 +50,11 @@ export default defineConfig({
         compiler: 'astro',
         autoInstall: true,
         customCollections: {
-          'custom': FileSystemIconLoader('./src/assets/icons')
-        }
-      })
+          custom: FileSystemIconLoader('src/assets/icons', svg =>
+            svg.replaceAll('stroke="none"', '').replaceAll('fill="none"', 'fill="currentColor"')
+          ),
+        },
+      }),
     ],
   },
 
