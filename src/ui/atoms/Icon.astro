@@ -20,7 +20,7 @@ interface Props {
   id?: string
 }
 
-const { name, size = 24, title, class: klass, id, ...rest } = Astro.props as Props & Record<string, unknown>
+const { name, size = 24, title, class: klass = '', id, ...rest } = Astro.props as Props & Record<string, unknown>
 
 // Analyse "prefix:icon"
 let prefix = 'custom'
@@ -39,9 +39,18 @@ const key = norm === 'custom' ? icon : `${norm}:${icon}`
 let IconComponent = norm === 'custom' ? customRegistry[icon] : ICONS[key]
 if (!IconComponent) console.warn(`[Icon] Icône non trouvée: ${key}`)
 
-// Styles de taille
-const style =
-  typeof size === 'number' ? `width:${size}px;height:${size}px;` : `width:${size};height:${size};`
+// 1) Si l'appelant fournit size-*/w-*/h-*, on laisse Tailwind piloter la taille
+const hasSizeClass = /\b(size-|w-|h-)/.test(klass)
+
+// 2) Inline style seulement si aucune classe de taille n'est donnée
+const style = hasSizeClass
+  ? undefined
+  : (typeof size === 'number'
+      ? `width:${size}px;height:${size}px;`
+      : `width:${size};height:${size};`)
+
+// 3) L’SVG interne occupe toute la place du conteneur quand on utilise des classes de taille
+const svgSizingClass = hasSizeClass ? 'block w-full h-full' : 'block'
 ---
 
 {IconComponent ? (
@@ -53,7 +62,7 @@ const style =
     {...(id && { id })}
     {...rest}
   >
-    <IconComponent />
+    <IconComponent class={svgSizingClass} />
   </span>
 ) : (
   <span class="inline-block h-[1em] w-[1em]" aria-hidden="true" />

@@ -364,22 +364,23 @@ const itemColors = [
   </div>
 
   <!-- Heroicons Icons -->
-  <div class="mb-8">
-    <h4 class="mb-4 text-base font-semibold">Heroicons (outline)</h4>
-    <div class="flex flex-wrap gap-4 mb-4">
-      <Icon name="heroicon-o-home" class="size-8 text-primary" title="Heroicons · home" />
-      <Icon name="heroicon-o-user" class="size-8 text-secondary" title="Heroicons · user" />
-      <Icon name="heroicon-o-bell" class="size-8 text-warning" title="Heroicons · bell" />
-      <Icon name="heroicon-o-magnifying-glass" class="size-8 text-info" title="Heroicons · search" />
-      <Icon name="heroicon-o-cog-6-tooth" class="size-8 text-success" title="Heroicons · settings" />
-    </div>
+<div class="mb-8">
+  <h4 class="mb-4 text-base font-semibold">Heroicons (outline)</h4>
+  <div class="flex flex-wrap gap-4 mb-4">
+    <Icon name="heroicons:home" class="size-8 text-primary" title="Heroicons · home" />
+    <Icon name="heroicons:user" class="size-8 text-secondary" title="Heroicons · user" />
+    <Icon name="heroicons:bell" class="size-8 text-warning" title="Heroicons · bell" />
+    <Icon name="heroicons:magnifying-glass" class="size-8 text-info" title="Heroicons · search" />
+    <Icon name="heroicons:cog-6-tooth" class="size-8 text-success" title="Heroicons · settings" />
+  </div>
+</div>
 
     <!-- Tailles pour Heroicons -->
     <h5 class="mb-2 text-sm font-medium">Tailles</h5>
     <div class="flex flex-wrap gap-3">
       {itemSizes.map(size => (
         <div class="flex flex-col items-center gap-1">
-          <Icon name="heroicon-o-home" class={`text-primary ${size === 'xs' ? 'size-3' : size === 'sm' ? 'size-4' : size === 'md' ? 'size-6' : size === 'lg' ? 'size-8' : 'size-12'}`} title={`Heroicons · home · ${size}`} />
+          <Icon name="heroicons:home" class={`text-primary ${size === 'xs' ? 'size-3' : size === 'sm' ? 'size-4' : size === 'md' ? 'size-6' : size === 'lg' ? 'size-8' : 'size-12'}`} title={`Heroicons · home · ${size}`} />
           <span class="text-xs text-base-content/70">{size}</span>
         </div>
       ))}
@@ -390,7 +391,7 @@ const itemColors = [
     <div class="flex flex-wrap gap-3">
       {itemColors.map(color => (
         <div class="flex flex-col items-center gap-1">
-          <Icon name="heroicon-o-home" class={`size-6 text-${color}`} title={`Heroicons · home · ${color}`} />
+          <Icon name="heroicons:home" class={`size-6 text-${color}`} title={`Heroicons · home · ${color}`} />
           <span class="text-xs text-base-content/70">{color}</span>
         </div>
       ))}
