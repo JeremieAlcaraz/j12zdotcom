@@ -12,6 +12,7 @@ import remarkCollapse from 'remark-collapse'
 import remarkToc from 'remark-toc'
 
 import Icons from 'unplugin-icons/vite'
+import { FileSystemIconLoader } from 'unplugin-icons/loaders'
 
 export default defineConfig({
   // 1) Intégrations
@@ -42,7 +43,17 @@ export default defineConfig({
 
   // 2) Vite
   vite: {
-    plugins: [tsconfigPaths(), tailwindcss(), Icons({ compiler: 'astro' })],
+    plugins: [
+      tsconfigPaths(),
+      tailwindcss(),
+      Icons({
+        compiler: 'astro',
+        autoInstall: true,
+        customCollections: {
+          'custom': FileSystemIconLoader('./src/assets/icons')
+        }
+      })
+    ],
   },
 
   // 3) Sortie : statique (recommandé)

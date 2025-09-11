@@ -1,31 +1,31 @@
 ---
 /**
  * Icon.astro
- * - Utilise `import.meta.glob` pour importer tous les SVG du dossier `./icons` en tant que composants Astro.
- * - Affiche le composant SVG importé dynamiquement.
- * - Cette méthode est robuste et compatible avec MDX.
+ * - Composant unifié pour gérer toutes les sources d'icônes
+ * - Supporte les icônes Iconify (Lucide, Heroicons, etc.) via unplugin-icons
+ * - Supporte les icônes personnalisées depuis src/assets/icons/
+ * - Utilisation: <Icon name="lucide:play" /> ou <Icon name="custom:cat" />
  */
+
+// Pour les icônes personnalisées locales
 import type { AstroComponentFactory } from 'astro/runtime/server/index.js'
 
-// Importer les SVG en tant que composants Astro
-// Utiliser un chemin absolu pour que Vite puisse résoudre correctement les icônes
-// peu importe l'emplacement du composant, et les charger comme composants Astro.
+// Importer les SVG personnalisés
 const modules = import.meta.glob('@/assets/icons/*.svg', { eager: true }) as Record<
   string,
   { default: AstroComponentFactory }
 >
 
-const registry = Object.fromEntries(
+// Créer un registre d'icônes personnalisées
+const customRegistry = Object.fromEntries(
   Object.entries(modules).map(([path, astroComponent]) => {
     const name = path.split('/').pop()!.replace('.svg', '')
     return [name, astroComponent.default]
   })
 ) as Record<string, AstroComponentFactory>
 
-type IconName = keyof typeof registry
-
 interface Props {
-  name: IconName
+  name: string // format: "prefix:name" ou simplement "name" pour les icônes personnalisées
   size?: number | string // ex: 24 | "1.5rem"
   title?: string // accessibilité
   class?: string
@@ -41,15 +41,34 @@ const {
   ...rest
 } = Astro.props as Props & Record<string, unknown>
 
-const SvgComponent = registry[name]
+// Analyser le nom pour déterminer le préfixe et le nom de l'icône
+let iconSource: string | null = null;
+let iconName: string;
 
-if (!SvgComponent) {
-  console.warn(`[Icon] Unknown icon: ${String(name)}`)
+if (name.includes(':')) {
+  const [prefix, iconPart] = name.split(':');
+  iconSource = prefix;
+  iconName = iconPart;
+} else {
+  // Si pas de préfixe, on considère que c'est une icône personnalisée du répertoire local
+  iconSource = 'custom';
+  iconName = name;
+}
+
+// Récupération de l'icône personnalisée si nécessaire
+let IconComponent: any = null;
+
+if (iconSource === 'custom') {
+  // Icône personnalisée depuis notre répertoire local
+  IconComponent = customRegistry[iconName];
+  if (!IconComponent) {
+    console.warn(`[Icon] Icône personnalisée inconnue: ${iconName}`);
+  }
 }
 ---
 
 {
-  SvgComponent ? (
+  IconComponent ? (
     <span
       class:list={['inline-block', klass]}
       style={`width:${typeof size === 'number' ? size + 'px' : size};height:${typeof size === 'number' ? size + 'px' : size};`}
@@ -58,7 +77,7 @@ if (!SvgComponent) {
       {...(id && { id })}
       {...rest}
     >
-      <SvgComponent />
+      <IconComponent />
     </span>
   ) : (
     <span class="inline-block h-[1em] w-[1em]" aria-hidden="true" />
