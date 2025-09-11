@@ -1,84 +1,50 @@
-
-
-
-
 ---
 /**
- * Icon.astro — simple & DRY
- * - Custom locaux: src/assets/icons/*.svg → <Icon name="custom:cat" /> ou <Icon name="cat" />
- * - Registry statique: 5 Lucide + 5 Heroicons Outline
+ * Icon.astro
+ * - Custom locaux (src/assets/icons/*.svg)
+ * - Icônes externes via registre TS (src/ui/icons/icon-registry.ts)
  */
-import type { AstroComponentFactory } from 'astro/runtime/server/index.js'
+import { ICONS, PREFIX_ALIASES } from '../icons/icon-registry'
 
-// ✅ Lucide
-import LucidePlay from '~icons/lucide/play'
-import LucidePause from '~icons/lucide/pause'
-import LucideHeart from '~icons/lucide/heart'
-import LucideStar from '~icons/lucide/star'
-import LucideHome from '~icons/lucide/home'
-
-// ✅ Heroicons Outline (ATTENTION: collection = heroicons-outline)
-import HiHomeO from '~icons/heroicons-outline/home'
-import HiUserO from '~icons/heroicons-outline/user'
-import HiBellO from '~icons/heroicons-outline/bell'
-import HiSearchO from '~icons/heroicons-outline/magnifying-glass'
-import HiCog6O from '~icons/heroicons-outline/cog-6-tooth'
-
-// Registry minimal
-const BUILTIN_ICONS: Record<string, AstroComponentFactory> = {
-  // Lucide
-  'lucide:play': LucidePlay,
-  'lucide:pause': LucidePause,
-  'lucide:heart': LucideHeart,
-  'lucide:star': LucideStar,
-  'lucide:home': LucideHome,
-
-  // Heroicons Outline (clé officielle)
-  'heroicons-outline:home': HiHomeO,
-  'heroicons-outline:user': HiUserO,
-  'heroicons-outline:bell': HiBellO,
-  'heroicons-outline:magnifying-glass': HiSearchO,
-  'heroicons-outline:cog-6-tooth': HiCog6O,
-
-  // Alias conviviaux (tu peux taper heroicons:…)
-  'heroicons:home': HiHomeO,
-  'heroicons:user': HiUserO,
-  'heroicons:bell': HiBellO,
-  'heroicons:magnifying-glass': HiSearchO,
-  'heroicons:cog-6-tooth': HiCog6O,
-}
-
-// Custom locaux
-const modules = import.meta.glob('@/assets/icons/*.svg', { eager: true }) as Record<
-  string,
-  { default: AstroComponentFactory }
->
+// Custom locaux (glob au build, zéro JS côté client)
+const modules = import.meta.glob('@/assets/icons/*.svg', { eager: true }) as Record<string, any>
 const customRegistry = Object.fromEntries(
   Object.entries(modules).map(([path, mod]) => [path.split('/').pop()!.replace('.svg', ''), mod.default]),
-) as Record<string, AstroComponentFactory>
+)
 
-interface Props { name: string; size?: number | string; title?: string; class?: string; id?: string }
+interface Props {
+  name: string
+  size?: number | string
+  title?: string
+  class?: string
+  id?: string
+}
+
 const { name, size = 24, title, class: klass, id, ...rest } = Astro.props as Props & Record<string, unknown>
 
-// Parse
-let prefix = 'custom', icon = name
-if (name.includes(':')) { const [p, n] = name.split(':'); prefix = p; icon = n }
+// Analyse "prefix:icon"
+let prefix = 'custom'
+let icon = name
+if (name.includes(':')) {
+  const [p, n] = name.split(':')
+  prefix = p
+  icon = n
+}
 
-// Normalise quelques alias
-const prefixAliases: Record<string, string> = { heroicon: 'heroicons', 'heroicons-outline': 'heroicons' }
-const normalized = prefixAliases[prefix] ?? prefix
-const key = normalized === 'custom' ? icon : `${normalized}:${icon}`
+// Normalise préfixes (aliases)
+const norm = PREFIX_ALIASES[prefix] ?? prefix
+const key = norm === 'custom' ? icon : `${norm}:${icon}`
 
-// Resolve: custom > builtin
-let IconComponent: AstroComponentFactory | null =
-  normalized === 'custom' ? (customRegistry[icon] ?? null) : (BUILTIN_ICONS[key] ?? null)
+// Résolution
+let IconComponent = norm === 'custom' ? customRegistry[icon] : ICONS[key]
+if (!IconComponent) console.warn(`[Icon] Icône non trouvée: ${key}`)
 
-if (!IconComponent) console.warn(`[Icon] Icône non déclarée dans le registre: ${key}`)
-
-const style = typeof size === 'number' ? `width:${size}px;height:${size}px;` : `width:${size};height:${size};`
+// Styles de taille
+const style =
+  typeof size === 'number' ? `width:${size}px;height:${size}px;` : `width:${size};height:${size};`
 ---
 
-{ IconComponent ? (
+{IconComponent ? (
   <span
     class:list={['inline-block align-middle', klass]}
     style={style}
@@ -91,5 +57,4 @@ const style = typeof size === 'number' ? `width:${size}px;height:${size}px;` : `
   </span>
 ) : (
   <span class="inline-block h-[1em] w-[1em]" aria-hidden="true" />
-) }
-
+)}
