@@ -22,18 +22,13 @@
       } catch (_) {}
     }
 
-        // Handle events from the UI FAB
-        document.addEventListener('fab:action', (e) => {
-          let detail = {}
-          try {
-            if (typeof CustomEvent !== 'undefined' && e instanceof CustomEvent) {
-              detail = e.detail || {}
-            }
-          } catch (_) {}
-          if (detail && detail.action === 'focus') {
-            toggleFocus()
-          }
-        })
+    // Handle events from the UI FAB (be generous about event shape)
+    document.addEventListener('fab:action', (e) => {
+      // Access detail safely without instanceof to avoid cross-realm issues
+      const detail = (e && (e).detail) || undefined
+      const action = detail && detail.action
+      if (action === 'focus') toggleFocus()
+    })
     
         // Handle Escape key to exit focus mode
         document.addEventListener('keydown', (e) => {

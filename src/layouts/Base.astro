@@ -4,6 +4,7 @@ import Header from '@/layouts/partials/Header.astro'
 import Footer from '@/layouts/partials/Footer.astro'
 import TwSizeIndicator from '@/domain/dev/TwSizeIndicator.astro'
 import { ClientRouter } from 'astro:transitions'
+import FocusModeController from '@/domain/shared/controllers/FocusModeController.astro'
 const { title = 'Mon Site', meta_title, description, image } = Astro.props
 const pageTitle = meta_title || title
 ---
@@ -42,9 +43,157 @@ const pageTitle = meta_title || title
       // Réinitialisation après chaque navigation ViewTransition
       document.addEventListener('astro:after-swap', initTheme)
     </script>
+
+    <!-- Global initializer for FAB Speed Dial (works across ViewTransitions) -->
+    <script is:inline>
+      (() => {
+        function initFab(root) {
+          if (!root || root.__fabInited) return
+          root.__fabInited = true
+          const main = root.querySelector('[data-fab-main]')
+          const items = root.querySelectorAll('[data-fab-item]')
+
+          const setExpanded = (val) => {
+            if (main) main.setAttribute('aria-expanded', val ? 'true' : 'false')
+          }
+          const close = () => {
+            setExpanded(false)
+            const active = document.activeElement
+            if (active && root.contains(active) && active.blur) active.blur()
+            else if (main && main.blur) main.blur()
+          }
+
+          if (main) {
+            main.addEventListener('click', () => {
+              main.focus()
+              setExpanded(true)
+            })
+            main.addEventListener('keydown', (e) => {
+              if (e.key === 'Escape') close()
+            })
+          }
+
+          items.forEach((btn) => {
+            btn.addEventListener('click', () => {
+              const action = btn.getAttribute('data-fab-action')
+              if (action) {
+                const ev = new CustomEvent('fab:action', {
+                  detail: { action },
+                  bubbles: true,
+                  composed: true,
+                })
+                btn.dispatchEvent(ev)
+              }
+              close()
+            })
+          })
+        }
+
+        function scanAndInitFabs() {
+          document.querySelectorAll('.fab').forEach((el) => initFab(el))
+        }
+
+        // Initial page load
+        if (document.readyState === 'loading') {
+          document.addEventListener('DOMContentLoaded', scanAndInitFabs)
+        } else {
+          scanAndInitFabs()
+        }
+
+        // After every client navigation
+        document.addEventListener('astro:page-load', scanAndInitFabs)
+        document.addEventListener('astro:after-swap', scanAndInitFabs)
+      })()
+    </script>
+
+    <!-- Global initializer for FocusEscapeHint (ESC helper on focus mode) -->
+    <script is:inline>
+      (() => {
+        const state = (window.__focusHintState = window.__focusHintState || {
+          hideTimeout: null,
+          observer: null,
+          keydownAttached: false,
+        })
+
+        function getHint() {
+          return document.getElementById('focus-escape-hint')
+        }
+
+        function showHint() {
+          const el = getHint()
+          if (!el) return
+          if (state.hideTimeout) {
+            clearTimeout(state.hideTimeout)
+            state.hideTimeout = null
+          }
+          el.classList.remove('fade-out')
+          el.classList.add('show')
+          state.hideTimeout = setTimeout(() => hideHint(), 3000)
+        }
+
+        function hideHint() {
+          const el = getHint()
+          if (!el) return
+          el.classList.remove('show')
+          el.classList.add('fade-out')
+          if (state.hideTimeout) {
+            clearTimeout(state.hideTimeout)
+            state.hideTimeout = null
+          }
+        }
+
+        function ensureObserver() {
+          if (state.observer) return
+          state.observer = new MutationObserver((mutations) => {
+            for (const m of mutations) {
+              if (m.type === 'attributes' && m.attributeName === 'class') {
+                if (document.body.classList.contains('focus-mode')) showHint()
+                else hideHint()
+              }
+            }
+          })
+          state.observer.observe(document.body, {
+            attributes: true,
+            attributeFilter: ['class'],
+          })
+        }
+
+        function ensureKeydown() {
+          if (state.keydownAttached) return
+          document.addEventListener('keydown', (e) => {
+            if (e.key !== 'Escape' && document.body.classList.contains('focus-mode')) {
+              showHint()
+            }
+          })
+          state.keydownAttached = true
+        }
+
+        function initHint() {
+          // Only act when the element exists on the current page
+          const el = getHint()
+          if (!el) return
+          ensureObserver()
+          ensureKeydown()
+          if (document.body.classList.contains('focus-mode')) showHint()
+        }
+
+        // Initial page load
+        if (document.readyState === 'loading') {
+          document.addEventListener('DOMContentLoaded', initHint)
+        } else {
+          initHint()
+        }
+
+        // Run after client navigations
+        document.addEventListener('astro:page-load', initHint)
+        document.addEventListener('astro:after-swap', initHint)
+      })()
+    </script>
   </head>
 
   <body class="min-h-screen">
+    <!-- Global controller: keeps focus-mode behavior across navigations -->
+    <FocusModeController />
     <!-- Layout principal avec Grid Tailwind -->
     <div class="grid min-h-screen grid-rows-[auto_1fr_auto]">
       <TwSizeIndicator />
