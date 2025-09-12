@@ -85,4 +85,33 @@ const { title, author, categories, image, date, tags } = post.data
   
   <!-- ESC key hint for focus mode -->
   <FocusEscapeHint />
+
+  <!-- Enable entering focus mode with Enter on blog posts -->
+  <script is:inline>
+    (() => {
+      // Only active on this page; detach on navigation
+      function onKeydown(e) {
+        if (e.key !== 'Enter') return
+        // Only when the page itself is focused (avoid links/forms)
+        const active = document.activeElement
+        const pageFocused = !active || active === document.body
+        if (!pageFocused) return
+        if (document.body.classList.contains('focus-mode')) return
+        if (e.altKey || e.ctrlKey || e.metaKey || e.shiftKey) return
+        e.preventDefault()
+        const ev = new CustomEvent('fab:action', {
+          detail: { action: 'focus' },
+          bubbles: true,
+          composed: true,
+        })
+        document.dispatchEvent(ev)
+      }
+
+      document.addEventListener('keydown', onKeydown)
+      // Clean up when navigating away (Astro ViewTransitions)
+      document.addEventListener('astro:before-swap', () => {
+        document.removeEventListener('keydown', onKeydown)
+      })
+    })()
+  </script>
 </section>
