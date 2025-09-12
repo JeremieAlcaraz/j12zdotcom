@@ -89,7 +89,7 @@ const { title, author, categories, image, date, tags } = post.data
 
   <!-- Music dock (appears when clicking the music FAB item) -->
   <aside id="music-dock" class="music-dock" aria-hidden="true">
-    <div class="music-panel bg-base-100/80 border-2 border-violet-500/70 shadow-2xl rounded-2xl backdrop-blur-md">
+    <div class="music-panel bg-base-100/80 shadow-2xl rounded-2xl backdrop-blur-md">
       <div class="flex items-center justify-between gap-2 px-2 pt-2 pb-1 select-none">
         <button type="button" data-drag-handle title="Déplacer" class="btn btn-ghost btn-xs text-base-content/70">
           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="size-5">
@@ -112,7 +112,7 @@ const { title, author, categories, image, date, tags } = post.data
     /* Floating dock positioning + smooth show/hide animation */
     #music-dock.music-dock {
       position: fixed;
-      inset-inline-end: 1rem; /* stick to the right at ~1rem */
+      inset-inline-end: 0.5rem; /* stick to the right at ~0.5rem */
       bottom: 9rem; /* sit nicely above the FAB */
       /* Reduced by at least 2rem from previous sizing */
       width: min(calc(360px - 2rem), calc(92vw - 2rem));
