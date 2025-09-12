@@ -301,9 +301,8 @@ const playerId = `mp-${Math.random().toString(36).slice(2, 9)}`
   }
 
   // Initialiser le lecteur pour CE composant uniquement
-  const PLAYER_ID = playerId;
   const init = () => {
-    const root = document.querySelector(`[data-player-id="${PLAYER_ID}"]`);
+    const root = document.querySelector(`[data-player-id="${playerId}"]`);
     if (root) new MusicPlayer(root);
   };
   if (document.readyState === 'loading') {
