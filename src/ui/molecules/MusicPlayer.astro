@@ -12,7 +12,7 @@ import Icon from '@/ui/atoms/Icon.astro'
   </audio>
   <div class="card-body my-2">
     <div class="flex items-center justify-around">
-      <button class="btn btn-square btn-ghost hover:bg-base-300/30" data-action="prev" title="Précédent">
+      <button class="btn btn-square btn-neutral" data-action="prev" title="Précédent">
         <Icon name="heroicons:backward" class="size-4 shrink-0" title="Précédent" />
       </button>
       <button class="btn btn-square btn-primary btn-lg" data-action="play" title="Lecture/Pause">
@@ -21,7 +21,7 @@ import Icon from '@/ui/atoms/Icon.astro'
           <Icon name="heroicons:pause" class="size-6 shrink-0" data-icon="pause" title="Pause" hidden />
         </span>
       </button>
-      <button class="btn btn-square btn-ghost hover:bg-base-300/30" data-action="next" title="Suivant">
+      <button class="btn btn-square btn-neutral" data-action="next" title="Suivant">
         <Icon name="heroicons:forward" class="size-4 shrink-0" title="Suivant" />
       </button>
     </div>
@@ -45,19 +45,19 @@ import Icon from '@/ui/atoms/Icon.astro'
     </div>
   </div>
   <div class="flex items-center justify-around px-2 pb-6">
-    <button class="btn btn-square btn-ghost btn-volume" data-action="volume" title="Volume" aria-pressed="false">
+    <button class="btn btn-square btn-neutral btn-volume" data-action="volume" title="Volume" aria-pressed="false">
       <span class="relative inline-flex items-center justify-center">
         <Icon name="heroicons:speaker-wave" class="size-4" data-icon="volume-on" title="Volume activé" />
         <Icon name="heroicons:speaker-x-mark" class="size-4" data-icon="volume-off" title="Sourdine" hidden />
       </span>
     </button>
-    <button class="btn btn-square btn-ghost btn-shuffle" data-action="shuffle" title="Aléatoire" aria-pressed="false">
+    <button class="btn btn-square btn-neutral btn-shuffle" data-action="shuffle" title="Aléatoire" aria-pressed="false">
       <Icon name="heroicons:arrows-right-left" class="size-4" title="Aléatoire" />
     </button>
-    <button class="btn btn-square btn-ghost btn-repeat" data-action="repeat" title="Répéter" aria-pressed="false">
+    <button class="btn btn-square btn-neutral btn-repeat" data-action="repeat" title="Répéter" aria-pressed="false">
       <Icon name="heroicons:arrow-path" class="size-4" title="Répéter" />
     </button>
-    <button class="btn btn-square" title="Radio">
+    <button class="btn btn-square btn-neutral" title="Radio">
       <Icon name="heroicons:rss" class="size-4" title="Radio" />
     </button>
   </div>
@@ -240,19 +240,23 @@ import Icon from '@/ui/atoms/Icon.astro'
         onEl.hidden = this.isMuted;
         offEl.hidden = !this.isMuted;
       }
+      // Style actif/inactif
       this.volumeBtn.classList.toggle('btn-primary', this.isMuted);
+      this.volumeBtn.classList.toggle('btn-neutral', !this.isMuted);
       this.volumeBtn.setAttribute('aria-pressed', String(this.isMuted));
     }
 
     updateRepeatButton() {
       if (!this.repeatBtn) return;
       this.repeatBtn.classList.toggle('btn-primary', this.isRepeating);
+      this.repeatBtn.classList.toggle('btn-neutral', !this.isRepeating);
       this.repeatBtn.setAttribute('aria-pressed', String(this.isRepeating));
     }
 
     updateShuffleButton() {
       if (!this.shuffleBtn) return;
       this.shuffleBtn.classList.toggle('btn-primary', this.isShuffling);
+      this.shuffleBtn.classList.toggle('btn-neutral', !this.isShuffling);
       this.shuffleBtn.setAttribute('aria-pressed', String(this.isShuffling));
     }
 
