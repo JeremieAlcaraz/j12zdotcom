@@ -13,18 +13,16 @@ import Icon from '@/ui/atoms/Icon.astro'
   <div class="card-body my-2">
     <div class="flex items-center justify-around">
       <button class="btn btn-square btn-neutral" data-action="prev" title="Précédent">
-        <Icon name="lucide:skip-back" class="size-4 shrink-0" title="Précédent" />
+        <Icon name="heroicons:backward" class="size-4 shrink-0" title="Précédent" />
       </button>
       <button class="btn btn-square btn-neutral btn-lg" data-action="play" title="Lecture/Pause">
         <span class="relative inline-flex items-center justify-center">
-          <Icon name="lucide:play" class="size-6 shrink-0" data-icon="play" title="Lecture" />
-          <Icon name="lucide:pause" class="size-6 shrink-0 hidden" data-icon="pause" title="Pause" />
+          <Icon name="heroicons:play" class="size-6 shrink-0" data-icon="play" title="Lecture" />
+          <Icon name="heroicons:pause" class="size-6 shrink-0 hidden" data-icon="pause" title="Pause" />
         </span>
       </button>
       <button class="btn btn-square btn-neutral" data-action="next" title="Suivant">
-        <!-- <Icon name="lucide:skip-forward" class="size-4 shrink-0" title="Suivant" /> -->
-        
-    <Icon name="heroicons:home" class="size-8 text-primary" title="Heroicons · home" />
+        <Icon name="heroicons:forward" class="size-4 shrink-0" title="Suivant" />
       </button>
     </div>
     <div class="mt-2 text-center">
@@ -49,18 +47,18 @@ import Icon from '@/ui/atoms/Icon.astro'
   <div class="flex items-center justify-around px-2 pb-6">
     <button class="btn btn-square btn-volume" data-action="volume" title="Volume">
       <span class="relative inline-flex items-center justify-center">
-        <Icon name="lucide:volume-2" class="size-4" data-icon="volume-on" title="Volume activé" />
-        <Icon name="lucide:volume-x" class="size-4 hidden" data-icon="volume-off" title="Sourdine" />
+        <Icon name="heroicons:speaker-wave" class="size-4" data-icon="volume-on" title="Volume activé" />
+        <Icon name="heroicons:speaker-x-mark" class="size-4 hidden" data-icon="volume-off" title="Sourdine" />
       </span>
     </button>
     <button class="btn btn-square btn-shuffle" data-action="shuffle" title="Aléatoire">
-      <Icon name="lucide:shuffle" class="size-4" title="Aléatoire" />
+      <Icon name="heroicons:arrows-right-left" class="size-4" title="Aléatoire" />
     </button>
     <button class="btn btn-square btn-repeat" data-action="repeat" title="Répéter">
-      <Icon name="lucide:repeat" class="size-4" title="Répéter" />
+      <Icon name="heroicons:arrow-path" class="size-4" title="Répéter" />
     </button>
     <button class="btn btn-square" title="Radio">
-      <Icon name="lucide:radio" class="size-4" title="Radio" />
+      <Icon name="heroicons:rss" class="size-4" title="Radio" />
     </button>
   </div>
 </div>
