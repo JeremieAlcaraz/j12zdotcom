@@ -150,14 +150,16 @@ const { title, author, categories, image, date, tags } = post.data
         if (e.key === 'Escape' && isOpen) setOpen(false)
       }
 
+      const onCloseClick = () => setOpen(false)
       document.addEventListener('fab:action', onFabAction)
       document.addEventListener('keydown', onKeydown)
-      closeBtn?.addEventListener('click', () => setOpen(false))
+      closeBtn?.addEventListener('click', onCloseClick)
 
       // Cleanup on navigation (Astro ViewTransitions)
       document.addEventListener('astro:before-swap', () => {
         document.removeEventListener('fab:action', onFabAction)
         document.removeEventListener('keydown', onKeydown)
+        closeBtn?.removeEventListener('click', onCloseClick)
       })
     })()
   </script>
