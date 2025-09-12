@@ -279,7 +279,13 @@ const itemColors = [
     <div class="flex flex-wrap gap-3">
       {itemSizes.map(size => (
         <div class="flex flex-col items-center gap-1">
-          <Icon name="custom:cat" class={`text-primary ${size === 'xs' ? 'size-3' : size === 'sm' ? 'size-4' : size === 'md' ? 'size-6' : size === 'lg' ? 'size-8' : 'size-12'}`} title={`Custom · cat · ${size}`} />
+          <div class="flex items-end h-12">
+            <Icon
+              name="custom:cat"
+              class={`text-primary ${size === 'xs' ? 'size-3' : size === 'sm' ? 'size-4' : size === 'md' ? 'size-6' : size === 'lg' ? 'size-8' : 'size-12'}`}
+              title={`Custom · cat · ${size}`}
+            />
+          </div>
           <span class="text-xs text-base-content/70">{size}</span>
         </div>
       ))}
@@ -322,7 +328,12 @@ const itemColors = [
     <div class="flex flex-wrap gap-3">
       {itemSizes.map(size => (
         <div class="flex flex-col items-center gap-1">
-          <MdiAlarmOff class={`text-error ${size === 'xs' ? 'size-3' : size === 'sm' ? 'size-4' : size === 'md' ? 'size-6' : size === 'lg' ? 'size-8' : 'size-12'}`} title={`MDI · alarm-off · ${size}`} />
+          <div class="flex items-end h-12">
+            <MdiAlarmOff
+              class={`text-error ${size === 'xs' ? 'size-3' : size === 'sm' ? 'size-4' : size === 'md' ? 'size-6' : size === 'lg' ? 'size-8' : 'size-12'}`}
+              title={`MDI · alarm-off · ${size}`}
+            />
+          </div>
           <span class="text-xs text-base-content/70">{size}</span>
         </div>
       ))}
@@ -356,7 +367,13 @@ const itemColors = [
     <div class="flex flex-wrap gap-3">
       {itemSizes.map(size => (
         <div class="flex flex-col items-center gap-1">
-          <Icon name="lucide:home" class={`text-primary ${size === 'xs' ? 'size-3' : size === 'sm' ? 'size-4' : size === 'md' ? 'size-6' : size === 'lg' ? 'size-8' : 'size-12'}`} title={`Lucide · home · ${size}`} />
+          <div class="flex items-end h-12">
+            <Icon
+              name="lucide:home"
+              class={`text-primary ${size === 'xs' ? 'size-3' : size === 'sm' ? 'size-4' : size === 'md' ? 'size-6' : size === 'lg' ? 'size-8' : 'size-12'}`}
+              title={`Lucide · home · ${size}`}
+            />
+          </div>
           <span class="text-xs text-base-content/70">{size}</span>
         </div>
       ))}
@@ -391,7 +408,13 @@ const itemColors = [
     <div class="flex flex-wrap gap-3">
       {itemSizes.map(size => (
         <div class="flex flex-col items-center gap-1">
-          <Icon name="heroicons:home" class={`text-primary ${size === 'xs' ? 'size-3' : size === 'sm' ? 'size-4' : size === 'md' ? 'size-6' : size === 'lg' ? 'size-8' : 'size-12'}`} title={`Heroicons · home · ${size}`} />
+          <div class="flex items-end h-12">
+            <Icon
+              name="heroicons:home"
+              class={`text-primary ${size === 'xs' ? 'size-3' : size === 'sm' ? 'size-4' : size === 'md' ? 'size-6' : size === 'lg' ? 'size-8' : 'size-12'}`}
+              title={`Heroicons · home · ${size}`}
+            />
+          </div>
           <span class="text-xs text-base-content/70">{size}</span>
         </div>
       ))}
