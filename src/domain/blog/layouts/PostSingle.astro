@@ -10,6 +10,7 @@ import Notice from '@/shortcodes/generic/Notice.shortcode.astro'
 import Video from '@/shortcodes/generic/Video.shortcode.astro'
 import Youtube from '@/shortcodes/generic/Youtube.shortcode.astro'
 import FabSpeedDial from '@/ui/molecules/FabSpeedDial.astro'
+import MusicPlayer from '@/ui/molecules/MusicPlayer.astro'
 import FocusEscapeHint from '@/ui/molecules/FocusEscapeHint.astro'
 
 const { post } = Astro.props
@@ -85,6 +86,81 @@ const { title, author, categories, image, date, tags } = post.data
   
   <!-- ESC key hint for focus mode -->
   <FocusEscapeHint />
+
+  <!-- Music dock (appears when clicking the music FAB item) -->
+  <aside id="music-dock" class="music-dock" aria-hidden="true">
+    <div class="music-panel bg-base-100/80 border-2 border-violet-500/70 shadow-2xl rounded-2xl backdrop-blur-md">
+      <div class="flex items-center justify-end px-2 pt-2">
+        <button type="button" id="music-dock-close" class="btn btn-circle btn-ghost btn-sm" aria-label="Fermer le lecteur">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="size-5">
+            <path fill-rule="evenodd" d="M5.47 5.47a.75.75 0 0 1 1.06 0L12 10.94l5.47-5.47a.75.75 0 1 1 1.06 1.06L13.06 12l5.47 5.47a.75.75 0 1 1-1.06 1.06L12 13.06l-5.47 5.47a.75.75 0 0 1-1.06-1.06L10.94 12 5.47 6.53a.75.75 0 0 1 0-1.06Z" clip-rule="evenodd" />
+          </svg>
+        </button>
+      </div>
+      <div class="p-3">
+        <MusicPlayer />
+      </div>
+    </div>
+  </aside>
+
+  <style>
+    /* Floating dock positioning + smooth show/hide animation */
+    #music-dock.music-dock {
+      position: fixed;
+      inset-inline-end: 1.5rem; /* right-6 */
+      top: 22vh;
+      width: min(360px, 92vw);
+      z-index: 45; /* below FAB (50), above page */
+      opacity: 0;
+      transform: translateY(12px) scale(0.98);
+      pointer-events: none;
+      transition: opacity 240ms ease, transform 260ms cubic-bezier(0.22, 1, 0.36, 1);
+    }
+    @media (min-width: 1024px) {
+      #music-dock.music-dock { inset-inline-end: 4rem; /* lg:right-16 */ }
+    }
+    #music-dock.music-dock.open {
+      opacity: 1;
+      transform: translateY(0) scale(1);
+      pointer-events: auto;
+    }
+    #music-dock .music-panel { overflow: hidden; }
+  </style>
+
+  <script is:inline>
+    (() => {
+      const dock = document.getElementById('music-dock')
+      const closeBtn = document.getElementById('music-dock-close')
+      if (!dock) return
+      let isOpen = false
+      const setOpen = (v) => {
+        isOpen = !!v
+        dock.classList.toggle('open', isOpen)
+        dock.setAttribute('aria-hidden', isOpen ? 'false' : 'true')
+      }
+      const toggle = () => setOpen(!isOpen)
+
+      function onFabAction(e) {
+        const action = e?.detail?.action
+        if (action === 'music') {
+          toggle()
+        }
+      }
+      function onKeydown(e) {
+        if (e.key === 'Escape' && isOpen) setOpen(false)
+      }
+
+      document.addEventListener('fab:action', onFabAction)
+      document.addEventListener('keydown', onKeydown)
+      closeBtn?.addEventListener('click', () => setOpen(false))
+
+      // Cleanup on navigation (Astro ViewTransitions)
+      document.addEventListener('astro:before-swap', () => {
+        document.removeEventListener('fab:action', onFabAction)
+        document.removeEventListener('keydown', onKeydown)
+      })
+    })()
+  </script>
 
   <!-- Enable entering focus mode with Enter on blog posts -->
   <script is:inline>
