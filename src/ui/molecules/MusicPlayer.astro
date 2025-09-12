@@ -4,7 +4,7 @@ import Icon from '@/ui/atoms/Icon.astro'
 ---
  
 
-<div class="card bg-base-100 card-border border-base-300 card-sm overflow-hidden">
+<div class="card bg-base-200 card-border border-base-300 card-sm overflow-hidden shadow-xl ring-1 ring-base-300/40">
   <!-- Élément audio caché -->
   <audio id="audio-player" preload="metadata">
     <source src="/musics/jeremie-theme.mp3" type="audio/mpeg">
@@ -12,16 +12,16 @@ import Icon from '@/ui/atoms/Icon.astro'
   </audio>
   <div class="card-body my-2">
     <div class="flex items-center justify-around">
-      <button class="btn btn-square btn-neutral" data-action="prev" title="Précédent">
+      <button class="btn btn-square btn-ghost hover:bg-base-300/30" data-action="prev" title="Précédent">
         <Icon name="heroicons:backward" class="size-4 shrink-0" title="Précédent" />
       </button>
-      <button class="btn btn-square btn-neutral btn-lg" data-action="play" title="Lecture/Pause">
+      <button class="btn btn-square btn-primary btn-lg" data-action="play" title="Lecture/Pause">
         <span class="relative inline-flex items-center justify-center">
           <Icon name="heroicons:play" class="size-6 shrink-0" data-icon="play" title="Lecture" />
           <Icon name="heroicons:pause" class="size-6 shrink-0" data-icon="pause" title="Pause" hidden />
         </span>
       </button>
-      <button class="btn btn-square btn-neutral" data-action="next" title="Suivant">
+      <button class="btn btn-square btn-ghost hover:bg-base-300/30" data-action="next" title="Suivant">
         <Icon name="heroicons:forward" class="size-4 shrink-0" title="Suivant" />
       </button>
     </div>
@@ -37,24 +37,24 @@ import Icon from '@/ui/atoms/Icon.astro'
         style="inset-inline-start:10%"
         data-tip="13:39"
       ></div>
-      <progress class="progress" value="0" max="100"></progress>
+      <progress class="progress progress-primary" value="0" max="100"></progress>
     </div>
-    <div class="flex justify-between text-xs opacity-50">
+    <div class="flex justify-between text-xs opacity-70">
       <span data-time="current">13:39</span>
       <span data-time="duration">120:00</span>
     </div>
   </div>
   <div class="flex items-center justify-around px-2 pb-6">
-    <button class="btn btn-square btn-volume" data-action="volume" title="Volume">
+    <button class="btn btn-square btn-ghost btn-volume" data-action="volume" title="Volume" aria-pressed="false">
       <span class="relative inline-flex items-center justify-center">
         <Icon name="heroicons:speaker-wave" class="size-4" data-icon="volume-on" title="Volume activé" />
         <Icon name="heroicons:speaker-x-mark" class="size-4" data-icon="volume-off" title="Sourdine" hidden />
       </span>
     </button>
-    <button class="btn btn-square btn-shuffle" data-action="shuffle" title="Aléatoire">
+    <button class="btn btn-square btn-ghost btn-shuffle" data-action="shuffle" title="Aléatoire" aria-pressed="false">
       <Icon name="heroicons:arrows-right-left" class="size-4" title="Aléatoire" />
     </button>
-    <button class="btn btn-square btn-repeat" data-action="repeat" title="Répéter">
+    <button class="btn btn-square btn-ghost btn-repeat" data-action="repeat" title="Répéter" aria-pressed="false">
       <Icon name="heroicons:arrow-path" class="size-4" title="Répéter" />
     </button>
     <button class="btn btn-square" title="Radio">
@@ -240,17 +240,20 @@ import Icon from '@/ui/atoms/Icon.astro'
         onEl.hidden = this.isMuted;
         offEl.hidden = !this.isMuted;
       }
-      this.volumeBtn.classList.toggle('bg-primary', this.isMuted);
+      this.volumeBtn.classList.toggle('btn-primary', this.isMuted);
+      this.volumeBtn.setAttribute('aria-pressed', String(this.isMuted));
     }
 
     updateRepeatButton() {
       if (!this.repeatBtn) return;
-      this.repeatBtn.classList.toggle('bg-primary', this.isRepeating);
+      this.repeatBtn.classList.toggle('btn-primary', this.isRepeating);
+      this.repeatBtn.setAttribute('aria-pressed', String(this.isRepeating));
     }
 
     updateShuffleButton() {
       if (!this.shuffleBtn) return;
-      this.shuffleBtn.classList.toggle('bg-primary', this.isShuffling);
+      this.shuffleBtn.classList.toggle('btn-primary', this.isShuffling);
+      this.shuffleBtn.setAttribute('aria-pressed', String(this.isShuffling));
     }
 
     formatTime(seconds: number) {
