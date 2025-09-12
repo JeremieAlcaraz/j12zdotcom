@@ -1,12 +1,15 @@
 ---
 // Composant MusicPlayer - Lecteur de musique avec logique
 import Icon from '@/ui/atoms/Icon.astro'
+
+// UID par instance pour cibler le bon DOM même avec ClientRouter
+const playerId = `mp-${Math.random().toString(36).slice(2, 9)}`
 ---
  
 
-<div class="card bg-base-200 card-border border-base-300 card-sm overflow-hidden shadow-xl ring-1 ring-base-300/40">
+<div class="card bg-base-200 card-border border-base-300 card-sm overflow-hidden shadow-xl ring-1 ring-base-300/40" data-player-id={playerId}>
   <!-- Élément audio caché -->
-  <audio id="audio-player" preload="metadata">
+  <audio id={`audio-player-${playerId}`} preload="metadata">
     <source src="/musics/jeremie-theme.mp3" type="audio/mpeg">
     Votre navigateur ne supporte pas l'élément audio.
   </audio>
@@ -63,40 +66,23 @@ import Icon from '@/ui/atoms/Icon.astro'
   </div>
 </div>
 
-<script>
+<script define:vars={{ playerId }} is:inline>
   class MusicPlayer {
-    audio: HTMLAudioElement;
-    playBtn: HTMLElement | null;
-    prevBtn: HTMLElement | null;
-    nextBtn: HTMLElement | null;
-    volumeBtn: HTMLElement | null;
-    repeatBtn: HTMLElement | null;
-    shuffleBtn: HTMLElement | null;
-    progressBar: HTMLElement | null;
-    progressContainer: HTMLElement | null;
-    currentTimeEl: HTMLElement | null;
-    durationEl: HTMLElement | null;
-    tooltip: HTMLElement | null;
-    isPlaying: boolean;
-    isMuted: boolean;
-    isRepeating: boolean;
-    isShuffling: boolean;
-    volume: number;
-    defaultDurationSec: number;
-    constructor() {
-      this.audio = document.getElementById('audio-player') as HTMLAudioElement;
-      this.playBtn = document.querySelector('[data-action="play"]');
-      this.prevBtn = document.querySelector('[data-action="prev"]');
-      this.nextBtn = document.querySelector('[data-action="next"]');
-      this.volumeBtn = document.querySelector('[data-action="volume"]');
-      this.repeatBtn = document.querySelector('[data-action="repeat"]');
-      this.shuffleBtn = document.querySelector('[data-action="shuffle"]');
-      this.progressBar = document.querySelector('.progress');
-      const progressEl = document.querySelector('.progress');
+    constructor(root) {
+      this.root = root;
+      this.audio = root.querySelector('audio');
+      this.playBtn = root.querySelector('[data-action="play"]');
+      this.prevBtn = root.querySelector('[data-action="prev"]');
+      this.nextBtn = root.querySelector('[data-action="next"]');
+      this.volumeBtn = root.querySelector('[data-action="volume"]');
+      this.repeatBtn = root.querySelector('[data-action="repeat"]');
+      this.shuffleBtn = root.querySelector('[data-action="shuffle"]');
+      this.progressBar = root.querySelector('.progress');
+      const progressEl = root.querySelector('.progress');
       this.progressContainer = progressEl ? progressEl.parentElement : null;
-      this.currentTimeEl = document.querySelector('[data-time="current"]');
-      this.durationEl = document.querySelector('[data-time="duration"]');
-      this.tooltip = document.querySelector('.tooltip');
+      this.currentTimeEl = root.querySelector('[data-time="current"]');
+      this.durationEl = root.querySelector('[data-time="duration"]');
+      this.tooltip = root.querySelector('.tooltip');
 
       this.isPlaying = false;
       this.isMuted = false;
@@ -121,7 +107,7 @@ import Icon from '@/ui/atoms/Icon.astro'
       // Remet les éléments UI à l'état initial
       this.audio.currentTime = 0;
       if (this.progressBar) {
-        (this.progressBar as HTMLProgressElement).value = 0;
+        this.progressBar.value = 0;
       }
       if (this.tooltip) {
         this.tooltip.style.left = '0%';
@@ -166,17 +152,39 @@ import Icon from '@/ui/atoms/Icon.astro'
       this.audio.addEventListener('timeupdate', () => this.updateProgress());
       this.audio.addEventListener('loadedmetadata', () => this.updateDuration());
       this.audio.addEventListener('ended', () => this.handleTrackEnd());
-      this.audio.addEventListener('play', () => this.updatePlayButton(true));
-      this.audio.addEventListener('pause', () => this.updatePlayButton(false));
+      this.audio.addEventListener('play', () => {
+        this.isPlaying = true;
+        this.updatePlayButton(true);
+      });
+      this.audio.addEventListener('pause', () => {
+        this.isPlaying = false;
+        this.updatePlayButton(false);
+      });
     }
 
     togglePlay() {
-      if (this.isPlaying) {
-        this.audio.pause();
+      if (this.audio.paused) {
+        const playPromise = this.audio.play();
+        if (playPromise && typeof playPromise.then === 'function') {
+          playPromise
+            .then(() => {
+              this.isPlaying = true;
+              this.updatePlayButton(true);
+            })
+            .catch((err) => {
+              console.warn('[MusicPlayer] play() failed:', err);
+              this.isPlaying = false;
+              this.updatePlayButton(false);
+            });
+        } else {
+          this.isPlaying = true;
+          this.updatePlayButton(true);
+        }
       } else {
-        this.audio.play();
+        this.audio.pause();
+        this.isPlaying = false;
+        this.updatePlayButton(false);
       }
-      this.isPlaying = !this.isPlaying;
     }
 
     prevTrack() {
@@ -206,22 +214,24 @@ import Icon from '@/ui/atoms/Icon.astro'
       this.updateShuffleButton();
     }
 
-    seek(e: MouseEvent) {
+    seek(e) {
       if (!this.progressContainer) return;
+      if (!this.audio || !isFinite(this.audio.duration) || this.audio.duration <= 0) return;
       const rect = this.progressContainer.getBoundingClientRect();
       const percent = (e.clientX - rect.left) / rect.width;
       this.audio.currentTime = percent * this.audio.duration;
     }
 
     updateProgress() {
-      const percent = (this.audio.currentTime / this.audio.duration) * 100;
+      const duration = this.audio.duration;
+      const percent = isFinite(duration) && duration > 0 ? (this.audio.currentTime / duration) * 100 : 0;
       if (this.progressBar) {
-        (this.progressBar as HTMLProgressElement).value = percent;
+        this.progressBar.value = percent;
       }
 
       // Mettre à jour le tooltip
       if (this.tooltip) {
-        const tooltipPercent = (this.audio.currentTime / this.audio.duration) * 100;
+        const tooltipPercent = percent;
         this.tooltip.style.left = `${tooltipPercent}%`;
         this.tooltip.setAttribute('data-tip', this.formatTime(this.audio.currentTime));
       }
@@ -245,9 +255,9 @@ import Icon from '@/ui/atoms/Icon.astro'
       }
     }
 
-    updatePlayButton(isPlaying: boolean) {
-      const playEl = this.playBtn?.querySelector('[data-icon="play"]') as HTMLElement | null;
-      const pauseEl = this.playBtn?.querySelector('[data-icon="pause"]') as HTMLElement | null;
+    updatePlayButton(isPlaying) {
+      const playEl = this.playBtn?.querySelector('[data-icon="play"]');
+      const pauseEl = this.playBtn?.querySelector('[data-icon="pause"]');
       if (playEl && pauseEl) {
         playEl.hidden = isPlaying;
         pauseEl.hidden = !isPlaying;
@@ -256,8 +266,8 @@ import Icon from '@/ui/atoms/Icon.astro'
 
     updateVolumeButton() {
       if (!this.volumeBtn) return;
-      const onEl = this.volumeBtn.querySelector('[data-icon="volume-on"]') as HTMLElement | null;
-      const offEl = this.volumeBtn.querySelector('[data-icon="volume-off"]') as HTMLElement | null;
+      const onEl = this.volumeBtn.querySelector('[data-icon="volume-on"]');
+      const offEl = this.volumeBtn.querySelector('[data-icon="volume-off"]');
       if (onEl && offEl) {
         onEl.hidden = this.isMuted;
         offEl.hidden = !this.isMuted;
@@ -282,7 +292,7 @@ import Icon from '@/ui/atoms/Icon.astro'
       this.shuffleBtn.setAttribute('aria-pressed', String(this.isShuffling));
     }
 
-    formatTime(seconds: number) {
+    formatTime(seconds) {
       if (isNaN(seconds)) return '0:00';
       const mins = Math.floor(seconds / 60);
       const secs = Math.floor(seconds % 60);
@@ -290,10 +300,15 @@ import Icon from '@/ui/atoms/Icon.astro'
     }
   }
 
-  // Initialiser le lecteur quand le DOM est prêt
+  // Initialiser le lecteur pour CE composant uniquement
+  const PLAYER_ID = playerId;
+  const init = () => {
+    const root = document.querySelector(`[data-player-id="${PLAYER_ID}"]`);
+    if (root) new MusicPlayer(root);
+  };
   if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', () => new MusicPlayer());
+    document.addEventListener('DOMContentLoaded', init);
   } else {
-    new MusicPlayer();
+    init();
   }
 </script>
