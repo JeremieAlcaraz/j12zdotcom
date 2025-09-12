@@ -87,25 +87,9 @@ const { title, author, categories, image, date, tags } = post.data
   <!-- ESC key hint for focus mode -->
   <FocusEscapeHint />
 
-  <!-- Music dock (appears when clicking the music FAB item) -->
+  <!-- Music dock (toggle with FAB music); only the player itself -->
   <aside id="music-dock" class="music-dock" aria-hidden="true">
-    <div class="music-panel bg-base-100/80 shadow-2xl rounded-2xl backdrop-blur-md">
-      <div class="flex items-center justify-between gap-2 px-2 pt-2 pb-1 select-none">
-        <button type="button" data-drag-handle title="Déplacer" class="btn btn-ghost btn-xs text-base-content/70">
-          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="size-5">
-            <path d="M10 3h4v4h-4V3Zm0 7h4v4h-4v-4Zm0 7h4v4h-4v-4Z"/>
-          </svg>
-        </button>
-        <button type="button" id="music-dock-close" class="btn btn-circle btn-ghost btn-sm" aria-label="Fermer le lecteur">
-          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="size-5">
-            <path fill-rule="evenodd" d="M5.47 5.47a.75.75 0 0 1 1.06 0L12 10.94l5.47-5.47a.75.75 0 1 1 1.06 1.06L13.06 12l5.47 5.47a.75.75 0 1 1-1.06 1.06L12 13.06l-5.47 5.47a.75.75 0 0 1-1.06-1.06L10.94 12 5.47 6.53a.75.75 0 0 1 0-1.06Z" clip-rule="evenodd" />
-          </svg>
-        </button>
-      </div>
-      <div class="p-3">
-        <MusicPlayer />
-      </div>
-    </div>
+    <MusicPlayer />
   </aside>
 
   <style>
@@ -125,16 +109,12 @@ const { title, author, categories, image, date, tags } = post.data
       transition: opacity 420ms cubic-bezier(0.16, 1, 0.3, 1),
                   transform 460ms cubic-bezier(0.16, 1, 0.3, 1);
     }
-    /* Dragging helpers */
-    #music-dock [data-drag-handle] { cursor: grab; }
-    #music-dock.dragging [data-drag-handle] { cursor: grabbing; }
-    #music-dock.dragging .music-panel { user-select: none; }
     #music-dock.music-dock.open {
       opacity: 1;
       transform: translate(0, 0) scale(1);
       pointer-events: auto;
     }
-    #music-dock .music-panel { overflow: hidden; }
+    /* The aside is only a positioning/animation shell */
 
     @media (prefers-reduced-motion: reduce) {
       #music-dock.music-dock { transition: none; transform: none; }
@@ -145,11 +125,8 @@ const { title, author, categories, image, date, tags } = post.data
   <script is:inline>
     (() => {
       const dock = document.getElementById('music-dock')
-      const closeBtn = document.getElementById('music-dock-close')
-      const handle = dock?.querySelector('[data-drag-handle]')
       if (!dock) return
       let isOpen = false
-      const POS_KEY = 'music-dock-pos'
       const setOpen = (v) => {
         isOpen = !!v
         dock.classList.toggle('open', isOpen)
@@ -167,94 +144,15 @@ const { title, author, categories, image, date, tags } = post.data
         if (e.key === 'Escape' && isOpen) setOpen(false)
       }
 
-      const onCloseClick = () => setOpen(false)
       document.addEventListener('fab:action', onFabAction)
       document.addEventListener('keydown', onKeydown)
-      closeBtn?.addEventListener('click', onCloseClick)
 
       // Cleanup on navigation (Astro ViewTransitions)
       document.addEventListener('astro:before-swap', () => {
         document.removeEventListener('fab:action', onFabAction)
         document.removeEventListener('keydown', onKeydown)
-        closeBtn?.removeEventListener('click', onCloseClick)
       })
 
-      // --- Drag to move ----------------------------------------------------
-      let dragging = false
-      let offsetX = 0
-      let offsetY = 0
-
-      function clamp(value, min, max) {
-        return Math.max(min, Math.min(max, value))
-      }
-
-      function applyManualPosition(left, top) {
-        dock.style.left = `${left}px`
-        dock.style.top = `${top}px`
-        dock.style.right = 'auto'
-        dock.style.bottom = 'auto'
-      }
-
-      function savePosition(left, top) {
-        try { localStorage.setItem(POS_KEY, JSON.stringify({ left, top })) } catch (_) {}
-      }
-
-      function restorePosition() {
-        try {
-          const raw = localStorage.getItem(POS_KEY)
-          if (!raw) return
-          const pos = JSON.parse(raw)
-          if (typeof pos?.left === 'number' && typeof pos?.top === 'number') {
-            const vw = window.innerWidth
-            const vh = window.innerHeight
-            const rect = dock.getBoundingClientRect()
-            const maxLeft = vw - rect.width - 8
-            const maxTop = vh - rect.height - 8
-            const left = clamp(pos.left, 8, Math.max(8, maxLeft))
-            const top = clamp(pos.top, 8, Math.max(8, maxTop))
-            applyManualPosition(left, top)
-          }
-        } catch (_) {}
-      }
-
-      function onPointerDown(e) {
-        if (e.button !== 0) return
-        dock.classList.add('dragging')
-        dragging = true
-        const rect = dock.getBoundingClientRect()
-        // If dock is positioned via right/bottom, switch to left/top once
-        applyManualPosition(rect.left, rect.top)
-        offsetX = e.clientX - rect.left
-        offsetY = e.clientY - rect.top
-        window.addEventListener('pointermove', onPointerMove)
-        window.addEventListener('pointerup', onPointerUp, { once: true })
-      }
-
-      function onPointerMove(e) {
-        if (!dragging) return
-        const vw = window.innerWidth
-        const vh = window.innerHeight
-        const rect = dock.getBoundingClientRect()
-        let left = e.clientX - offsetX
-        let top = e.clientY - offsetY
-        const maxLeft = vw - rect.width - 8
-        const maxTop = vh - rect.height - 8
-        left = clamp(left, 8, Math.max(8, maxLeft))
-        top = clamp(top, 8, Math.max(8, maxTop))
-        applyManualPosition(left, top)
-      }
-
-      function onPointerUp() {
-        if (!dragging) return
-        dragging = false
-        dock.classList.remove('dragging')
-        const rect = dock.getBoundingClientRect()
-        savePosition(rect.left, rect.top)
-        window.removeEventListener('pointermove', onPointerMove)
-      }
-
-      handle?.addEventListener('pointerdown', onPointerDown)
-      restorePosition()
     })()
   </script>
 
