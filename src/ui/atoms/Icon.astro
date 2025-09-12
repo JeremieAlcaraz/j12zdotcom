@@ -19,6 +19,7 @@ interface Props {
   title?: string
   class?: string
   id?: string
+  hidden?: boolean
 }
 
 const { name, size = 24, title, class: klass = '', id, ...rest } = Astro.props as Props & Record<string, unknown>
