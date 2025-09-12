@@ -34,14 +34,14 @@ import Icon from '@/ui/atoms/Icon.astro'
     <div class="relative mt-6">
       <div
         class="tooltip tooltip-open absolute top-2 before:text-xs"
-        style="inset-inline-start:10%"
-        data-tip="13:39"
+        style="inset-inline-start:0%"
+        data-tip="0:00"
       ></div>
       <progress class="progress progress-primary" value="0" max="100"></progress>
     </div>
     <div class="flex justify-between text-xs opacity-70">
-      <span data-time="current">13:39</span>
-      <span data-time="duration">120:00</span>
+      <span data-time="current">0:00</span>
+      <span data-time="duration">4:00</span>
     </div>
   </div>
   <div class="flex items-center justify-around px-2 pb-6">
@@ -82,6 +82,7 @@ import Icon from '@/ui/atoms/Icon.astro'
     isRepeating: boolean;
     isShuffling: boolean;
     volume: number;
+    defaultDurationSec: number;
     constructor() {
       this.audio = document.getElementById('audio-player') as HTMLAudioElement;
       this.playBtn = document.querySelector('[data-action="play"]');
@@ -102,16 +103,37 @@ import Icon from '@/ui/atoms/Icon.astro'
       this.isRepeating = false;
       this.isShuffling = false;
       this.volume = 1;
+      this.defaultDurationSec = 240; // 4 minutes par défaut
 
       this.init();
     }
 
     init() {
       this.setupEventListeners();
+      this.setInitialUI();
       this.updateDuration();
       this.updateVolumeButton();
       this.updateRepeatButton();
       this.updateShuffleButton();
+    }
+
+    setInitialUI() {
+      // Remet les éléments UI à l'état initial
+      this.audio.currentTime = 0;
+      if (this.progressBar) {
+        (this.progressBar as HTMLProgressElement).value = 0;
+      }
+      if (this.tooltip) {
+        this.tooltip.style.left = '0%';
+        this.tooltip.setAttribute('data-tip', this.formatTime(0));
+      }
+      if (this.currentTimeEl) {
+        this.currentTimeEl.textContent = this.formatTime(0);
+      }
+      if (this.durationEl) {
+        const seconds = isNaN(this.audio.duration) ? this.defaultDurationSec : this.audio.duration;
+        this.durationEl.textContent = this.formatTime(seconds);
+      }
     }
 
     setupEventListeners() {
@@ -211,9 +233,9 @@ import Icon from '@/ui/atoms/Icon.astro'
     }
 
     updateDuration() {
-      if (this.durationEl && !isNaN(this.audio.duration)) {
-        this.durationEl.textContent = this.formatTime(this.audio.duration);
-      }
+      if (!this.durationEl) return;
+      const seconds = isNaN(this.audio.duration) ? this.defaultDurationSec : this.audio.duration;
+      this.durationEl.textContent = this.formatTime(seconds);
     }
 
     handleTrackEnd() {
