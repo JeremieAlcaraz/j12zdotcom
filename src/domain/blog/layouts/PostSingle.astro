@@ -114,7 +114,8 @@ const { title, author, categories, image, date, tags } = post.data
       position: fixed;
       inset-inline-end: 1rem; /* stick to the right at ~1rem */
       bottom: 9rem; /* sit nicely above the FAB */
-      width: min(360px, 92vw);
+      /* Reduced by at least 2rem from previous sizing */
+      width: min(calc(360px - 2rem), calc(92vw - 2rem));
       z-index: 45; /* below FAB (50), above page */
       opacity: 0;
       transform: translate(18px, 14px) scale(0.985);
