@@ -55,3 +55,19 @@ export const ICONS: Record<string, IconComponent> = {
 
 // Type des clés disponibles (pratique pour l’autocomplétion TS)
 export type IconKey = keyof typeof ICONS
+
+/**
+ * Normalise le nom d’icône fourni par un agent ou un auteur.
+ * - Mappe le vieux préfixe "heroicon:" vers "heroicons:" (alias outline)
+ */
+export function normalizeIconName(name: string) {
+  return name.replace(/^heroicon:/, 'heroicons:')
+}
+
+/**
+ * Convertit un nom normalisé en nom Iconify attendu par `astro-icon`.
+ * - Mappe l'alias "heroicons:*" vers la collection réelle "heroicons-outline:*"
+ */
+export function toIconifyName(name: string) {
+  return name.replace(/^heroicons:/, 'heroicons-outline:')
+}

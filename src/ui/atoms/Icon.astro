@@ -4,7 +4,8 @@
  * - Custom locaux (src/assets/icons/*.svg)
  * - Icônes externes via registre TS (src/ui/icons/icon-registry.ts)
  */
-import { ICONS, PREFIX_ALIASES } from '../icons/icon-registry'
+import { ICONS, PREFIX_ALIASES, normalizeIconName, toIconifyName } from '../icons/icon-registry'
+import { Icon as AIcon } from 'astro-icon/components'
 
 // Custom locaux (glob au build, zéro JS côté client)
 const modules = import.meta.glob('@/assets/icons/*.svg', { eager: true }) as Record<string, any>
@@ -22,11 +23,12 @@ interface Props {
 
 const { name, size = 24, title, class: klass = '', id, ...rest } = Astro.props as Props & Record<string, unknown>
 
-// Analyse "prefix:icon"
+// Analyse "prefix:icon" avec normalisation conviviale
 let prefix = 'custom'
 let icon = name
-if (name.includes(':')) {
-  const [p, n] = name.split(':')
+const normalizedInput = normalizeIconName(name)
+if (normalizedInput.includes(':')) {
+  const [p, n] = normalizedInput.split(':')
   prefix = p
   icon = n
 }
@@ -65,5 +67,14 @@ const svgSizingClass = hasSizeClass ? 'block w-full h-full' : 'block'
     <IconComponent class={svgSizingClass} />
   </span>
 ) : (
-  <span class="inline-block h-[1em] w-[1em]" aria-hidden="true" />
+  <span
+    class:list={['inline-block align-middle', klass]}
+    style={style}
+    role={title ? 'img' : 'presentation'}
+    aria-label={title || undefined}
+    {...(id && { id })}
+    {...rest}
+  >
+    <AIcon name={toIconifyName(`${prefix}:${icon}`)} class={svgSizingClass} />
+  </span>
 )}

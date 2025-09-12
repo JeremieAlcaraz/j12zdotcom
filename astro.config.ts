@@ -13,6 +13,7 @@ import remarkToc from 'remark-toc'
 
 import Icons from 'unplugin-icons/vite'
 import { FileSystemIconLoader } from 'unplugin-icons/loaders'
+import astroIcon from 'astro-icon'
 
 export default defineConfig({
   // 1) Intégrations
@@ -23,6 +24,7 @@ export default defineConfig({
     react(),
     svelte(),
     sitemap(),
+    astroIcon(),
     AutoImport({
       // export default requis (ou map explicite, cf. ci-dessous)
       imports: [

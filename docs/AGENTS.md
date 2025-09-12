@@ -1,99 +1,37 @@
-# Claude Code Assistant Guide
+# Icônes — Guide pour les Agents IA
 
-This guide provides instructions for using the Claude code assistant with this project.
+Ce projet supporte un usage unifié des icônes via un composant `<Icon />` et la résolution par nom au format Iconify.
 
-## Project Overview
+## Règles d’utilisation
 
-This project is a modern showcase site for presenting training and services, built with Astro. It uses a combination of Astro, React, and Svelte components, with Tailwind CSS and DaisyUI for styling.
+- Utiliser `Icon` ainsi : `<Icon name="collection:icon" />`
+- Collections supportées : `heroicons-outline`, `heroicons-solid`, `lucide`
+- Alias : `heroicons:*` est redirigé vers `heroicons-outline:*`
+- Exemples valides :
+  - `heroicons:home`
+  - `heroicons-outline:magnifying-glass`
+  - `heroicons-solid:user`
+  - `lucide:play`
 
-## Tech Stack
+## Résolution
 
-- **Framework:** [Astro](https://astro.build/)
-- **UI Components:** [React](https://react.dev/), [Svelte](https://svelte.dev/)
-- **Styling:** [Tailwind CSS](https://tailwindcss.com/), [DaisyUI](https://daisyui.com/)
-- **Linting:** [ESLint](https://eslint.org/)
-- **Formatting:** [Prettier](https://prettier.io/)
-- **Package Manager:** [pnpm](https://pnpm.io/)
+- Registre curaté : certaines icônes fréquentes sont importées via `unplugin-icons` pour la performance.
+- Fallback universel : si l’icône n’est pas dans le registre, on passe par `astro-icon` qui résout n’importe quel nom Iconify depuis `@iconify-json/*`.
 
-## Getting Started
+## Accessibilité et tailles
 
-### Prerequisites
+- Taille par défaut: `24px`. Vous pouvez passer des classes Tailwind (`size-*`, `w-*`, `h-*`) ou la prop `size` (px, rem…).
+- Le composant gère l’`aria-label` automatiquement via la prop `title`.
 
-- **Node.js:** Version 18.0.0 or higher.
-- **pnpm:** Version 8.0.0 or higher.
+## Exemples
 
-### Installation
-
-1.  Clone the repository:
-    ```bash
-    git clone <repository-url>
-    ```
-2.  Navigate to the project directory:
-    ```bash
-    cd site-formations
-    ```
-3.  Install the dependencies:
-    ```bash
-    pnpm install
-    ```
-
-## Available Scripts
-
-You can run the following scripts using `pnpm run <script-name>`:
-
-- **`dev`**: Starts the development server.
-- **`start`**: An alias for `dev`.
-- **`build`**: Builds the project for production. This includes image optimization.
-- **`preview`**: Serves the production build locally for previewing.
-- **`lint`**: Lints the codebase for errors.
-- **`lint:fix`**: Lints the codebase and automatically fixes issues.
-- **`format`**: Formats the code using Prettier.
-- **`format:check`**: Checks for formatting issues without applying changes.
-- **`type-check`**: Runs the TypeScript compiler to check for type errors.
-- **`img:opt`**: Optimizes images in the `src/assets/raw` directory and outputs them to `src/assets/img_opt`.
-
-## Directory Structure
-
-- **`src/`**: Contains the main source code of the project.
-  - **`assets/`**: Static assets like images and fonts.
-    - **`raw/`**: Raw, unoptimized images.
-    - **`img_opt/`**: Optimized images.
-  - **`components/`**: Reusable UI components (Astro, React, Svelte).
-  - **`content/`**: Content for the site, managed by Astro's content collections.
-  - **`layouts/`**: Base layouts for pages.
-  - **`pages/`**: Astro pages, which define the routes of the site.
-  - **`styles/`**: Global CSS styles.
-- **`public/`**: Files in this directory are served at the root of the site.
-
-## Content Management
-
-To add or modify content, you can edit the Markdown or MDX files in the `src/content/` directory. The content is managed using Astro's content collections, with the schema defined in `src/content/content.ts`.
-
-## Image Optimization
-
-This project uses `sharp-cli` for image optimization. To optimize new images, place them in the `src/assets/raw` directory and run the following command:
-
-```bash
-pnpm run img:opt
+```astro
+---
+import Icon from '@/ui/atoms/Icon.astro'
+---
+<div>
+  <Icon name="heroicons:home" class="size-6 text-primary" />
+  <Icon name="heroicons-solid:user" class="size-6 text-neutral" />
+  <Icon name="lucide:search" class="size-5 text-info" />
+</div>
 ```
-
-This will generate optimized AVIF, WebP, and PNG images in the `src/assets/img_opt` directory.
-
-## Coding Style
-
-This project uses ESLint for linting and Prettier for code formatting. Please run the following commands before committing your changes to ensure your code adheres to the project's style guidelines:
-
-```bash
-pnpm run lint:fix
-pnpm run format
-```
-
-## Deployment
-
-To build the site for production, run the following command:
-
-```bash
-pnpm run build
-```
-
-The output will be in the `dist/` directory. You can then deploy this directory to your hosting provider.
