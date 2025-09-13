@@ -217,7 +217,8 @@ const { title, author, categories, image, date, tags } = post.data
       }
 
       // Open/close via FAB & ESC
-      const setOpen = (v) => {
+      const setOpen = (v, opts = {}) => {
+        const immediate = !!opts.immediate
         isOpen = !!v
         dock.classList.toggle('open', isOpen)
         dock.setAttribute('aria-hidden', isOpen ? 'false' : 'true')
@@ -225,17 +226,27 @@ const { title, author, categories, image, date, tags } = post.data
           // Reveal only if mouse is in the gutter; otherwise stay faded
           setTarget(inGutter ? 1 : 0)
         } else {
-          setTarget(0)
+          if (immediate) {
+            if (rafId) {
+              cancelAnimationFrame(rafId)
+              rafId = 0
+            }
+            setOpacity(0)
+          } else {
+            setTarget(0)
+          }
         }
       }
-      const toggle = () => setOpen(!isOpen)
+      const toggle = (opts) => setOpen(!isOpen, opts)
 
       function onFabAction(e) {
         const action = e?.detail?.action
         if (action === 'music') {
           // Assume click originates in the right gutter (where the FAB lives)
           inGutter = true
-          toggle()
+          // Close immediately on second click; open normally otherwise
+          if (isOpen) toggle({ immediate: true })
+          else toggle()
         }
       }
       function onKeydown(e) {
