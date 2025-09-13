@@ -127,7 +127,9 @@ body.focus-mode .prose img {
   object-fit: contain;
 }
 
-/* Conserve la pillule FAB visible pour sortir du mode focus */
-body.focus-mode .fab {
-  display: block;
+/* Conserver la pillule FAB visible en mode focus uniquement sur desktop */
+@media (min-width: 1024px) {
+  body.focus-mode .fab {
+    display: block;
+  }
 }
