@@ -1,25 +1,27 @@
 ---
-// FocusModeController: listens to UI events and toggles a global "focus-mode" class
-// This keeps UI components dumb and pushes behavior to the domain layer.
+// FocusModeController: handles the global "focus-mode" class.
+// Rules:
+// - Never persist state (no cookies/storage)
+// - Only allow enabling on blog post pages
+// - Always reset when navigating away
 ---
 
 <script is:inline>
   (() => {
-    const STORAGE_KEY = 'focus-mode'
-
-    function applyInitial() {
-      try {
-        const saved = localStorage.getItem(STORAGE_KEY)
-        if (saved === '1') document.body.classList.add('focus-mode')
-      } catch (_) {}
+    // Detect if current page allows focus mode (blog post layout)
+    function isFocusContext() {
+      // Presence of the FAB action or the ESC hint marks post pages
+      return (
+        !!document.querySelector('[data-fab-action="focus"]') ||
+        !!document.getElementById('focus-escape-hint')
+      )
     }
 
     function toggleFocus() {
       const willEnable = !document.body.classList.contains('focus-mode')
+      // Only allow enabling on post pages; disabling is always allowed
+      if (willEnable && !isFocusContext()) return
       document.body.classList.toggle('focus-mode', willEnable)
-      try {
-        localStorage.setItem(STORAGE_KEY, willEnable ? '1' : '0')
-      } catch (_) {}
     }
 
     // Handle events from the UI FAB (be generous about event shape)
@@ -37,8 +39,15 @@
             toggleFocus()
           }
         })
-    
-        // Initialize state on load
-        applyInitial()
+
+        // Reset on navigations (Astro ViewTransitions)
+        document.addEventListener('astro:before-swap', () => {
+          // Leaving current page: ensure focus is cleared
+          document.body.classList.remove('focus-mode')
+        })
+        document.addEventListener('astro:page-load', () => {
+          // Initial load and after client navigations: ensure focus is cleared
+          document.body.classList.remove('focus-mode')
+        })
       })()
     </script>

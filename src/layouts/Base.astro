@@ -192,7 +192,7 @@ const pageTitle = meta_title || title
   </head>
 
   <body class="min-h-screen">
-    <!-- Global controller: keeps focus-mode behavior across navigations -->
+    <!-- Global controller: resets focus-mode on navigation; only active on posts -->
     <FocusModeController />
     <!-- Layout principal avec Grid Tailwind -->
     <div class="grid min-h-screen grid-rows-[auto_1fr_auto]">
