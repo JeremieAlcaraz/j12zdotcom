@@ -8,8 +8,8 @@ const positionClass = position === 'absolute' ? 'absolute' : 'fixed'
 ---
 
 <!-- Floating Action Button (FAB) + Speed Dial using daisyUI 5 -->
-<!-- Hidden on phone/tablet; visible only on desktop (lg+) -->
-<div class={`fab ${positionClass} bottom-6 right-6 z-50 hidden lg:block ${extraClass}`}>
+<!-- Hidden on phone/tablet; visible only on desktop (lg+). Layout as vertical stack with main button at bottom. -->
+<div class={`fab ${positionClass} bottom-6 right-6 z-50 hidden lg:flex lg:flex-col-reverse lg:items-center lg:gap-3 ${extraClass}`}>
   <!-- Focusable trigger: required for accessibility and to open the Speed Dial -->
   <div
     tabindex="0"
