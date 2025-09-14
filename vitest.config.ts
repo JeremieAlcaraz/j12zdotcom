@@ -1,7 +1,7 @@
 /// <reference types="vitest" />
-import { getViteConfig } from 'astro/config'
+import { defineConfig } from 'vitest/config'
 
-export default getViteConfig({
+export default defineConfig({
   test: {
     environment: 'happy-dom',
     globals: true,
@@ -10,7 +10,6 @@ export default getViteConfig({
       'tests/**/*.{test,spec}.{js,ts}', // Tests d'intégration centralisés
     ],
     setupFiles: ['src/test/setup.ts'],
-    // Garde tes options commentées pour plus tard si besoin
     // reporters: ['dot'],
     // silent: true,
     // noStackTrace: true,

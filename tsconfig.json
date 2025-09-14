@@ -8,7 +8,9 @@
       "@types/*": ["src/types/*"],
       "@playground/*": ["src/playground/*"],
       "@styles/*": ["src/styles/*"],
-      "@/*": ["./src/*"]
+      "@/*": ["./src/*"],
+      "vite": ["./node_modules/astro/node_modules/vite"],
+      "vite/*": ["./node_modules/astro/node_modules/vite/*"]
     },
     "types": ["unplugin-icons/types/astro", "astro/client"]
   },
