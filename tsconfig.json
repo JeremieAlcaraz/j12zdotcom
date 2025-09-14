@@ -15,5 +15,5 @@
     "types": ["unplugin-icons/types/astro", "astro/client"]
   },
   "include": [".astro/types.d.ts", "**/*.ts", "**/*.tsx", "**/*.astro"],
-  "exclude": ["dist", "node_modules"]
+  "exclude": ["eslint.config.ts", "node_modules", "dist"]
 }
