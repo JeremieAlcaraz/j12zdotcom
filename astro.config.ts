@@ -10,10 +10,20 @@ import AutoImport from 'astro-auto-import' // ⟵ NEW
 // import cloudflare from '@astrojs/cloudflare'
 import remarkCollapse from 'remark-collapse'
 import remarkToc from 'remark-toc'
-
 import Icons from 'unplugin-icons/vite'
 import { FileSystemIconLoader } from 'unplugin-icons/loaders'
 import astroIcon from 'astro-icon'
+import remarkMarkPlugin from 'remark-mark'
+import remarkDirective from 'remark-directive'
+import remarkHighlight from './src/remark/remarkHighlight.js'
+
+const remarkMark =
+  (remarkMarkPlugin as unknown as { default?: unknown }).default ?? remarkMarkPlugin
+const remarkMarkCompat = function remarkMarkCompat(this: any, ...args: unknown[]) {
+  if (!this || typeof this.Parser === 'undefined') return undefined
+  ;(remarkMark as (...parameters: unknown[]) => void).call(this, ...args)
+  return undefined
+}
 
 export default defineConfig({
   // 1) Intégrations
@@ -79,6 +89,12 @@ export default defineConfig({
   },
   // Markdown (TOC + sections repliables)
   markdown: {
-    remarkPlugins: [remarkToc, [remarkCollapse, { test: 'Table of contents' }]],
+    remarkPlugins: [
+      remarkMarkCompat as any,
+      remarkDirective,
+      remarkHighlight,
+      remarkToc,
+      [remarkCollapse, { test: 'Table of contents' }],
+    ],
   },
 })

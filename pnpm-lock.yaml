@@ -14,9 +14,6 @@ importers:
       '@astrojs/cloudflare':
         specifier: ^12.6.4
         version: 12.6.8(@types/node@24.3.1)(astro@5.7.8(@types/node@24.3.1)(jiti@2.5.1)(lightningcss@1.30.1)(rollup@4.50.1)(sass@1.92.1)(typescript@5.9.2)(yaml@2.8.1))(jiti@2.5.1)(lightningcss@1.30.1)(sass@1.92.1)(yaml@2.8.1)
-      '@astrojs/mdx':
-        specifier: 4.2.5
-        version: 4.2.5(astro@5.7.8(@types/node@24.3.1)(jiti@2.5.1)(lightningcss@1.30.1)(rollup@4.50.1)(sass@1.92.1)(typescript@5.9.2)(yaml@2.8.1))
       '@astrojs/react':
         specifier: 4.2.5
         version: 4.2.5(@types/node@24.3.1)(@types/react-dom@19.1.9(@types/react@19.1.12))(@types/react@19.1.12)(jiti@2.5.1)(lightningcss@1.30.1)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)(sass@1.92.1)(yaml@2.8.1)
@@ -99,6 +96,9 @@ importers:
         specifier: 6.3.3
         version: 6.3.3(@types/node@24.3.1)(jiti@2.5.1)(lightningcss@1.30.1)(sass@1.92.1)(yaml@2.8.1)
     devDependencies:
+      '@astrojs/mdx':
+        specifier: 4.2.5
+        version: 4.2.5(astro@5.7.8(@types/node@24.3.1)(jiti@2.5.1)(lightningcss@1.30.1)(rollup@4.50.1)(sass@1.92.1)(typescript@5.9.2)(yaml@2.8.1))
       '@eslint/js':
         specifier: ^9.30.1
         version: 9.35.0
@@ -192,6 +192,12 @@ importers:
       prettier-plugin-tailwindcss:
         specifier: ^0.6.13
         version: 0.6.14(prettier-plugin-astro@0.14.1)(prettier-plugin-svelte@3.4.0(prettier@3.6.2)(svelte@5.38.8))(prettier@3.6.2)
+      remark-directive:
+        specifier: ^4.0.0
+        version: 4.0.0
+      remark-mark:
+        specifier: ^0.0.0
+        version: 0.0.0
       sass:
         specifier: ^1.89.2
         version: 1.92.1
@@ -213,6 +219,9 @@ importers:
       typescript-eslint:
         specifier: ^8.38.0
         version: 8.43.0(eslint@9.35.0(jiti@2.5.1))(typescript@5.9.2)
+      unist-util-visit:
+        specifier: ^5.0.0
+        version: 5.0.0
       unplugin-icons:
         specifier: ^22.2.0
         version: 22.2.0(svelte@5.38.8)
@@ -3416,6 +3425,9 @@ packages:
   mdast-util-definitions@6.0.0:
     resolution: {integrity: sha512-scTllyX6pnYNZH/AIp/0ePz6s4cZtARxImwoPJ7kS42n+MnVsI4XbnG6d4ibehRIldYMWM2LD7ImQblVhUejVQ==}
 
+  mdast-util-directive@3.1.0:
+    resolution: {integrity: sha512-I3fNFt+DHmpWCYAT7quoM6lHf9wuqtI+oCOfvILnoicNIqjh5E3dEJWiXuYME2gNe8vl1iMQwyUHa7bgFmak6Q==}
+
   mdast-util-find-and-replace@3.0.2:
     resolution: {integrity: sha512-Tmd1Vg/m3Xz43afeNxDIhWRtFZgM2VLyaf4vSTYwudTyeuTneoL3qtWMA5jeLyz/O1vDJmmV4QuScFCA2tBPwg==}
 
@@ -3488,6 +3500,9 @@ packages:
 
   micromark-core-commonmark@2.0.3:
     resolution: {integrity: sha512-RDBrHEMSxVFLg6xvnXmb1Ayr2WzLAWjeSATAoxwKYJV94TeNavgoIdA0a9ytzDSVzBy2YKFK+emCPOEibLeCrg==}
+
+  micromark-extension-directive@4.0.0:
+    resolution: {integrity: sha512-/C2nqVmXXmiseSSuCdItCMho7ybwwop6RrrRPk0KbOHW21JKoCldC+8rFOaundDoRBUWBnJJcxeA/Kvi34WQXg==}
 
   micromark-extension-gfm-autolink-literal@2.1.0:
     resolution: {integrity: sha512-oOg7knzhicgQ3t4QCjCWgTmfNhvQbDDnJeVu9v81r7NltNCVmhPy1fJRX27pISafdjL+SVc4d3l48Gb6pbRypw==}
@@ -4126,8 +4141,14 @@ packages:
   remark-collapse@0.1.2:
     resolution: {integrity: sha512-x2lhtaT4nR1Tkp/hftoeiMHbdAntxu5Q9D6lymwMqUtoF2pg3bqNaa8NO/8yyOVhddYk0d0dkhGc+avGUf0lZA==}
 
+  remark-directive@4.0.0:
+    resolution: {integrity: sha512-7sxn4RfF1o3izevPV1DheyGDD6X4c9hrGpfdUpm7uC++dqrnJxIZVkk7CoKqcLm0VUMAuOol7Mno3m6g8cfMuA==}
+
   remark-gfm@4.0.1:
     resolution: {integrity: sha512-1quofZ2RQ9EWdeN34S79+KExV1764+wCUGop5CPL1WGdD0ocPpu91lzPGbwWMECpEpd42kJGQwzRfyov9j4yNg==}
+
+  remark-mark@0.0.0:
+    resolution: {integrity: sha512-B3ssahH0EcrGFf4nn5LFs2UgDNG5imLsm/iuDAojSYeIYC04iAtnZFG6IuIpbUPKzeP9fE2AUzTElgb43oLZJw==}
 
   remark-mdx@3.1.1:
     resolution: {integrity: sha512-Pjj2IYlUY3+D8x00UJsIOg5BEvfMyeI+2uLPn9VO9Wg4MEtN/VTIq2NEJQfde9PnX15KgtHyl9S0BcTnWrIuWg==}
@@ -8760,6 +8781,20 @@ snapshots:
       '@types/unist': 3.0.3
       unist-util-visit: 5.0.0
 
+  mdast-util-directive@3.1.0:
+    dependencies:
+      '@types/mdast': 4.0.4
+      '@types/unist': 3.0.3
+      ccount: 2.0.1
+      devlop: 1.1.0
+      mdast-util-from-markdown: 2.0.2
+      mdast-util-to-markdown: 2.1.2
+      parse-entities: 4.0.2
+      stringify-entities: 4.0.4
+      unist-util-visit-parents: 6.0.1
+    transitivePeerDependencies:
+      - supports-color
+
   mdast-util-find-and-replace@3.0.2:
     dependencies:
       '@types/mdast': 4.0.4
@@ -8965,6 +9000,16 @@ snapshots:
       micromark-util-subtokenize: 2.1.0
       micromark-util-symbol: 2.0.1
       micromark-util-types: 2.0.2
+
+  micromark-extension-directive@4.0.0:
+    dependencies:
+      devlop: 1.1.0
+      micromark-factory-space: 2.0.1
+      micromark-factory-whitespace: 2.0.1
+      micromark-util-character: 2.1.1
+      micromark-util-symbol: 2.0.1
+      micromark-util-types: 2.0.2
+      parse-entities: 4.0.2
 
   micromark-extension-gfm-autolink-literal@2.1.0:
     dependencies:
@@ -9736,6 +9781,15 @@ snapshots:
       mdast-util-heading-range: 2.1.5
       mdast-util-to-string: 1.1.0
 
+  remark-directive@4.0.0:
+    dependencies:
+      '@types/mdast': 4.0.4
+      mdast-util-directive: 3.1.0
+      micromark-extension-directive: 4.0.0
+      unified: 11.0.5
+    transitivePeerDependencies:
+      - supports-color
+
   remark-gfm@4.0.1:
     dependencies:
       '@types/mdast': 4.0.4
@@ -9746,6 +9800,8 @@ snapshots:
       unified: 11.0.5
     transitivePeerDependencies:
       - supports-color
+
+  remark-mark@0.0.0: {}
 
   remark-mdx@3.1.1:
     dependencies:
