@@ -1,4 +1,0 @@
-.hl{--hl:#fff7a6;background:var(--hl);border-radius:.25rem;padding:0 .15em;-webkit-box-decoration-break:clone;box-decoration-break:clone}
-.hl-underline{--hl:#e8f3e8;background:transparent;box-shadow:inset 0 -.5em 0 var(--hl);border-radius:.2em;padding:0 .05em;-webkit-box-decoration-break:clone;box-decoration-break:clone}
-mark{background:var(--hl,#fff7a6);border-radius:.25rem;padding:0 .15em;-webkit-box-decoration-break:clone;box-decoration-break:clone}
-@media (prefers-color-scheme: dark){.hl{--hl:#5a4a00}.hl-underline{--hl:#10331f}mark{--hl:#5a4a00}}
