@@ -47,7 +47,7 @@ import Icon from '@/ui/atoms/Icon.astro'
   - Pour des variantes inline configurables : soulignés, couleurs, etc.
   - Idéal quand il y a beaucoup d’occurrences mais peu de logique.
   - Reste un span inline : pas de state, pas d’effets.
-- **Components MDX** (ex. `<Highlight variant="underline" color="#f1ffe0">`)
+- **Shortcodes Components MDX** (ex. `<Highlight variant="underline" color="#f1ffe0">`)
   - Pour les éléments sémantiques ou interactifs : callouts, cards, embeds, tabs, figures légendées…
   - À utiliser dès que tu as besoin de props, d’un comportement ou d’un rendu complexe.
   - À réserver pour éviter d’alourdir la rédaction.

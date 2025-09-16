@@ -195,9 +195,6 @@ importers:
       remark-directive:
         specifier: ^4.0.0
         version: 4.0.0
-      remark-mark:
-        specifier: ^0.0.0
-        version: 0.0.0
       sass:
         specifier: ^1.89.2
         version: 1.92.1
@@ -4146,9 +4143,6 @@ packages:
 
   remark-gfm@4.0.1:
     resolution: {integrity: sha512-1quofZ2RQ9EWdeN34S79+KExV1764+wCUGop5CPL1WGdD0ocPpu91lzPGbwWMECpEpd42kJGQwzRfyov9j4yNg==}
-
-  remark-mark@0.0.0:
-    resolution: {integrity: sha512-B3ssahH0EcrGFf4nn5LFs2UgDNG5imLsm/iuDAojSYeIYC04iAtnZFG6IuIpbUPKzeP9fE2AUzTElgb43oLZJw==}
 
   remark-mdx@3.1.1:
     resolution: {integrity: sha512-Pjj2IYlUY3+D8x00UJsIOg5BEvfMyeI+2uLPn9VO9Wg4MEtN/VTIq2NEJQfde9PnX15KgtHyl9S0BcTnWrIuWg==}
@@ -9800,8 +9794,6 @@ snapshots:
       unified: 11.0.5
     transitivePeerDependencies:
       - supports-color
-
-  remark-mark@0.0.0: {}
 
   remark-mdx@3.1.1:
     dependencies:

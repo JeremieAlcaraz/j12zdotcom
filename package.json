@@ -93,7 +93,6 @@
     "prettier-plugin-svelte": "^3.4.0",
     "prettier-plugin-tailwindcss": "^0.6.13",
     "remark-directive": "^4.0.0",
-    "remark-mark": "^0.0.0",
     "sass": "^1.89.2",
     "sharp": "0.33.5",
     "sharp-cli": "^5.2.0",
