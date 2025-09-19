@@ -1,6 +1,7 @@
 ---
 import StyleGuideLayout from '@/domain/style-guide/layouts/StyleGuideLayout.astro'
 import Section from '@/ui/atoms/Section.astro'
+import Typography from '@ui/atoms/Typography.astro'
 import Alert from '@/ui/atoms/Alert.astro'
 import Avatar from '@/ui/atoms/Avatar.astro'
 import Badge from '@/ui/atoms/Badge.astro'
@@ -38,9 +39,123 @@ const itemColors = [
   'warning',
   'error',
 ] as const
+const pangram = "Voix ambigue d'un coeur qui au zephyr prefere les jattes de kiwis."
 ---
 
 <StyleGuideLayout title="Style Guide | Atoms">
+  <!-- Typography -->
+<Section>
+  <div id="typography" class="scroll-mt-[5rem]">
+    <Divider variant="default" label="Typography" />
+  </div>
+  <h2 class="sr-only">Typography</h2>
+  <div class="space-y-10">
+    <div class="space-y-2">
+      <Typography variant="overline" class="text-muted-foreground">Scale - Headings</Typography>
+      <div class="space-y-1">
+        <Typography variant="h1">H1 - Titre principal</Typography>
+        <Typography variant="h2">H2 - Sous-titre</Typography>
+        <Typography variant="h3">H3 - Intertitre</Typography>
+      </div>
+    </div>
+
+    <div class="space-y-2">
+      <Typography variant="overline" class="text-muted-foreground">Variants - UI</Typography>
+      <div class="space-y-1">
+        <Typography variant="lead">Lead - Texte d'intro plus large pour amorce.</Typography>
+        <Typography>Body - Paragraphe standard pour le contenu regulier de l'UI.</Typography>
+        <Typography variant="small">Small - Annotation discrete ou meta-texte.</Typography>
+        <Typography variant="overline">OVERLINE - SECTION / LABEL</Typography>
+      </div>
+    </div>
+
+    <div class="space-y-2">
+      <Typography variant="overline" class="text-muted-foreground">Fonts - Pairing</Typography>
+      <div class="grid gap-3 md:grid-cols-3">
+        <div class="rounded-lg border p-4">
+          <Typography variant="small" class="mb-1 text-muted-foreground">font-heading</Typography>
+          <Typography as="p" variant="h3" class="mb-1">Titre Heading</Typography>
+          <Typography class="text-foreground/80">{pangram}</Typography>
+        </div>
+        <div class="rounded-lg border p-4">
+          <Typography variant="small" class="mb-1 text-muted-foreground">font-sans</Typography>
+          <Typography as="p" class="mb-1">Texte Corps</Typography>
+          <Typography class="text-foreground/80">{pangram}</Typography>
+        </div>
+        <div class="rounded-lg border p-4">
+          <Typography variant="small" class="mb-1 text-muted-foreground">font-illustration</Typography>
+          <Typography as="p" variant="h3" font="illustration" class="mb-1">Illustration Heading</Typography>
+          <Typography font="illustration" class="text-foreground/80">{pangram}</Typography>
+        </div>
+      </div>
+    </div>
+
+    <div class="space-y-2">
+      <Typography variant="overline" class="text-muted-foreground">Weights and Italic</Typography>
+      <div class="grid gap-3 md:grid-cols-3">
+        <Typography weight="light">Light - {pangram}</Typography>
+        <Typography weight="normal">Normal - {pangram}</Typography>
+        <Typography weight="medium">Medium - {pangram}</Typography>
+        <Typography weight="semibold">Semibold - {pangram}</Typography>
+        <Typography weight="bold">Bold - {pangram}</Typography>
+        <Typography weight="extrabold">Extrabold - {pangram}</Typography>
+        <Typography italic>Italic - {pangram}</Typography>
+        <Typography weight="semibold" italic>Semibold Italic - {pangram}</Typography>
+        <Typography variant="overline" italic>Overline Italic</Typography>
+      </div>
+    </div>
+
+    <div class="space-y-2">
+      <Typography variant="overline" class="text-muted-foreground">Align</Typography>
+      <div class="grid gap-3 md:grid-cols-3">
+        <div class="rounded-lg border p-4">
+          <Typography variant="small" class="text-muted-foreground">left</Typography>
+          <Typography align="left">{pangram}</Typography>
+        </div>
+        <div class="rounded-lg border p-4">
+          <Typography variant="small" class="text-muted-foreground">center</Typography>
+          <Typography align="center">{pangram}</Typography>
+        </div>
+        <div class="rounded-lg border p-4">
+          <Typography variant="small" class="text-muted-foreground">right</Typography>
+          <Typography align="right">{pangram}</Typography>
+        </div>
+      </div>
+    </div>
+
+    <div class="space-y-2">
+      <Typography variant="overline" class="text-muted-foreground">Semantics vs Variant</Typography>
+      <Typography as="h2" variant="h1" class="mb-1">
+        Visuellement H1, balise H2
+      </Typography>
+      <Typography variant="small" class="text-muted-foreground">
+        Utile pour garder un seul H1 reel par page.
+      </Typography>
+    </div>
+
+    <div class="space-y-3">
+      <Typography variant="overline" class="text-muted-foreground">Long form (UI)</Typography>
+      <Typography>
+        Voici un paragraphe de demonstration pour verifier la lisibilite, le rythme, la
+        hauteur de ligne et les espacements. {pangram} {pangram} {pangram}
+      </Typography>
+      <ul class="list-disc space-y-1 pl-6">
+        <li><Typography>Item de liste standard.</Typography></li>
+        <li><Typography>Un autre item de liste.</Typography></li>
+        <li><Typography weight="medium">Item en medium pour contraste.</Typography></li>
+      </ul>
+    </div>
+
+    <div class="space-y-1">
+      <Typography variant="overline">CATEGORIE</Typography>
+      <Typography variant="h3">Un titre de section court</Typography>
+      <Typography variant="small" class="text-muted-foreground">
+        Petite meta ou description breve.
+      </Typography>
+    </div>
+  </div>
+</Section>
+
   <!-- Alert -->
 <Section>
   <div id="alert" class="scroll-mt-[5rem]">

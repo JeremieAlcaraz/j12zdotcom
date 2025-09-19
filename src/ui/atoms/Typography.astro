@@ -1,0 +1,99 @@
+---
+type Variant =
+  | 'h1'
+  | 'h2'
+  | 'h3'
+  | 'subtitle'
+  | 'lead'
+  | 'body'
+  | 'small'
+  | 'overline'
+
+type Font = 'sans' | 'heading' | 'illustration'
+
+type Props = {
+  as?: keyof HTMLElementTagNameMap
+  variant?: Variant
+  font?: Font
+  align?: 'left' | 'center' | 'right' | 'justify'
+  weight?: 'light' | 'normal' | 'medium' | 'semibold' | 'bold' | 'extrabold'
+  italic?: boolean
+  class?: string
+}
+
+const {
+  as = 'p',
+  variant = 'body',
+  font,
+  align,
+  weight,
+  italic = false,
+  class: extra = '',
+}: Props = Astro.props
+
+const variants: Record<Variant, string> = {
+  h1: 'text-4xl md:text-5xl tracking-tight',
+  h2: 'text-3xl md:text-4xl tracking-tight',
+  h3: 'text-2xl md:text-3xl',
+  subtitle: 'text-lg md:text-xl text-muted-foreground',
+  lead: 'text-lg md:text-xl leading-relaxed text-foreground/80',
+  body: 'text-base leading-7',
+  small: 'text-sm leading-6 text-foreground/80',
+  overline: 'text-xs uppercase tracking-wider text-foreground/70',
+}
+
+const defaultFonts: Partial<Record<Variant, Font>> = {
+  h1: 'heading',
+  h2: 'heading',
+  h3: 'heading',
+  subtitle: 'heading',
+  overline: 'heading',
+}
+
+const fonts: Record<Font, string> = {
+  sans: 'font-sans',
+  heading: 'font-heading',
+  illustration: 'font-illustration',
+}
+
+const alignClass = align
+  ? {
+      left: 'text-left',
+      center: 'text-center',
+      right: 'text-right',
+      justify: 'text-justify',
+    }[align]
+  : ''
+
+const weightClass = weight
+  ? {
+      light: 'font-light',
+      normal: 'font-normal',
+      medium: 'font-medium',
+      semibold: 'font-semibold',
+      bold: 'font-bold',
+      extrabold: 'font-extrabold',
+    }[weight]
+  : ''
+
+const italicClass = italic ? 'italic' : ''
+
+const resolvedFont = font ?? defaultFonts[variant] ?? 'sans'
+
+const className = [
+  variants[variant],
+  fonts[resolvedFont],
+  alignClass,
+  weightClass,
+  italicClass,
+  extra,
+]
+  .filter(Boolean)
+  .join(' ')
+
+const Tag = (as ?? 'p') as keyof HTMLElementTagNameMap
+---
+
+<Tag class={className}>
+  <slot />
+</Tag>
