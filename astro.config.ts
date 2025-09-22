@@ -10,6 +10,11 @@ import AutoImport from 'astro-auto-import' // ⟵ NEW
 // import cloudflare from '@astrojs/cloudflare'
 import remarkCollapse from 'remark-collapse'
 import remarkToc from 'remark-toc'
+import Icons from 'unplugin-icons/vite'
+import { FileSystemIconLoader } from 'unplugin-icons/loaders'
+import astroIcon from 'astro-icon'
+import remarkDirective from 'remark-directive'
+import remarkHighlight from './src/remark/remarkHighlight.js'
 
 export default defineConfig({
   // 1) Intégrations
@@ -20,6 +25,7 @@ export default defineConfig({
     react(),
     svelte(),
     sitemap(),
+    astroIcon(),
     AutoImport({
       // export default requis (ou map explicite, cf. ci-dessous)
       imports: [
@@ -40,7 +46,19 @@ export default defineConfig({
 
   // 2) Vite
   vite: {
-    plugins: [tsconfigPaths(), tailwindcss()],
+    plugins: [
+      tsconfigPaths(),
+      tailwindcss(),
+      Icons({
+        compiler: 'astro',
+        autoInstall: true,
+        customCollections: {
+          custom: FileSystemIconLoader('src/assets/icons', svg =>
+            svg.replaceAll('stroke="none"', '').replaceAll('fill="none"', 'fill="currentColor"')
+          ),
+        },
+      }),
+    ],
   },
 
   // 3) Sortie : statique (recommandé)
@@ -62,6 +80,11 @@ export default defineConfig({
   },
   // Markdown (TOC + sections repliables)
   markdown: {
-    remarkPlugins: [remarkToc, [remarkCollapse, { test: 'Table of contents' }]],
+    remarkPlugins: [
+      remarkDirective,
+      remarkHighlight,
+      remarkToc,
+      [remarkCollapse, { test: 'Table of contents' }],
+    ],
   },
 })

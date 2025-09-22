@@ -10,7 +10,7 @@ import Notice from '@/shortcodes/generic/Notice.shortcode.astro'
 import Video from '@/shortcodes/generic/Video.shortcode.astro'
 import Youtube from '@/shortcodes/generic/Youtube.shortcode.astro'
 import FabSpeedDial from '@/ui/molecules/FabSpeedDial.astro'
-import FocusModeController from '@/domain/shared/controllers/FocusModeController.astro'
+import MusicPlayer from '@/ui/molecules/MusicPlayer.astro'
 import FocusEscapeHint from '@/ui/molecules/FocusEscapeHint.astro'
 
 const { post } = Astro.props
@@ -83,8 +83,222 @@ const { title, author, categories, image, date, tags } = post.data
 
   <!-- FAB / Speed Dial fixed in the viewport for blog posts -->
   <FabSpeedDial />
-  <FocusModeController />
   
   <!-- ESC key hint for focus mode -->
   <FocusEscapeHint />
+
+  <!-- Music dock (toggle with FAB music); only the player itself -->
+  <aside id="music-dock" class="music-dock" aria-hidden="true">
+    <MusicPlayer />
+  </aside>
+
+  <style>
+    /* Floating dock positioning + smooth show/hide animation */
+    #music-dock.music-dock {
+      position: fixed;
+      inset-inline-end: 0.5rem; /* stick to the right at ~0.5rem */
+      bottom: 12rem; /* 3rem higher above the FAB */
+      /* Narrower by an additional 3rem */
+      width: min(calc(360px - 5rem), calc(92vw - 5rem));
+      z-index: 45; /* below FAB (50), above page */
+      opacity: var(--dock-o, 0);
+      transform: translate(18px, 14px) scale(0.985);
+      transform-origin: 100% 100%; /* animate from bottom-right */
+      will-change: transform, opacity;
+      pointer-events: none;
+      transition: transform 460ms cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    #music-dock.music-dock.open { transform: translate(0, 0) scale(1); }
+    /* The aside is only a positioning/animation shell */
+
+    @media (prefers-reduced-motion: reduce) {
+      #music-dock.music-dock { transition: none; transform: none; }
+      #music-dock.music-dock.open { opacity: 1; }
+    }
+  </style>
+
+  <script is:inline>
+    (() => {
+      const dock = document.getElementById('music-dock')
+      if (!dock) return
+
+      // --- State ----------------------------------------------------------
+      let isOpen = false
+      let inGutter = false
+      let target = 0 // desired opacity [0..1]
+      let current = 0 // current opacity [0..1]
+      let rafId = 0
+      let lastTs = performance.now()
+
+      // Timings
+      const RISE_MS = 800 // appear in < 1s
+      const FALL_MS_BASE = 5000 // ~5s fade when idle
+      let effectiveFallMs = FALL_MS_BASE
+
+      // Scroll speed tracking (px/sec)
+      let lastScrollY = window.scrollY
+      let lastScrollT = performance.now()
+      let lastSpeed = 0
+      const SPEED_DECAY = 0.92 // gently decay between events
+
+      // Gutter definition (px from the right edge)
+      function gutterWidth() {
+        const vw = window.innerWidth
+        // 12% of viewport, clamped between 120px and 260px
+        return Math.max(120, Math.min(260, Math.round(vw * 0.12)))
+      }
+
+      // Helpers
+      function setPointerEvents() {
+        const pe = current > 0.05 && isOpen ? 'auto' : 'none'
+        if (dock.style.pointerEvents !== pe) dock.style.pointerEvents = pe
+      }
+      function setOpacity(val) {
+        current = Math.max(0, Math.min(1, val))
+        dock.style.setProperty('--dock-o', String(current))
+        setPointerEvents()
+      }
+      function setTarget(val) {
+        target = Math.max(0, Math.min(1, val))
+        if (!rafId) rafId = requestAnimationFrame(tick)
+      }
+
+      function computeFallMs() {
+        // Increase fade speed with scroll speed
+        // lastSpeed in px/s -> factor in [1..]
+        const factor = 1 + 0.003 * lastSpeed
+        effectiveFallMs = Math.max(300, Math.round(FALL_MS_BASE / factor))
+      }
+
+      function tick(ts) {
+        const dt = Math.max(0, (ts || performance.now()) - lastTs)
+        lastTs = ts || performance.now()
+
+        // Decay stored speed when not scrolling
+        lastSpeed *= SPEED_DECAY
+        computeFallMs()
+
+        const duration = target > current ? RISE_MS : effectiveFallMs
+        if (duration <= 0) {
+          setOpacity(target)
+        } else {
+          const step = dt / duration
+          const next = current + (target - current) * Math.min(1, step)
+          setOpacity(next)
+        }
+
+        if (Math.abs(target - current) > 0.003) {
+          rafId = requestAnimationFrame(tick)
+        } else {
+          rafId = 0
+          setOpacity(target)
+        }
+      }
+
+      function updateInGutterFromMouse(e) {
+        const w = gutterWidth()
+        inGutter = e.clientX >= window.innerWidth - w
+        if (!isOpen) return
+        setTarget(inGutter ? 1 : 0)
+      }
+
+      function handleScroll() {
+        const now = performance.now()
+        const dy = Math.abs(window.scrollY - lastScrollY)
+        const dt = Math.max(16, now - lastScrollT)
+        lastScrollY = window.scrollY
+        lastScrollT = now
+        // px per second
+        lastSpeed = (dy / dt) * 1000
+        if (isOpen && !inGutter) {
+          // Recompute target to accelerate fade
+          setTarget(0)
+        }
+      }
+
+      // Open/close via FAB & ESC
+      const setOpen = (v, opts = {}) => {
+        const immediate = !!opts.immediate
+        isOpen = !!v
+        dock.classList.toggle('open', isOpen)
+        dock.setAttribute('aria-hidden', isOpen ? 'false' : 'true')
+        if (isOpen) {
+          // Reveal only if mouse is in the gutter; otherwise stay faded
+          setTarget(inGutter ? 1 : 0)
+        } else {
+          if (immediate) {
+            if (rafId) {
+              cancelAnimationFrame(rafId)
+              rafId = 0
+            }
+            setOpacity(0)
+          } else {
+            setTarget(0)
+          }
+        }
+      }
+      const toggle = (opts) => setOpen(!isOpen, opts)
+
+      function onFabAction(e) {
+        const action = e?.detail?.action
+        if (action === 'music') {
+          // Assume click originates in the right gutter (where the FAB lives)
+          inGutter = true
+          // Close immediately on second click; open normally otherwise
+          if (isOpen) toggle({ immediate: true })
+          else toggle()
+        }
+      }
+      function onKeydown(e) {
+        if (e.key === 'Escape' && isOpen) setOpen(false)
+      }
+
+      document.addEventListener('fab:action', onFabAction)
+      document.addEventListener('keydown', onKeydown)
+      document.addEventListener('mousemove', updateInGutterFromMouse)
+      document.addEventListener('scroll', handleScroll, { passive: true })
+      window.addEventListener('resize', () => {
+        // Re-evaluate gutter on resize; trigger target recompute
+        if (isOpen) setTarget(inGutter ? 1 : 0)
+      })
+
+      // Cleanup on navigation (Astro ViewTransitions)
+      document.addEventListener('astro:before-swap', () => {
+        document.removeEventListener('fab:action', onFabAction)
+        document.removeEventListener('keydown', onKeydown)
+        document.removeEventListener('mousemove', updateInGutterFromMouse)
+        document.removeEventListener('scroll', handleScroll)
+        if (rafId) cancelAnimationFrame(rafId)
+      })
+    })()
+  </script>
+
+  <!-- Enable entering focus mode with Enter on blog posts -->
+  <script is:inline>
+    (() => {
+      // Only active on this page; detach on navigation
+      function onKeydown(e) {
+        if (e.key !== 'Enter') return
+        // Only when the page itself is focused (avoid links/forms)
+        const active = document.activeElement
+        const pageFocused = !active || active === document.body
+        if (!pageFocused) return
+        if (document.body.classList.contains('focus-mode')) return
+        if (e.altKey || e.ctrlKey || e.metaKey || e.shiftKey) return
+        e.preventDefault()
+        const ev = new CustomEvent('fab:action', {
+          detail: { action: 'focus' },
+          bubbles: true,
+          composed: true,
+        })
+        document.dispatchEvent(ev)
+      }
+
+      document.addEventListener('keydown', onKeydown)
+      // Clean up when navigating away (Astro ViewTransitions)
+      document.addEventListener('astro:before-swap', () => {
+        document.removeEventListener('keydown', onKeydown)
+      })
+    })()
+  </script>
 </section>

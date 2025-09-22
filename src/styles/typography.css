@@ -16,10 +16,43 @@
 
 @theme {
   --font-family-sans: 'Nunito', system-ui, sans-serif;
+  --font-family-heading: 'Nunito', system-ui, sans-serif;
+  --font-family-illustration: 'Excalidraw', 'Nunito', system-ui, sans-serif;
 }
 
-.excalidraw-font {
-  font-family: 'Excalidraw', 'Nunito', system-ui, sans-serif;
+:root {
+  --text-foreground: var(--color-base-content, #0f172a);
+  --text-muted: color-mix(in oklab, var(--text-foreground) 70%, transparent);
+}
+
+:root[data-theme='dark'],
+[data-theme='dark'] {
+  --text-foreground: var(--color-base-content, #e2e8f0);
+  --text-muted: color-mix(in oklab, var(--text-foreground) 65%, transparent);
+}
+
+.font-sans {
+  font-family: var(--font-family-sans);
+}
+
+.font-heading {
+  font-family: var(--font-family-heading);
+}
+
+.font-illustration {
+  font-family: var(--font-family-illustration);
+}
+
+.text-foreground\/80 {
+  color: color-mix(in oklab, var(--text-foreground) 80%, transparent);
+}
+
+.text-foreground\/70 {
+  color: color-mix(in oklab, var(--text-foreground) 70%, transparent);
+}
+
+.text-muted-foreground {
+  color: var(--text-muted);
 }
 
 body {

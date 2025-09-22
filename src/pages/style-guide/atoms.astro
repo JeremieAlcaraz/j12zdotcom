@@ -1,6 +1,7 @@
 ---
 import StyleGuideLayout from '@/domain/style-guide/layouts/StyleGuideLayout.astro'
 import Section from '@/ui/atoms/Section.astro'
+import Typography from '@ui/atoms/Typography.astro'
 import Alert from '@/ui/atoms/Alert.astro'
 import Avatar from '@/ui/atoms/Avatar.astro'
 import Badge from '@/ui/atoms/Badge.astro'
@@ -19,6 +20,12 @@ import Notice from '@/ui/atoms/Notice.astro'
 import PaginationItem from '@/ui/atoms/PaginationItem.astro'
 import Video from '@/ui/atoms/Video.astro'
 import Youtube from '@/ui/atoms/Youtube.astro'
+// import AstroLogo from "~icons/logos/astro";
+import MdiStore24Hour from "~icons/mdi/store-24-hour";
+import MdiAlarmOff from "~icons/mdi/alarm-off";
+import IconParkAbnormal from "~icons/icon-park/abnormal";
+import RawMdiAlarmOff from "~icons/mdi/alarm-off?raw&width=4em&height=4em";
+import RawMdiAlarmOff2 from "~icons/mdi/alarm-off?raw&width=1em&height=1em";
 
 const loadingVariants = ['spinner', 'dots', 'ring', 'ball', 'bars', 'infinity'] as const
 const itemSizes = ['xs', 'sm', 'md', 'lg', 'xl'] as const
@@ -32,9 +39,123 @@ const itemColors = [
   'warning',
   'error',
 ] as const
+const pangram = "Voix ambigue d'un coeur qui au zephyr prefere les jattes de kiwis."
 ---
 
 <StyleGuideLayout title="Style Guide | Atoms">
+  <!-- Typography -->
+<Section>
+  <div id="typography" class="scroll-mt-[5rem]">
+    <Divider variant="default" label="Typography" />
+  </div>
+  <h2 class="sr-only">Typography</h2>
+  <div class="space-y-10">
+    <div class="space-y-2">
+      <Typography variant="overline" class="text-muted-foreground">Scale - Headings</Typography>
+      <div class="space-y-1">
+        <Typography variant="h1">H1 - Titre principal</Typography>
+        <Typography variant="h2">H2 - Sous-titre</Typography>
+        <Typography variant="h3">H3 - Intertitre</Typography>
+      </div>
+    </div>
+
+    <div class="space-y-2">
+      <Typography variant="overline" class="text-muted-foreground">Variants - UI</Typography>
+      <div class="space-y-1">
+        <Typography variant="lead">Lead - Texte d'intro plus large pour amorce.</Typography>
+        <Typography>Body - Paragraphe standard pour le contenu regulier de l'UI.</Typography>
+        <Typography variant="small">Small - Annotation discrete ou meta-texte.</Typography>
+        <Typography variant="overline">OVERLINE - SECTION / LABEL</Typography>
+      </div>
+    </div>
+
+    <div class="space-y-2">
+      <Typography variant="overline" class="text-muted-foreground">Fonts - Pairing</Typography>
+      <div class="grid gap-3 md:grid-cols-3">
+        <div class="rounded-lg border p-4">
+          <Typography variant="small" class="mb-1 text-muted-foreground">font-heading</Typography>
+          <Typography as="p" variant="h3" class="mb-1">Titre Heading</Typography>
+          <Typography class="text-foreground/80">{pangram}</Typography>
+        </div>
+        <div class="rounded-lg border p-4">
+          <Typography variant="small" class="mb-1 text-muted-foreground">font-sans</Typography>
+          <Typography as="p" class="mb-1">Texte Corps</Typography>
+          <Typography class="text-foreground/80">{pangram}</Typography>
+        </div>
+        <div class="rounded-lg border p-4">
+          <Typography variant="small" class="mb-1 text-muted-foreground">font-illustration</Typography>
+          <Typography as="p" variant="h3" font="illustration" class="mb-1">Illustration Heading</Typography>
+          <Typography font="illustration" class="text-foreground/80">{pangram}</Typography>
+        </div>
+      </div>
+    </div>
+
+    <div class="space-y-2">
+      <Typography variant="overline" class="text-muted-foreground">Weights and Italic</Typography>
+      <div class="grid gap-3 md:grid-cols-3">
+        <Typography weight="light">Light - {pangram}</Typography>
+        <Typography weight="normal">Normal - {pangram}</Typography>
+        <Typography weight="medium">Medium - {pangram}</Typography>
+        <Typography weight="semibold">Semibold - {pangram}</Typography>
+        <Typography weight="bold">Bold - {pangram}</Typography>
+        <Typography weight="extrabold">Extrabold - {pangram}</Typography>
+        <Typography italic>Italic - {pangram}</Typography>
+        <Typography weight="semibold" italic>Semibold Italic - {pangram}</Typography>
+        <Typography variant="overline" italic>Overline Italic</Typography>
+      </div>
+    </div>
+
+    <div class="space-y-2">
+      <Typography variant="overline" class="text-muted-foreground">Align</Typography>
+      <div class="grid gap-3 md:grid-cols-3">
+        <div class="rounded-lg border p-4">
+          <Typography variant="small" class="text-muted-foreground">left</Typography>
+          <Typography align="left">{pangram}</Typography>
+        </div>
+        <div class="rounded-lg border p-4">
+          <Typography variant="small" class="text-muted-foreground">center</Typography>
+          <Typography align="center">{pangram}</Typography>
+        </div>
+        <div class="rounded-lg border p-4">
+          <Typography variant="small" class="text-muted-foreground">right</Typography>
+          <Typography align="right">{pangram}</Typography>
+        </div>
+      </div>
+    </div>
+
+    <div class="space-y-2">
+      <Typography variant="overline" class="text-muted-foreground">Semantics vs Variant</Typography>
+      <Typography as="h2" variant="h1" class="mb-1">
+        Visuellement H1, balise H2
+      </Typography>
+      <Typography variant="small" class="text-muted-foreground">
+        Utile pour garder un seul H1 reel par page.
+      </Typography>
+    </div>
+
+    <div class="space-y-3">
+      <Typography variant="overline" class="text-muted-foreground">Long form (UI)</Typography>
+      <Typography>
+        Voici un paragraphe de demonstration pour verifier la lisibilite, le rythme, la
+        hauteur de ligne et les espacements. {pangram} {pangram} {pangram}
+      </Typography>
+      <ul class="list-disc space-y-1 pl-6">
+        <li><Typography>Item de liste standard.</Typography></li>
+        <li><Typography>Un autre item de liste.</Typography></li>
+        <li><Typography weight="medium">Item en medium pour contraste.</Typography></li>
+      </ul>
+    </div>
+
+    <div class="space-y-1">
+      <Typography variant="overline">CATEGORIE</Typography>
+      <Typography variant="h3">Un titre de section court</Typography>
+      <Typography variant="small" class="text-muted-foreground">
+        Petite meta ou description breve.
+      </Typography>
+    </div>
+  </div>
+</Section>
+
   <!-- Alert -->
 <Section>
   <div id="alert" class="scroll-mt-[5rem]">
@@ -246,48 +367,204 @@ const itemColors = [
     </div>
   </Section>
 
-  <!-- Icon -->
+  
+<!-- Icon -->
 <Section>
   <div id="icon" class="scroll-mt-[5rem]">
     <Divider variant="default" label="Icon" />
   </div>
   <h2 class="sr-only">Icon</h2>
-    <div class="grid grid-cols-1 gap-4">
-      <div>
-        <h3 class="mb-2 text-lg font-bold">Icônes disponibles</h3>
-        <div class="flex flex-wrap items-center gap-4">
-          <Icon name="cat" id="cat-icon" size={20} class="text-base-content" title="Chat" />
-          <Icon name="music" size={20} class="text-base-content" title="Musique" />
-          <Icon name="sun" size="24" class="text-base-content" title="Soleil" />
-          <Icon name="moon" size="24" class="text-base-content" title="Lune" />
-          <Icon name="chevron-left" size="24" class="text-base-content" title="Précédent" />
-          <Icon name="chevron-right" size="24" class="text-base-content" title="Suivant" />
-        </div>
-      </div>
-      <div>
-        <h3 class="mb-2 text-lg font-bold">Tailles</h3>
-        <div class="flex flex-wrap items-center gap-4">
-          <Icon name="cat" size="16" class="text-base-content" title="Petit" />
-          <Icon name="cat" size="20" class="text-base-content" title="Moyen" />
-          <Icon name="cat" size="24" class="text-base-content" title="Normal" />
-          <Icon name="cat" size="32" class="text-base-content" title="Grand" />
-          <Icon name="cat" size="48" class="text-base-content" title="Très grand" />
-        </div>
-      </div>
-      <div>
-        <h3 class="mb-2 text-lg font-bold">Couleurs</h3>
-        <div class="flex flex-wrap items-center gap-4">
-          <Icon name="music" size="24" class="text-primary" title="Primaire" />
-          <Icon name="music" size="24" class="text-secondary" title="Secondaire" />
-          <Icon name="music" size="24" class="text-accent" title="Accent" />
-          <Icon name="music" size="24" class="text-info" title="Info" />
-          <Icon name="music" size="24" class="text-success" title="Succès" />
-          <Icon name="music" size="24" class="text-warning" title="Attention" />
-          <Icon name="music" size="24" class="text-error" title="Erreur" />
-        </div>
-      </div>
+  <h3 class="mb-2 text-lg font-bold">Système d'icônes (via registre)</h3>
+
+  <!-- Custom Icons -->
+  <div class="mb-8">
+    <h4 class="mb-4 text-base font-semibold">Custom (icônes locales)</h4>
+    <div class="flex flex-wrap gap-4 mb-4">
+      <Icon name="custom:cat" class="size-8 text-primary" title="Custom · cat" />
+      <Icon name="custom:chevron-left" class="size-8 text-secondary" title="Custom · chevron-left" />
+      <Icon name="custom:chevron-right" class="size-8 text-accent" title="Custom · chevron-right" />
+      <Icon name="custom:eye" class="size-8 text-info" title="Custom · eye" />
+      <Icon name="custom:music" class="size-8 text-success" title="Custom · music" />
+      <Icon name="custom:moon" class="size-8 text-neutral" title="Custom · moon" />
+      <Icon name="custom:sun" class="size-8 text-warning" title="Custom · sun" />
     </div>
-  </Section>
+
+    <!-- Tailles pour Custom -->
+    <h5 class="mb-2 text-sm font-medium">Tailles</h5>
+    <div class="flex flex-wrap gap-3">
+      {itemSizes.map(size => (
+        <div class="flex flex-col items-center gap-1">
+          <div class="flex items-end h-12">
+            <Icon
+              name="custom:cat"
+              class={`text-primary ${size === 'xs' ? 'size-3' : size === 'sm' ? 'size-4' : size === 'md' ? 'size-6' : size === 'lg' ? 'size-8' : 'size-12'}`}
+              title={`Custom · cat · ${size}`}
+            />
+          </div>
+          <span class="text-xs text-base-content/70">{size}</span>
+        </div>
+      ))}
+    </div>
+
+    <!-- Couleurs pour Custom -->
+    <h5 class="mb-2 text-sm font-medium mt-4">Couleurs</h5>
+    <div class="flex flex-wrap gap-3">
+      {itemColors.map(color => (
+        <div class="flex flex-col items-center gap-1">
+          <Icon name="custom:cat" class={`size-6 text-${color}`} title={`Custom · cat · ${color}`} />
+          <span class="text-xs text-base-content/70">{color}</span>
+        </div>
+      ))}
+    </div>
+
+    <!-- Versions brutes (?raw) pour MDI -->
+    <h5 class="mb-2 text-sm font-medium mt-4">Brut (?raw)</h5>
+    <div class="flex flex-wrap items-center gap-4">
+      <span class="inline-flex items-center" title="MDI · alarm-off (raw 4em)">
+        <span set:html={RawMdiAlarmOff} />
+      </span>
+      <span class="inline-flex items-center" title="MDI · alarm-off (raw 1em)">
+        <span set:html={RawMdiAlarmOff2} />
+      </span>
+    </div>
+  </div>
+
+  <!-- MDI Icons (exemple depuis imports) -->
+  <div class="mb-8">
+    <h4 class="mb-4 text-base font-semibold">MDI (Material Design Icons)</h4>
+    <div class="flex flex-wrap gap-4 mb-4">
+      <MdiStore24Hour class="size-8 text-primary" title="MDI · store-24-hour" />
+      <MdiAlarmOff class="size-8 text-error" title="MDI · alarm-off" />
+      <IconParkAbnormal class="size-8 text-warning" title="IconPark · abnormal" />
+    </div>
+
+    <!-- Tailles pour MDI -->
+    <h5 class="mb-2 text-sm font-medium">Tailles</h5>
+    <div class="flex flex-wrap gap-3">
+      {itemSizes.map(size => (
+        <div class="flex flex-col items-center gap-1">
+          <div class="flex items-end h-12">
+            <MdiAlarmOff
+              class={`text-error ${size === 'xs' ? 'size-3' : size === 'sm' ? 'size-4' : size === 'md' ? 'size-6' : size === 'lg' ? 'size-8' : 'size-12'}`}
+              title={`MDI · alarm-off · ${size}`}
+            />
+          </div>
+          <span class="text-xs text-base-content/70">{size}</span>
+        </div>
+      ))}
+    </div>
+
+    <!-- Couleurs pour MDI -->
+    <h5 class="mb-2 text-sm font-medium mt-4">Couleurs</h5>
+    <div class="flex flex-wrap gap-3">
+      {itemColors.map(color => (
+        <div class="flex flex-col items-center gap-1">
+          <MdiAlarmOff class={`size-6 text-${color}`} title={`MDI · alarm-off · ${color}`} />
+          <span class="text-xs text-base-content/70">{color}</span>
+        </div>
+      ))}
+    </div>
+  </div>
+
+  <!-- Lucide Icons -->
+  <div class="mb-8">
+    <h4 class="mb-4 text-base font-semibold">Lucide</h4>
+    <div class="flex flex-wrap gap-4 mb-4">
+      <Icon name="lucide:activity" class="size-8 text-primary" title="Lucide · activity" />
+      <Icon name="lucide:heart" class="size-8 text-error" title="Lucide · heart" />
+      <Icon name="lucide:star" class="size-8 text-warning" title="Lucide · star" />
+      <Icon name="lucide:home" class="size-8 text-info" title="Lucide · home" />
+      <Icon name="lucide:search" class="size-8 text-secondary" title="Lucide · search" />
+    </div>
+
+    <!-- Tailles pour Lucide -->
+    <h5 class="mb-2 text-sm font-medium">Tailles</h5>
+    <div class="flex flex-wrap gap-3">
+      {itemSizes.map(size => (
+        <div class="flex flex-col items-center gap-1">
+          <div class="flex items-end h-12">
+            <Icon
+              name="lucide:home"
+              class={`text-primary ${size === 'xs' ? 'size-3' : size === 'sm' ? 'size-4' : size === 'md' ? 'size-6' : size === 'lg' ? 'size-8' : 'size-12'}`}
+              title={`Lucide · home · ${size}`}
+            />
+          </div>
+          <span class="text-xs text-base-content/70">{size}</span>
+        </div>
+      ))}
+    </div>
+
+    <!-- Couleurs pour Lucide -->
+    <h5 class="mb-2 text-sm font-medium mt-4">Couleurs</h5>
+    <div class="flex flex-wrap gap-3">
+      {itemColors.map(color => (
+        <div class="flex flex-col items-center gap-1">
+          <Icon name="lucide:home" class={`size-6 text-${color}`} title={`Lucide · home · ${color}`} />
+          <span class="text-xs text-base-content/70">{color}</span>
+        </div>
+      ))}
+    </div>
+  </div>
+
+  <!-- Heroicons Icons -->
+<div class="mb-8">
+  <h4 class="mb-4 text-base font-semibold">Heroicons (outline)</h4>
+  <div class="flex flex-wrap gap-4 mb-4">
+    <Icon name="heroicons:home" class="size-8 text-primary" title="Heroicons · home" />
+    <Icon name="heroicons:user" class="size-8 text-secondary" title="Heroicons · user" />
+    <Icon name="heroicons:bell" class="size-8 text-warning" title="Heroicons · bell" />
+    <Icon name="heroicons:magnifying-glass" class="size-8 text-info" title="Heroicons · search" />
+    <Icon name="heroicons:cog-6-tooth" class="size-8 text-success" title="Heroicons · settings" />
+  </div>
+</div>
+
+    <!-- Tailles pour Heroicons -->
+    <h5 class="mb-2 text-sm font-medium">Tailles</h5>
+    <div class="flex flex-wrap gap-3">
+      {itemSizes.map(size => (
+        <div class="flex flex-col items-center gap-1">
+          <div class="flex items-end h-12">
+            <Icon
+              name="heroicons:home"
+              class={`text-primary ${size === 'xs' ? 'size-3' : size === 'sm' ? 'size-4' : size === 'md' ? 'size-6' : size === 'lg' ? 'size-8' : 'size-12'}`}
+              title={`Heroicons · home · ${size}`}
+            />
+          </div>
+          <span class="text-xs text-base-content/70">{size}</span>
+        </div>
+      ))}
+    </div>
+
+    <!-- Couleurs pour Heroicons -->
+    <h5 class="mb-2 text-sm font-medium mt-4">Couleurs</h5>
+    <div class="flex flex-wrap gap-3">
+      {itemColors.map(color => (
+        <div class="flex flex-col items-center gap-1">
+          <Icon name="heroicons:home" class={`size-6 text-${color}`} title={`Heroicons · home · ${color}`} />
+          <span class="text-xs text-base-content/70">{color}</span>
+        </div>
+      ))}
+    </div>
+  </div>
+
+  <div class="mt-3 p-3 bg-base-200 rounded-lg">
+    <p class="text-sm mb-2">Syntaxes :</p>
+    <pre class="text-xs overflow-x-auto">
+&lt;Icon name="custom:nom-fichier" /&gt;
+&lt;Icon name="lucide:icon-name" /&gt;
+&lt;Icon name="heroicons-outline:icon-name" /&gt;  (Heroicons outline)
+&lt;Icon name="heroicons:icon-name" /&gt;       (Alias → outline)
+&lt;MdiAlarmOff /&gt;  (imports directs pour icônes spécifiques)
+    </pre>
+    <p class="text-xs mt-2">
+      <code>size</code> accepte un nombre (px) ou une valeur CSS (ex&nbsp;: <code>"1.5rem"</code>).
+      Couleurs via classes utilitaires (ex&nbsp;: <code>text-primary</code>).
+      Si une icône ne s'affiche pas, vérifiez le nom dans le registre ou les fichiers SVG.
+    </p>
+  </div>
+</Section>
+
+
 
   <!-- ImageMod -->
 <Section>

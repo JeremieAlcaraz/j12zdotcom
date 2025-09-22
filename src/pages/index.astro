@@ -7,7 +7,7 @@ import FluidCursor from '@/ui/atoms/FluidCursor.astro'
 
 <BaseLayout title="Accueil – Mon Site">
   <!-- Overlay fluide (home uniquement) -->
-  <FluidCursor slot="hero" />
+  <FluidCursor container="#hero-container" scoped slot="hero" />
 
   <!-- Hero utilise le slot hero pour être full-width -->
   <Hero slot="hero" />

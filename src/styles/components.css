@@ -127,7 +127,22 @@ body.focus-mode .prose img {
   object-fit: contain;
 }
 
-/* Conserve la pillule FAB visible pour sortir du mode focus */
-body.focus-mode .fab {
-  display: block;
+/* Conserver la pillule FAB visible en mode focus uniquement sur desktop */
+@media (min-width: 1024px) {
+  body.focus-mode .fab {
+    display: flex; /* preserve layout (stack) in focus mode */
+  }
+}
+
+/* Simple Speed Dial behavior: hide items until expanded */
+.fab [data-fab-item] {
+  opacity: 0;
+  transform: translateY(6px) scale(0.95);
+  pointer-events: none;
+  transition: opacity 180ms ease, transform 180ms ease;
+}
+.fab [data-fab-main][aria-expanded="true"] ~ [data-fab-item] {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+  pointer-events: auto;
 }

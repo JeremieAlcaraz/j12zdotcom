@@ -3,14 +3,48 @@
   "compilerOptions": {
     "baseUrl": ".",
     "paths": {
-      "@assets/*": ["src/assets/*"],
-      "@utils/*": ["src/utils/*"],
-      "@types/*": ["src/types/*"],
-      "@playground/*": ["src/playground/*"],
-      "@styles/*": ["src/styles/*"],
-      "@/*": ["./src/*"]
-    }
+      "@assets/*": [
+        "src/assets/*"
+      ],
+      "@utils/*": [
+        "src/utils/*"
+      ],
+      "@types/*": [
+        "src/types/*"
+      ],
+      "@playground/*": [
+        "src/playground/*"
+      ],
+      "@styles/*": [
+        "src/styles/*"
+      ],
+      "@/*": [
+        "./src/*"
+      ],
+      "vite": [
+        "./node_modules/astro/node_modules/vite"
+      ],
+      "vite/*": [
+        "./node_modules/astro/node_modules/vite/*"
+      ],
+      "@ui/*": [
+        "src/ui/*"
+      ]
+    },
+    "types": [
+      "unplugin-icons/types/astro",
+      "astro/client"
+    ]
   },
-  "include": [".astro/types.d.ts", "**/*.ts", "**/*.tsx", "**/*.astro"],
-  "exclude": ["dist", "node_modules"]
+  "include": [
+    ".astro/types.d.ts",
+    "**/*.ts",
+    "**/*.tsx",
+    "**/*.astro"
+  ],
+  "exclude": [
+    "eslint.config.ts",
+    "node_modules",
+    "dist"
+  ]
 }

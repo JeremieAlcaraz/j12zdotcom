@@ -1,66 +1,54 @@
+// eslint.config.ts
 import eslint from '@eslint/js'
 import tseslint from 'typescript-eslint'
 import pluginAstro from 'eslint-plugin-astro'
 import parserAstro from 'astro-eslint-parser'
 import pluginSvelte from 'eslint-plugin-svelte'
 import parserSvelte from 'svelte-eslint-parser'
-import globals from 'globals'
 import pluginImport from 'eslint-plugin-import'
+import globals from 'globals'
 
-export default tseslint.config(
+export default [
+  // Ignorer des chemins
   {
     ignores: ['node_modules', 'dist', '.astro', 'public', 'astro.config.mjs'],
   },
+
+  // Recommandations JS de base
   eslint.configs.recommended,
+
+  // Recommandations TypeScript
   ...tseslint.configs.recommended,
+
+  // Recommandations Astro (flat)
   ...pluginAstro.configs['flat/recommended'],
+
+  // Recommandations Svelte (flat)
   ...pluginSvelte.configs['flat/recommended'],
+
+  // Règles et settings du projet (appliqués après les presets pour les surcharger)
   {
-    // Global settings for all files
     languageOptions: {
       globals: {
         ...globals.browser,
         ...globals.node,
-      },
-    },
-    rules: {
-      '@typescript-eslint/no-unused-vars': 'off',
-      '@typescript-eslint/no-explicit-any': 'off',
-    },
-  },
-  {
-    // Settings for Astro components
-    files: ['**/*.astro'],
-    languageOptions: {
-      parser: parserAstro,
-      globals: {
+        // Utile pour certains cas Astro
         astroHTML: 'readonly',
       },
-      parserOptions: {
-        parser: tseslint.parser,
-        extraFileExtensions: ['.astro'],
-      },
     },
-  },
-  {
-    // Settings for Svelte components
-    files: ['**/*.svelte'],
-    languageOptions: {
-      parser: parserSvelte,
-      parserOptions: {
-        parser: tseslint.parser,
-      },
+    plugins: {
+      import: pluginImport,
     },
-  },
-  {
-    plugins: { import: pluginImport },
     settings: {
+      // Résolution des imports (TypeScript + Node)
       'import/resolver': {
         typescript: true,
         node: true,
       },
     },
     rules: {
+      '@typescript-eslint/no-unused-vars': 'off',
+      '@typescript-eslint/no-explicit-any': 'off',
       'import/no-restricted-paths': [
         'error',
         {
@@ -81,5 +69,28 @@ export default tseslint.config(
         },
       ],
     },
-  }
-)
+  },
+
+  // Overrides pour fichiers Astro : parser Astro + TS pour les <script>
+  {
+    files: ['**/*.astro'],
+    languageOptions: {
+      parser: parserAstro,
+      parserOptions: {
+        parser: tseslint.parser,
+        extraFileExtensions: ['.astro'],
+      },
+    },
+  },
+
+  // Overrides pour fichiers Svelte : parser Svelte + TS pour les <script lang="ts">
+  {
+    files: ['**/*.svelte'],
+    languageOptions: {
+      parser: parserSvelte,
+      parserOptions: {
+        parser: tseslint.parser,
+      },
+    },
+  },
+]
