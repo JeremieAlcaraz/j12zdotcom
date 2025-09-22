@@ -5,6 +5,8 @@ import Divider from '@/ui/atoms/Divider.astro'
 import CardVariantsGallery from '@/domain/dev/CardVariantsGallery.astro'
 import CardBlogGallery from '@/domain/dev/CardBlogGallery.astro'
 import CardPricingGallery from '@/domain/dev/CardPricingGallery.astro'
+import MusicPlayerGallery from '@/domain/dev/MusicPlayerGallery.astro'
+import PodcastPlayer from '@/ui/organisms/PodcastPlayer.astro'
 import { getSinglePage } from '@/utils/contentParser'
 import { sortByDate } from '@/utils/sortFunctions'
 
@@ -23,7 +25,6 @@ const currentPosts = sortedPosts.slice(0, 3)
     <CardVariantsGallery />
   </Section>
 
-
   <Section>
     <div id="blogcard" class="scroll-mt-[5rem]">
       <Divider variant="default" label="BlogCard" />
@@ -32,12 +33,48 @@ const currentPosts = sortedPosts.slice(0, 3)
     <CardBlogGallery posts={currentPosts} />
   </Section>
 
-
   <Section>
     <div id="pricingcard" class="scroll-mt-[5rem]">
       <Divider variant="default" label="PricingCard" />
     </div>
     <h2 class="sr-only">PricingCard</h2>
     <CardPricingGallery />
+  </Section>
+
+  <!-- MusicPlayer -->
+  <Section>
+    <div id="musicplayer" class="scroll-mt-[5rem]">
+      <Divider variant="default" label="MusicPlayer" />
+    </div>
+    <h2 class="sr-only">MusicPlayer</h2>
+    <div class="grid grid-cols-1 gap-4">
+      <div>
+        <h3 class="mb-4 text-lg font-bold">Lecteur Audio avec variantes de fond</h3>
+        <MusicPlayerGallery />
+        <p class="text-base-content/70 mt-4 text-sm">
+          Le MusicPlayer utilise BaseCard comme fondation avec des variantes de fond (base-100 pour light, base-300 pour dark/inversé), démontrant la réutilisabilité et l'adaptabilité aux thèmes.
+        </p>
+      </div>
+    </div>
+  </Section>
+
+  <!-- PodcastPlayer -->
+  <Section>
+    <div id="podcastplayer" class="scroll-mt-[5rem]">
+      <Divider variant="default" label="PodcastPlayer" />
+    </div>
+    <h2 class="sr-only">PodcastPlayer</h2>
+    <div class="grid grid-cols-1 gap-4">
+      <div>
+        <h3 class="mb-4 text-lg font-bold">Lecteur de Podcast (Utilisant BaseCard)</h3>
+        <div class="w-full">
+          <PodcastPlayer />
+        </div>
+        <p class="text-base-content/70 mt-4 text-sm">
+          Le PodcastPlayer utilise BaseCard comme conteneur et adopte un layout en grid avec l'image
+          sur 1/4 et le contenu sur 3/4 de la largeur.
+        </p>
+      </div>
+    </div>
   </Section>
 </StyleGuideLayout>

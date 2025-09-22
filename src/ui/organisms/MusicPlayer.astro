@@ -1,0 +1,360 @@
+---
+  // Composant MusicPlayer - Lecteur de musique avec logique
+  import BaseCard from '@/ui/atoms/BaseCard.astro'
+  import Icon from '@/ui/atoms/Icon.astro'
+
+  interface Props {
+    base?: 100 | 200 | 300
+  }
+
+  const { base = 200 } = Astro.props as Props
+
+  // UID par instance pour cibler le bon DOM même avec ClientRouter
+  const playerId = `mp-${Math.random().toString(36).slice(2, 9)}`
+---
+
+<BaseCard
+  background={`base-${base}`}
+  border="default"
+  shadow="xl"
+  padding="none"
+  class="ring-base-300/40 ring-1"
+  data-player-id={playerId}
+>
+  <!-- Élément audio caché -->
+  <audio id={`audio-player-${playerId}`} preload="metadata">
+    <source src="/musics/jeremie-theme.mp3" type="audio/mpeg" />
+    Votre navigateur ne supporte pas l'élément audio.
+  </audio>
+  <div class="card-body my-2">
+    <div class="flex items-center justify-around">
+      <button class="btn btn-square btn-neutral" data-action="prev" title="Précédent">
+        <Icon name="heroicons:backward" class="size-4 shrink-0" title="Précédent" />
+      </button>
+      <button class="btn btn-square btn-primary btn-lg" data-action="play" title="Lecture/Pause">
+        <span class="relative inline-flex items-center justify-center">
+          <Icon name="heroicons:play" class="size-6 shrink-0" data-icon="play" title="Lecture" />
+          <Icon
+            name="heroicons:pause"
+            class="size-6 shrink-0"
+            data-icon="pause"
+            title="Pause"
+            hidden
+          />
+        </span>
+      </button>
+      <button class="btn btn-square btn-neutral" data-action="next" title="Suivant">
+        <Icon name="heroicons:forward" class="size-4 shrink-0" title="Suivant" />
+      </button>
+    </div>
+    <div class="mt-2 text-center">
+      <h6 class="text-sm font-bold">PM Zoomcall ASMR</h6>
+      <p class="text-xs opacity-50">Project Manager talking for 2 hours</p>
+    </div>
+  </div>
+  <div class="border-base-300 flex flex-col border-t px-6 py-4">
+    <div class="relative mt-6">
+      <div
+        class="tooltip tooltip-open absolute top-2 before:text-xs"
+        style="inset-inline-start:0%"
+        data-tip="0:00"
+      >
+      </div>
+      <progress class="progress progress-primary" value="0" max="100"></progress>
+    </div>
+    <div class="flex justify-between text-xs opacity-70">
+      <span data-time="current">0:00</span>
+      <span data-time="duration">4:00</span>
+    </div>
+  </div>
+  <div class="flex items-center justify-around px-2 pb-6">
+    <button
+      class="btn btn-square btn-neutral btn-volume"
+      data-action="volume"
+      title="Volume"
+      aria-pressed="false"
+    >
+      <span class="relative inline-flex items-center justify-center">
+        <Icon
+          name="heroicons:speaker-wave"
+          class="size-4"
+          data-icon="volume-on"
+          title="Volume activé"
+        />
+        <Icon
+          name="heroicons:speaker-x-mark"
+          class="size-4"
+          data-icon="volume-off"
+          title="Sourdine"
+          hidden
+        />
+      </span>
+    </button>
+    <button
+      class="btn btn-square btn-neutral btn-shuffle"
+      data-action="shuffle"
+      title="Aléatoire"
+      aria-pressed="false"
+    >
+      <Icon name="heroicons:arrows-right-left" class="size-4" title="Aléatoire" />
+    </button>
+    <button
+      class="btn btn-square btn-neutral btn-repeat"
+      data-action="repeat"
+      title="Répéter"
+      aria-pressed="false"
+    >
+      <Icon name="heroicons:arrow-path" class="size-4" title="Répéter" />
+    </button>
+    <button class="btn btn-square btn-neutral" title="Radio">
+      <Icon name="heroicons:rss" class="size-4" title="Radio" />
+    </button>
+  </div>
+</BaseCard>
+
+<script define:vars={{ playerId }} is:inline>
+  class MusicPlayer {
+    constructor(root) {
+      this.root = root
+      this.audio = root.querySelector('audio')
+      this.playBtn = root.querySelector('[data-action="play"]')
+      this.prevBtn = root.querySelector('[data-action="prev"]')
+      this.nextBtn = root.querySelector('[data-action="next"]')
+      this.volumeBtn = root.querySelector('[data-action="volume"]')
+      this.repeatBtn = root.querySelector('[data-action="repeat"]')
+      this.shuffleBtn = root.querySelector('[data-action="shuffle"]')
+      this.progressBar = root.querySelector('.progress')
+      const progressEl = root.querySelector('.progress')
+      this.progressContainer = progressEl ? progressEl.parentElement : null
+      this.currentTimeEl = root.querySelector('[data-time="current"]')
+      this.durationEl = root.querySelector('[data-time="duration"]')
+      this.tooltip = root.querySelector('.tooltip')
+
+      this.isPlaying = false
+      this.isMuted = false
+      this.isRepeating = false
+      this.isShuffling = false
+      this.volume = 1
+      this.defaultDurationSec = 240 // 4 minutes par défaut
+
+      this.init()
+    }
+
+    init() {
+      this.setupEventListeners()
+      this.setInitialUI()
+      this.updateDuration()
+      this.updateVolumeButton()
+      this.updateRepeatButton()
+      this.updateShuffleButton()
+    }
+
+    setInitialUI() {
+      // Remet les éléments UI à l'état initial
+      this.audio.currentTime = 0
+      if (this.progressBar) {
+        this.progressBar.value = 0
+      }
+      if (this.tooltip) {
+        this.tooltip.style.left = '0%'
+        this.tooltip.setAttribute('data-tip', this.formatTime(0))
+      }
+      if (this.currentTimeEl) {
+        this.currentTimeEl.textContent = this.formatTime(0)
+      }
+      if (this.durationEl) {
+        const seconds = isNaN(this.audio.duration) ? this.defaultDurationSec : this.audio.duration
+        this.durationEl.textContent = this.formatTime(seconds)
+      }
+    }
+
+    setupEventListeners() {
+      // Boutons de contrôle
+      if (this.playBtn) {
+        this.playBtn.addEventListener('click', () => this.togglePlay())
+      }
+      if (this.prevBtn) {
+        this.prevBtn.addEventListener('click', () => this.prevTrack())
+      }
+      if (this.nextBtn) {
+        this.nextBtn.addEventListener('click', () => this.nextTrack())
+      }
+      if (this.volumeBtn) {
+        this.volumeBtn.addEventListener('click', () => this.toggleMute())
+      }
+      if (this.repeatBtn) {
+        this.repeatBtn.addEventListener('click', () => this.toggleRepeat())
+      }
+      if (this.shuffleBtn) {
+        this.shuffleBtn.addEventListener('click', () => this.toggleShuffle())
+      }
+
+      // Barre de progression
+      if (this.progressContainer) {
+        this.progressContainer.addEventListener('click', e => this.seek(e))
+      }
+
+      // Événements audio
+      this.audio.addEventListener('timeupdate', () => this.updateProgress())
+      this.audio.addEventListener('loadedmetadata', () => this.updateDuration())
+      this.audio.addEventListener('ended', () => this.handleTrackEnd())
+      this.audio.addEventListener('play', () => {
+        this.isPlaying = true
+        this.updatePlayButton(true)
+      })
+      this.audio.addEventListener('pause', () => {
+        this.isPlaying = false
+        this.updatePlayButton(false)
+      })
+    }
+
+    togglePlay() {
+      if (this.audio.paused) {
+        const playPromise = this.audio.play()
+        if (playPromise && typeof playPromise.then === 'function') {
+          playPromise
+            .then(() => {
+              this.isPlaying = true
+              this.updatePlayButton(true)
+            })
+            .catch(err => {
+              console.warn('[MusicPlayer] play() failed:', err)
+              this.isPlaying = false
+              this.updatePlayButton(false)
+            })
+        } else {
+          this.isPlaying = true
+          this.updatePlayButton(true)
+        }
+      } else {
+        this.audio.pause()
+        this.isPlaying = false
+        this.updatePlayButton(false)
+      }
+    }
+
+    prevTrack() {
+      // Pour l'instant, recommence la piste
+      this.audio.currentTime = 0
+    }
+
+    nextTrack() {
+      // Pour l'instant, recommence la piste
+      this.audio.currentTime = 0
+    }
+
+    toggleMute() {
+      this.isMuted = !this.isMuted
+      this.audio.muted = this.isMuted
+      this.updateVolumeButton()
+    }
+
+    toggleRepeat() {
+      this.isRepeating = !this.isRepeating
+      this.audio.loop = this.isRepeating
+      this.updateRepeatButton()
+    }
+
+    toggleShuffle() {
+      this.isShuffling = !this.isShuffling
+      this.updateShuffleButton()
+    }
+
+    seek(e) {
+      if (!this.progressContainer) return
+      if (!this.audio || !isFinite(this.audio.duration) || this.audio.duration <= 0) return
+      const rect = this.progressContainer.getBoundingClientRect()
+      const percent = (e.clientX - rect.left) / rect.width
+      this.audio.currentTime = percent * this.audio.duration
+    }
+
+    updateProgress() {
+      const duration = this.audio.duration
+      const percent =
+        isFinite(duration) && duration > 0 ? (this.audio.currentTime / duration) * 100 : 0
+      if (this.progressBar) {
+        this.progressBar.value = percent
+      }
+
+      // Mettre à jour le tooltip
+      if (this.tooltip) {
+        const tooltipPercent = percent
+        this.tooltip.style.left = `${tooltipPercent}%`
+        this.tooltip.setAttribute('data-tip', this.formatTime(this.audio.currentTime))
+      }
+
+      // Mettre à jour le temps actuel
+      if (this.currentTimeEl) {
+        this.currentTimeEl.textContent = this.formatTime(this.audio.currentTime)
+      }
+    }
+
+    updateDuration() {
+      if (!this.durationEl) return
+      const seconds = isNaN(this.audio.duration) ? this.defaultDurationSec : this.audio.duration
+      this.durationEl.textContent = this.formatTime(seconds)
+    }
+
+    handleTrackEnd() {
+      if (!this.isRepeating) {
+        this.isPlaying = false
+        this.updatePlayButton(false)
+      }
+    }
+
+    updatePlayButton(isPlaying) {
+      const playEl = this.playBtn?.querySelector('[data-icon="play"]')
+      const pauseEl = this.playBtn?.querySelector('[data-icon="pause"]')
+      if (playEl && pauseEl) {
+        playEl.hidden = isPlaying
+        pauseEl.hidden = !isPlaying
+      }
+    }
+
+    updateVolumeButton() {
+      if (!this.volumeBtn) return
+      const onEl = this.volumeBtn.querySelector('[data-icon="volume-on"]')
+      const offEl = this.volumeBtn.querySelector('[data-icon="volume-off"]')
+      if (onEl && offEl) {
+        onEl.hidden = this.isMuted
+        offEl.hidden = !this.isMuted
+      }
+      // Style actif/inactif
+      this.volumeBtn.classList.toggle('btn-primary', this.isMuted)
+      this.volumeBtn.classList.toggle('btn-neutral', !this.isMuted)
+      this.volumeBtn.setAttribute('aria-pressed', String(this.isMuted))
+    }
+
+    updateRepeatButton() {
+      if (!this.repeatBtn) return
+      this.repeatBtn.classList.toggle('btn-primary', this.isRepeating)
+      this.repeatBtn.classList.toggle('btn-neutral', !this.isRepeating)
+      this.repeatBtn.setAttribute('aria-pressed', String(this.isRepeating))
+    }
+
+    updateShuffleButton() {
+      if (!this.shuffleBtn) return
+      this.shuffleBtn.classList.toggle('btn-primary', this.isShuffling)
+      this.shuffleBtn.classList.toggle('btn-neutral', !this.isShuffling)
+      this.shuffleBtn.setAttribute('aria-pressed', String(this.isShuffling))
+    }
+
+    formatTime(seconds) {
+      if (isNaN(seconds)) return '0:00'
+      const mins = Math.floor(seconds / 60)
+      const secs = Math.floor(seconds % 60)
+      return `${mins}:${secs.toString().padStart(2, '0')}`
+    }
+  }
+
+  // Initialiser le lecteur pour CE composant uniquement
+  const init = () => {
+    const root = document.querySelector(`[data-player-id="${playerId}"]`)
+    if (root) new MusicPlayer(root)
+  }
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', init)
+  } else {
+    init()
+  }
+</script>
