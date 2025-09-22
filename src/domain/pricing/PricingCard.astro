@@ -11,7 +11,7 @@ const { data, base = 100 } = Astro.props as Props
 const { title, price, period, features = [], cta } = data
 ---
 
-<Card class="shadow-sm" base={base}>
+<Card class="shadow-sm" base={base} shadow="sm" hover>
   {
     title && (
       <span slot="title" class="card-title mb-2">

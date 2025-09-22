@@ -1,0 +1,351 @@
+---
+/**
+ * BaseCardShowcase - Démonstration complète du composant BaseCard
+ *
+ * Ce composant montre tous les exemples d'utilisation de BaseCard
+ * et comment il améliore la réutilisabilité dans le projet
+ */
+import BaseCard from '@/ui/atoms/BaseCard.astro'
+import Typography from '@/ui/atoms/Typography.astro'
+import Icon from '@/ui/atoms/Icon.astro'
+import Avatar from '@/ui/atoms/Avatar.astro'
+import Badge from '@/ui/atoms/Badge.astro'
+---
+
+<div class="space-y-12">
+  <!-- Introduction -->
+  <section>
+    <Typography variant="h1" class="mb-4">BaseCard - Composant Atomique</Typography>
+    <Typography variant="lead" class="mb-6">
+      BaseCard est le composant de base pour toutes les cartes du système. Il implémente une
+      approche DRY en centralisant la logique commune : ombres, bordures, arrondis, backgrounds et
+      effets.
+    </Typography>
+
+    <BaseCard background="base-200" border="primary" padding="lg" class="mb-8">
+      <Typography variant="h3" class="mb-2">🎯 Objectifs</Typography>
+      <ul class="space-y-1 text-sm">
+        <li>
+          • <strong>DRY (Don't Repeat Yourself)</strong> : Éviter la duplication de styles de cartes
+        </li>
+        <li>
+          • <strong>Réutilisabilité</strong> : Base pour BlogCard, PricingCard, MusicPlayer, etc.
+        </li>
+        <li>
+          • <strong>Consistance</strong> : Uniformisation des styles de cartes dans tout le projet
+        </li>
+        <li>• <strong>Flexibilité</strong> : Système de variants et props configurables</li>
+      </ul>
+    </BaseCard>
+  </section>
+
+  <!-- Exemples de base -->
+  <section>
+    <Typography variant="h2" class="mb-6">Exemples de Base</Typography>
+
+    <div class="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
+      <BaseCard shadow="sm" padding="md">
+        <Typography variant="h3" class="mb-2">Carte Simple</Typography>
+        <Typography variant="small" class="text-base-content/70">
+          Utilisation basique avec ombre légère
+        </Typography>
+      </BaseCard>
+
+      <BaseCard shadow="lg" hover padding="md">
+        <Typography variant="h3" class="mb-2">Avec Hover</Typography>
+        <Typography variant="small" class="text-base-content/70">
+          Effet de survol activé
+        </Typography>
+      </BaseCard>
+
+      <BaseCard border="primary" shadow="md" padding="md">
+        <Typography variant="h3" class="mb-2">Avec Bordure</Typography>
+        <Typography variant="small" class="text-base-content/70">
+          Bordure colorée primaire
+        </Typography>
+      </BaseCard>
+
+      <BaseCard glass shadow="xl" padding="md">
+        <Typography variant="h3" class="mb-2">Effet Verre</Typography>
+        <Typography variant="small" class="text-base-content/70">
+          Glassmorphism moderne
+        </Typography>
+      </BaseCard>
+
+      <BaseCard background="primary" shadow="lg" padding="md">
+        <Typography variant="h3" class="mb-2">Background Coloré</Typography>
+        <Typography variant="small"> Fond primaire avec texte adapté </Typography>
+      </BaseCard>
+
+      <BaseCard rounding="2xl" shadow="md" padding="lg">
+        <Typography variant="h3" class="mb-2">Très Arrondie</Typography>
+        <Typography variant="small" class="text-base-content/70"> Coins très arrondis </Typography>
+      </BaseCard>
+    </div>
+  </section>
+
+  <!-- Composants refactorisés -->
+  <section>
+    <Typography variant="h2" class="mb-6">Composants Refactorisés</Typography>
+
+    <div class="space-y-6">
+      <BaseCard border="default" padding="lg">
+        <Typography variant="h3" class="mb-4">🎵 MusicPlayer</Typography>
+        <Typography class="mb-4">
+          Le composant MusicPlayer a été refactorisé pour utiliser BaseCard au lieu de styles
+          manuels :
+        </Typography>
+        <div class="bg-base-300 rounded p-4 font-mono text-sm">
+          &lt;BaseCard<br />
+          &nbsp;&nbsp;background="base-200"<br />
+          &nbsp;&nbsp;border="default"<br />
+          &nbsp;&nbsp;shadow="xl"<br />
+          &nbsp;&nbsp;padding="none"<br />
+          &gt;
+        </div>
+        <Typography variant="small" class="text-success mt-2">
+          ✓ Réduction de la duplication de code • ✓ Maintien de l'apparence existante
+        </Typography>
+      </BaseCard>
+
+      <BaseCard border="default" padding="lg">
+        <Typography variant="h3" class="mb-4">🎨 Card Organism</Typography>
+        <Typography class="mb-4">
+          Le composant Card a été refactorisé pour utiliser BaseCard comme fondation :
+        </Typography>
+        <div class="bg-base-300 rounded p-4 font-mono text-sm">
+          // Map variant vers BaseCard props<br />
+          const baseCardProps = {'{'}
+          &nbsp;&nbsp;background: backgroundMap[base],<br />
+          &nbsp;&nbsp;shadow: variant === 'glass' ? 'lg' : shadow,<br />
+          &nbsp;&nbsp;border: variant === 'bordered' ? 'default' : 'none',<br />
+          &nbsp;&nbsp;glass: variant === 'glass',<br />
+          {'}'}
+        </div>
+        <Typography variant="small" class="text-success mt-2">
+          ✓ BlogCard et PricingCard bénéficient automatiquement • ✓ Approche légo respectée
+        </Typography>
+      </BaseCard>
+    </div>
+  </section>
+
+  <!-- Cas d'usage avancés -->
+  <section>
+    <Typography variant="h2" class="mb-6">Cas d'Usage Avancés</Typography>
+
+    <div class="grid grid-cols-1 gap-6 lg:grid-cols-2">
+      <!-- Profile Card -->
+      <BaseCard shadow="lg" hover border="default" padding="lg">
+        <div class="flex items-start gap-4">
+          <Avatar src="img_opt/jeremie-hero" alt="Profil" size={60} />
+          <div class="flex-1">
+            <Typography variant="h3" class="mb-1">Profile Card</Typography>
+            <Typography variant="small" class="text-base-content/70 mb-3">
+              Développeur Full-Stack
+            </Typography>
+            <div class="flex gap-2">
+              <Badge label="React" />
+              <Badge label="TypeScript" />
+              <Badge label="Astro" />
+            </div>
+          </div>
+        </div>
+      </BaseCard>
+
+      <!-- Stats Card -->
+      <BaseCard background="accent" shadow="xl" padding="lg">
+        <div class="text-center">
+          <Icon name="heroicons:chart-bar" class="mx-auto mb-3 size-12" />
+          <Typography variant="h3" class="mb-2">Statistiques</Typography>
+          <div class="mt-4 grid grid-cols-2 gap-4">
+            <div>
+              <Typography variant="h2" class="mb-1">127</Typography>
+              <Typography variant="small">Projets</Typography>
+            </div>
+            <div>
+              <Typography variant="h2" class="mb-1">98%</Typography>
+              <Typography variant="small">Satisfaction</Typography>
+            </div>
+          </div>
+        </div>
+      </BaseCard>
+
+      <!-- Feature Card -->
+      <BaseCard glass shadow="2xl" hover padding="xl">
+        <div class="text-center">
+          <Icon name="heroicons:sparkles" class="text-primary mx-auto mb-4 size-16" />
+          <Typography variant="h2" class="mb-3">Premium Feature</Typography>
+          <Typography class="text-base-content/70 mb-4">
+            Fonctionnalité avancée avec effet verre et animation de survol
+          </Typography>
+          <div class="text-primary inline-flex items-center gap-2 font-medium">
+            <span>Découvrir</span>
+            <Icon name="heroicons:arrow-right" class="size-4" />
+          </div>
+        </div>
+      </BaseCard>
+
+      <!-- Notification Card -->
+      <BaseCard border="default" background="base-100" shadow="md" padding="lg">
+        <div class="flex items-center gap-3">
+          <Icon name="heroicons:exclamation-triangle" class="text-warning size-8 flex-shrink-0" />
+          <div>
+            <Typography variant="h3" class="mb-1">Notification</Typography>
+            <Typography variant="small" class="text-base-content/70">
+              Carte d'alerte avec bordure colorée et icône
+            </Typography>
+          </div>
+        </div>
+      </BaseCard>
+    </div>
+  </section>
+
+  <!-- Avant/Après -->
+  <section>
+    <Typography variant="h2" class="mb-6">Avant / Après Refactoring</Typography>
+
+    <div class="grid grid-cols-1 gap-8 lg:grid-cols-2">
+      <!-- Avant -->
+      <BaseCard border="default" padding="lg">
+        <Typography variant="h3" class="text-error mb-4">❌ Avant (Code Dupliqué)</Typography>
+        <div class="bg-base-300 space-y-2 rounded p-4 font-mono text-sm">
+          <div>// MusicPlayer.astro</div>
+          <div class="text-error">
+            &lt;div class="card bg-base-200 shadow-xl border-base-300"&gt;
+          </div>
+
+          <div class="mt-3">// PricingCard.astro</div>
+          <div class="text-error">&lt;Card class="shadow-sm"&gt;</div>
+
+          <div class="mt-3">// BlogCard.astro</div>
+          <div class="text-error">&lt;Card class="shadow-sm flex h-full"&gt;</div>
+        </div>
+        <Typography variant="small" class="text-error mt-3">
+          Styles répétés, maintenance difficile, inconsistance possible
+        </Typography>
+      </BaseCard>
+
+      <!-- Après -->
+      <BaseCard border="default" padding="lg">
+        <Typography variant="h3" class="text-success mb-4">✅ Après (DRY & Réutilisable)</Typography
+        >
+        <div class="bg-base-300 space-y-2 rounded p-4 font-mono text-sm">
+          <div>// MusicPlayer.astro</div>
+          <div class="text-success">
+            &lt;BaseCard background="base-200" shadow="xl" border="default"&gt;
+          </div>
+
+          <div class="mt-3">// Card.astro (refactorisé)</div>
+          <div class="text-success">&lt;BaseCard shadow="lg" background="base-100"&gt;</div>
+
+          <div class="mt-3">// Nouveaux composants</div>
+          <div class="text-success">&lt;BaseCard shadow="lg" hover border="primary"&gt;</div>
+        </div>
+        <Typography variant="small" class="text-success mt-3">
+          Code centralisé, maintenance aisée, consistance garantie
+        </Typography>
+      </BaseCard>
+    </div>
+  </section>
+
+  <!-- API Reference -->
+  <section>
+    <Typography variant="h2" class="mb-6">API Reference</Typography>
+
+    <BaseCard border="default" padding="lg">
+      <Typography variant="h3" class="mb-4">Props Disponibles</Typography>
+
+      <div class="overflow-x-auto">
+        <table class="table-zebra table w-full text-sm">
+          <thead>
+            <tr>
+              <th>Prop</th>
+              <th>Type</th>
+              <th>Défaut</th>
+              <th>Description</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><code>shadow</code></td>
+              <td>'none' | 'sm' | 'md' | 'lg' | 'xl' | '2xl'</td>
+              <td>'md'</td>
+              <td>Intensité de l'ombre portée</td>
+            </tr>
+            <tr>
+              <td><code>border</code></td>
+              <td>'none' | 'default' | 'primary' | 'secondary' | 'accent' | 'neutral'</td>
+              <td>'none'</td>
+              <td>Style et couleur de bordure</td>
+            </tr>
+            <tr>
+              <td><code>rounding</code></td>
+              <td>'none' | 'sm' | 'md' | 'lg' | 'xl' | '2xl' | 'full'</td>
+              <td>'lg'</td>
+              <td>Rayon des coins arrondis</td>
+            </tr>
+            <tr>
+              <td><code>background</code></td>
+              <td
+                >'base-100' | 'base-200' | 'base-300' | 'primary' | 'secondary' | 'accent' |
+                'neutral'</td
+              >
+              <td>'base-100'</td>
+              <td>Couleur d'arrière-plan</td>
+            </tr>
+            <tr>
+              <td><code>hover</code></td>
+              <td>boolean</td>
+              <td>false</td>
+              <td>Active les effets de survol</td>
+            </tr>
+            <tr>
+              <td><code>glass</code></td>
+              <td>boolean</td>
+              <td>false</td>
+              <td>Applique l'effet glassmorphism</td>
+            </tr>
+            <tr>
+              <td><code>padding</code></td>
+              <td>'none' | 'sm' | 'md' | 'lg' | 'xl'</td>
+              <td>'md'</td>
+              <td>Espacement interne</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </BaseCard>
+  </section>
+
+  <!-- Conclusion -->
+  <section>
+    <BaseCard background="primary" shadow="xl" padding="xl">
+      <div class="text-center">
+        <Typography variant="h2" class="mb-4">🚀 Résultat</Typography>
+        <Typography variant="lead" class="mb-6">
+          BaseCard permet une approche modulaire et DRY pour la construction de cartes, améliorant
+          la maintenabilité et la cohérence du design system.
+        </Typography>
+
+        <div class="grid grid-cols-1 gap-4 text-left md:grid-cols-3">
+          <div class="text-center">
+            <Typography variant="h3" class="mb-2">📦 Réutilisabilité</Typography>
+            <Typography variant="small">
+              Un seul composant pour tous les besoins de cartes
+            </Typography>
+          </div>
+          <div class="text-center">
+            <Typography variant="h3" class="mb-2">🎨 Consistance</Typography>
+            <Typography variant="small"> Styles uniformisés dans tout le projet </Typography>
+          </div>
+          <div class="text-center">
+            <Typography variant="h3" class="mb-2">🔧 Maintenabilité</Typography>
+            <Typography variant="small">
+              Modifications centralisées, pas de duplication
+            </Typography>
+          </div>
+        </div>
+      </div>
+    </BaseCard>
+  </section>
+</div>

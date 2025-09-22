@@ -5,6 +5,7 @@ import Typography from '@ui/atoms/Typography.astro'
 import Alert from '@/ui/atoms/Alert.astro'
 import Avatar from '@/ui/atoms/Avatar.astro'
 import Badge from '@/ui/atoms/Badge.astro'
+import BaseCard from '@/ui/atoms/BaseCard.astro'
 import Button from '@/ui/atoms/Button.astro'
 import Checkbox from '@/ui/atoms/Checkbox.astro'
 import Divider from '@/ui/atoms/Divider.astro'
@@ -21,11 +22,11 @@ import PaginationItem from '@/ui/atoms/PaginationItem.astro'
 import Video from '@/ui/atoms/Video.astro'
 import Youtube from '@/ui/atoms/Youtube.astro'
 // import AstroLogo from "~icons/logos/astro";
-import MdiStore24Hour from "~icons/mdi/store-24-hour";
-import MdiAlarmOff from "~icons/mdi/alarm-off";
-import IconParkAbnormal from "~icons/icon-park/abnormal";
-import RawMdiAlarmOff from "~icons/mdi/alarm-off?raw&width=4em&height=4em";
-import RawMdiAlarmOff2 from "~icons/mdi/alarm-off?raw&width=1em&height=1em";
+import MdiStore24Hour from '~icons/mdi/store-24-hour'
+import MdiAlarmOff from '~icons/mdi/alarm-off'
+import IconParkAbnormal from '~icons/icon-park/abnormal'
+import RawMdiAlarmOff from '~icons/mdi/alarm-off?raw&width=4em&height=4em'
+import RawMdiAlarmOff2 from '~icons/mdi/alarm-off?raw&width=1em&height=1em'
 
 const loadingVariants = ['spinner', 'dots', 'ring', 'ball', 'bars', 'infinity'] as const
 const itemSizes = ['xs', 'sm', 'md', 'lg', 'xl'] as const
@@ -44,124 +45,130 @@ const pangram = "Voix ambigue d'un coeur qui au zephyr prefere les jattes de kiw
 
 <StyleGuideLayout title="Style Guide | Atoms">
   <!-- Typography -->
-<Section>
-  <div id="typography" class="scroll-mt-[5rem]">
-    <Divider variant="default" label="Typography" />
-  </div>
-  <h2 class="sr-only">Typography</h2>
-  <div class="space-y-10">
-    <div class="space-y-2">
-      <Typography variant="overline" class="text-muted-foreground">Scale - Headings</Typography>
+  <Section>
+    <div id="typography" class="scroll-mt-[5rem]">
+      <Divider variant="default" label="Typography" />
+    </div>
+    <h2 class="sr-only">Typography</h2>
+    <div class="space-y-10">
+      <div class="space-y-2">
+        <Typography variant="overline" class="text-muted-foreground">Scale - Headings</Typography>
+        <div class="space-y-1">
+          <Typography variant="h1">H1 - Titre principal</Typography>
+          <Typography variant="h2">H2 - Sous-titre</Typography>
+          <Typography variant="h3">H3 - Intertitre</Typography>
+        </div>
+      </div>
+
+      <div class="space-y-2">
+        <Typography variant="overline" class="text-muted-foreground">Variants - UI</Typography>
+        <div class="space-y-1">
+          <Typography variant="lead">Lead - Texte d'intro plus large pour amorce.</Typography>
+          <Typography>Body - Paragraphe standard pour le contenu regulier de l'UI.</Typography>
+          <Typography variant="small">Small - Annotation discrete ou meta-texte.</Typography>
+          <Typography variant="overline">OVERLINE - SECTION / LABEL</Typography>
+        </div>
+      </div>
+
+      <div class="space-y-2">
+        <Typography variant="overline" class="text-muted-foreground">Fonts - Pairing</Typography>
+        <div class="grid gap-3 md:grid-cols-3">
+          <div class="rounded-lg border p-4">
+            <Typography variant="small" class="text-muted-foreground mb-1">font-heading</Typography>
+            <Typography as="p" variant="h3" class="mb-1">Titre Heading</Typography>
+            <Typography class="text-foreground/80">{pangram}</Typography>
+          </div>
+          <div class="rounded-lg border p-4">
+            <Typography variant="small" class="text-muted-foreground mb-1">font-sans</Typography>
+            <Typography as="p" class="mb-1">Texte Corps</Typography>
+            <Typography class="text-foreground/80">{pangram}</Typography>
+          </div>
+          <div class="rounded-lg border p-4">
+            <Typography variant="small" class="text-muted-foreground mb-1"
+              >font-illustration</Typography
+            >
+            <Typography as="p" variant="h3" font="illustration" class="mb-1"
+              >Illustration Heading</Typography
+            >
+            <Typography font="illustration" class="text-foreground/80">{pangram}</Typography>
+          </div>
+        </div>
+      </div>
+
+      <div class="space-y-2">
+        <Typography variant="overline" class="text-muted-foreground">Weights and Italic</Typography>
+        <div class="grid gap-3 md:grid-cols-3">
+          <Typography weight="light">Light - {pangram}</Typography>
+          <Typography weight="normal">Normal - {pangram}</Typography>
+          <Typography weight="medium">Medium - {pangram}</Typography>
+          <Typography weight="semibold">Semibold - {pangram}</Typography>
+          <Typography weight="bold">Bold - {pangram}</Typography>
+          <Typography weight="extrabold">Extrabold - {pangram}</Typography>
+          <Typography italic>Italic - {pangram}</Typography>
+          <Typography weight="semibold" italic>Semibold Italic - {pangram}</Typography>
+          <Typography variant="overline" italic>Overline Italic</Typography>
+        </div>
+      </div>
+
+      <div class="space-y-2">
+        <Typography variant="overline" class="text-muted-foreground">Align</Typography>
+        <div class="grid gap-3 md:grid-cols-3">
+          <div class="rounded-lg border p-4">
+            <Typography variant="small" class="text-muted-foreground">left</Typography>
+            <Typography align="left">{pangram}</Typography>
+          </div>
+          <div class="rounded-lg border p-4">
+            <Typography variant="small" class="text-muted-foreground">center</Typography>
+            <Typography align="center">{pangram}</Typography>
+          </div>
+          <div class="rounded-lg border p-4">
+            <Typography variant="small" class="text-muted-foreground">right</Typography>
+            <Typography align="right">{pangram}</Typography>
+          </div>
+        </div>
+      </div>
+
+      <div class="space-y-2">
+        <Typography variant="overline" class="text-muted-foreground"
+          >Semantics vs Variant</Typography
+        >
+        <Typography as="h2" variant="h1" class="mb-1"> Visuellement H1, balise H2 </Typography>
+        <Typography variant="small" class="text-muted-foreground">
+          Utile pour garder un seul H1 reel par page.
+        </Typography>
+      </div>
+
+      <div class="space-y-3">
+        <Typography variant="overline" class="text-muted-foreground">Long form (UI)</Typography>
+        <Typography>
+          Voici un paragraphe de demonstration pour verifier la lisibilite, le rythme, la hauteur de
+          ligne et les espacements. {pangram}
+          {pangram}
+          {pangram}
+        </Typography>
+        <ul class="list-disc space-y-1 pl-6">
+          <li><Typography>Item de liste standard.</Typography></li>
+          <li><Typography>Un autre item de liste.</Typography></li>
+          <li><Typography weight="medium">Item en medium pour contraste.</Typography></li>
+        </ul>
+      </div>
+
       <div class="space-y-1">
-        <Typography variant="h1">H1 - Titre principal</Typography>
-        <Typography variant="h2">H2 - Sous-titre</Typography>
-        <Typography variant="h3">H3 - Intertitre</Typography>
+        <Typography variant="overline">CATEGORIE</Typography>
+        <Typography variant="h3">Un titre de section court</Typography>
+        <Typography variant="small" class="text-muted-foreground">
+          Petite meta ou description breve.
+        </Typography>
       </div>
     </div>
-
-    <div class="space-y-2">
-      <Typography variant="overline" class="text-muted-foreground">Variants - UI</Typography>
-      <div class="space-y-1">
-        <Typography variant="lead">Lead - Texte d'intro plus large pour amorce.</Typography>
-        <Typography>Body - Paragraphe standard pour le contenu regulier de l'UI.</Typography>
-        <Typography variant="small">Small - Annotation discrete ou meta-texte.</Typography>
-        <Typography variant="overline">OVERLINE - SECTION / LABEL</Typography>
-      </div>
-    </div>
-
-    <div class="space-y-2">
-      <Typography variant="overline" class="text-muted-foreground">Fonts - Pairing</Typography>
-      <div class="grid gap-3 md:grid-cols-3">
-        <div class="rounded-lg border p-4">
-          <Typography variant="small" class="mb-1 text-muted-foreground">font-heading</Typography>
-          <Typography as="p" variant="h3" class="mb-1">Titre Heading</Typography>
-          <Typography class="text-foreground/80">{pangram}</Typography>
-        </div>
-        <div class="rounded-lg border p-4">
-          <Typography variant="small" class="mb-1 text-muted-foreground">font-sans</Typography>
-          <Typography as="p" class="mb-1">Texte Corps</Typography>
-          <Typography class="text-foreground/80">{pangram}</Typography>
-        </div>
-        <div class="rounded-lg border p-4">
-          <Typography variant="small" class="mb-1 text-muted-foreground">font-illustration</Typography>
-          <Typography as="p" variant="h3" font="illustration" class="mb-1">Illustration Heading</Typography>
-          <Typography font="illustration" class="text-foreground/80">{pangram}</Typography>
-        </div>
-      </div>
-    </div>
-
-    <div class="space-y-2">
-      <Typography variant="overline" class="text-muted-foreground">Weights and Italic</Typography>
-      <div class="grid gap-3 md:grid-cols-3">
-        <Typography weight="light">Light - {pangram}</Typography>
-        <Typography weight="normal">Normal - {pangram}</Typography>
-        <Typography weight="medium">Medium - {pangram}</Typography>
-        <Typography weight="semibold">Semibold - {pangram}</Typography>
-        <Typography weight="bold">Bold - {pangram}</Typography>
-        <Typography weight="extrabold">Extrabold - {pangram}</Typography>
-        <Typography italic>Italic - {pangram}</Typography>
-        <Typography weight="semibold" italic>Semibold Italic - {pangram}</Typography>
-        <Typography variant="overline" italic>Overline Italic</Typography>
-      </div>
-    </div>
-
-    <div class="space-y-2">
-      <Typography variant="overline" class="text-muted-foreground">Align</Typography>
-      <div class="grid gap-3 md:grid-cols-3">
-        <div class="rounded-lg border p-4">
-          <Typography variant="small" class="text-muted-foreground">left</Typography>
-          <Typography align="left">{pangram}</Typography>
-        </div>
-        <div class="rounded-lg border p-4">
-          <Typography variant="small" class="text-muted-foreground">center</Typography>
-          <Typography align="center">{pangram}</Typography>
-        </div>
-        <div class="rounded-lg border p-4">
-          <Typography variant="small" class="text-muted-foreground">right</Typography>
-          <Typography align="right">{pangram}</Typography>
-        </div>
-      </div>
-    </div>
-
-    <div class="space-y-2">
-      <Typography variant="overline" class="text-muted-foreground">Semantics vs Variant</Typography>
-      <Typography as="h2" variant="h1" class="mb-1">
-        Visuellement H1, balise H2
-      </Typography>
-      <Typography variant="small" class="text-muted-foreground">
-        Utile pour garder un seul H1 reel par page.
-      </Typography>
-    </div>
-
-    <div class="space-y-3">
-      <Typography variant="overline" class="text-muted-foreground">Long form (UI)</Typography>
-      <Typography>
-        Voici un paragraphe de demonstration pour verifier la lisibilite, le rythme, la
-        hauteur de ligne et les espacements. {pangram} {pangram} {pangram}
-      </Typography>
-      <ul class="list-disc space-y-1 pl-6">
-        <li><Typography>Item de liste standard.</Typography></li>
-        <li><Typography>Un autre item de liste.</Typography></li>
-        <li><Typography weight="medium">Item en medium pour contraste.</Typography></li>
-      </ul>
-    </div>
-
-    <div class="space-y-1">
-      <Typography variant="overline">CATEGORIE</Typography>
-      <Typography variant="h3">Un titre de section court</Typography>
-      <Typography variant="small" class="text-muted-foreground">
-        Petite meta ou description breve.
-      </Typography>
-    </div>
-  </div>
-</Section>
+  </Section>
 
   <!-- Alert -->
-<Section>
-  <div id="alert" class="scroll-mt-[5rem]">
-    <Divider variant="default" label="Alert" />
-  </div>
-  <h2 class="sr-only">Alert</h2>
+  <Section>
+    <div id="alert" class="scroll-mt-[5rem]">
+      <Divider variant="default" label="Alert" />
+    </div>
+    <h2 class="sr-only">Alert</h2>
     <div class="grid grid-cols-1 gap-4">
       <div>
         <h3 class="mb-2 text-lg font-bold">Variants</h3>
@@ -183,16 +190,16 @@ const pangram = "Voix ambigue d'un coeur qui au zephyr prefere les jattes de kiw
   </Section>
 
   <!-- Avatar -->
-<Section>
-  <div id="avatar" class="scroll-mt-[5rem]">
-    <Divider variant="default" label="Avatar" />
-  </div>
-  <h2 class="sr-only">Avatar</h2>
+  <Section>
+    <div id="avatar" class="scroll-mt-[5rem]">
+      <Divider variant="default" label="Avatar" />
+    </div>
+    <h2 class="sr-only">Avatar</h2>
     <div class="grid grid-cols-1 gap-4">
       <div>
         <h3 class="mb-2 text-lg font-bold">Sizes</h3>
         <div class="flex flex-wrap items-center gap-4">
-<Avatar src="img_opt/jeremie-hero" alt="Jérémie" size={40} />
+          <Avatar src="img_opt/jeremie-hero" alt="Jérémie" size={40} />
           <Avatar src="img_opt/jeremie-hero" alt="Jérémie" size={60} />
           <Avatar src="img_opt/jeremie-hero" alt="Jérémie" size={80} />
           <Avatar src="img_opt/jeremie-hero" alt="Jérémie" size={100} />
@@ -202,11 +209,11 @@ const pangram = "Voix ambigue d'un coeur qui au zephyr prefere les jattes de kiw
   </Section>
 
   <!-- Badge -->
-<Section>
-  <div id="badge" class="scroll-mt-[5rem]">
-    <Divider variant="default" label="Badge" />
-  </div>
-  <h2 class="sr-only">Badge</h2>
+  <Section>
+    <div id="badge" class="scroll-mt-[5rem]">
+      <Divider variant="default" label="Badge" />
+    </div>
+    <h2 class="sr-only">Badge</h2>
     <div class="grid grid-cols-1 gap-4">
       <div>
         <h3 class="mb-2 text-lg font-bold">Variants</h3>
@@ -220,11 +227,11 @@ const pangram = "Voix ambigue d'un coeur qui au zephyr prefere les jattes de kiw
   </Section>
 
   <!-- Button -->
-<Section>
-  <div id="button" class="scroll-mt-[5rem]">
-    <Divider variant="default" label="Button" />
-  </div>
-  <h2 class="sr-only">Button</h2>
+  <Section>
+    <div id="button" class="scroll-mt-[5rem]">
+      <Divider variant="default" label="Button" />
+    </div>
+    <h2 class="sr-only">Button</h2>
     <div class="grid grid-cols-1 gap-4">
       <div>
         <h3 class="mb-2 text-lg font-bold">Variants</h3>
@@ -243,12 +250,182 @@ const pangram = "Voix ambigue d'un coeur qui au zephyr prefere les jattes de kiw
     </div>
   </Section>
 
+  <!-- BaseCard -->
+  <Section>
+    <div id="basecard" class="scroll-mt-[5rem]">
+      <Divider variant="default" label="BaseCard" />
+    </div>
+    <h2 class="sr-only">BaseCard</h2>
+    <div class="grid grid-cols-1 gap-4">
+      <div>
+        <h3 class="mb-2 text-lg font-bold">Shadows</h3>
+        <div class="grid grid-cols-2 gap-4 md:grid-cols-3">
+          <BaseCard shadow="none" class="min-h-20">
+            <p class="text-sm">Shadow: none</p>
+          </BaseCard>
+          <BaseCard shadow="sm" class="min-h-20">
+            <p class="text-sm">Shadow: sm</p>
+          </BaseCard>
+          <BaseCard shadow="md" class="min-h-20">
+            <p class="text-sm">Shadow: md</p>
+          </BaseCard>
+          <BaseCard shadow="lg" class="min-h-20">
+            <p class="text-sm">Shadow: lg</p>
+          </BaseCard>
+          <BaseCard shadow="xl" class="min-h-20">
+            <p class="text-sm">Shadow: xl</p>
+          </BaseCard>
+          <BaseCard shadow="2xl" class="min-h-20">
+            <p class="text-sm">Shadow: 2xl</p>
+          </BaseCard>
+        </div>
+      </div>
+
+      <div>
+        <h3 class="mb-2 text-lg font-bold">Borders</h3>
+        <div class="grid grid-cols-2 gap-4 md:grid-cols-3">
+          <BaseCard border="none" shadow="sm" class="min-h-20">
+            <p class="text-sm">Border: none</p>
+          </BaseCard>
+          <BaseCard border="default" shadow="sm" class="min-h-20">
+            <p class="text-sm">Border: default</p>
+          </BaseCard>
+          <BaseCard border="primary" shadow="sm" class="min-h-20">
+            <p class="text-sm">Border: primary</p>
+          </BaseCard>
+          <BaseCard border="secondary" shadow="sm" class="min-h-20">
+            <p class="text-sm">Border: secondary</p>
+          </BaseCard>
+          <BaseCard border="accent" shadow="sm" class="min-h-20">
+            <p class="text-sm">Border: accent</p>
+          </BaseCard>
+          <BaseCard border="neutral" shadow="sm" class="min-h-20">
+            <p class="text-sm">Border: neutral</p>
+          </BaseCard>
+        </div>
+      </div>
+
+      <div>
+        <h3 class="mb-2 text-lg font-bold">Backgrounds</h3>
+        <div class="grid grid-cols-2 gap-4 md:grid-cols-3">
+          <BaseCard background="base-100" shadow="md" class="min-h-20">
+            <p class="text-sm">Background: base-100</p>
+          </BaseCard>
+          <BaseCard background="base-200" shadow="md" class="min-h-20">
+            <p class="text-sm">Background: base-200</p>
+          </BaseCard>
+          <BaseCard background="base-300" shadow="md" class="min-h-20">
+            <p class="text-sm">Background: base-300</p>
+          </BaseCard>
+          <BaseCard background="primary" shadow="md" class="min-h-20">
+            <p class="text-sm">Background: primary</p>
+          </BaseCard>
+          <BaseCard background="secondary" shadow="md" class="min-h-20">
+            <p class="text-sm">Background: secondary</p>
+          </BaseCard>
+          <BaseCard background="accent" shadow="md" class="min-h-20">
+            <p class="text-sm">Background: accent</p>
+          </BaseCard>
+        </div>
+      </div>
+
+      <div>
+        <h3 class="mb-2 text-lg font-bold">Rounding</h3>
+        <div class="grid grid-cols-2 gap-4 md:grid-cols-4">
+          <BaseCard rounding="none" shadow="md" class="min-h-20">
+            <p class="text-sm">Rounding: none</p>
+          </BaseCard>
+          <BaseCard rounding="sm" shadow="md" class="min-h-20">
+            <p class="text-sm">Rounding: sm</p>
+          </BaseCard>
+          <BaseCard rounding="md" shadow="md" class="min-h-20">
+            <p class="text-sm">Rounding: md</p>
+          </BaseCard>
+          <BaseCard rounding="lg" shadow="md" class="min-h-20">
+            <p class="text-sm">Rounding: lg</p>
+          </BaseCard>
+          <BaseCard rounding="xl" shadow="md" class="min-h-20">
+            <p class="text-sm">Rounding: xl</p>
+          </BaseCard>
+          <BaseCard rounding="2xl" shadow="md" class="min-h-20">
+            <p class="text-sm">Rounding: 2xl</p>
+          </BaseCard>
+          <BaseCard rounding="full" shadow="md" class="mx-auto min-h-20 w-20">
+            <p class="text-center text-xs">Full</p>
+          </BaseCard>
+        </div>
+      </div>
+
+      <div>
+        <h3 class="mb-2 text-lg font-bold">Effects</h3>
+        <div class="grid grid-cols-1 gap-4 md:grid-cols-3">
+          <BaseCard shadow="md" class="min-h-20">
+            <p class="text-sm font-medium">Standard Card</p>
+            <p class="mt-1 text-xs opacity-70">Default appearance</p>
+          </BaseCard>
+          <BaseCard hover shadow="md" class="min-h-20">
+            <p class="text-sm font-medium">Hover Effect</p>
+            <p class="mt-1 text-xs opacity-70">Hover to see animation</p>
+          </BaseCard>
+          <BaseCard glass shadow="md" class="min-h-20">
+            <p class="text-sm font-medium">Glass Effect</p>
+            <p class="mt-1 text-xs opacity-70">Glassmorphism style</p>
+          </BaseCard>
+        </div>
+      </div>
+
+      <div>
+        <h3 class="mb-2 text-lg font-bold">Padding</h3>
+        <div class="grid grid-cols-2 gap-4 md:grid-cols-3">
+          <BaseCard padding="none" border="default" class="min-h-20">
+            <p class="text-sm">Padding: none</p>
+          </BaseCard>
+          <BaseCard padding="sm" border="default" class="min-h-20">
+            <p class="text-sm">Padding: sm</p>
+          </BaseCard>
+          <BaseCard padding="md" border="default" class="min-h-20">
+            <p class="text-sm">Padding: md</p>
+          </BaseCard>
+          <BaseCard padding="lg" border="default" class="min-h-20">
+            <p class="text-sm">Padding: lg</p>
+          </BaseCard>
+          <BaseCard padding="xl" border="default" class="min-h-20">
+            <p class="text-sm">Padding: xl</p>
+          </BaseCard>
+        </div>
+      </div>
+
+      <div>
+        <h3 class="mb-2 text-lg font-bold">Usage Examples</h3>
+        <div class="grid grid-cols-1 gap-4 md:grid-cols-2">
+          <BaseCard shadow="lg" hover background="base-100" class="min-h-32">
+            <div class="flex items-center gap-3">
+              <Avatar src="img_opt/jeremie-hero" alt="User" size={40} />
+              <div>
+                <p class="font-medium">Profile Card</p>
+                <p class="text-sm opacity-70">Using BaseCard as foundation</p>
+              </div>
+            </div>
+          </BaseCard>
+
+          <BaseCard shadow="md" border="primary" background="base-100" hover class="min-h-32">
+            <div class="text-center">
+              <Icon name="heroicons:star" class="text-primary mx-auto mb-2 size-8" />
+              <p class="font-medium">Feature Card</p>
+              <p class="text-sm opacity-70">With border and hover</p>
+            </div>
+          </BaseCard>
+        </div>
+      </div>
+    </div>
+  </Section>
+
   <!-- Checkbox -->
-<Section>
-  <div id="checkbox" class="scroll-mt-[5rem]">
-    <Divider variant="default" label="Checkbox" />
-  </div>
-  <h2 class="sr-only">Checkbox</h2>
+  <Section>
+    <div id="checkbox" class="scroll-mt-[5rem]">
+      <Divider variant="default" label="Checkbox" />
+    </div>
+    <h2 class="sr-only">Checkbox</h2>
     <div class="grid grid-cols-1 gap-4">
       <div>
         <h3 class="mb-2 text-lg font-bold">Sizes</h3>
@@ -273,11 +450,11 @@ const pangram = "Voix ambigue d'un coeur qui au zephyr prefere les jattes de kiw
   </Section>
 
   <!-- Divider -->
-<Section>
-  <div id="divider" class="scroll-mt-[5rem]">
-    <Divider variant="default" label="Divider" />
-  </div>
-  <h2 class="sr-only">Divider</h2>
+  <Section>
+    <div id="divider" class="scroll-mt-[5rem]">
+      <Divider variant="default" label="Divider" />
+    </div>
+    <h2 class="sr-only">Divider</h2>
     <div class="grid grid-cols-1 gap-4">
       <div>
         <h3 class="mb-2 text-lg font-bold">Variants</h3>
@@ -305,11 +482,11 @@ const pangram = "Voix ambigue d'un coeur qui au zephyr prefere les jattes de kiw
   </Section>
 
   <!-- DotLottiePlayer -->
-<Section>
-  <div id="dotlottieplayer" class="scroll-mt-[5rem]">
-    <Divider variant="default" label="DotLottiePlayer" />
-  </div>
-  <h2 class="sr-only">DotLottiePlayer</h2>
+  <Section>
+    <div id="dotlottieplayer" class="scroll-mt-[5rem]">
+      <Divider variant="default" label="DotLottiePlayer" />
+    </div>
+    <h2 class="sr-only">DotLottiePlayer</h2>
     <div class="grid grid-cols-1 gap-4">
       <div>
         <h3 class="mb-2 text-lg font-bold">Animation .lottie (DotLottie)</h3>
@@ -324,7 +501,7 @@ const pangram = "Voix ambigue d'un coeur qui au zephyr prefere les jattes de kiw
             class="bg-base-200 rounded-lg"
           />
         </div>
-        <p class="text-sm text-base-content/70 mt-2">
+        <p class="text-base-content/70 mt-2 text-sm">
           Test avec le fichier .lottie original utilisant @lottiefiles/dotlottie-web
         </p>
       </div>
@@ -332,18 +509,22 @@ const pangram = "Voix ambigue d'un coeur qui au zephyr prefere les jattes de kiw
   </Section>
 
   <!-- FluidCursor -->
-<Section>
-  <div id="fluidcursor" class="scroll-mt-[5rem]">
-    <Divider variant="default" label="FluidCursor" />
-  </div>
-  <h2 class="sr-only">FluidCursor</h2>
+  <Section>
+    <div id="fluidcursor" class="scroll-mt-[5rem]">
+      <Divider variant="default" label="FluidCursor" />
+    </div>
+    <h2 class="sr-only">FluidCursor</h2>
     <div class="grid grid-cols-1 gap-4">
       <div>
         <h3 class="mb-2 text-lg font-bold">Fluid Cursor</h3>
-        <p class="mb-4 text-sm text-base-content/70">
-          Effet de curseur fluide WebGL limité à cette section. Bougez votre souris dans la zone ci-dessous.
+        <p class="text-base-content/70 mb-4 text-sm">
+          Effet de curseur fluide WebGL limité à cette section. Bougez votre souris dans la zone
+          ci-dessous.
         </p>
-        <div id="fluid-cursor-demo" class="relative w-full h-80 rounded-lg overflow-hidden bg-base-200">
+        <div
+          id="fluid-cursor-demo"
+          class="bg-base-200 relative h-80 w-full overflow-hidden rounded-lg"
+        >
           <!-- Place the cursor component inside the container in scoped mode -->
           <FluidCursor scoped />
         </div>
@@ -352,11 +533,11 @@ const pangram = "Voix ambigue d'un coeur qui au zephyr prefere les jattes de kiw
   </Section>
 
   <!-- Halo -->
-<Section>
-  <div id="halo" class="scroll-mt-[5rem]">
-    <Divider variant="default" label="Halo" />
-  </div>
-  <h2 class="sr-only">Halo</h2>
+  <Section>
+    <div id="halo" class="scroll-mt-[5rem]">
+      <Divider variant="default" label="Halo" />
+    </div>
+    <h2 class="sr-only">Halo</h2>
     <div class="grid grid-cols-1 gap-4">
       <div>
         <h3 class="mb-2 text-lg font-bold">Halo Effect</h3>
@@ -367,445 +548,486 @@ const pangram = "Voix ambigue d'un coeur qui au zephyr prefere les jattes de kiw
     </div>
   </Section>
 
-  
-<!-- Icon -->
-<Section>
-  <div id="icon" class="scroll-mt-[5rem]">
-    <Divider variant="default" label="Icon" />
-  </div>
-  <h2 class="sr-only">Icon</h2>
-  <h3 class="mb-2 text-lg font-bold">Système d'icônes (via registre)</h3>
+  <!-- Icon -->
+  <Section>
+    <div id="icon" class="scroll-mt-[5rem]">
+      <Divider variant="default" label="Icon" />
+    </div>
+    <h2 class="sr-only">Icon</h2>
+    <h3 class="mb-2 text-lg font-bold">Système d'icônes (via registre)</h3>
 
-  <!-- Custom Icons -->
-  <div class="mb-8">
-    <h4 class="mb-4 text-base font-semibold">Custom (icônes locales)</h4>
-    <div class="flex flex-wrap gap-4 mb-4">
-      <Icon name="custom:cat" class="size-8 text-primary" title="Custom · cat" />
-      <Icon name="custom:chevron-left" class="size-8 text-secondary" title="Custom · chevron-left" />
-      <Icon name="custom:chevron-right" class="size-8 text-accent" title="Custom · chevron-right" />
-      <Icon name="custom:eye" class="size-8 text-info" title="Custom · eye" />
-      <Icon name="custom:music" class="size-8 text-success" title="Custom · music" />
-      <Icon name="custom:moon" class="size-8 text-neutral" title="Custom · moon" />
-      <Icon name="custom:sun" class="size-8 text-warning" title="Custom · sun" />
+    <!-- Custom Icons -->
+    <div class="mb-8">
+      <h4 class="mb-4 text-base font-semibold">Custom (icônes locales)</h4>
+      <div class="mb-4 flex flex-wrap gap-4">
+        <Icon name="custom:cat" class="text-primary size-8" title="Custom · cat" />
+        <Icon
+          name="custom:chevron-left"
+          class="text-secondary size-8"
+          title="Custom · chevron-left"
+        />
+        <Icon
+          name="custom:chevron-right"
+          class="text-accent size-8"
+          title="Custom · chevron-right"
+        />
+        <Icon name="custom:eye" class="text-info size-8" title="Custom · eye" />
+        <Icon name="custom:music" class="text-success size-8" title="Custom · music" />
+        <Icon name="custom:moon" class="text-neutral size-8" title="Custom · moon" />
+        <Icon name="custom:sun" class="text-warning size-8" title="Custom · sun" />
+      </div>
+
+      <!-- Tailles pour Custom -->
+      <h5 class="mb-2 text-sm font-medium">Tailles</h5>
+      <div class="flex flex-wrap gap-3">
+        {
+          itemSizes.map(size => (
+            <div class="flex flex-col items-center gap-1">
+              <div class="flex h-12 items-end">
+                <Icon
+                  name="custom:cat"
+                  class={`text-primary ${size === 'xs' ? 'size-3' : size === 'sm' ? 'size-4' : size === 'md' ? 'size-6' : size === 'lg' ? 'size-8' : 'size-12'}`}
+                  title={`Custom · cat · ${size}`}
+                />
+              </div>
+              <span class="text-base-content/70 text-xs">{size}</span>
+            </div>
+          ))
+        }
+      </div>
+
+      <!-- Couleurs pour Custom -->
+      <h5 class="mt-4 mb-2 text-sm font-medium">Couleurs</h5>
+      <div class="flex flex-wrap gap-3">
+        {
+          itemColors.map(color => (
+            <div class="flex flex-col items-center gap-1">
+              <Icon
+                name="custom:cat"
+                class={`size-6 text-${color}`}
+                title={`Custom · cat · ${color}`}
+              />
+              <span class="text-base-content/70 text-xs">{color}</span>
+            </div>
+          ))
+        }
+      </div>
+
+      <!-- Versions brutes (?raw) pour MDI -->
+      <h5 class="mt-4 mb-2 text-sm font-medium">Brut (?raw)</h5>
+      <div class="flex flex-wrap items-center gap-4">
+        <span class="inline-flex items-center" title="MDI · alarm-off (raw 4em)">
+          <span set:html={RawMdiAlarmOff} />
+        </span>
+        <span class="inline-flex items-center" title="MDI · alarm-off (raw 1em)">
+          <span set:html={RawMdiAlarmOff2} />
+        </span>
+      </div>
     </div>
 
-    <!-- Tailles pour Custom -->
-    <h5 class="mb-2 text-sm font-medium">Tailles</h5>
-    <div class="flex flex-wrap gap-3">
-      {itemSizes.map(size => (
-        <div class="flex flex-col items-center gap-1">
-          <div class="flex items-end h-12">
-            <Icon
-              name="custom:cat"
-              class={`text-primary ${size === 'xs' ? 'size-3' : size === 'sm' ? 'size-4' : size === 'md' ? 'size-6' : size === 'lg' ? 'size-8' : 'size-12'}`}
-              title={`Custom · cat · ${size}`}
-            />
-          </div>
-          <span class="text-xs text-base-content/70">{size}</span>
-        </div>
-      ))}
+    <!-- MDI Icons (exemple depuis imports) -->
+    <div class="mb-8">
+      <h4 class="mb-4 text-base font-semibold">MDI (Material Design Icons)</h4>
+      <div class="mb-4 flex flex-wrap gap-4">
+        <MdiStore24Hour class="text-primary size-8" title="MDI · store-24-hour" />
+        <MdiAlarmOff class="text-error size-8" title="MDI · alarm-off" />
+        <IconParkAbnormal class="text-warning size-8" title="IconPark · abnormal" />
+      </div>
+
+      <!-- Tailles pour MDI -->
+      <h5 class="mb-2 text-sm font-medium">Tailles</h5>
+      <div class="flex flex-wrap gap-3">
+        {
+          itemSizes.map(size => (
+            <div class="flex flex-col items-center gap-1">
+              <div class="flex h-12 items-end">
+                <MdiAlarmOff
+                  class={`text-error ${size === 'xs' ? 'size-3' : size === 'sm' ? 'size-4' : size === 'md' ? 'size-6' : size === 'lg' ? 'size-8' : 'size-12'}`}
+                  title={`MDI · alarm-off · ${size}`}
+                />
+              </div>
+              <span class="text-base-content/70 text-xs">{size}</span>
+            </div>
+          ))
+        }
+      </div>
+
+      <!-- Couleurs pour MDI -->
+      <h5 class="mt-4 mb-2 text-sm font-medium">Couleurs</h5>
+      <div class="flex flex-wrap gap-3">
+        {
+          itemColors.map(color => (
+            <div class="flex flex-col items-center gap-1">
+              <MdiAlarmOff class={`size-6 text-${color}`} title={`MDI · alarm-off · ${color}`} />
+              <span class="text-base-content/70 text-xs">{color}</span>
+            </div>
+          ))
+        }
+      </div>
     </div>
 
-    <!-- Couleurs pour Custom -->
-    <h5 class="mb-2 text-sm font-medium mt-4">Couleurs</h5>
-    <div class="flex flex-wrap gap-3">
-      {itemColors.map(color => (
-        <div class="flex flex-col items-center gap-1">
-          <Icon name="custom:cat" class={`size-6 text-${color}`} title={`Custom · cat · ${color}`} />
-          <span class="text-xs text-base-content/70">{color}</span>
-        </div>
-      ))}
+    <!-- Lucide Icons -->
+    <div class="mb-8">
+      <h4 class="mb-4 text-base font-semibold">Lucide</h4>
+      <div class="mb-4 flex flex-wrap gap-4">
+        <Icon name="lucide:activity" class="text-primary size-8" title="Lucide · activity" />
+        <Icon name="lucide:heart" class="text-error size-8" title="Lucide · heart" />
+        <Icon name="lucide:star" class="text-warning size-8" title="Lucide · star" />
+        <Icon name="lucide:home" class="text-info size-8" title="Lucide · home" />
+        <Icon name="lucide:search" class="text-secondary size-8" title="Lucide · search" />
+      </div>
+
+      <!-- Tailles pour Lucide -->
+      <h5 class="mb-2 text-sm font-medium">Tailles</h5>
+      <div class="flex flex-wrap gap-3">
+        {
+          itemSizes.map(size => (
+            <div class="flex flex-col items-center gap-1">
+              <div class="flex h-12 items-end">
+                <Icon
+                  name="lucide:home"
+                  class={`text-primary ${size === 'xs' ? 'size-3' : size === 'sm' ? 'size-4' : size === 'md' ? 'size-6' : size === 'lg' ? 'size-8' : 'size-12'}`}
+                  title={`Lucide · home · ${size}`}
+                />
+              </div>
+              <span class="text-base-content/70 text-xs">{size}</span>
+            </div>
+          ))
+        }
+      </div>
+
+      <!-- Couleurs pour Lucide -->
+      <h5 class="mt-4 mb-2 text-sm font-medium">Couleurs</h5>
+      <div class="flex flex-wrap gap-3">
+        {
+          itemColors.map(color => (
+            <div class="flex flex-col items-center gap-1">
+              <Icon
+                name="lucide:home"
+                class={`size-6 text-${color}`}
+                title={`Lucide · home · ${color}`}
+              />
+              <span class="text-base-content/70 text-xs">{color}</span>
+            </div>
+          ))
+        }
+      </div>
     </div>
 
-    <!-- Versions brutes (?raw) pour MDI -->
-    <h5 class="mb-2 text-sm font-medium mt-4">Brut (?raw)</h5>
-    <div class="flex flex-wrap items-center gap-4">
-      <span class="inline-flex items-center" title="MDI · alarm-off (raw 4em)">
-        <span set:html={RawMdiAlarmOff} />
-      </span>
-      <span class="inline-flex items-center" title="MDI · alarm-off (raw 1em)">
-        <span set:html={RawMdiAlarmOff2} />
-      </span>
+    <!-- Heroicons Icons -->
+    <div class="mb-8">
+      <h4 class="mb-4 text-base font-semibold">Heroicons (outline)</h4>
+      <div class="mb-4 flex flex-wrap gap-4">
+        <Icon name="heroicons:home" class="text-primary size-8" title="Heroicons · home" />
+        <Icon name="heroicons:user" class="text-secondary size-8" title="Heroicons · user" />
+        <Icon name="heroicons:bell" class="text-warning size-8" title="Heroicons · bell" />
+        <Icon
+          name="heroicons:magnifying-glass"
+          class="text-info size-8"
+          title="Heroicons · search"
+        />
+        <Icon
+          name="heroicons:cog-6-tooth"
+          class="text-success size-8"
+          title="Heroicons · settings"
+        />
+      </div>
     </div>
-  </div>
-
-  <!-- MDI Icons (exemple depuis imports) -->
-  <div class="mb-8">
-    <h4 class="mb-4 text-base font-semibold">MDI (Material Design Icons)</h4>
-    <div class="flex flex-wrap gap-4 mb-4">
-      <MdiStore24Hour class="size-8 text-primary" title="MDI · store-24-hour" />
-      <MdiAlarmOff class="size-8 text-error" title="MDI · alarm-off" />
-      <IconParkAbnormal class="size-8 text-warning" title="IconPark · abnormal" />
-    </div>
-
-    <!-- Tailles pour MDI -->
-    <h5 class="mb-2 text-sm font-medium">Tailles</h5>
-    <div class="flex flex-wrap gap-3">
-      {itemSizes.map(size => (
-        <div class="flex flex-col items-center gap-1">
-          <div class="flex items-end h-12">
-            <MdiAlarmOff
-              class={`text-error ${size === 'xs' ? 'size-3' : size === 'sm' ? 'size-4' : size === 'md' ? 'size-6' : size === 'lg' ? 'size-8' : 'size-12'}`}
-              title={`MDI · alarm-off · ${size}`}
-            />
-          </div>
-          <span class="text-xs text-base-content/70">{size}</span>
-        </div>
-      ))}
-    </div>
-
-    <!-- Couleurs pour MDI -->
-    <h5 class="mb-2 text-sm font-medium mt-4">Couleurs</h5>
-    <div class="flex flex-wrap gap-3">
-      {itemColors.map(color => (
-        <div class="flex flex-col items-center gap-1">
-          <MdiAlarmOff class={`size-6 text-${color}`} title={`MDI · alarm-off · ${color}`} />
-          <span class="text-xs text-base-content/70">{color}</span>
-        </div>
-      ))}
-    </div>
-  </div>
-
-  <!-- Lucide Icons -->
-  <div class="mb-8">
-    <h4 class="mb-4 text-base font-semibold">Lucide</h4>
-    <div class="flex flex-wrap gap-4 mb-4">
-      <Icon name="lucide:activity" class="size-8 text-primary" title="Lucide · activity" />
-      <Icon name="lucide:heart" class="size-8 text-error" title="Lucide · heart" />
-      <Icon name="lucide:star" class="size-8 text-warning" title="Lucide · star" />
-      <Icon name="lucide:home" class="size-8 text-info" title="Lucide · home" />
-      <Icon name="lucide:search" class="size-8 text-secondary" title="Lucide · search" />
-    </div>
-
-    <!-- Tailles pour Lucide -->
-    <h5 class="mb-2 text-sm font-medium">Tailles</h5>
-    <div class="flex flex-wrap gap-3">
-      {itemSizes.map(size => (
-        <div class="flex flex-col items-center gap-1">
-          <div class="flex items-end h-12">
-            <Icon
-              name="lucide:home"
-              class={`text-primary ${size === 'xs' ? 'size-3' : size === 'sm' ? 'size-4' : size === 'md' ? 'size-6' : size === 'lg' ? 'size-8' : 'size-12'}`}
-              title={`Lucide · home · ${size}`}
-            />
-          </div>
-          <span class="text-xs text-base-content/70">{size}</span>
-        </div>
-      ))}
-    </div>
-
-    <!-- Couleurs pour Lucide -->
-    <h5 class="mb-2 text-sm font-medium mt-4">Couleurs</h5>
-    <div class="flex flex-wrap gap-3">
-      {itemColors.map(color => (
-        <div class="flex flex-col items-center gap-1">
-          <Icon name="lucide:home" class={`size-6 text-${color}`} title={`Lucide · home · ${color}`} />
-          <span class="text-xs text-base-content/70">{color}</span>
-        </div>
-      ))}
-    </div>
-  </div>
-
-  <!-- Heroicons Icons -->
-<div class="mb-8">
-  <h4 class="mb-4 text-base font-semibold">Heroicons (outline)</h4>
-  <div class="flex flex-wrap gap-4 mb-4">
-    <Icon name="heroicons:home" class="size-8 text-primary" title="Heroicons · home" />
-    <Icon name="heroicons:user" class="size-8 text-secondary" title="Heroicons · user" />
-    <Icon name="heroicons:bell" class="size-8 text-warning" title="Heroicons · bell" />
-    <Icon name="heroicons:magnifying-glass" class="size-8 text-info" title="Heroicons · search" />
-    <Icon name="heroicons:cog-6-tooth" class="size-8 text-success" title="Heroicons · settings" />
-  </div>
-</div>
 
     <!-- Tailles pour Heroicons -->
     <h5 class="mb-2 text-sm font-medium">Tailles</h5>
     <div class="flex flex-wrap gap-3">
-      {itemSizes.map(size => (
-        <div class="flex flex-col items-center gap-1">
-          <div class="flex items-end h-12">
-            <Icon
-              name="heroicons:home"
-              class={`text-primary ${size === 'xs' ? 'size-3' : size === 'sm' ? 'size-4' : size === 'md' ? 'size-6' : size === 'lg' ? 'size-8' : 'size-12'}`}
-              title={`Heroicons · home · ${size}`}
-            />
+      {
+        itemSizes.map(size => (
+          <div class="flex flex-col items-center gap-1">
+            <div class="flex h-12 items-end">
+              <Icon
+                name="heroicons:home"
+                class={`text-primary ${size === 'xs' ? 'size-3' : size === 'sm' ? 'size-4' : size === 'md' ? 'size-6' : size === 'lg' ? 'size-8' : 'size-12'}`}
+                title={`Heroicons · home · ${size}`}
+              />
+            </div>
+            <span class="text-base-content/70 text-xs">{size}</span>
           </div>
-          <span class="text-xs text-base-content/70">{size}</span>
-        </div>
-      ))}
+        ))
+      }
     </div>
 
     <!-- Couleurs pour Heroicons -->
-    <h5 class="mb-2 text-sm font-medium mt-4">Couleurs</h5>
+    <h5 class="mt-4 mb-2 text-sm font-medium">Couleurs</h5>
     <div class="flex flex-wrap gap-3">
-      {itemColors.map(color => (
-        <div class="flex flex-col items-center gap-1">
-          <Icon name="heroicons:home" class={`size-6 text-${color}`} title={`Heroicons · home · ${color}`} />
-          <span class="text-xs text-base-content/70">{color}</span>
-        </div>
-      ))}
+      {
+        itemColors.map(color => (
+          <div class="flex flex-col items-center gap-1">
+            <Icon
+              name="heroicons:home"
+              class={`size-6 text-${color}`}
+              title={`Heroicons · home · ${color}`}
+            />
+            <span class="text-base-content/70 text-xs">{color}</span>
+          </div>
+        ))
+      }
     </div>
-  </div>
+  </Section>
 
-  <div class="mt-3 p-3 bg-base-200 rounded-lg">
-    <p class="text-sm mb-2">Syntaxes :</p>
-    <pre class="text-xs overflow-x-auto">
+  <div class="bg-base-200 mt-3 rounded-lg p-3">
+    <p class="mb-2 text-sm">Syntaxes :</p>
+    <pre
+      class="overflow-x-auto text-xs">
 &lt;Icon name="custom:nom-fichier" /&gt;
 &lt;Icon name="lucide:icon-name" /&gt;
 &lt;Icon name="heroicons-outline:icon-name" /&gt;  (Heroicons outline)
 &lt;Icon name="heroicons:icon-name" /&gt;       (Alias → outline)
 &lt;MdiAlarmOff /&gt;  (imports directs pour icônes spécifiques)
     </pre>
-    <p class="text-xs mt-2">
+    <p class="mt-2 text-xs">
       <code>size</code> accepte un nombre (px) ou une valeur CSS (ex&nbsp;: <code>"1.5rem"</code>).
-      Couleurs via classes utilitaires (ex&nbsp;: <code>text-primary</code>).
-      Si une icône ne s'affiche pas, vérifiez le nom dans le registre ou les fichiers SVG.
+      Couleurs via classes utilitaires (ex&nbsp;: <code>text-primary</code>). Si une icône ne
+      s'affiche pas, vérifiez le nom dans le registre ou les fichiers SVG.
     </p>
   </div>
-</Section>
+</StyleGuideLayout>
 
-
-
-  <!-- ImageMod -->
+<!-- ImageMod -->
 <Section>
   <div id="imagemod" class="scroll-mt-[5rem]">
     <Divider variant="default" label="ImageMod" />
   </div>
   <h2 class="sr-only">ImageMod</h2>
-    <div class="grid grid-cols-1 gap-4">
-      <div>
-        <h3 class="mb-2 text-lg font-bold">Image avec optimisations</h3>
-        <div class="flex flex-wrap items-center gap-4">
-<ImageMod
-            src="img_opt/jeremie-hero"
-            alt="Jérémie"
-            width={400}
-            height={400}
-          />
-        </div>
+  <div class="grid grid-cols-1 gap-4">
+    <div>
+      <h3 class="mb-2 text-lg font-bold">Image avec optimisations</h3>
+      <div class="flex flex-wrap items-center gap-4">
+        <ImageMod src="img_opt/jeremie-hero" alt="Jérémie" width={400} height={400} />
       </div>
     </div>
-  </Section>
+  </div>
+</Section>
 
-  <!-- Loader -->
+<!-- Loader -->
 <Section>
   <div id="loader" class="scroll-mt-[5rem]">
     <Divider variant="default" label="Loader" />
   </div>
   <h2 class="sr-only">Loader</h2>
-    <div class="grid grid-cols-1 gap-4">
-      <div>
-        <h3 class="mb-2 text-lg font-bold">Variants</h3>
-        <div class="flex flex-wrap items-center gap-4">
-          {loadingVariants.map(variant => <Loader variant={variant} />)}
-        </div>
-      </div>
-      <div>
-        <h3 class="mb-2 text-lg font-bold">Sizes</h3>
-        <div class="flex flex-wrap items-center gap-4">
-          {itemSizes.map(size => <Loader size={size} />)}
-        </div>
-      </div>
-      <div>
-        <h3 class="mb-2 text-lg font-bold">Colors</h3>
-        <div class="flex flex-wrap items-center gap-4">
-          {itemColors.map(color => <Loader color={color} />)}
-        </div>
+  <div class="grid grid-cols-1 gap-4">
+    <div>
+      <h3 class="mb-2 text-lg font-bold">Variants</h3>
+      <div class="flex flex-wrap items-center gap-4">
+        {loadingVariants.map(variant => <Loader variant={variant} />)}
       </div>
     </div>
-  </Section>
+    <div>
+      <h3 class="mb-2 text-lg font-bold">Sizes</h3>
+      <div class="flex flex-wrap items-center gap-4">
+        {itemSizes.map(size => <Loader size={size} />)}
+      </div>
+    </div>
+    <div>
+      <h3 class="mb-2 text-lg font-bold">Colors</h3>
+      <div class="flex flex-wrap items-center gap-4">
+        {itemColors.map(color => <Loader color={color} />)}
+      </div>
+    </div>
+  </div>
+</Section>
 
-  <!-- LottiePlayer -->
+<!-- LottiePlayer -->
 <Section>
   <div id="lottieplayer" class="scroll-mt-[5rem]">
     <Divider variant="default" label="LottiePlayer" />
   </div>
   <h2 class="sr-only">LottiePlayer</h2>
-    <div class="grid grid-cols-1 gap-4">
-      <div>
-        <h3 class="mb-2 text-lg font-bold">Animation Test Simple (JSON)</h3>
-        <div class="flex flex-wrap items-center gap-4">
-          <LottiePlayer
-            src="/animations/test-simple.json"
-            width={150}
-            height={150}
-            loop={true}
-            autoplay={true}
-            controls={false}
-            class="bg-base-200 rounded-lg"
-          />
-        </div>
-      </div>
-      <div>
-        <h3 class="mb-2 text-lg font-bold">Animation Watermelon Loader (JSON)</h3>
-        <div class="flex flex-wrap items-center gap-4">
-          <LottiePlayer
-            src="/animations/watermelon-simple.json"
-            width={150}
-            height={150}
-            loop={true}
-            autoplay={true}
-            controls={false}
-            class="bg-base-200 rounded-lg"
-          />
-        </div>
-      </div>
-      <div>
-        <h3 class="mb-2 text-lg font-bold">Avec contrôles</h3>
-        <div class="flex flex-wrap items-center gap-4">
-          <LottiePlayer
-            src="/animations/watermelon-simple.json"
-            width={200}
-            height={200}
-            loop={true}
-            autoplay={false}
-            controls={true}
-            speed={0.8}
-            class="bg-base-200 rounded-lg"
-          />
-        </div>
-      </div>
-      <div>
-        <h3 class="mb-2 text-lg font-bold">Différentes tailles</h3>
-        <div class="flex flex-wrap items-center gap-4">
-          <LottiePlayer
-            src="/animations/watermelon-simple.json"
-            width={100}
-            height={100}
-            loop={true}
-            autoplay={true}
-            speed={1.5}
-            class="bg-base-200 rounded-lg"
-          />
-          <LottiePlayer
-            src="/animations/watermelon-simple.json"
-            width={150}
-            height={150}
-            loop={true}
-            autoplay={true}
-            speed={1}
-            class="bg-base-200 rounded-lg"
-          />
-          <LottiePlayer
-            src="/animations/watermelon-simple.json"
-            width={250}
-            height={250}
-            loop={true}
-            autoplay={true}
-            speed={0.5}
-            class="bg-base-200 rounded-lg"
-          />
-        </div>
+  <div class="grid grid-cols-1 gap-4">
+    <div>
+      <h3 class="mb-2 text-lg font-bold">Animation Test Simple (JSON)</h3>
+      <div class="flex flex-wrap items-center gap-4">
+        <LottiePlayer
+          src="/animations/test-simple.json"
+          width={150}
+          height={150}
+          loop={true}
+          autoplay={true}
+          controls={false}
+          class="bg-base-200 rounded-lg"
+        />
       </div>
     </div>
-  </Section>
+    <div>
+      <h3 class="mb-2 text-lg font-bold">Animation Watermelon Loader (JSON)</h3>
+      <div class="flex flex-wrap items-center gap-4">
+        <LottiePlayer
+          src="/animations/watermelon-simple.json"
+          width={150}
+          height={150}
+          loop={true}
+          autoplay={true}
+          controls={false}
+          class="bg-base-200 rounded-lg"
+        />
+      </div>
+    </div>
+    <div>
+      <h3 class="mb-2 text-lg font-bold">Avec contrôles</h3>
+      <div class="flex flex-wrap items-center gap-4">
+        <LottiePlayer
+          src="/animations/watermelon-simple.json"
+          width={200}
+          height={200}
+          loop={true}
+          autoplay={false}
+          controls={true}
+          speed={0.8}
+          class="bg-base-200 rounded-lg"
+        />
+      </div>
+    </div>
+    <div>
+      <h3 class="mb-2 text-lg font-bold">Différentes tailles</h3>
+      <div class="flex flex-wrap items-center gap-4">
+        <LottiePlayer
+          src="/animations/watermelon-simple.json"
+          width={100}
+          height={100}
+          loop={true}
+          autoplay={true}
+          speed={1.5}
+          class="bg-base-200 rounded-lg"
+        />
+        <LottiePlayer
+          src="/animations/watermelon-simple.json"
+          width={150}
+          height={150}
+          loop={true}
+          autoplay={true}
+          speed={1}
+          class="bg-base-200 rounded-lg"
+        />
+        <LottiePlayer
+          src="/animations/watermelon-simple.json"
+          width={250}
+          height={250}
+          loop={true}
+          autoplay={true}
+          speed={0.5}
+          class="bg-base-200 rounded-lg"
+        />
+      </div>
+    </div>
+  </div>
+</Section>
 
-  <!-- Notice -->
+<!-- Notice -->
 <Section>
   <div id="notice" class="scroll-mt-[5rem]">
     <Divider variant="default" label="Notice" />
   </div>
   <h2 class="sr-only">Notice</h2>
-    <div class="grid grid-cols-1 gap-4">
-      <div>
-        <h3 class="mb-2 text-lg font-bold">Types</h3>
-        <div class="flex flex-col gap-4">
-          <Notice type="tip">This is a tip notice</Notice>
-          <Notice type="info">This is an info notice</Notice>
-          <Notice type="warning">This is a warning notice</Notice>
-          <Notice type="danger">This is a danger notice</Notice>
-        </div>
+  <div class="grid grid-cols-1 gap-4">
+    <div>
+      <h3 class="mb-2 text-lg font-bold">Types</h3>
+      <div class="flex flex-col gap-4">
+        <Notice type="tip">This is a tip notice</Notice>
+        <Notice type="info">This is an info notice</Notice>
+        <Notice type="warning">This is a warning notice</Notice>
+        <Notice type="danger">This is a danger notice</Notice>
       </div>
     </div>
-  </Section>
+  </div>
+</Section>
 
-  <!-- PaginationItem -->
+<!-- PaginationItem -->
 <Section>
   <div id="paginationitem" class="scroll-mt-[5rem]">
     <Divider variant="default" label="PaginationItem" />
   </div>
   <h2 class="sr-only">PaginationItem</h2>
-    <div class="grid grid-cols-1 gap-4">
-      <div>
-        <h3 class="mb-2 text-lg font-bold">States</h3>
-        <div class="flex flex-wrap items-center gap-4">
-          <PaginationItem label="1" page={1} href="#" />
-          <PaginationItem label="2" page={2} current />
-          <PaginationItem label="3" page={3} href="#" />
-          <PaginationItem label="..." disabled />
-        </div>
+  <div class="grid grid-cols-1 gap-4">
+    <div>
+      <h3 class="mb-2 text-lg font-bold">States</h3>
+      <div class="flex flex-wrap items-center gap-4">
+        <PaginationItem label="1" page={1} href="#" />
+        <PaginationItem label="2" page={2} current />
+        <PaginationItem label="3" page={3} href="#" />
+        <PaginationItem label="..." disabled />
       </div>
     </div>
-  </Section>
+  </div>
+</Section>
 
-  <!-- Video -->
+<!-- Video -->
 <Section>
   <div id="video" class="scroll-mt-[5rem]">
     <Divider variant="default" label="Video" />
   </div>
   <h2 class="sr-only">Video</h2>
-    <div class="grid grid-cols-1 gap-4">
-      <div>
-        <h3 class="mb-2 text-lg font-bold">Video Player</h3>
-        <div class="flex flex-wrap items-center gap-4">
-          <div class="w-3/4 mx-auto">
-            <Video title="Sample Video" width="100%" height="auto" src="https://www.w3schools.com/html/mov_bbb.mp4" />
-          </div>
+  <div class="grid grid-cols-1 gap-4">
+    <div>
+      <h3 class="mb-2 text-lg font-bold">Video Player</h3>
+      <div class="flex flex-wrap items-center gap-4">
+        <div class="mx-auto w-3/4">
+          <Video
+            title="Sample Video"
+            width="100%"
+            height="auto"
+            src="https://www.w3schools.com/html/mov_bbb.mp4"
+          />
         </div>
       </div>
     </div>
-  </Section>
+  </div>
+</Section>
 
-  <!-- Youtube -->
+<!-- Youtube -->
 <Section>
   <div id="youtube" class="scroll-mt-[5rem]">
     <Divider variant="default" label="Youtube" />
   </div>
   <h2 class="sr-only">Youtube</h2>
-    <div class="grid grid-cols-1 gap-4">
-      <div>
-        <h3 class="mb-2 text-lg font-bold">Youtube Player</h3>
-        <div class="flex flex-wrap items-center gap-4">
-          <Youtube id="dQw4w9WgXcQ" title="Sample YouTube Video" />
-        </div>
+  <div class="grid grid-cols-1 gap-4">
+    <div>
+      <h3 class="mb-2 text-lg font-bold">Youtube Player</h3>
+      <div class="flex flex-wrap items-center gap-4">
+        <Youtube id="dQw4w9WgXcQ" title="Sample YouTube Video" />
       </div>
     </div>
-  </Section>
+  </div>
+</Section>
 
-  <!-- Kbd -->
-  <Section>
-    <div id="kbd" class="scroll-mt-[5rem]">
-      <Divider variant="default" label="Kbd" />
-    </div>
-    <h2 class="sr-only">Kbd</h2>
-    <div class="grid grid-cols-1 gap-4">
-      <div>
-        <h3 class="mb-2 text-lg font-bold">Tailles</h3>
-        <div class="flex flex-wrap items-center gap-4">
-          <Kbd size="xs">K</Kbd>
-          <Kbd size="sm">K</Kbd>
-          <Kbd size="md">K</Kbd>
-          <Kbd size="lg">K</Kbd>
-          <Kbd size="xl">K</Kbd>
-        </div>
-      </div>
-      <div>
-        <h3 class="mb-2 text-lg font-bold">Test Daisy UI direct</h3>
-        <div class="flex flex-wrap items-center gap-4">
-          <kbd class="kbd">K</kbd>
-          <kbd class="kbd">ESC</kbd>
-          <kbd class="kbd kbd-lg">K</kbd>
-        </div>
-      </div>
-      <div>
-        <h3 class="mb-2 text-lg font-bold">Exemple d'utilisation avec composant</h3>
-        <div class="flex flex-wrap items-center gap-4">
-          <Kbd size="md">Ctrl</Kbd>
-          <Kbd size="md">+</Kbd>
-          <Kbd size="md">K</Kbd>
-          <span class="text-sm">pour ouvrir les raccourcis clavier</span>
-        </div>
+<!-- Kbd -->
+<Section>
+  <div id="kbd" class="scroll-mt-[5rem]">
+    <Divider variant="default" label="Kbd" />
+  </div>
+  <h2 class="sr-only">Kbd</h2>
+  <div class="grid grid-cols-1 gap-4">
+    <div>
+      <h3 class="mb-2 text-lg font-bold">Tailles</h3>
+      <div class="flex flex-wrap items-center gap-4">
+        <Kbd size="xs">K</Kbd>
+        <Kbd size="sm">K</Kbd>
+        <Kbd size="md">K</Kbd>
+        <Kbd size="lg">K</Kbd>
+        <Kbd size="xl">K</Kbd>
       </div>
     </div>
-  </Section>
-</StyleGuideLayout>
+    <div>
+      <h3 class="mb-2 text-lg font-bold">Test Daisy UI direct</h3>
+      <div class="flex flex-wrap items-center gap-4">
+        <kbd class="kbd">K</kbd>
+        <kbd class="kbd">ESC</kbd>
+        <kbd class="kbd kbd-lg">K</kbd>
+      </div>
+    </div>
+    <div>
+      <h3 class="mb-2 text-lg font-bold">Exemple d'utilisation avec composant</h3>
+      <div class="flex flex-wrap items-center gap-4">
+        <Kbd size="md">Ctrl</Kbd>
+        <Kbd size="md">+</Kbd>
+        <Kbd size="md">K</Kbd>
+        <span class="text-sm">pour ouvrir les raccourcis clavier</span>
+      </div>
+    </div>
+  </div>
+</Section>
