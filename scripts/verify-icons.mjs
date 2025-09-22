@@ -1,7 +1,7 @@
 import { readFileSync, readdirSync } from 'node:fs'
 import { join } from 'node:path'
 
-const ICONS_DIR = 'src/ui/atoms/icons'
+const ICONS_DIR = 'src/assets/icons'
 const CONTENT_DIRS = ['src/content', 'src/pages', 'src/domain'] // adapte si besoin
 
 const svgNames = new Set(
