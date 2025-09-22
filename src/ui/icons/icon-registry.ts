@@ -66,8 +66,9 @@ export function normalizeIconName(name: string) {
 
 /**
  * Convertit un nom normalisé en nom Iconify attendu par `astro-icon`.
- * - Mappe l'alias "heroicons:*" vers la collection réelle "heroicons-outline:*"
+ * - Laisse passer « heroicons:* » tel quel pour utiliser le set v2
+ * - Ne force plus le mapping vers « heroicons-outline:* »
  */
 export function toIconifyName(name: string) {
-  return name.replace(/^heroicons:/, 'heroicons-outline:')
+  return name
 }
