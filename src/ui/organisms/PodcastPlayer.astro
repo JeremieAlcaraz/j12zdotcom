@@ -1,0 +1,363 @@
+---
+// Composant PodcastPlayer - Lecteur de podcast avec logique
+import BaseCard from '@/ui/atoms/BaseCard.astro'
+import Icon from '@/ui/atoms/Icon.astro'
+import ImageMod from '@/ui/atoms/ImageMod.astro'
+
+// UID par instance pour cibler le bon DOM même avec ClientRouter
+const playerId = `pp-${Math.random().toString(36).slice(2, 9)}`
+---
+
+<BaseCard
+  background="base-100"
+  border="default"
+  shadow="lg"
+  padding="none"
+  class="w-full"
+  data-podcast-player-id={playerId}
+>
+  <!-- Élément audio caché -->
+  <audio id={`audio-podcast-${playerId}`} preload="metadata">
+    <source src="/musics/jeremie-theme.mp3" type="audio/mpeg" />
+    Votre navigateur ne supporte pas l'élément audio.
+  </audio>
+
+  <div class="pp-layout flex items-start gap-6 p-6">
+    <!-- Visuel (colonne gauche ~38.2%) -->
+    <div class="pp-left flex-shrink-0" style="width: 38.2%;">
+      <div class="pp-left-img w-full overflow-hidden rounded-lg" style="height: 100px;">
+        <ImageMod
+          src="img_opt/jeremie-hero"
+          alt="Podcast Episode"
+          width={150}
+          height={100}
+          class="h-full w-full object-cover object-center"
+        />
+      </div>
+    </div>
+
+    <!-- Contenu principal (colonne droite ~61.8%) -->
+    <div class="pp-right flex flex-grow flex-col gap-4">
+      <!-- Titre & métadonnées -->
+      <div class="pr-2">
+        <h3 class="pp-title line-clamp-2 text-xl leading-snug font-bold tracking-tight">
+          Tech Talk: Building Modern Web Apps
+        </h3>
+        <p class="text-base-content/70 mt-0.5 line-clamp-1 text-sm">
+          Episode #042 – Discussing the latest in web development
+        </p>
+        <p class="text-base-content/50 mt-1 text-xs">Publié le 15 janvier 2024</p>
+      </div>
+
+      <!-- Contrôles -->
+      <div class="grid grid-cols-[auto_auto_auto_1fr_auto] items-center gap-3">
+        <button class="btn btn-circle btn-neutral btn-sm" data-action="prev" title="Reculer">
+          <Icon name="heroicons:backward" class="size-4" title="Reculer" />
+        </button>
+
+        <button class="btn btn-circle btn-primary" data-action="play" title="Lecture/Pause">
+          <span class="relative inline-flex items-center justify-center">
+            <Icon name="heroicons:play" class="size-5" data-icon="play" title="Lecture" />
+            <Icon name="heroicons:pause" class="size-5" data-icon="pause" title="Pause" hidden />
+          </span>
+        </button>
+
+        <button class="btn btn-circle btn-neutral btn-sm" data-action="next" title="Avancer">
+          <Icon name="heroicons:forward" class="size-4" title="Avancer" />
+        </button>
+
+        <!-- Temps courant / durée -->
+        <div class="text-base-content/70 flex items-center gap-2 text-sm">
+          <span data-time="current">0:00</span>
+          <span class="opacity-50">/</span>
+          <span data-time="duration">45:30</span>
+        </div>
+
+        <!-- Volume (poussé à droite) -->
+        <button
+          class="btn btn-circle btn-ghost btn-volume btn-sm justify-self-end"
+          data-action="volume"
+          title="Volume"
+          aria-pressed="false"
+        >
+          <span class="relative inline-flex items-center justify-center">
+            <Icon
+              name="heroicons:speaker-wave"
+              class="size-5"
+              data-icon="volume-on"
+              title="Volume activé"
+            />
+            <Icon
+              name="heroicons:speaker-x-mark"
+              class="size-5"
+              data-icon="volume-off"
+              title="Sourdine"
+              hidden
+            />
+          </span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Barre de progression en pleine largeur -->
+  <div class="px-6 pb-6">
+    <div class="relative">
+      <div
+        class="tooltip tooltip-open absolute before:text-[10px]"
+        style="inset-inline-start:0%; top: -0.375rem; transform: translateY(-100%);"
+        data-tip="0:00"
+      >
+      </div>
+      <progress
+        class="progress progress-primary w-full"
+        value="0"
+        max="100"
+        aria-label="Progression"></progress>
+    </div>
+  </div>
+</BaseCard>
+
+<style>
+  /* Layout flexible: image 38.2% width + contenu flexible */
+  .pp-layout {
+    display: flex;
+    flex-direction: column;
+  }
+  @media (min-width: 768px) {
+    .pp-layout {
+      flex-direction: row;
+      align-items: flex-start;
+    }
+  }
+  .pp-title {
+    text-wrap: balance;
+  }
+  /* Soften buttons visually for hierarchy */
+  .btn.btn-ghost {
+    background: color-mix(in oklab, currentColor 8%, transparent);
+  }
+  /* Limit image height to align with controls */
+  .pp-left-img {
+    height: 100px;
+    flex-shrink: 0;
+  }
+  /* Rapprocher le tooltip de la barre de progression */
+  .tooltip[data-tip] {
+    font-size: 0.25rem;
+    line-height: 0.25;
+    padding: 0;
+    margin: 0;
+  }
+  .tooltip[data-tip]::before {
+    display: none !important;
+  }
+  .tooltip[data-tip]::after {
+    display: none !important;
+  }
+</style>
+
+<script define:vars={{ playerId }} is:inline>
+  class PodcastPlayer {
+    constructor(root) {
+      this.root = root
+      this.audio = root.querySelector('audio')
+      this.playBtn = root.querySelector('[data-action="play"]')
+      this.prevBtn = root.querySelector('[data-action="prev"]')
+      this.nextBtn = root.querySelector('[data-action="next"]')
+      this.volumeBtn = root.querySelector('[data-action="volume"]')
+      this.progressBar = root.querySelector('.progress')
+      const progressEl = root.querySelector('.progress')
+      this.progressContainer = progressEl ? progressEl.parentElement.parentElement : null  // Adjusted for new structure: div.relative > div.tooltip, but click on outer px-6 div
+      this.currentTimeEl = root.querySelector('[data-time="current"]')
+      this.durationEl = root.querySelector('[data-time="duration"]')
+      this.tooltip = root.querySelector('.tooltip')
+      this.leftImgWrap = root.querySelector('.pp-left-img')
+      this.rightCol = root.querySelector('.pp-right')
+
+      this.isPlaying = false
+      this.isMuted = false
+      this.volume = 1
+      this.defaultDurationSec = 2730 // 45:30 par défaut
+
+      this.init()
+    }
+
+    init() {
+      this.setupEventListeners()
+      this.setInitialUI()
+      this.updateDuration()
+      this.updateVolumeButton()
+      // image fixed at 80px height; no dynamic sync needed
+    }
+
+    setInitialUI() {
+      this.audio.currentTime = 0
+      if (this.progressBar) {
+        this.progressBar.value = 0
+      }
+      if (this.tooltip) {
+        this.tooltip.style.left = '0%'
+        this.tooltip.setAttribute('data-tip', this.formatTime(0))
+      }
+      if (this.currentTimeEl) {
+        this.currentTimeEl.textContent = this.formatTime(0)
+      }
+      if (this.durationEl) {
+        const seconds = isNaN(this.audio.duration) ? this.defaultDurationSec : this.audio.duration
+        this.durationEl.textContent = this.formatTime(seconds)
+      }
+    }
+
+    setupEventListeners() {
+      if (this.playBtn) {
+        this.playBtn.addEventListener('click', () => this.togglePlay())
+      }
+      if (this.prevBtn) {
+        this.prevBtn.addEventListener('click', () => this.prevTrack())
+      }
+      if (this.nextBtn) {
+        this.nextBtn.addEventListener('click', () => this.nextTrack())
+      }
+      if (this.volumeBtn) {
+        this.volumeBtn.addEventListener('click', () => this.toggleMute())
+      }
+
+      if (this.progressContainer) {
+        this.progressContainer.addEventListener('click', e => {
+          const progressRect = this.progressBar.getBoundingClientRect()
+          const containerRect = this.progressContainer.getBoundingClientRect()
+          const relativeX = (e.clientX - containerRect.left) / containerRect.width
+          e = { clientX: progressRect.left + relativeX * progressRect.width }
+          this.seek(e)
+        })
+      }
+
+      this.audio.addEventListener('timeupdate', () => this.updateProgress())
+      this.audio.addEventListener('loadedmetadata', () => this.updateDuration())
+      this.audio.addEventListener('ended', () => this.handleTrackEnd())
+      this.audio.addEventListener('play', () => {
+        this.isPlaying = true
+        this.updatePlayButton(true)
+      })
+      this.audio.addEventListener('pause', () => {
+        this.isPlaying = false
+        this.updatePlayButton(false)
+      })
+    }
+
+    togglePlay() {
+      if (this.audio.paused) {
+        const playPromise = this.audio.play()
+        if (playPromise && typeof playPromise.then === 'function') {
+          playPromise
+            .then(() => {
+              this.isPlaying = true
+              this.updatePlayButton(true)
+            })
+            .catch(err => {
+              console.warn('[PodcastPlayer] play() failed:', err)
+              this.isPlaying = false
+              this.updatePlayButton(false)
+            })
+        } else {
+          this.isPlaying = true
+          this.updatePlayButton(true)
+        }
+      } else {
+        this.audio.pause()
+        this.isPlaying = false
+        this.updatePlayButton(false)
+      }
+    }
+
+    prevTrack() {
+      this.audio.currentTime = 0
+    }
+
+    nextTrack() {
+      this.audio.currentTime = 0
+    }
+
+    toggleMute() {
+      this.isMuted = !this.isMuted
+      this.audio.muted = this.isMuted
+      this.updateVolumeButton()
+    }
+
+    // seek method no longer needed as click handler handles it directly
+
+    updateProgress() {
+      const duration = this.audio.duration
+      const percent =
+        isFinite(duration) && duration > 0 ? (this.audio.currentTime / duration) * 100 : 0
+      if (this.progressBar) {
+        this.progressBar.value = percent
+      }
+
+      if (this.tooltip) {
+        const tooltipPercent = percent
+        this.tooltip.style.left = `${tooltipPercent}%`
+        this.tooltip.setAttribute('data-tip', this.formatTime(this.audio.currentTime))
+      }
+
+      if (this.currentTimeEl) {
+        this.currentTimeEl.textContent = this.formatTime(this.audio.currentTime)
+      }
+    }
+
+    updateDuration() {
+      if (!this.durationEl) return
+      const seconds = isNaN(this.audio.duration) ? this.defaultDurationSec : this.audio.duration
+      this.durationEl.textContent = this.formatTime(seconds)
+      // no dynamic image sizing
+    }
+
+    handleTrackEnd() {
+      this.isPlaying = false
+      this.updatePlayButton(false)
+    }
+
+    updatePlayButton(isPlaying) {
+      const playEl = this.playBtn?.querySelector('[data-icon="play"]')
+      const pauseEl = this.playBtn?.querySelector('[data-icon="pause"]')
+      if (playEl && pauseEl) {
+        playEl.hidden = isPlaying
+        pauseEl.hidden = !isPlaying
+      }
+    }
+
+    updateVolumeButton() {
+      if (!this.volumeBtn) return
+      const onEl = this.volumeBtn.querySelector('[data-icon="volume-on"]')
+      const offEl = this.volumeBtn.querySelector('[data-icon="volume-off"]')
+      if (onEl && offEl) {
+        onEl.hidden = this.isMuted
+        offEl.hidden = !this.isMuted
+      }
+      // Highlight when muted; stay subtle otherwise
+      this.volumeBtn.classList.toggle('btn-primary', this.isMuted)
+      this.volumeBtn.classList.toggle('btn-ghost', !this.isMuted)
+      this.volumeBtn.setAttribute('aria-pressed', String(this.isMuted))
+    }
+
+    formatTime(seconds) {
+      if (isNaN(seconds)) return '0:00'
+      const mins = Math.floor(seconds / 60)
+      const secs = Math.floor(seconds % 60)
+      return `${mins}:${secs.toString().padStart(2, '0')}`
+    }
+
+    // no layout sync needed
+  }
+
+  const init = () => {
+    const root = document.querySelector(`[data-podcast-player-id="${playerId}"]`)
+    if (root) new PodcastPlayer(root)
+  }
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', init)
+  } else {
+    init()
+  }
+</script>
