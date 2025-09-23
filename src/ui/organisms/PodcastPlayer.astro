@@ -24,7 +24,7 @@ const playerId = `pp-${Math.random().toString(36).slice(2, 9)}`
 
   <div class="pp-layout flex items-start gap-6 p-6">
     <!-- Visuel (colonne gauche ~38.2%) -->
-    <div class="pp-left flex-shrink-0" style="width: 38.2%;">
+    <div class="pp-left flex-shrink-0" style="width: 20.2%;">
       <div class="pp-left-img w-full overflow-hidden rounded-lg" style="height: 100px;">
         <ImageMod
           src="img_opt/jeremie-hero"
@@ -101,11 +101,11 @@ const playerId = `pp-${Math.random().toString(36).slice(2, 9)}`
   </div>
 
   <!-- Barre de progression en pleine largeur -->
-  <div class="px-6 pb-6">
+  <div class="px-6 pb-6 cursor-pointer">
     <div class="relative">
       <div
-        class="tooltip tooltip-open absolute before:text-[10px]"
-        style="inset-inline-start:0%; top: -0.375rem; transform: translateY(-100%);"
+        class="tooltip tooltip-open absolute top-2 before:text-xs"
+        style="inset-inline-start:0%"
         data-tip="0:00"
       >
       </div>
@@ -142,19 +142,6 @@ const playerId = `pp-${Math.random().toString(36).slice(2, 9)}`
     height: 100px;
     flex-shrink: 0;
   }
-  /* Rapprocher le tooltip de la barre de progression */
-  .tooltip[data-tip] {
-    font-size: 0.25rem;
-    line-height: 0.25;
-    padding: 0;
-    margin: 0;
-  }
-  .tooltip[data-tip]::before {
-    display: none !important;
-  }
-  .tooltip[data-tip]::after {
-    display: none !important;
-  }
 </style>
 
 <script define:vars={{ playerId }} is:inline>
@@ -167,8 +154,8 @@ const playerId = `pp-${Math.random().toString(36).slice(2, 9)}`
       this.nextBtn = root.querySelector('[data-action="next"]')
       this.volumeBtn = root.querySelector('[data-action="volume"]')
       this.progressBar = root.querySelector('.progress')
-      const progressEl = root.querySelector('.progress')
-      this.progressContainer = progressEl ? progressEl.parentElement.parentElement : null  // Adjusted for new structure: div.relative > div.tooltip, but click on outer px-6 div
+      this.progressContainer = this.progressBar ? this.progressBar.parentElement : null
+      this.progressClickTarget = this.progressContainer?.parentElement ?? this.progressContainer
       this.currentTimeEl = root.querySelector('[data-time="current"]')
       this.durationEl = root.querySelector('[data-time="duration"]')
       this.tooltip = root.querySelector('.tooltip')
@@ -223,14 +210,8 @@ const playerId = `pp-${Math.random().toString(36).slice(2, 9)}`
         this.volumeBtn.addEventListener('click', () => this.toggleMute())
       }
 
-      if (this.progressContainer) {
-        this.progressContainer.addEventListener('click', e => {
-          const progressRect = this.progressBar.getBoundingClientRect()
-          const containerRect = this.progressContainer.getBoundingClientRect()
-          const relativeX = (e.clientX - containerRect.left) / containerRect.width
-          e = { clientX: progressRect.left + relativeX * progressRect.width }
-          this.seek(e)
-        })
+      if (this.progressClickTarget) {
+        this.progressClickTarget.addEventListener('click', e => this.seek(e))
       }
 
       this.audio.addEventListener('timeupdate', () => this.updateProgress())
@@ -285,7 +266,27 @@ const playerId = `pp-${Math.random().toString(36).slice(2, 9)}`
       this.updateVolumeButton()
     }
 
-    // seek method no longer needed as click handler handles it directly
+    seek(e) {
+      if (!this.audio || !this.progressBar) return
+      if (!isFinite(this.audio.duration) || this.audio.duration <= 0) return
+
+      const clientX =
+        typeof e.clientX === 'number'
+          ? e.clientX
+          : e.touches && e.touches.length > 0
+            ? e.touches[0].clientX
+            : undefined
+      if (clientX === undefined) return
+
+      const rect = this.progressBar.getBoundingClientRect()
+      if (!rect || rect.width === 0) return
+
+      const rawPercent = (clientX - rect.left) / rect.width
+      const percent = Math.min(Math.max(rawPercent, 0), 1)
+
+      this.audio.currentTime = percent * this.audio.duration
+      this.updateProgress()
+    }
 
     updateProgress() {
       const duration = this.audio.duration
