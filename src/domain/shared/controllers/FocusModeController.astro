@@ -8,6 +8,9 @@
 
 <script is:inline>
   (() => {
+    // Always start posts out of focus to avoid persisting state across navigations
+    document.body.classList.remove('focus-mode')
+
     // Detect if current page allows focus mode (blog post layout)
     function isFocusContext() {
       // Presence of the FAB action or the ESC hint marks post pages
@@ -31,23 +34,19 @@
       const action = detail && detail.action
       if (action === 'focus') toggleFocus()
     })
-    
-        // Handle Escape key to exit focus mode
-        document.addEventListener('keydown', (e) => {
-          if (e.key === 'Escape' && document.body.classList.contains('focus-mode')) {
-            e.preventDefault()
-            toggleFocus()
-          }
-        })
 
-        // Reset on navigations (Astro ViewTransitions)
-        document.addEventListener('astro:before-swap', () => {
-          // Leaving current page: ensure focus is cleared
-          document.body.classList.remove('focus-mode')
-        })
-        document.addEventListener('astro:page-load', () => {
-          // Initial load and after client navigations: ensure focus is cleared
-          document.body.classList.remove('focus-mode')
-        })
-      })()
-    </script>
+    // Handle Escape key to exit focus mode
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && document.body.classList.contains('focus-mode')) {
+        e.preventDefault()
+        toggleFocus()
+      }
+    })
+
+    // Reset on navigations (Astro ViewTransitions)
+    document.addEventListener('astro:before-swap', () => {
+      // Leaving current page: ensure focus is cleared
+      document.body.classList.remove('focus-mode')
+    })
+  })()
+</script>
