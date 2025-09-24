@@ -1,0 +1,69 @@
+---
+import Tooltip from '@/ui/atoms/Tooltip.astro'
+
+interface TooltipConfig {
+  label?: string
+  position?: 'top' | 'bottom' | 'left' | 'right'
+  open?: boolean
+  class?: string
+  style?: string
+}
+
+interface Props {
+  value?: number | string
+  max?: number | string
+  ariaLabel?: string
+  showTooltip?: boolean
+  tooltip?: TooltipConfig
+  wrapperClass?: string
+  progressClass?: string
+  id?: string
+}
+
+const {
+  value = 0,
+  max = 100,
+  ariaLabel,
+  showTooltip = false,
+  tooltip = {},
+  wrapperClass = '',
+  progressClass = '',
+  id,
+} = Astro.props as Props
+
+const tooltipClasses = ['absolute', 'pointer-events-none', 'before:text-xs', tooltip.class]
+  .filter(Boolean)
+  .join(' ')
+
+const wrapperClasses = ['progress-wrapper', 'relative', wrapperClass].filter(Boolean).join(' ')
+
+const progressClasses = ['progress', 'progress-primary', progressClass].filter(Boolean).join(' ')
+const tooltipStyle = tooltip.style ?? 'inset-inline-start: 0%;'
+const ariaLabelAttr = ariaLabel ?? undefined
+---
+
+<div
+  class={wrapperClasses}
+  data-progress-root
+  data-progress-id={id ?? undefined}
+>
+  {showTooltip && (
+    <Tooltip
+      label={tooltip.label ?? ''}
+      position={tooltip.position ?? 'top'}
+      open={tooltip.open ?? false}
+      class={tooltipClasses}
+      style={tooltipStyle}
+      dataAttributes={{ progressTooltip: true }}
+    />
+  )}
+  <progress
+    class={progressClasses}
+    value={value}
+    max={max}
+    aria-label={ariaLabelAttr}
+    data-progress-bar
+  >
+    <slot name="fallback" />
+  </progress>
+</div>
