@@ -129,11 +129,12 @@
       this.volumeBtn = root.querySelector('[data-action="volume"]')
       this.repeatBtn = root.querySelector('[data-action="repeat"]')
       this.shuffleBtn = root.querySelector('[data-action="shuffle"]')
-      this.progressBar = root.querySelector('[data-progress-bar]')
-      this.progressContainer = root.querySelector('[data-progress-root]')
+      this.progressBar = root.querySelector('.progress')
+      const progressEl = root.querySelector('.progress')
+      this.progressContainer = progressEl ? progressEl.parentElement : null
       this.currentTimeEl = root.querySelector('[data-time="current"]')
       this.durationEl = root.querySelector('[data-time="duration"]')
-      this.tooltip = root.querySelector('[data-progress-tooltip]')
+      this.tooltip = root.querySelector('.tooltip')
 
       this.isPlaying = false
       this.isMuted = false
@@ -161,7 +162,7 @@
         this.progressBar.value = 0
       }
       if (this.tooltip) {
-        this.tooltip.style.setProperty('inset-inline-start', '0%')
+        this.tooltip.style.left = '0%'
         this.tooltip.setAttribute('data-tip', this.formatTime(0))
       }
       if (this.currentTimeEl) {
@@ -268,13 +269,9 @@
     seek(e) {
       if (!this.progressContainer) return
       if (!this.audio || !isFinite(this.audio.duration) || this.audio.duration <= 0) return
-      const rectTarget = this.progressBar ?? this.progressContainer
-      if (!rectTarget) return
-      const rect = rectTarget.getBoundingClientRect()
-      if (!rect || rect.width === 0) return
-      const rawPercent = (e.clientX - rect.left) / rect.width
-      const clampedPercent = Math.min(Math.max(rawPercent, 0), 1)
-      this.audio.currentTime = clampedPercent * this.audio.duration
+      const rect = this.progressContainer.getBoundingClientRect()
+      const percent = (e.clientX - rect.left) / rect.width
+      this.audio.currentTime = percent * this.audio.duration
     }
 
     updateProgress() {
@@ -288,7 +285,7 @@
       // Mettre à jour le tooltip
       if (this.tooltip) {
         const tooltipPercent = percent
-        this.tooltip.style.setProperty('inset-inline-start', `${tooltipPercent}%`)
+        this.tooltip.style.left = `${tooltipPercent}%`
         this.tooltip.setAttribute('data-tip', this.formatTime(this.audio.currentTime))
       }
 
