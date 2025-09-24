@@ -5,8 +5,8 @@ Ce projet supporte un usage unifié des icônes via un composant `<Icon />` et l
 ## Règles d’utilisation
 
 - Utiliser `Icon` ainsi : `<Icon name="collection:icon" />`
-- Collections supportées : `heroicons-outline`, `heroicons-solid`, `lucide`
-- Alias : `heroicons:*` est redirigé vers `heroicons-outline:*`
+- Collections supportées : `heroicons` (v2), `heroicons-outline`, `heroicons-solid`, `lucide`
+- Alias : `heroicons:*` utilise le set v2 (pas de redirection vers outline)
 - Exemples valides :
   - `heroicons:home`
   - `heroicons-outline:magnifying-glass`

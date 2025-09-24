@@ -1,0 +1,46 @@
+---
+interface Props {
+  label?: string
+  position?: 'top' | 'bottom' | 'left' | 'right'
+  open?: boolean
+  class?: string
+  style?: string
+  id?: string
+  dataAttributes?: Record<string, string | number | boolean | null | undefined>
+}
+
+const {
+  label = '',
+  position = 'top',
+  open = false,
+  class: className = '',
+  style = '',
+  id,
+  dataAttributes = {},
+} = Astro.props as Props
+
+const dataset = Object.entries(dataAttributes).reduce<Record<string, string>>((acc, [key, value]) => {
+  if (value === undefined || value === null) return acc
+  const kebabKey = key
+    .replace(/([a-z0-9])([A-Z])/g, '$1-$2')
+    .replace(/_/g, '-')
+    .toLowerCase()
+  acc[`data-${kebabKey}`] = String(value)
+  return acc
+}, {})
+---
+
+<div
+  id={id}
+  class:list={{
+    tooltip: true,
+    [`tooltip-${position}`]: Boolean(position),
+    'tooltip-open': open,
+    [className]: Boolean(className),
+  }}
+  data-tip={label}
+  style={style}
+  {...dataset}
+>
+  <slot />
+</div>

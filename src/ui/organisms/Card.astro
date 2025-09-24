@@ -1,37 +1,56 @@
 ---
-import type { JSX } from 'astro/jsx-runtime'
+import BaseCard from '@/ui/atoms/BaseCard.astro'
 
 const VARIANTS = ['default', 'bordered', 'compact', 'side', 'glass', 'image-full'] as const
 export type Variant = (typeof VARIANTS)[number]
 
-interface Props extends JSX.HTMLAttributes {
+interface Props {
   variant?: Variant
   base?: 100 | 200 | 300
+  shadow?: 'none' | 'sm' | 'md' | 'lg' | 'xl' | '2xl'
+  hover?: boolean
+  class?: string
 }
 
-const { variant = 'default', base = 100, class: className, ...rest } = Astro.props as Props
+const {
+  variant = 'default',
+  base = 100,
+  shadow = 'md',
+  hover = false,
+  class: className,
+} = Astro.props as Props
 
-const baseClasses = {
-  100: 'bg-base-100',
-  200: 'bg-base-200',
-  300: 'bg-base-300',
-} as const
+// Map base to BaseCard background
+const backgroundMap = {
+  100: 'base-100' as const,
+  200: 'base-200' as const,
+  300: 'base-300' as const,
+}
 
+// Map variant to specific styling
 const variantClasses: Record<Variant, string> = {
   default: '',
-  bordered: 'card-bordered',
+  bordered: '', // handled by BaseCard border prop
   compact: 'card-compact',
   side: 'card-side',
-  glass: 'glass',
+  glass: '', // handled by BaseCard glass prop
   'image-full': 'image-full',
 }
 
-const classes = ['card', baseClasses[base], variantClasses[variant], className]
-  .filter(Boolean)
-  .join(' ')
+// Determine BaseCard props based on variant
+const baseCardProps = {
+  background: backgroundMap[base],
+  shadow: variant === 'glass' ? 'lg' : shadow,
+  border: variant === 'bordered' ? 'default' : 'none',
+  glass: variant === 'glass',
+  hover,
+  padding: 'none', // We'll handle padding with card-body
+}
+
+const cardSpecificClasses = ['card', variantClasses[variant], className].filter(Boolean).join(' ')
 ---
 
-<div class={classes} {...rest}>
+<BaseCard {...(baseCardProps as any)} class={cardSpecificClasses}>
   {
     Astro.slots.has('image') && (
       <figure>
@@ -56,4 +75,4 @@ const classes = ['card', baseClasses[base], variantClasses[variant], className]
       )
     }
   </div>
-</div>
+</BaseCard>

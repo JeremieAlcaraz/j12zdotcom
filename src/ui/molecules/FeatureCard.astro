@@ -1,0 +1,95 @@
+---
+import BaseCard from '@/ui/atoms/BaseCard.astro'
+import Icon from '@/ui/atoms/Icon.astro'
+import Typography from '@/ui/atoms/Typography.astro'
+
+interface Props {
+  /** Card title */
+  title: string
+  /** Card description */
+  description: string
+  /** Icon name (from icon registry) */
+  icon?: string
+  /** Card variant style */
+  variant?: 'default' | 'bordered' | 'glass' | 'highlighted'
+  /** Enable hover effect */
+  hover?: boolean
+  /** Link destination */
+  href?: string
+  /** Icon color theme */
+  iconColor?: 'primary' | 'secondary' | 'accent' | 'info' | 'success' | 'warning' | 'error'
+}
+
+const {
+  title,
+  description,
+  icon = 'heroicons:star',
+  variant = 'default',
+  hover = true,
+  href,
+  iconColor = 'primary'
+} = Astro.props
+
+// Map variant to BaseCard props
+const variantProps = {
+  default: {
+    shadow: 'md' as const,
+    border: 'none' as const,
+    background: 'base-100' as const,
+    glass: false
+  },
+  bordered: {
+    shadow: 'sm' as const,
+    border: 'default' as const,
+    background: 'base-100' as const,
+    glass: false
+  },
+  glass: {
+    shadow: 'lg' as const,
+    border: 'none' as const,
+    background: 'base-100' as const,
+    glass: true
+  },
+  highlighted: {
+    shadow: 'lg' as const,
+    border: 'primary' as const,
+    background: 'base-100' as const,
+    glass: false
+  }
+}
+
+const cardProps = variantProps[variant]
+---
+
+<BaseCard
+  {...cardProps}
+  hover={hover}
+  padding="lg"
+  class={`transition-all duration-200 ${href ? 'cursor-pointer' : ''}`}
+  {...(href ? { href } : {})}
+>
+  <div class="text-center">
+    <div class="mb-4">
+      <Icon
+        name={icon}
+        class={`text-${iconColor} mx-auto size-12`}
+      />
+    </div>
+
+    <Typography variant="h3" class="mb-3">
+      {title}
+    </Typography>
+
+    <Typography class="text-base-content/70 leading-relaxed">
+      {description}
+    </Typography>
+
+    {href && (
+      <div class="mt-4">
+        <Typography variant="small" class={`text-${iconColor} font-medium`}>
+          En savoir plus →
+        </Typography>
+      </div>
+    )}
+  </div>
+</BaseCard>

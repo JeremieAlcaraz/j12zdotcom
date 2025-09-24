@@ -16,7 +16,7 @@ const { summaryLength, blogFolder }: { summaryLength: number; blogFolder: string
 const { title, image, date, author, description } = data.data
 ---
 
-<Card class="flex h-full flex-col shadow-sm" base={base}>
+<Card class="flex h-full flex-col" base={base} shadow="sm" hover>
   {
     image && (
       <ImageMod

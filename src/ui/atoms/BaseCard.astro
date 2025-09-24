@@ -1,0 +1,146 @@
+---
+/**
+ * BaseCard - Composant de base pour toutes les cartes
+ *
+ * Ce composant atomique fournit une fondation réutilisable pour construire
+ * différents types de cartes (BlogCard, PricingCard, MusicPlayer, etc.)
+ *
+ * Approche DRY : centralise la logique commune des cartes (ombres, bordures,
+ * arrondis, backgrounds, effets) pour éviter la duplication de code
+ *
+ * @example
+ * ```astro
+ * <BaseCard shadow="lg" border="primary" hover>
+ *   <h3>Mon contenu</h3>
+ *   <p>Description</p>
+ * </BaseCard>
+ * ```
+ *
+ * @example
+ * ```astro
+ * <!-- Pour un MusicPlayer -->
+ * <BaseCard background="base-200" shadow="xl" border="default" padding="none">
+ *   <!-- Contenu du lecteur -->
+ * </BaseCard>
+ * ```
+ */
+import type { JSX } from 'astro/jsx-runtime'
+
+const SHADOWS = ['none', 'sm', 'md', 'lg', 'xl', '2xl'] as const
+const BORDERS = ['none', 'default', 'primary', 'secondary', 'accent', 'neutral'] as const
+const ROUNDINGS = ['none', 'sm', 'md', 'lg', 'xl', '2xl', 'full'] as const
+const BACKGROUNDS = [
+  'base-100',
+  'base-200',
+  'base-300',
+  'primary',
+  'secondary',
+  'accent',
+  'neutral',
+] as const
+
+export type Shadow = (typeof SHADOWS)[number]
+export type Border = (typeof BORDERS)[number]
+export type Rounding = (typeof ROUNDINGS)[number]
+export type Background = (typeof BACKGROUNDS)[number]
+
+interface Props extends JSX.HTMLAttributes {
+  /** Intensité de l'ombre portée */
+  shadow?: Shadow
+  /** Style et couleur de bordure */
+  border?: Border
+  /** Rayon des coins arrondis */
+  rounding?: Rounding
+  /** Couleur d'arrière-plan avec thème DaisyUI */
+  background?: Background
+  /** Active les effets de survol (translation + ombre) */
+  hover?: boolean
+  /** Applique l'effet glassmorphism */
+  glass?: boolean
+  /** Espacement interne de la carte */
+  padding?: 'none' | 'sm' | 'md' | 'lg' | 'xl'
+}
+
+const {
+  shadow = 'md',
+  border = 'none',
+  rounding = 'lg',
+  background = 'base-100',
+  hover = false,
+  glass = false,
+  padding = 'md',
+  class: className,
+  ...rest
+} = Astro.props as Props
+
+const shadowClasses: Record<Shadow, string> = {
+  none: '',
+  sm: 'shadow-sm',
+  md: 'shadow-md',
+  lg: 'shadow-lg',
+  xl: 'shadow-xl',
+  '2xl': 'shadow-2xl',
+}
+
+const borderClasses: Record<Border, string> = {
+  none: '',
+  default: 'border border-base-300',
+  primary: 'border border-primary',
+  secondary: 'border border-secondary',
+  accent: 'border border-accent',
+  neutral: 'border border-neutral',
+}
+
+const roundingClasses: Record<Rounding, string> = {
+  none: 'rounded-none',
+  sm: 'rounded-sm',
+  md: 'rounded-md',
+  lg: 'rounded-lg',
+  xl: 'rounded-xl',
+  '2xl': 'rounded-2xl',
+  full: 'rounded-full',
+}
+
+const backgroundClasses: Record<Background, string> = {
+  'base-100': 'bg-base-100',
+  'base-200': 'bg-base-200',
+  'base-300': 'bg-base-300',
+  primary: 'bg-primary text-primary-content',
+  secondary: 'bg-secondary text-secondary-content',
+  accent: 'bg-accent text-accent-content',
+  neutral: 'bg-neutral text-neutral-content',
+}
+
+const paddingClasses = {
+  none: '',
+  sm: 'p-3',
+  md: 'p-4',
+  lg: 'p-6',
+  xl: 'p-8',
+}
+
+const classes = [
+  // Base card styles
+  'overflow-hidden',
+
+  // Variants
+  shadowClasses[shadow],
+  borderClasses[border],
+  roundingClasses[rounding],
+  backgroundClasses[background],
+  paddingClasses[padding],
+
+  // Effects
+  glass ? 'glass' : '',
+  hover ? 'transition-all duration-200 hover:shadow-lg hover:-translate-y-0.5' : '',
+
+  // Custom classes
+  className,
+]
+  .filter(Boolean)
+  .join(' ')
+---
+
+<div class={classes} {...rest}>
+  <slot />
+</div>

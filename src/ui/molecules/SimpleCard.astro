@@ -1,0 +1,71 @@
+---
+/**
+ * SimpleCard - Exemple simple utilisant BaseCard
+ *
+ * Démontre l'utilisation basique de BaseCard pour créer
+ * un composant de carte simple et réutilisable
+ */
+import BaseCard from '@/ui/atoms/BaseCard.astro'
+import Typography from '@/ui/atoms/Typography.astro'
+
+interface Props {
+  /** Titre de la carte */
+  title: string
+  /** Description ou contenu */
+  description?: string
+  /** Style de la carte */
+  variant?: 'default' | 'elevated' | 'outlined' | 'subtle'
+}
+
+const {
+  title,
+  description,
+  variant = 'default'
+} = Astro.props
+
+// Configuration des variants
+const variantConfig = {
+  default: {
+    shadow: 'md' as const,
+    border: 'none' as const,
+    background: 'base-100' as const,
+    hover: true
+  },
+  elevated: {
+    shadow: 'xl' as const,
+    border: 'none' as const,
+    background: 'base-100' as const,
+    hover: true
+  },
+  outlined: {
+    shadow: 'none' as const,
+    border: 'default' as const,
+    background: 'base-100' as const,
+    hover: true
+  },
+  subtle: {
+    shadow: 'sm' as const,
+    border: 'none' as const,
+    background: 'base-200' as const,
+    hover: false
+  }
+}
+
+const config = variantConfig[variant]
+---
+
+<BaseCard {...config} padding="lg">
+  <div>
+    <Typography variant="h3" class="mb-3">
+      {title}
+    </Typography>
+
+    {description && (
+      <Typography class="text-base-content/70">
+        {description}
+      </Typography>
+    )}
+
+    <slot />
+  </div>
+</BaseCard>

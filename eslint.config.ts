@@ -11,7 +11,7 @@ import globals from 'globals'
 export default [
   // Ignorer des chemins
   {
-    ignores: ['node_modules', 'dist', '.astro', 'public', 'astro.config.mjs'],
+    ignores: ['node_modules', 'dist', '.astro', 'public', 'astro.config.mjs', 'astro.config.ts'],
   },
 
   // Recommandations JS de base
@@ -53,18 +53,24 @@ export default [
         'error',
         {
           zones: [
-            {
-              target: 'src/components/atoms',
-              from: 'src/components/{molecules,organisms,sections,layout}',
-            },
-            {
-              target: 'src/components/molecules',
-              from: 'src/components/{organisms,sections,layout}',
-            },
-            { target: 'src/components/organisms', from: 'src/components/{sections,layout}' },
-            { target: 'src/components/sections', from: 'src/components/layout' },
-            { target: 'src/components/layout', from: 'src/components/{organisms,sections}' },
-            { target: 'src/components/**/*', from: 'src/components/dev' },
+            // UI ne doit dépendre ni du domain ni des pages/layouts
+            { target: 'src/ui', from: 'src/domain/**' },
+            { target: 'src/ui', from: 'src/pages/**' },
+            { target: 'src/ui', from: 'src/layouts/**' },
+
+            // Domain ne doit pas dépendre des pages
+            { target: 'src/domain', from: 'src/pages/**' },
+
+            // Règles internes au Design System (hiérarchie):
+            // atoms ne peut pas importer molecules/organisms
+            { target: 'src/ui/atoms', from: 'src/ui/{molecules,organisms}/**' },
+            // molecules ne peut pas importer organisms
+            { target: 'src/ui/molecules', from: 'src/ui/organisms/**' },
+
+            // Pas d'utilisation de dev utils depuis le reste
+            { target: 'src/ui/**', from: 'src/domain/dev/**' },
+            { target: 'src/domain/**', from: 'src/domain/dev/**' },
+            { target: 'src/pages/**', from: 'src/domain/dev/**' },
           ],
         },
       ],

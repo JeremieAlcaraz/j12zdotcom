@@ -7,7 +7,9 @@ import Loading from '@/ui/molecules/Loading.astro'
 import Pagination from '@/ui/molecules/Pagination.astro'
 import { makePaginationLinks } from '@/utils/pagination'
 import FabSpeedDial from '@/ui/molecules/FabSpeedDial.astro'
-import MusicPlayer from '@/ui/molecules/MusicPlayer.astro'
+import FeatureCard from '@/ui/molecules/FeatureCard.astro'
+import SimpleCard from '@/ui/molecules/SimpleCard.astro'
+import ProgressBar from '@/ui/molecules/ProgressBar.astro'
 
 const { pages, prev, next } = makePaginationLinks('blog', 1, 5)
 ---
@@ -31,7 +33,12 @@ const { pages, prev, next } = makePaginationLinks('blog', 1, 5)
         <p>Accordéon avec couleur info pour un style informatif.</p>
       </Accordion>
 
-      <Accordion title="Variante combinée (plus + warning)" variant="plus" color="warning" groupName="demo">
+      <Accordion
+        title="Variante combinée (plus + warning)"
+        variant="plus"
+        color="warning"
+        groupName="demo"
+      >
         <p>Combinaison d'icône plus et couleur warning pour alertes.</p>
       </Accordion>
 
@@ -56,6 +63,49 @@ const { pages, prev, next } = makePaginationLinks('blog', 1, 5)
   </Section>
 
   <Section>
+    <div id="progressbar" class="scroll-mt-[5rem]">
+      <Divider variant="default" label="ProgressBar" />
+    </div>
+    <h2 class="sr-only">ProgressBar</h2>
+    <div class="space-y-8">
+      <div class="space-y-2">
+        <h3 class="text-lg font-bold">Avec tooltip actif</h3>
+        <ProgressBar
+          value={30}
+          max={100}
+          showTooltip={true}
+          wrapperClass="max-w-xl"
+          progressClass="w-full"
+          ariaLabel="Progression démo"
+          tooltip={{
+            label: '0:30',
+            open: true,
+            class: 'top-2 before:text-xs',
+            style: 'inset-inline-start: 30%;',
+          }}
+        />
+      </div>
+
+      <div class="space-y-4">
+        <h3 class="text-lg font-bold">Variantes de style</h3>
+        <ProgressBar value={60} progressClass="progress-secondary w-full" wrapperClass="max-w-xl" />
+        <ProgressBar
+          value={85}
+          showTooltip={true}
+          wrapperClass="max-w-xl"
+          progressClass="progress-accent w-full"
+          tooltip={{
+            label: '85%',
+            open: true,
+            class: 'top-2 before:text-xs',
+            style: 'inset-inline-start: 85%;',
+          }}
+        />
+      </div>
+    </div>
+  </Section>
+
+  <Section>
     <div id="pagination" class="scroll-mt-[5rem]">
       <Divider variant="default" label="Pagination" />
     </div>
@@ -72,18 +122,186 @@ const { pages, prev, next } = makePaginationLinks('blog', 1, 5)
     <h2 class="sr-only">FAB / Speed Dial</h2>
     <!-- The FAB is now positioned relative to this section -->
     <FabSpeedDial position="absolute" />
-    <div class="min-h-[50vh] bg-base-300 flex items-center justify-center">
-      <p class="text-muted">Zone de démonstration pour visualiser le positionnement du FAB en bas à droite de la section.</p>
+    <div class="bg-base-300 flex min-h-[50vh] items-center justify-center">
+      <p class="text-muted">
+        Zone de démonstration pour visualiser le positionnement du FAB en bas à droite de la
+        section.
+      </p>
     </div>
   </Section>
 
+  
+
+  <!-- FeatureCard -->
   <Section>
-    <div id="music-player" class="scroll-mt-[5rem]">
-      <Divider variant="default" label="Music Player" />
+    <div id="featurecard" class="scroll-mt-[5rem]">
+      <Divider variant="default" label="FeatureCard" />
     </div>
-    <h2 class="sr-only">Music Player</h2>
-    <div class="grid grid-cols-1 gap-4">
-      <MusicPlayer />
+    <h2 class="sr-only">FeatureCard</h2>
+    <div class="grid grid-cols-1 gap-8">
+      <div>
+        <h3 class="mb-4 text-lg font-bold">Variants</h3>
+        <div class="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-4">
+          <FeatureCard
+            title="Standard"
+            description="Une carte de fonctionnalité avec le style par défaut"
+            icon="heroicons:star"
+            variant="default"
+          />
+          <FeatureCard
+            title="Avec Bordure"
+            description="Une carte avec une bordure subtile"
+            icon="heroicons:shield-check"
+            variant="bordered"
+            iconColor="success"
+          />
+          <FeatureCard
+            title="Effet Verre"
+            description="Une carte avec effet glassmorphism"
+            icon="heroicons:sparkles"
+            variant="glass"
+            iconColor="accent"
+          />
+          <FeatureCard
+            title="Mise en Valeur"
+            description="Une carte mise en valeur avec bordure colorée"
+            icon="heroicons:fire"
+            variant="highlighted"
+            iconColor="warning"
+          />
+        </div>
+      </div>
+
+      <div>
+        <h3 class="mb-4 text-lg font-bold">Avec Liens</h3>
+        <div class="grid grid-cols-1 gap-4 md:grid-cols-3">
+          <FeatureCard
+            title="Développement"
+            description="Services de développement web et mobile"
+            icon="heroicons:code-bracket"
+            href="#development"
+            iconColor="primary"
+          />
+          <FeatureCard
+            title="Design"
+            description="Création d'interfaces utilisateur modernes"
+            icon="heroicons:paint-brush"
+            href="#design"
+            iconColor="secondary"
+            variant="bordered"
+          />
+          <FeatureCard
+            title="Consulting"
+            description="Conseil en architecture et stratégie technique"
+            icon="heroicons:light-bulb"
+            href="#consulting"
+            iconColor="accent"
+            variant="highlighted"
+          />
+        </div>
+      </div>
+
+      <div>
+        <h3 class="mb-4 text-lg font-bold">Différentes Icônes</h3>
+        <div class="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-4">
+          <FeatureCard
+            title="Performance"
+            description="Optimisation des performances web"
+            icon="heroicons:rocket-launch"
+            iconColor="success"
+            hover={false}
+          />
+          <FeatureCard
+            title="Sécurité"
+            description="Protection et sécurisation des données"
+            icon="heroicons:lock-closed"
+            iconColor="error"
+          />
+          <FeatureCard
+            title="Analytics"
+            description="Analyse et suivi des métriques"
+            icon="heroicons:chart-bar"
+            iconColor="info"
+          />
+          <FeatureCard
+            title="Support"
+            description="Assistance technique 24/7"
+            icon="heroicons:chat-bubble-left-right"
+            iconColor="warning"
+          />
+        </div>
+      </div>
+    </div>
+  </Section>
+
+  <!-- SimpleCard -->
+  <Section>
+    <div id="simplecard" class="scroll-mt-[5rem]">
+      <Divider variant="default" label="SimpleCard" />
+    </div>
+    <h2 class="sr-only">SimpleCard</h2>
+    <div class="grid grid-cols-1 gap-6">
+      <div>
+        <h3 class="mb-4 text-lg font-bold">Variants Simples</h3>
+        <div class="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-4">
+          <SimpleCard
+            title="Default"
+            description="Carte par défaut avec ombre moyenne"
+            variant="default"
+          />
+          <SimpleCard
+            title="Elevated"
+            description="Carte avec ombre prononcée"
+            variant="elevated"
+          />
+          <SimpleCard
+            title="Outlined"
+            description="Carte avec bordure sans ombre"
+            variant="outlined"
+          />
+          <SimpleCard title="Subtle" description="Carte discrète sur fond gris" variant="subtle" />
+        </div>
+      </div>
+
+      <div>
+        <h3 class="mb-4 text-lg font-bold">Avec Contenu Personnalisé</h3>
+        <div class="grid grid-cols-1 gap-4 md:grid-cols-3">
+          <SimpleCard
+            title="Avec Slot"
+            description="Cette carte utilise le slot pour du contenu personnalisé"
+            variant="elevated"
+          >
+            <div class="mt-3 flex gap-2">
+              <span class="badge badge-primary">React</span>
+              <span class="badge badge-secondary">TypeScript</span>
+            </div>
+          </SimpleCard>
+
+          <SimpleCard title="Statistiques" variant="outlined">
+            <div class="mt-4 space-y-2">
+              <div class="flex justify-between">
+                <span>Vues:</span>
+                <span class="font-semibold">1,234</span>
+              </div>
+              <div class="flex justify-between">
+                <span>Likes:</span>
+                <span class="font-semibold">56</span>
+              </div>
+            </div>
+          </SimpleCard>
+
+          <SimpleCard
+            title="Note"
+            description="Démonstration de la flexibilité de BaseCard"
+            variant="subtle"
+          >
+            <div class="mt-3">
+              <p class="text-success text-sm">✓ Utilise BaseCard comme fondation</p>
+              <p class="text-success text-sm">✓ Approche DRY respectée</p>
+            </div>
+          </SimpleCard>
+        </div>
+      </div>
     </div>
   </Section>
 </StyleGuideLayout>

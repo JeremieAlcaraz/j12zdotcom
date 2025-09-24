@@ -10,7 +10,7 @@ import Notice from '@/shortcodes/generic/Notice.shortcode.astro'
 import Video from '@/shortcodes/generic/Video.shortcode.astro'
 import Youtube from '@/shortcodes/generic/Youtube.shortcode.astro'
 import FabSpeedDial from '@/ui/molecules/FabSpeedDial.astro'
-import MusicPlayer from '@/ui/molecules/MusicPlayer.astro'
+import MusicPlayer from '@/ui/organisms/MusicPlayer.astro'
 import FocusEscapeHint from '@/ui/molecules/FocusEscapeHint.astro'
 
 const { post } = Astro.props
@@ -83,7 +83,7 @@ const { title, author, categories, image, date, tags } = post.data
 
   <!-- FAB / Speed Dial fixed in the viewport for blog posts -->
   <FabSpeedDial />
-  
+
   <!-- ESC key hint for focus mode -->
   <FocusEscapeHint />
 
@@ -108,17 +108,24 @@ const { title, author, categories, image, date, tags } = post.data
       pointer-events: none;
       transition: transform 460ms cubic-bezier(0.16, 1, 0.3, 1);
     }
-    #music-dock.music-dock.open { transform: translate(0, 0) scale(1); }
+    #music-dock.music-dock.open {
+      transform: translate(0, 0) scale(1);
+    }
     /* The aside is only a positioning/animation shell */
 
     @media (prefers-reduced-motion: reduce) {
-      #music-dock.music-dock { transition: none; transform: none; }
-      #music-dock.music-dock.open { opacity: 1; }
+      #music-dock.music-dock {
+        transition: none;
+        transform: none;
+      }
+      #music-dock.music-dock.open {
+        opacity: 1;
+      }
     }
   </style>
 
   <script is:inline>
-    (() => {
+    ;(() => {
       const dock = document.getElementById('music-dock')
       if (!dock) return
 
@@ -127,12 +134,16 @@ const { title, author, categories, image, date, tags } = post.data
       let inGutter = false
       let target = 0 // desired opacity [0..1]
       let current = 0 // current opacity [0..1]
+      let lastPointerX = null
       let rafId = 0
+      let autoHideTimer = 0
+      let justOpenedTimer = 0
+      let isJustOpened = false
       let lastTs = performance.now()
 
       // Timings
       const RISE_MS = 800 // appear in < 1s
-      const FALL_MS_BASE = 5000 // ~5s fade when idle
+      const FALL_MS_BASE = 2200 // faster default fade
       let effectiveFallMs = FALL_MS_BASE
 
       // Scroll speed tracking (px/sec)
@@ -160,7 +171,28 @@ const { title, author, categories, image, date, tags } = post.data
       }
       function setTarget(val) {
         target = Math.max(0, Math.min(1, val))
+        console.log('[MusicDock] setTarget:', target)
         if (!rafId) rafId = requestAnimationFrame(tick)
+      }
+
+      function clearAutoHide() {
+        if (autoHideTimer) {
+          clearTimeout(autoHideTimer)
+          autoHideTimer = 0
+        }
+      }
+
+      function scheduleAutoHide(delay = 0) {
+        clearAutoHide()
+        if (!isOpen || inGutter) return
+        autoHideTimer = window.setTimeout(
+          () => {
+            autoHideTimer = 0
+            if (!isOpen || inGutter) return
+            setTarget(0)
+          },
+          Math.max(0, delay)
+        )
       }
 
       function computeFallMs() {
@@ -195,11 +227,47 @@ const { title, author, categories, image, date, tags } = post.data
         }
       }
 
-      function updateInGutterFromMouse(e) {
+      function computeInGutter(x) {
+        if (typeof x !== 'number' || Number.isNaN(x)) return false
         const w = gutterWidth()
-        inGutter = e.clientX >= window.innerWidth - w
-        if (!isOpen) return
-        setTarget(inGutter ? 1 : 0)
+        return x >= window.innerWidth - w
+      }
+
+      function syncInGutter(x = lastPointerX) {
+        const next = computeInGutter(x)
+        const changed = next !== inGutter
+        inGutter = next
+        return changed
+      }
+
+      function updateInGutterFromPointer(e) {
+        if (typeof e?.clientX !== 'number') return
+        lastPointerX = e.clientX
+        const changed = syncInGutter(lastPointerX)
+        console.log('[MusicDock] mousemove:', {
+          clientX: lastPointerX,
+          inGutter,
+          isJustOpened,
+          isOpen,
+          changed,
+        })
+        if (!isOpen || isJustOpened) return // Ignore during grace period
+        if (inGutter) {
+          clearAutoHide()
+          // Always ensure dock stays visible when in gutter, not just when entering
+          if (changed) {
+            console.log('[MusicDock] Entering gutter, setTarget(1)')
+          } else {
+            console.log('[MusicDock] Staying in gutter, maintaining visibility')
+          }
+          setTarget(1)
+        } else {
+          if (changed) {
+            console.log('[MusicDock] Leaving gutter, setTarget(0)')
+            setTarget(0)
+          }
+          scheduleAutoHide()
+        }
       }
 
       function handleScroll() {
@@ -213,19 +281,41 @@ const { title, author, categories, image, date, tags } = post.data
         if (isOpen && !inGutter) {
           // Recompute target to accelerate fade
           setTarget(0)
+          scheduleAutoHide()
         }
       }
 
       // Open/close via FAB & ESC
       const setOpen = (v, opts = {}) => {
-        const immediate = !!opts.immediate
+        const { immediate = false, forceReveal = false } = opts
+        console.log('[MusicDock] setOpen called:', { v, isOpen: !!v, immediate, forceReveal })
         isOpen = !!v
         dock.classList.toggle('open', isOpen)
         dock.setAttribute('aria-hidden', isOpen ? 'false' : 'true')
         if (isOpen) {
-          // Reveal only if mouse is in the gutter; otherwise stay faded
-          setTarget(inGutter ? 1 : 0)
+          // Refresh gutter state on open so we don't rely on stale data
+          syncInGutter()
+          // If we were explicitly asked to reveal, ignore gutter state just once
+          const targetValue = forceReveal ? 1 : inGutter ? 1 : 0
+          setTarget(targetValue)
+          if (inGutter) clearAutoHide()
+          else scheduleAutoHide(forceReveal ? 600 : 0)
+
+          // Grace period: ignore hide logic for 400ms after open to prevent instant hide on first mousemove
+          console.log('[MusicDock] Starting grace period')
+          isJustOpened = true
+          if (justOpenedTimer) clearTimeout(justOpenedTimer)
+          justOpenedTimer = setTimeout(() => {
+            console.log('[MusicDock] Grace period ended')
+            isJustOpened = false
+          }, 400)
         } else {
+          console.log('[MusicDock] Closing dock')
+          isJustOpened = false
+          if (justOpenedTimer) {
+            clearTimeout(justOpenedTimer)
+            justOpenedTimer = 0
+          }
           if (immediate) {
             if (rafId) {
               cancelAnimationFrame(rafId)
@@ -235,18 +325,17 @@ const { title, author, categories, image, date, tags } = post.data
           } else {
             setTarget(0)
           }
+          clearAutoHide()
         }
       }
-      const toggle = (opts) => setOpen(!isOpen, opts)
+      const toggle = opts => setOpen(!isOpen, opts)
 
       function onFabAction(e) {
         const action = e?.detail?.action
         if (action === 'music') {
-          // Assume click originates in the right gutter (where the FAB lives)
-          inGutter = true
-          // Close immediately on second click; open normally otherwise
+          // Close immediately on second click; force a reveal on open
           if (isOpen) toggle({ immediate: true })
-          else toggle()
+          else toggle({ forceReveal: true })
         }
       }
       function onKeydown(e) {
@@ -255,19 +344,24 @@ const { title, author, categories, image, date, tags } = post.data
 
       document.addEventListener('fab:action', onFabAction)
       document.addEventListener('keydown', onKeydown)
-      document.addEventListener('mousemove', updateInGutterFromMouse)
+      document.addEventListener('mousemove', updateInGutterFromPointer)
+      document.addEventListener('mousedown', updateInGutterFromPointer)
       document.addEventListener('scroll', handleScroll, { passive: true })
       window.addEventListener('resize', () => {
         // Re-evaluate gutter on resize; trigger target recompute
+        syncInGutter()
         if (isOpen) setTarget(inGutter ? 1 : 0)
+        if (!inGutter) scheduleAutoHide()
       })
 
       // Cleanup on navigation (Astro ViewTransitions)
       document.addEventListener('astro:before-swap', () => {
         document.removeEventListener('fab:action', onFabAction)
         document.removeEventListener('keydown', onKeydown)
-        document.removeEventListener('mousemove', updateInGutterFromMouse)
+        document.removeEventListener('mousemove', updateInGutterFromPointer)
+        document.removeEventListener('mousedown', updateInGutterFromPointer)
         document.removeEventListener('scroll', handleScroll)
+        clearAutoHide()
         if (rafId) cancelAnimationFrame(rafId)
       })
     })()
@@ -275,7 +369,7 @@ const { title, author, categories, image, date, tags } = post.data
 
   <!-- Enable entering focus mode with Enter on blog posts -->
   <script is:inline>
-    (() => {
+    ;(() => {
       // Only active on this page; detach on navigation
       function onKeydown(e) {
         if (e.key !== 'Enter') return

@@ -196,7 +196,7 @@ const pageTitle = meta_title || title
     <FocusModeController />
     <!-- Layout principal avec Grid Tailwind -->
     <div class="grid min-h-screen grid-rows-[auto_1fr_auto]">
-      <TwSizeIndicator />
+      {import.meta.env.DEV && <TwSizeIndicator />}
       <!-- HEADER fixe -->
       <header class="fixed top-0 right-0 left-0 z-50 bg-transparent">
         <Header />
