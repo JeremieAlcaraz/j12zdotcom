@@ -3,6 +3,7 @@
 import BaseCard from '@/ui/atoms/BaseCard.astro'
 import Icon from '@/ui/atoms/Icon.astro'
 import ImageMod from '@/ui/atoms/ImageMod.astro'
+import ProgressBar from '@/ui/molecules/ProgressBar.astro'
 
 // UID par instance pour cibler le bon DOM même avec ClientRouter
 const playerId = `pp-${Math.random().toString(36).slice(2, 9)}`
@@ -101,20 +102,22 @@ const playerId = `pp-${Math.random().toString(36).slice(2, 9)}`
   </div>
 
   <!-- Barre de progression en pleine largeur -->
-  <div class="px-6 pb-6 cursor-pointer">
-    <div class="relative">
-      <div
-        class="tooltip tooltip-open absolute top-2 before:text-xs"
-        style="inset-inline-start:0%"
-        data-tip="0:00"
-      >
-      </div>
-      <progress
-        class="progress progress-primary w-full"
-        value="0"
-        max="100"
-        aria-label="Progression"></progress>
-    </div>
+  <div class="px-6 pb-6">
+    <ProgressBar
+      id={playerId}
+      value={0}
+      max={100}
+      showTooltip={true}
+      wrapperClass="cursor-pointer"
+      progressClass="w-full"
+      tooltip={{
+        label: '0:00',
+        open: true,
+        class: 'top-2 before:text-xs',
+        style: 'inset-inline-start:0%;',
+      }}
+      ariaLabel="Progression"
+    />
   </div>
 </BaseCard>
 
@@ -153,12 +156,11 @@ const playerId = `pp-${Math.random().toString(36).slice(2, 9)}`
       this.prevBtn = root.querySelector('[data-action="prev"]')
       this.nextBtn = root.querySelector('[data-action="next"]')
       this.volumeBtn = root.querySelector('[data-action="volume"]')
-      this.progressBar = root.querySelector('.progress')
-      this.progressContainer = this.progressBar ? this.progressBar.parentElement : null
-      this.progressClickTarget = this.progressContainer?.parentElement ?? this.progressContainer
+      this.progressBar = root.querySelector('[data-progress-bar]')
+      this.progressContainer = root.querySelector('[data-progress-root]')
       this.currentTimeEl = root.querySelector('[data-time="current"]')
       this.durationEl = root.querySelector('[data-time="duration"]')
-      this.tooltip = root.querySelector('.tooltip')
+      this.tooltip = root.querySelector('[data-progress-tooltip]')
       this.leftImgWrap = root.querySelector('.pp-left-img')
       this.rightCol = root.querySelector('.pp-right')
 
@@ -184,7 +186,7 @@ const playerId = `pp-${Math.random().toString(36).slice(2, 9)}`
         this.progressBar.value = 0
       }
       if (this.tooltip) {
-        this.tooltip.style.left = '0%'
+        this.tooltip.style.setProperty('inset-inline-start', '0%')
         this.tooltip.setAttribute('data-tip', this.formatTime(0))
       }
       if (this.currentTimeEl) {
@@ -210,8 +212,8 @@ const playerId = `pp-${Math.random().toString(36).slice(2, 9)}`
         this.volumeBtn.addEventListener('click', () => this.toggleMute())
       }
 
-      if (this.progressClickTarget) {
-        this.progressClickTarget.addEventListener('click', e => this.seek(e))
+      if (this.progressContainer) {
+        this.progressContainer.addEventListener('click', e => this.seek(e))
       }
 
       this.audio.addEventListener('timeupdate', () => this.updateProgress())
@@ -298,7 +300,7 @@ const playerId = `pp-${Math.random().toString(36).slice(2, 9)}`
 
       if (this.tooltip) {
         const tooltipPercent = percent
-        this.tooltip.style.left = `${tooltipPercent}%`
+        this.tooltip.style.setProperty('inset-inline-start', `${tooltipPercent}%`)
         this.tooltip.setAttribute('data-tip', this.formatTime(this.audio.currentTime))
       }
 

@@ -2,6 +2,7 @@
   // Composant MusicPlayer - Lecteur de musique avec logique
   import BaseCard from '@/ui/atoms/BaseCard.astro'
   import Icon from '@/ui/atoms/Icon.astro'
+  import ProgressBar from '@/ui/molecules/ProgressBar.astro'
 
   interface Props {
     base?: 100 | 200 | 300
@@ -53,15 +54,20 @@
     </div>
   </div>
   <div class="border-base-300 flex flex-col border-t px-6 py-4">
-    <div class="relative mt-6">
-      <div
-        class="tooltip tooltip-open absolute top-2 before:text-xs"
-        style="inset-inline-start:0%"
-        data-tip="0:00"
-      >
-      </div>
-      <progress class="progress progress-primary" value="0" max="100"></progress>
-    </div>
+    <ProgressBar
+      id={playerId}
+      value={0}
+      max={100}
+      showTooltip={true}
+      wrapperClass="mt-6"
+      progressClass="w-full"
+      tooltip={{
+        label: '0:00',
+        open: true,
+        class: 'top-2 before:text-xs',
+        style: 'inset-inline-start:0%;',
+      }}
+    />
     <div class="flex justify-between text-xs opacity-70">
       <span data-time="current">0:00</span>
       <span data-time="duration">4:00</span>
@@ -123,12 +129,11 @@
       this.volumeBtn = root.querySelector('[data-action="volume"]')
       this.repeatBtn = root.querySelector('[data-action="repeat"]')
       this.shuffleBtn = root.querySelector('[data-action="shuffle"]')
-      this.progressBar = root.querySelector('.progress')
-      const progressEl = root.querySelector('.progress')
-      this.progressContainer = progressEl ? progressEl.parentElement : null
+      this.progressBar = root.querySelector('[data-progress-bar]')
+      this.progressContainer = root.querySelector('[data-progress-root]')
       this.currentTimeEl = root.querySelector('[data-time="current"]')
       this.durationEl = root.querySelector('[data-time="duration"]')
-      this.tooltip = root.querySelector('.tooltip')
+      this.tooltip = root.querySelector('[data-progress-tooltip]')
 
       this.isPlaying = false
       this.isMuted = false
@@ -156,7 +161,7 @@
         this.progressBar.value = 0
       }
       if (this.tooltip) {
-        this.tooltip.style.left = '0%'
+        this.tooltip.style.setProperty('inset-inline-start', '0%')
         this.tooltip.setAttribute('data-tip', this.formatTime(0))
       }
       if (this.currentTimeEl) {
@@ -263,9 +268,13 @@
     seek(e) {
       if (!this.progressContainer) return
       if (!this.audio || !isFinite(this.audio.duration) || this.audio.duration <= 0) return
-      const rect = this.progressContainer.getBoundingClientRect()
-      const percent = (e.clientX - rect.left) / rect.width
-      this.audio.currentTime = percent * this.audio.duration
+      const rectTarget = this.progressBar ?? this.progressContainer
+      if (!rectTarget) return
+      const rect = rectTarget.getBoundingClientRect()
+      if (!rect || rect.width === 0) return
+      const rawPercent = (e.clientX - rect.left) / rect.width
+      const clampedPercent = Math.min(Math.max(rawPercent, 0), 1)
+      this.audio.currentTime = clampedPercent * this.audio.duration
     }
 
     updateProgress() {
@@ -279,7 +288,7 @@
       // Mettre à jour le tooltip
       if (this.tooltip) {
         const tooltipPercent = percent
-        this.tooltip.style.left = `${tooltipPercent}%`
+        this.tooltip.style.setProperty('inset-inline-start', `${tooltipPercent}%`)
         this.tooltip.setAttribute('data-tip', this.formatTime(this.audio.currentTime))
       }
 
