@@ -127,12 +127,14 @@ const { title, author, categories, image, date, tags } = post.data
       let inGutter = false
       let target = 0 // desired opacity [0..1]
       let current = 0 // current opacity [0..1]
+      let lastPointerX = null
       let rafId = 0
+      let autoHideTimer = 0
       let lastTs = performance.now()
 
       // Timings
       const RISE_MS = 800 // appear in < 1s
-      const FALL_MS_BASE = 5000 // ~5s fade when idle
+      const FALL_MS_BASE = 2200 // faster default fade
       let effectiveFallMs = FALL_MS_BASE
 
       // Scroll speed tracking (px/sec)
@@ -161,6 +163,23 @@ const { title, author, categories, image, date, tags } = post.data
       function setTarget(val) {
         target = Math.max(0, Math.min(1, val))
         if (!rafId) rafId = requestAnimationFrame(tick)
+      }
+
+      function clearAutoHide() {
+        if (autoHideTimer) {
+          clearTimeout(autoHideTimer)
+          autoHideTimer = 0
+        }
+      }
+
+      function scheduleAutoHide(delay = 0) {
+        clearAutoHide()
+        if (!isOpen || inGutter) return
+        autoHideTimer = window.setTimeout(() => {
+          autoHideTimer = 0
+          if (!isOpen || inGutter) return
+          setTarget(0)
+        }, Math.max(0, delay))
       }
 
       function computeFallMs() {
@@ -195,11 +214,31 @@ const { title, author, categories, image, date, tags } = post.data
         }
       }
 
-      function updateInGutterFromMouse(e) {
+      function computeInGutter(x) {
+        if (typeof x !== 'number' || Number.isNaN(x)) return false
         const w = gutterWidth()
-        inGutter = e.clientX >= window.innerWidth - w
+        return x >= window.innerWidth - w
+      }
+
+      function syncInGutter(x = lastPointerX) {
+        const next = computeInGutter(x)
+        const changed = next !== inGutter
+        inGutter = next
+        return changed
+      }
+
+      function updateInGutterFromPointer(e) {
+        if (typeof e?.clientX !== 'number') return
+        lastPointerX = e.clientX
+        const changed = syncInGutter(lastPointerX)
         if (!isOpen) return
-        setTarget(inGutter ? 1 : 0)
+        if (inGutter) {
+          clearAutoHide()
+          if (changed) setTarget(1)
+        } else {
+          if (changed) setTarget(0)
+          scheduleAutoHide()
+        }
       }
 
       function handleScroll() {
@@ -213,18 +252,24 @@ const { title, author, categories, image, date, tags } = post.data
         if (isOpen && !inGutter) {
           // Recompute target to accelerate fade
           setTarget(0)
+          scheduleAutoHide()
         }
       }
 
       // Open/close via FAB & ESC
       const setOpen = (v, opts = {}) => {
-        const immediate = !!opts.immediate
+        const { immediate = false, forceReveal = false } = opts
         isOpen = !!v
         dock.classList.toggle('open', isOpen)
         dock.setAttribute('aria-hidden', isOpen ? 'false' : 'true')
         if (isOpen) {
-          // Reveal only if mouse is in the gutter; otherwise stay faded
-          setTarget(inGutter ? 1 : 0)
+          // Refresh gutter state on open so we don't rely on stale data
+          syncInGutter()
+          // If we were explicitly asked to reveal, ignore gutter state just once
+          const targetValue = forceReveal ? 1 : inGutter ? 1 : 0
+          setTarget(targetValue)
+          if (inGutter) clearAutoHide()
+          else scheduleAutoHide(forceReveal ? 600 : 0)
         } else {
           if (immediate) {
             if (rafId) {
@@ -235,6 +280,7 @@ const { title, author, categories, image, date, tags } = post.data
           } else {
             setTarget(0)
           }
+          clearAutoHide()
         }
       }
       const toggle = (opts) => setOpen(!isOpen, opts)
@@ -242,11 +288,9 @@ const { title, author, categories, image, date, tags } = post.data
       function onFabAction(e) {
         const action = e?.detail?.action
         if (action === 'music') {
-          // Assume click originates in the right gutter (where the FAB lives)
-          inGutter = true
-          // Close immediately on second click; open normally otherwise
+          // Close immediately on second click; force a reveal on open
           if (isOpen) toggle({ immediate: true })
-          else toggle()
+          else toggle({ forceReveal: true })
         }
       }
       function onKeydown(e) {
@@ -255,19 +299,24 @@ const { title, author, categories, image, date, tags } = post.data
 
       document.addEventListener('fab:action', onFabAction)
       document.addEventListener('keydown', onKeydown)
-      document.addEventListener('mousemove', updateInGutterFromMouse)
+      document.addEventListener('mousemove', updateInGutterFromPointer)
+      document.addEventListener('mousedown', updateInGutterFromPointer)
       document.addEventListener('scroll', handleScroll, { passive: true })
       window.addEventListener('resize', () => {
         // Re-evaluate gutter on resize; trigger target recompute
+        syncInGutter()
         if (isOpen) setTarget(inGutter ? 1 : 0)
+        if (!inGutter) scheduleAutoHide()
       })
 
       // Cleanup on navigation (Astro ViewTransitions)
       document.addEventListener('astro:before-swap', () => {
         document.removeEventListener('fab:action', onFabAction)
         document.removeEventListener('keydown', onKeydown)
-        document.removeEventListener('mousemove', updateInGutterFromMouse)
+        document.removeEventListener('mousemove', updateInGutterFromPointer)
+        document.removeEventListener('mousedown', updateInGutterFromPointer)
         document.removeEventListener('scroll', handleScroll)
+        clearAutoHide()
         if (rafId) cancelAnimationFrame(rafId)
       })
     })()

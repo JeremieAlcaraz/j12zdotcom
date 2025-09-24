@@ -18,6 +18,7 @@ import Kbd from '@/ui/atoms/Kbd.astro'
 import Loader from '@/ui/atoms/Loader.astro'
 import LottiePlayer from '@/ui/atoms/LottiePlayer.astro'
 import Notice from '@/ui/atoms/Notice.astro'
+import Tooltip from '@/ui/atoms/Tooltip.astro'
 import PaginationItem from '@/ui/atoms/PaginationItem.astro'
 import Video from '@/ui/atoms/Video.astro'
 import Youtube from '@/ui/atoms/Youtube.astro'
@@ -913,6 +914,51 @@ const pangram = "Voix ambigue d'un coeur qui au zephyr prefere les jattes de kiw
           speed={0.5}
           class="bg-base-200 rounded-lg"
         />
+      </div>
+    </div>
+  </div>
+</Section>
+
+<!-- Tooltip -->
+<Section>
+  <div id="tooltip" class="scroll-mt-[5rem]">
+    <Divider variant="default" label="Tooltip" />
+  </div>
+  <h2 class="sr-only">Tooltip</h2>
+  <div class="grid grid-cols-1 gap-6">
+    <div>
+      <h3 class="mb-2 text-lg font-bold">Positions & Etats</h3>
+      <div class="flex flex-wrap items-center gap-6">
+        <Tooltip label="Infos depuis le haut" position="top">
+          <button class="btn btn-sm">Hover top</button>
+        </Tooltip>
+        <Tooltip label="Affiché en bas" position="bottom" open={true}>
+          <button class="btn btn-sm">Toujours visible</button>
+        </Tooltip>
+        <Tooltip
+          label="Accent info"
+          position="right"
+          open={true}
+          class="tooltip-info"
+        >
+          <button class="btn btn-sm btn-info">Info</button>
+        </Tooltip>
+      </div>
+    </div>
+    <div>
+      <h3 class="mb-2 text-lg font-bold">Avec contenu personnalisé</h3>
+      <div class="flex flex-wrap items-center gap-6">
+        <Tooltip
+          label="Progression actuelle"
+          position="top"
+          open={true}
+          class="tooltip-primary"
+          style="inset-inline-start: 40%;"
+        >
+          <div class="relative inline-flex h-2 w-40 items-center rounded-full bg-base-200">
+            <span class="absolute left-0 h-full w-2/5 rounded-full bg-primary"></span>
+          </div>
+        </Tooltip>
       </div>
     </div>
   </div>

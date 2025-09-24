@@ -9,6 +9,7 @@ import { makePaginationLinks } from '@/utils/pagination'
 import FabSpeedDial from '@/ui/molecules/FabSpeedDial.astro'
 import FeatureCard from '@/ui/molecules/FeatureCard.astro'
 import SimpleCard from '@/ui/molecules/SimpleCard.astro'
+import ProgressBar from '@/ui/molecules/ProgressBar.astro'
 
 const { pages, prev, next } = makePaginationLinks('blog', 1, 5)
 ---
@@ -58,6 +59,49 @@ const { pages, prev, next } = makePaginationLinks('blog', 1, 5)
     <h2 class="sr-only">Loading</h2>
     <div class="grid grid-cols-1 gap-4">
       <Loading text="Chargement..." />
+    </div>
+  </Section>
+
+  <Section>
+    <div id="progressbar" class="scroll-mt-[5rem]">
+      <Divider variant="default" label="ProgressBar" />
+    </div>
+    <h2 class="sr-only">ProgressBar</h2>
+    <div class="space-y-8">
+      <div class="space-y-2">
+        <h3 class="text-lg font-bold">Avec tooltip actif</h3>
+        <ProgressBar
+          value={30}
+          max={100}
+          showTooltip={true}
+          wrapperClass="max-w-xl"
+          progressClass="w-full"
+          ariaLabel="Progression démo"
+          tooltip={{
+            label: '0:30',
+            open: true,
+            class: 'top-2 before:text-xs',
+            style: 'inset-inline-start: 30%;',
+          }}
+        />
+      </div>
+
+      <div class="space-y-4">
+        <h3 class="text-lg font-bold">Variantes de style</h3>
+        <ProgressBar value={60} progressClass="progress-secondary w-full" wrapperClass="max-w-xl" />
+        <ProgressBar
+          value={85}
+          showTooltip={true}
+          wrapperClass="max-w-xl"
+          progressClass="progress-accent w-full"
+          tooltip={{
+            label: '85%',
+            open: true,
+            class: 'top-2 before:text-xs',
+            style: 'inset-inline-start: 85%;',
+          }}
+        />
+      </div>
     </div>
   </Section>
 
