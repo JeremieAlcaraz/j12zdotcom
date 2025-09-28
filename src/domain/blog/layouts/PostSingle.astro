@@ -21,20 +21,6 @@ const { title, author, categories, image, date, tags } = post.data
 
 <section class="py-8">
   <article class="prose prose-lg dark:prose-invert mx-auto max-w-3xl">
-    {
-      image && (
-        <figure class="not-prose mb-8">
-          <ImageMod
-            src={image}
-            height={500}
-            width={1200}
-            alt={title}
-            class="w-full rounded"
-            format="webp"
-          />
-        </figure>
-      )
-    }
     <header class="not-prose mb-8">
       <h1 set:html={markdownify(title)} class="mb-4" />
       <ul class="flex flex-wrap items-center gap-x-4 text-sm text-gray-600 dark:text-gray-400">
