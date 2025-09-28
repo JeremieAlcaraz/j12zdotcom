@@ -1,50 +1,122 @@
-# [PROJECT_NAME] Constitution
-<!-- Example: Spec Constitution, TaskFlow Constitution, etc. -->
+<!-- Sync Impact Report
+Version change: 1.0.0 → 1.1.0
+Modified principles: All principles updated for website context
+Added sections: Development Workflow, Quality Standards
+Removed sections: None
+Templates requiring updates: ✅ plan-template.md, spec-template.md, tasks-template.md
+Follow-up TODOs: Update author name in package.json, Refine component architecture section with detailed atomic design principles
+-->
+
+# j12zdotcom Constitution
 
 ## Core Principles
 
-### [PRINCIPLE_1_NAME]
-<!-- Example: I. Library-First -->
-[PRINCIPLE_1_DESCRIPTION]
-<!-- Example: Every feature starts as a standalone library; Libraries must be self-contained, independently testable, documented; Clear purpose required - no organizational-only libraries -->
+### Performance First
+Toutes les optimisations de performance sont prioritaires et non négociables.
+- Les images doivent être optimisées (WebP/AVIF) avec des tailles responsives
+- Le code JavaScript doit être minimisé et chargé de manière asynchrone
+- Les animations doivent maintenir 60 FPS et être optimisées pour les appareils mobiles
+- Les temps de chargement doivent rester sous 3 secondes sur 3G
 
-### [PRINCIPLE_2_NAME]
-<!-- Example: II. CLI Interface -->
-[PRINCIPLE_2_DESCRIPTION]
-<!-- Example: Every library exposes functionality via CLI; Text in/out protocol: stdin/args → stdout, errors → stderr; Support JSON + human-readable formats -->
+### Accessibilité Universelle
+L'accessibilité n'est pas optionnelle - c'est une exigence fondamentale.
+- Respect strict du WCAG 2.1 AA minimum
+- Navigation clavier complète et intuitive
+- Support des technologies d'assistance (lecteurs d'écran, agrandisseurs)
+- Contraste des couleurs supérieur à 4.5:1 pour le texte normal
+- Tests d'accessibilité automatisés et manuels obligatoires
 
-### [PRINCIPLE_3_NAME]
-<!-- Example: III. Test-First (NON-NEGOTIABLE) -->
-[PRINCIPLE_3_DESCRIPTION]
-<!-- Example: TDD mandatory: Tests written → User approved → Tests fail → Then implement; Red-Green-Refactor cycle strictly enforced -->
+### Modernité Technique
+Le code doit refléter les meilleures pratiques actuelles du développement web.
+- TypeScript obligatoire pour tous les composants
+- Utilisation cohérente de Tailwind CSS avec DaisyUI
+- Architecture component-based (atoms/molecules/organisms)
+- Support des navigateurs modernes uniquement (2 dernières versions)
+- Progressive enhancement pour les fonctionnalités avancées
 
-### [PRINCIPLE_4_NAME]
-<!-- Example: IV. Integration Testing -->
-[PRINCIPLE_4_DESCRIPTION]
-<!-- Example: Focus areas requiring integration tests: New library contract tests, Contract changes, Inter-service communication, Shared schemas -->
+### Qualité du Contenu
+Le contenu prime sur la technologie - le site doit servir son objectif premier.
+- Hiérarchie claire de l'information avec des headings logiques
+- Contenu scannable avec des listes et des courts paragraphes
+- Appels à l'action explicites et bien positionnés
+- Mise à jour régulière du contenu pour maintenir la pertinence
+- Optimisation SEO de base pour la visibilité
 
-### [PRINCIPLE_5_NAME]
-<!-- Example: V. Observability, VI. Versioning & Breaking Changes, VII. Simplicity -->
-[PRINCIPLE_5_DESCRIPTION]
-<!-- Example: Text I/O ensures debuggability; Structured logging required; Or: MAJOR.MINOR.BUILD format; Or: Start simple, YAGNI principles -->
+### Maintenabilité Long-terme
+Le code doit être facile à maintenir et faire évoluer.
+- Architecture modulaire avec séparation claire des responsabilités
+- Documentation des composants complexes
+- Tests automatisés pour les fonctionnalités critiques
+- Gestion rigoureuse des dépendances et des versions
+- Révision périodique de la dette technique
 
-## [SECTION_2_NAME]
-<!-- Example: Additional Constraints, Security Requirements, Performance Standards, etc. -->
+## Standards de Développement
 
-[SECTION_2_CONTENT]
-<!-- Example: Technology stack requirements, compliance standards, deployment policies, etc. -->
+### Stack Technologique Obligatoire
+- **Framework**: Astro 5.x avec support SSR hybride
+- **UI**: React 19.x et Svelte 5.x selon les besoins
+- **Styling**: Tailwind CSS 4.x avec DaisyUI 5.x
+- **Langage**: TypeScript 5.x avec configuration stricte
+- **Linters**: ESLint et Prettier configurés et appliqués
 
-## [SECTION_3_NAME]
-<!-- Example: Development Workflow, Review Process, Quality Gates, etc. -->
+### Architecture des Composants
 
-[SECTION_3_CONTENT]
-<!-- Example: Code review requirements, testing gates, deployment approval process, etc. -->
+L'architecture suit une hiérarchie claire allant des briques UI aux orchestrateurs métier :
+
+**Atoms** : Composants UI minimaux (bouton, icône, input). Pures, sans layout ni logique de données.
+
+**Molecules** : Assemblages simples d'Atoms (Input + Label). Pas de logique métier.
+
+**Organisms** : Blocs UI réutilisables (Card, Sidebar, Form). Reçoivent des données prêtes, gèrent des variantes (ex. BlogCard, OfferCard).
+
+**Sections** : Conteneurs de mise en page regroupant des Organisms. Elles orchestrent uniquement la présentation (layout, grille, ancrage). Pas de fetch ni logique métier.
+
+**Domains** : Modules métier.
+- Responsables de la logique de données (fetch, adaptation, mapping).
+- Orchestrent les Sections avec des données prêtes à l'emploi.
+- Peuvent inclure des composants spécialisés liés au domaine (blog, formation, contact).
+
+**Pages Astro** : Points d'entrée routés. Elles délèguent leur logique métier aux Domains et se limitent au contexte global (SEO, routing, meta).
+
+**Layouts Astro** : Charpente globale du site (<html>, <head>, <body>). Intègrent les composants structurels transverses (Header, Footer) et exposent des slots nommés.
+
+➡️ **Règles de responsabilité**
+
+- La logique métier vit exclusivement dans les Domains.
+- La présentation est assurée par Sections + Organisms.
+- Les Pages restent minimales et délèguent aux Domains.
+- Les Layouts ne concernent que la structure globale et transversale.
+
+👉 **Avec cette version, chaque niveau est strictement défini :**
+
+- **UI** → Atoms à Organisms
+- **Présentation** → Sections
+- **Métier** → Domains
+- **Routing / SEO** → Pages
+- **Structure globale** → Layouts
+
+> Avantages clés : cohérence, réutilisation, vitesse, évolutivité, meilleure communication design ↔ dev.
+
+## Workflow de Développement
+
+### Processus de Développement
+- Développement feature-first avec tests d'intégration
+- Révision de code obligatoire pour toute modification
+- Tests automatisés avant déploiement
+- Déploiement continu avec prévisualisation
+
+### Révision et Qualité
+- Checklist d'accessibilité pour chaque nouvelle page
+- Tests de performance sur différents appareils
+- Révision UX/UI pour les nouvelles fonctionnalités
+- Documentation mise à jour pour les changements majeurs
 
 ## Governance
-<!-- Example: Constitution supersedes all other practices; Amendments require documentation, approval, migration plan -->
 
-[GOVERNANCE_RULES]
-<!-- Example: All PRs/reviews must verify compliance; Complexity must be justified; Use [GUIDANCE_FILE] for runtime development guidance -->
+La présente constitution prévaut sur toutes les autres pratiques de développement.
+- Les amendements nécessitent une justification technique claire
+- Les exceptions temporaires doivent être documentées avec plan de résolution
+- Révision constitutionnelle annuelle ou lors de changements majeurs de stack
+- Formation continue sur les standards web modernes
 
-**Version**: [CONSTITUTION_VERSION] | **Ratified**: [RATIFICATION_DATE] | **Last Amended**: [LAST_AMENDED_DATE]
-<!-- Example: Version: 2.1.1 | Ratified: 2025-06-13 | Last Amended: 2025-07-16 -->
+**Version**: 1.1.0 | **Ratified**: 2024-09-28 | **Last Amended**: 2024-09-28
