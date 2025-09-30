@@ -7,6 +7,7 @@ import Icon from '@/ui/atoms/Icon.astro'
 import Accordion from '@/shortcodes/generic/Accordion.shortcode.astro'
 import Button from '@/shortcodes/generic/Button.shortcode.astro'
 import Notice from '@/shortcodes/generic/Notice.shortcode.astro'
+import PodcastPlayer from '@/shortcodes/generic/PodcastPlayer.shortcode.astro'
 import Video from '@/shortcodes/generic/Video.shortcode.astro'
 import Youtube from '@/shortcodes/generic/Youtube.shortcode.astro'
 import FabSpeedDial from '@/ui/molecules/FabSpeedDial.astro'
@@ -15,7 +16,7 @@ import FocusEscapeHint from '@/ui/molecules/FocusEscapeHint.astro'
 
 const { post } = Astro.props
 const { Content } = await render(post)
-const components = { Accordion, Button, Notice, Video, Youtube }
+const components = { Accordion, Button, Notice, PodcastPlayer, Video, Youtube }
 const { title, author, date, tags } = post.data
 
 const formattedAuthor = humanize(author)
