@@ -9,6 +9,6 @@ const { posts } = Astro.props as Props
 const bases = [100, 200, 300] as const
 ---
 
-<div class="grid w-full grid-cols-3 gap-4">
+<div class="grid w-full grid-cols-1 gap-4 sm:grid-cols-3">
   {posts.map((post, idx) => <BlogCard data={post} base={bases[idx] ?? 100} />)}
 </div>

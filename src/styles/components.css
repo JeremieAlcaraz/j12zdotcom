@@ -88,6 +88,59 @@
     @apply prose-tr:border-base-300;
     @apply prose-td:relative prose-td:z-10 prose-td:px-3 prose-td:py-[18px];
   }
+
+  /* Blog article rhythm: golden ratio spacing & compact sections */
+  .prose {
+    --article-leading: 1.618;
+    --article-block-gap: calc(1em * var(--article-leading));
+    --article-heading-gap: calc(var(--article-block-gap) * 1.618);
+    line-height: var(--article-leading);
+  }
+
+  .prose :where(p, ul, ol, blockquote, pre, figure) {
+    margin-top: 0;
+    margin-bottom: 0;
+  }
+
+  .prose :where(h2, h3, h4, h5, h6) {
+    margin-top: 0;
+    margin-bottom: 0;
+  }
+
+  .prose > :where(* + *) {
+    margin-top: var(--article-block-gap);
+  }
+
+  .prose > :where(h2, h3, h4, h5, h6) {
+    margin-top: var(--article-heading-gap);
+    margin-bottom: calc(var(--article-block-gap) / var(--article-leading));
+  }
+
+  .prose > :where(h2, h3, h4, h5, h6) + :where(p, ul, ol, blockquote, pre, figure) {
+    margin-top: calc(var(--article-block-gap) / var(--article-leading));
+  }
+
+  .prose hr {
+    margin-top: var(--article-heading-gap);
+    margin-bottom: var(--article-heading-gap);
+  }
+
+  .prose :where(ul, ol) {
+    padding-left: 1.2em;
+  }
+
+  .prose :where(li + li) {
+    margin-top: calc(var(--article-block-gap) / 2.618);
+  }
+
+  .prose :where(section.section) {
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+
+  .prose :where(section.section > h2:first-child) {
+    margin-bottom: calc(var(--article-block-gap) / var(--article-leading));
+  }
 }
 
 /* Focus (lecture épurée) – domain behavior styles */

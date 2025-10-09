@@ -7,7 +7,7 @@ interface Props {
 const { class: className = '', name } = Astro.props
 ---
 
-<section class={`mt-16 mb-12 p-4 ${className}`.trim()}>
+<section class={`section mt-16 mb-12 p-4 ${className}`.trim()}>
   {name && <h2 class="mb-4 text-2xl font-bold">{name}</h2>}
   <slot />
 </section>

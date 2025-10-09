@@ -19,7 +19,7 @@ const { logo = defaultLogo, links = defaultLinks } = Astro.props
   <!-- PARTIE GAUCHE DE LA NAVBAR (logo + nom) -->
   <div class="navbar-start">
     <!-- LIEN LOGO - Retour à l'accueil -->
-    <a href="/" class="btn btn-ghost text-xl normal-case">
+    <a href="/" class="btn btn-ghost normal-case flex items-center gap-3">
       <!-- IMAGE DU LOGO -->
       <img
         id="main-logo"
@@ -29,6 +29,7 @@ const { logo = defaultLogo, links = defaultLinks } = Astro.props
         alt="Logo"
         class="h-12 w-auto"
       />
+      <span class="font-illustration text-2xl leading-none">Jeremie Alcaraz</span>
     </a>
   </div>
 

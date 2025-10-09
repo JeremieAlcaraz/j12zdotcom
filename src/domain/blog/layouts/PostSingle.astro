@@ -2,11 +2,12 @@
 import dateFormat from '@/utils/dateFormat'
 import { humanize, markdownify, slugify } from '@/utils/textConverter'
 import { render } from 'astro:content'
-import { FaRegClock, FaRegFolder, FaRegUserCircle } from 'react-icons/fa'
-import ImageMod from '@/ui/atoms/ImageMod.astro'
+import Avatar from '@/ui/atoms/Avatar.astro'
+import Icon from '@/ui/atoms/Icon.astro'
 import Accordion from '@/shortcodes/generic/Accordion.shortcode.astro'
 import Button from '@/shortcodes/generic/Button.shortcode.astro'
 import Notice from '@/shortcodes/generic/Notice.shortcode.astro'
+import PodcastPlayer from '@/shortcodes/generic/PodcastPlayer.shortcode.astro'
 import Video from '@/shortcodes/generic/Video.shortcode.astro'
 import Youtube from '@/shortcodes/generic/Youtube.shortcode.astro'
 import FabSpeedDial from '@/ui/molecules/FabSpeedDial.astro'
@@ -15,49 +16,101 @@ import FocusEscapeHint from '@/ui/molecules/FocusEscapeHint.astro'
 
 const { post } = Astro.props
 const { Content } = await render(post)
-const components = { Accordion, Button, Notice, Video, Youtube }
-const { title, author, categories, image, date, tags } = post.data
+const components = { Accordion, Button, Notice, PodcastPlayer, Video, Youtube }
+const { title, author, date, tags } = post.data
+
+const formattedAuthor = humanize(author)
+const readingTimeDisplay = '4 min read'
+const isoDate = date
+  ? date instanceof Date
+    ? date.toISOString()
+    : new Date(date).toISOString()
+  : undefined
 ---
 
 <section class="py-8">
   <article class="prose prose-lg dark:prose-invert mx-auto max-w-3xl">
-    {
-      image && (
-        <figure class="not-prose mb-8">
-          <ImageMod
-            src={image}
-            height={500}
-            width={1200}
-            alt={title}
-            class="w-full rounded"
-            format="webp"
-          />
-        </figure>
-      )
-    }
-    <header class="not-prose mb-8">
-      <h1 set:html={markdownify(title)} class="mb-4" />
-      <ul class="flex flex-wrap items-center gap-x-4 text-sm text-gray-600 dark:text-gray-400">
-        <li class="flex items-center">
-          <FaRegUserCircle className={'-mt-0.5 mr-2 inline-block'} />
-          <a href={`/authors/${slugify(author)}`}>{humanize(author)}</a>
-        </li>
-        <li class="flex items-center">
-          <FaRegFolder className={'-mt-0.5 mr-2 inline-block'} />
-          {
-            categories.map((category: string, index: number) => (
-              <a href={`/categories/${slugify(category)}`}>
-                {humanize(category)}
-                {index !== categories.length - 1 && ','}
-              </a>
-            ))
-          }
-        </li>
-        <li class="flex items-center">
-          <FaRegClock className={'-mt-0.5 mr-2 inline-block'} />
-          {dateFormat(date)}
-        </li>
-      </ul>
+    <header class="not-prose mb-12 border-b border-base-300 pb-8">
+      <h1
+        set:html={markdownify(title)}
+        class="text-balance text-4xl font-extrabold leading-tight text-base-content sm:text-5xl"
+      />
+
+      <div class="mt-6 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+        <div class="flex items-center gap-4">
+          <Avatar src="/img_opt/avatar-sm.png" alt={formattedAuthor} size={56} />
+          <div class="flex flex-wrap items-center gap-3 text-sm">
+            <a
+              href="#"
+              class="font-medium text-base-content transition hover:text-primary"
+            >
+              {formattedAuthor}
+            </a>
+            <button
+              type="button"
+              class="rounded-full border border-base-300 px-4 py-1 text-sm font-medium text-base-content/80 transition hover:border-base-200 hover:text-base-content"
+            >
+              Follow
+            </button>
+            <span class="text-base-content/70">{readingTimeDisplay}</span>
+            <span class="text-base-content/50" aria-hidden="true">·</span>
+            <time datetime={isoDate} class="text-base-content/70">
+              {dateFormat(date)}
+            </time>
+          </div>
+        </div>
+      </div>
+
+      <div class="mt-8 flex flex-col gap-4 border-t border-base-300 pt-6 sm:flex-row sm:items-center sm:justify-between">
+        <div class="flex items-center gap-6 text-sm text-base-content/80">
+          <a href="#" class="flex items-center gap-2 font-medium text-base-content hover:text-primary">
+            <Icon name="heroicons:hand-raised" class="size-5" aria-hidden="true" />
+            <span class="text-base font-semibold text-base-content">2.8K</span>
+          </a>
+          <a href="#" class="flex items-center gap-2 font-medium text-base-content hover:text-primary">
+            <Icon name="heroicons:chat-bubble-left-right" class="size-5" aria-hidden="true" />
+            <span class="text-base font-semibold text-base-content">198</span>
+          </a>
+        </div>
+
+        <div class="flex items-center gap-2 text-base-content/60">
+          <button
+            type="button"
+            class="rounded-full border border-base-300 p-2 transition hover:border-base-200 hover:text-base-content"
+            aria-label="Save"
+          >
+            <Icon name="heroicons:bookmark" class="size-5" aria-hidden="true" />
+          </button>
+          <button
+            type="button"
+            class="rounded-full border border-base-300 p-2 transition hover:border-base-200 hover:text-base-content"
+            aria-label="Add to list"
+          >
+            <Icon name="heroicons:plus" class="size-5" aria-hidden="true" />
+          </button>
+          <button
+            type="button"
+            class="rounded-full border border-base-300 p-2 transition hover:border-base-200 hover:text-base-content"
+            aria-label="Play"
+          >
+            <Icon name="heroicons:play" class="size-5" aria-hidden="true" />
+          </button>
+          <button
+            type="button"
+            class="rounded-full border border-base-300 p-2 transition hover:border-base-200 hover:text-base-content"
+            aria-label="Share"
+          >
+            <Icon name="heroicons:arrow-up-tray" class="size-5" aria-hidden="true" />
+          </button>
+          <button
+            type="button"
+            class="rounded-full border border-base-300 p-2 transition hover:border-base-200 hover:text-base-content"
+            aria-label="More options"
+          >
+            <Icon name="heroicons:ellipsis-horizontal" class="size-5" aria-hidden="true" />
+          </button>
+        </div>
+      </div>
     </header>
     <Content components={components} />
     {
