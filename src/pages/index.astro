@@ -2,6 +2,7 @@
 import BaseLayout from '@/layouts/Base.astro'
 import Hero from '@/domain/shared/sections/HeroSection.astro'
 import FluidCursor from '@/ui/atoms/FluidCursor.astro'
+import FeaturedPostsSection from '@/domain/shared/sections/FeaturedPostsSection.astro'
 
 ---
 
@@ -11,6 +12,10 @@ import FluidCursor from '@/ui/atoms/FluidCursor.astro'
 
   <!-- Hero utilise le slot hero pour être full-width -->
   <Hero slot="hero" />
+
+  <!-- Section articles vedette -->
+  <FeaturedPostsSection />
+
   <!-- <Section> -->
   <!--   <Testimonial testimonial={testimonial} /> -->
   <!-- </Section> -->

@@ -1,0 +1,50 @@
+---
+import BlogCard from '@/domain/blog/components/BlogCard.astro'
+import { getSinglePage } from '@/utils/contentParser'
+import { sortByDate } from '@/utils/sortFunctions'
+import type { CollectionEntry } from 'astro:content'
+
+// Récupérer les articles du blog
+const posts = await getSinglePage('blog')
+const sortedPosts = sortByDate(posts)
+
+// Sélectionner les 3 articles les plus récents (non-draft)
+const featuredPosts = sortedPosts
+  .filter((post: CollectionEntry<'blog'>) => !post.data.draft)
+  .slice(0, 3)
+---
+
+<section class="px-4 py-12 lg:py-20">
+  <div class="mx-auto max-w-6xl">
+    <!-- En-tête de la section -->
+    <div class="mb-10 text-center">
+      <h2 class="mb-4 text-3xl font-bold lg:text-4xl">
+        Quelques réflexions du jardin
+      </h2>
+      <p class="mx-auto max-w-2xl text-base-content/70 text-lg">
+        Découvrez mes dernières réflexions sur la productivité douce, l'organisation et la création d'outils qui respectent votre bien-être mental. 🌸
+      </p>
+    </div>
+
+    <!-- Grille d'articles -->
+    <div class="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
+      {
+        featuredPosts.map((post) => (
+          <div class="w-full">
+            <BlogCard data={post} base={100} />
+          </div>
+        ))
+      }
+    </div>
+
+    <!-- CTA vers le blog -->
+    <div class="mt-10 text-center">
+      <a
+        href="/blog"
+        class="btn btn-outline btn-primary"
+      >
+        Voir tous les articles
+      </a>
+    </div>
+  </div>
+</section>
