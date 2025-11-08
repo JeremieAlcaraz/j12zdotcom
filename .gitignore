@@ -35,3 +35,13 @@ cloudflared/cert.pem
 # Caddy data (si jamais bindé en local)
 caddy_data/
 caddy_config/
+
+# Nix
+result
+result-*
+.direnv/
+
+# Secrets
+/run/secrets/
+secrets.yaml
+secrets.yml
