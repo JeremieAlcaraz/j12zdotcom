@@ -24,7 +24,7 @@
         buildInputs = with pkgs; [
           nodejs
           nodePackages.pnpm
-          sharp  # Pour l'optimisation d'images
+          vips  # Pour l'optimisation d'images (utilisé par sharp)
         ];
 
         # Build du site Astro
