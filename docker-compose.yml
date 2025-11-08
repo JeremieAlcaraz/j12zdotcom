@@ -1,6 +1,5 @@
 # docker-compose.yml
-# Stack complète : Caddy + Site Astro + Cloudflare Tunnel
-version: '3.8'
+# Stack : Caddy + Astro Dev + Cloudflare Tunnel
 
 services:
   # Reverse Proxy Caddy
@@ -9,9 +8,9 @@ services:
     container_name: j12z_caddy
     restart: unless-stopped
     ports:
-      - "80:80"
-      - "443:443"
-      - "443:443/udp" # HTTP/3
+      - '80:80'
+      - '443:443'
+      - '443:443/udp' # HTTP/3
     volumes:
       # Configuration Caddy
       - ./Caddyfile:/etc/caddy/Caddyfile:ro
@@ -23,19 +22,16 @@ services:
       # Logs
       - ./logs/caddy:/var/log/caddy
 
-      # Si vous servez les fichiers statiques directement (optionnel)
-      # - ./dist:/srv/dist:ro
     networks:
       - webnet
     healthcheck:
-      test: ["CMD", "wget", "--quiet", "--tries=1", "--spider", "http://localhost:80"]
+      test: ['CMD', 'wget', '--quiet', '--tries=1', '--spider', 'http://localhost:80']
       interval: 30s
       timeout: 10s
       retries: 3
       start_period: 40s
 
-  # Site Astro (environnement de développement)
-  # Décommenter pour utiliser en dev
+  # Site Astro (développement) - lancé par défaut
   astro-dev:
     build:
       context: .
@@ -51,26 +47,22 @@ services:
       - NODE_ENV=development
     command: pnpm dev --host 0.0.0.0
     ports:
-      - "4321:4321"
-    profiles:
-      - dev
+      - '4321:4321'
 
   # Site Astro (production - serveur statique)
-  # Décommenter pour la production
-  astro-prod:
-    image: node:20-alpine
-    container_name: j12z_astro_prod
-    restart: unless-stopped
-    working_dir: /app
-    volumes:
-      - ./dist:/app/dist:ro
-    networks:
-      - webnet
-    command: npx serve dist -l 8080
-    ports:
-      - "8080:8080"
-    profiles:
-      - prod
+  # À activer plus tard si besoin
+  # astro-prod:
+  #   image: node:20-alpine
+  #   container_name: j12z_astro_prod
+  #   restart: unless-stopped
+  #   working_dir: /app
+  #   volumes:
+  #     - ./dist:/app/dist:ro
+  #   networks:
+  #     - webnet
+  #   command: npx serve dist -l 8080
+  #   ports:
+  #     - "8080:8080"
 
   # Cloudflare Tunnel
   cloudflared:
@@ -78,23 +70,17 @@ services:
     container_name: j12z_cloudflared
     restart: unless-stopped
     command: tunnel --no-autoupdate run --token ${CLOUDFLARE_TUNNEL_TOKEN}
-    environment:
-      - TUNNEL_ORIGIN_CERT=/etc/cloudflared/cert.pem
     networks:
       - webnet
     depends_on:
       - caddy
+      - astro-dev
     healthcheck:
-      test: ["CMD", "cloudflared", "tunnel", "info"]
+      test: ['CMD', 'cloudflared', 'tunnel', 'info']
       interval: 60s
       timeout: 10s
       retries: 3
       start_period: 10s
-    # Alternative: utiliser un fichier de config au lieu du token
-    # volumes:
-    #   - ./cloudflared/config.yml:/etc/cloudflared/config.yml:ro
-    #   - ./cloudflared/cert.pem:/etc/cloudflared/cert.pem:ro
-    # command: tunnel --config /etc/cloudflared/config.yml run
 
 networks:
   webnet:

@@ -44,6 +44,9 @@ export default defineConfig({
 
   // 2) Vite
   vite: {
+    server: {
+      allowedHosts: ['jeremiealcaraz.com', 'www.jeremiealcaraz.com'],
+    },
     plugins: [
       tsconfigPaths(),
       tailwindcss(),
