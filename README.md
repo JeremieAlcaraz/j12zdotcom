@@ -112,9 +112,15 @@ pnpm verify:icons # Vérifie les icônes utilisées
 pnpm clean        # Supprime dist/ et .astro/
 ```
 
-## 🐳 Déploiement avec Docker
+## 🚀 Déploiement
 
-### Développement
+Ce projet supporte **deux approches de déploiement** :
+
+### 🐳 Approche 1 : Docker Compose (Setup rapide)
+
+**Idéal pour** : Test rapide, développement local, compatibilité multi-OS
+
+#### Développement
 
 ```bash
 # Créer .env depuis le template
@@ -130,7 +136,7 @@ docker compose --profile dev up -d
 docker compose logs -f
 ```
 
-### Production
+#### Production
 
 ```bash
 # Build du site
@@ -143,12 +149,96 @@ docker compose --profile prod up -d
 docker compose ps
 ```
 
-### Services Docker
+#### Services Docker
 
 - **caddy**: Reverse proxy (ports 80, 443)
 - **cloudflared**: Tunnel Cloudflare
 - **astro-dev**: Serveur de développement Astro (profil dev)
 - **astro-prod**: Serveur statique production (profil prod)
+
+---
+
+### 🔷 Approche 2 : NixOS (Infrastructure as Code)
+
+**Idéal pour** : Production long terme, reproductibilité maximale, philosophie déclarative
+
+#### Quick Start avec Nix
+
+```bash
+# Environnement de développement
+nix develop
+
+# Builder le site
+nix build
+
+# Déployer sur NixOS
+nixos-rebuild switch \
+  --flake .#jeremie-web \
+  --target-host root@ton-serveur.com
+```
+
+#### Configuration NixOS
+
+Sur votre serveur NixOS, utilisez la flake du projet :
+
+```nix
+{
+  inputs.j12z-site.url = "github:JeremieAlcaraz/j12zdotcom";
+
+  outputs = { j12z-site, ... }: {
+    nixosConfigurations.jeremie-web = {
+      modules = [
+        j12z-site.nixosModules.j12z-webserver
+        {
+          services.j12z-webserver = {
+            enable = true;
+            domain = "jeremiealcaraz.com";
+            email = "hello@jeremiealcaraz.com";
+            enableCloudflaredTunnel = true;
+            cloudflaredTokenFile = "/run/secrets/cloudflare-tunnel-token";
+          };
+        }
+      ];
+    };
+  };
+}
+```
+
+#### Avantages de NixOS
+
+- ✅ Reproductibilité à 100%
+- ✅ Rollback natif (`nixos-rebuild switch --rollback`)
+- ✅ Configuration déclarative versionnée
+- ✅ Moins de ressources (pas de Docker)
+- ✅ Sécurité renforcée (systemd hardening)
+- ✅ Zero downtime sur les mises à jour
+
+#### Documentation NixOS
+
+- **[NIX.md](./NIX.md)** - Guide complet Nix/NixOS
+- **[nixos-examples/](./nixos-examples/)** - Exemples de configuration serveur
+- **[docs/infra/](./docs/infra/)** - Documentation détaillée
+  - [01-nixos-overview.md](./docs/infra/01-nixos-overview.md) - Vue d'ensemble
+  - [02-nixos-deployment.md](./docs/infra/02-nixos-deployment.md) - Déploiement
+  - [03-nixos-vs-docker.md](./docs/infra/03-nixos-vs-docker.md) - Comparaison
+
+---
+
+### 🎯 Quelle approche choisir ?
+
+| Critère | Docker Compose | NixOS |
+|---------|----------------|-------|
+| **Setup initial** | 5 min | 30 min |
+| **Courbe d'apprentissage** | Facile | Difficile |
+| **Portabilité** | ★★★★★ | ★★☆☆☆ |
+| **Reproductibilité** | ~80% | 100% |
+| **Rollback** | Manuel | Natif |
+| **Ressources (RAM)** | ~430MB | ~60MB |
+| **Sécurité** | Bonne | Excellente |
+
+**Recommandation** :
+- **Phase 1** : Docker Compose pour valider l'architecture rapidement
+- **Phase 2** : Migrer vers NixOS pour la production long terme
 
 ## 🏗️ Architecture
 
@@ -177,12 +267,22 @@ ui → domain → pages
 
 ## 📚 Documentation
 
+### Architecture et développement
 - **[ARCHITECTURE.md](./docs/ARCHITECTURE.md)** - Architecture du code et principes
-- **[INFRASTRUCTURE.md](./docs/INFRASTRUCTURE.md)** - Infrastructure de déploiement
-- **[DEPLOYMENT.md](./docs/DEPLOYMENT.md)** - Guide de déploiement pas-à-pas
+- **[AGENTS.md](./docs/AGENTS.md)** - Guide pour les agents IA
+
+### Infrastructure Docker
+- **[INFRASTRUCTURE.md](./docs/INFRASTRUCTURE.md)** - Infrastructure Docker + Cloudflare Tunnel
+- **[DEPLOYMENT.md](./docs/DEPLOYMENT.md)** - Guide de déploiement Docker pas-à-pas
 - **[DIAGRAMS.md](./docs/DIAGRAMS.md)** - Diagrammes de séquence et flux
 - **[MIGRATION.md](./docs/MIGRATION.md)** - Migration Cloudflare Worker vers Tunnel
-- **[AGENTS.md](./docs/AGENTS.md)** - Guide pour les agents IA
+
+### Infrastructure NixOS
+- **[NIX.md](./NIX.md)** - Guide principal Nix/NixOS
+- **[nixos-examples/](./nixos-examples/)** - Exemples de configuration serveur
+- **[docs/infra/01-nixos-overview.md](./docs/infra/01-nixos-overview.md)** - Vue d'ensemble NixOS
+- **[docs/infra/02-nixos-deployment.md](./docs/infra/02-nixos-deployment.md)** - Déploiement NixOS
+- **[docs/infra/03-nixos-vs-docker.md](./docs/infra/03-nixos-vs-docker.md)** - Comparaison
 
 ## 🎨 Design System
 
