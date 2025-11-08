@@ -1,0 +1,107 @@
+# docker-compose.yml
+# Stack complète : Caddy + Site Astro + Cloudflare Tunnel
+version: '3.8'
+
+services:
+  # Reverse Proxy Caddy
+  caddy:
+    image: caddy:2-alpine
+    container_name: j12z_caddy
+    restart: unless-stopped
+    ports:
+      - "80:80"
+      - "443:443"
+      - "443:443/udp" # HTTP/3
+    volumes:
+      # Configuration Caddy
+      - ./Caddyfile:/etc/caddy/Caddyfile:ro
+
+      # Données persistantes (certificats SSL, etc.)
+      - caddy_data:/data
+      - caddy_config:/config
+
+      # Logs
+      - ./logs/caddy:/var/log/caddy
+
+      # Si vous servez les fichiers statiques directement (optionnel)
+      # - ./dist:/srv/dist:ro
+    networks:
+      - webnet
+    healthcheck:
+      test: ["CMD", "wget", "--quiet", "--tries=1", "--spider", "http://localhost:80"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+
+  # Site Astro (environnement de développement)
+  # Décommenter pour utiliser en dev
+  astro-dev:
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
+    container_name: j12z_astro_dev
+    restart: unless-stopped
+    volumes:
+      - .:/app
+      - /app/node_modules
+    networks:
+      - webnet
+    environment:
+      - NODE_ENV=development
+    command: pnpm dev --host 0.0.0.0
+    ports:
+      - "4321:4321"
+    profiles:
+      - dev
+
+  # Site Astro (production - serveur statique)
+  # Décommenter pour la production
+  astro-prod:
+    image: node:20-alpine
+    container_name: j12z_astro_prod
+    restart: unless-stopped
+    working_dir: /app
+    volumes:
+      - ./dist:/app/dist:ro
+    networks:
+      - webnet
+    command: npx serve dist -l 8080
+    ports:
+      - "8080:8080"
+    profiles:
+      - prod
+
+  # Cloudflare Tunnel
+  cloudflared:
+    image: cloudflare/cloudflared:latest
+    container_name: j12z_cloudflared
+    restart: unless-stopped
+    command: tunnel --no-autoupdate run --token ${CLOUDFLARE_TUNNEL_TOKEN}
+    environment:
+      - TUNNEL_ORIGIN_CERT=/etc/cloudflared/cert.pem
+    networks:
+      - webnet
+    depends_on:
+      - caddy
+    healthcheck:
+      test: ["CMD", "cloudflared", "tunnel", "info"]
+      interval: 60s
+      timeout: 10s
+      retries: 3
+      start_period: 10s
+    # Alternative: utiliser un fichier de config au lieu du token
+    # volumes:
+    #   - ./cloudflared/config.yml:/etc/cloudflared/config.yml:ro
+    #   - ./cloudflared/cert.pem:/etc/cloudflared/cert.pem:ro
+    # command: tunnel --config /etc/cloudflared/config.yml run
+
+networks:
+  webnet:
+    driver: bridge
+
+volumes:
+  caddy_data:
+    name: j12z_caddy_data
+  caddy_config:
+    name: j12z_caddy_config

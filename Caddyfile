@@ -1,0 +1,94 @@
+# Caddyfile - Configuration du reverse proxy Caddy
+# Documentation: https://caddyserver.com/docs/caddyfile
+
+# Configuration globale
+{
+	# Email pour Let's Encrypt (certificats SSL automatiques)
+	email contact@jeremiealcaraz.com
+
+	# Activer les logs d'accès
+	log {
+		output file /var/log/caddy/access.log
+		format json
+	}
+}
+
+# Configuration pour jeremiealcaraz.com
+jeremiealcaraz.com, www.jeremiealcaraz.com {
+	# Reverse proxy vers le site Astro
+	# En développement: localhost:4321
+	# En production: localhost:8080 (ou tout serveur servant dist/)
+	reverse_proxy localhost:4321 {
+		# Headers pour préserver l'IP du client
+		header_up X-Real-IP {remote_host}
+		header_up X-Forwarded-For {remote_host}
+		header_up X-Forwarded-Proto {scheme}
+		header_up X-Forwarded-Host {host}
+	}
+
+	# Compression automatique (gzip, brotli)
+	encode gzip zstd
+
+	# Headers de sécurité
+	header {
+		# Empêcher le clickjacking
+		X-Frame-Options "SAMEORIGIN"
+
+		# Protection XSS
+		X-Content-Type-Options "nosniff"
+		X-XSS-Protection "1; mode=block"
+
+		# Politique de référent
+		Referrer-Policy "strict-origin-when-cross-origin"
+
+		# Content Security Policy (à adapter selon vos besoins)
+		Content-Security-Policy "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:; font-src 'self' data:;"
+
+		# Permissions Policy
+		Permissions-Policy "geolocation=(), microphone=(), camera=()"
+
+		# Supprimer le header Server pour la sécurité
+		-Server
+	}
+
+	# Gestion des erreurs
+	handle_errors {
+		@404 {
+			expression {http.error.status_code} == 404
+		}
+		rewrite @404 /404.html
+		file_server
+	}
+
+	# Logs spécifiques pour ce site
+	log {
+		output file /var/log/caddy/jeremiealcaraz.log {
+			roll_size 100mb
+			roll_keep 10
+			roll_keep_for 720h
+		}
+		format json
+		level INFO
+	}
+}
+
+# Configuration alternative pour la production (serveur statique)
+# Décommenter si vous servez directement les fichiers statiques
+# jeremiealcaraz.com, www.jeremiealcaraz.com {
+# 	root * /path/to/j12zdotcom/dist
+# 	file_server
+#
+# 	encode gzip zstd
+#
+# 	# Mêmes headers de sécurité qu'au-dessus
+# 	header {
+# 		X-Frame-Options "SAMEORIGIN"
+# 		X-Content-Type-Options "nosniff"
+# 		X-XSS-Protection "1; mode=block"
+# 		Referrer-Policy "strict-origin-when-cross-origin"
+# 		-Server
+# 	}
+#
+# 	# SPA routing (si nécessaire)
+# 	try_files {path} {path}/ /index.html
+# }
