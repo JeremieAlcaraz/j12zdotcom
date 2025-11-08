@@ -16,6 +16,8 @@ pnpm-debug.log*
 # environment variables
 .env
 .env.production
+.env.local
+.env.*.local
 
 # macOS-specific files
 .DS_Store
@@ -23,3 +25,13 @@ pnpm-debug.log*
 # jetbrains setting folder
 .idea/
 public/musics/jeremie-theme.mp3
+
+# Docker & Infrastructure
+logs/
+cloudflared/*.pem
+cloudflared/cert.pem
+*.log
+
+# Caddy data (si jamais bindé en local)
+caddy_data/
+caddy_config/
