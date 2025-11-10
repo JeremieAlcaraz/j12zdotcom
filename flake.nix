@@ -42,16 +42,17 @@
           # Configuration de pnpm
           pnpmDeps = pkgs.stdenv.mkDerivation {
             pname = "j12zdotcom-pnpm-deps";
-            inherit (self.packages.${system}.default) src version;
+            version = "1.0.0";
+            src = ./.;
             nativeBuildInputs = [ nodejs pkgs.nodePackages.pnpm ];
 
             installPhase = ''
               export HOME=$TMPDIR
-              export STORE_PATH=$(mktemp -d)
+              export STORE_PATH=$TMPDIR/pnpm-store
+              mkdir -p $STORE_PATH
 
-              # Copier $src dans un dossier temporaire writable
-              cp -r $src/* .
-              chmod -R +w .
+              # On est déjà dans un répertoire writable ($TMPDIR/build)
+              # Les sources ont été automatiquement copiées ici par Nix
 
               pnpm config set store-dir $STORE_PATH
               pnpm install --frozen-lockfile --offline false
@@ -64,12 +65,9 @@
           buildPhase = ''
             export HOME=$TMPDIR
 
-            # Copier les node_modules depuis le cache
-            if [ -d "${self.packages.${system}.site.pnpmDeps or ""}/node_modules" ]; then
-              cp -r ${self.packages.${system}.site.pnpmDeps}/node_modules .
-            else
-              pnpm install --frozen-lockfile
-            fi
+            # Copier les node_modules depuis pnpmDeps
+            cp -r ${pnpmDeps}/node_modules .
+            chmod -R +w node_modules
 
             # Créer les dossiers nécessaires pour les images
             mkdir -p src/assets/img_opt src/assets/img_raw
