@@ -49,7 +49,10 @@
               export HOME=$TMPDIR
               export STORE_PATH=$(mktemp -d)
 
-              cd $src
+              # Copier $src dans un dossier temporaire writable
+              cp -r $src/* .
+              chmod -R +w .
+
               pnpm config set store-dir $STORE_PATH
               pnpm install --frozen-lockfile --offline false
 
