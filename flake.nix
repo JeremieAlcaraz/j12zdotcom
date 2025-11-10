@@ -27,20 +27,8 @@
           vips  # Pour l'optimisation d'images (utilisé par sharp)
         ];
 
-        # Build du site Astro
-        site = pkgs.stdenv.mkDerivation {
-          pname = "j12zdotcom";
-          version = "1.0.0";
-          src = ./.;
-
-          nativeBuildInputs = buildInputs;
-
-          # Variables d'environnement pour le build
-          NODE_ENV = "production";
-          SHARP_IGNORE_GLOBAL_LIBVIPS = "1";
-
-          # Configuration de pnpm
-          pnpmDeps = pkgs.stdenv.mkDerivation {
+        # Configuration de pnpm
+        pnpmDeps = pkgs.stdenv.mkDerivation {
             pname = "j12zdotcom-pnpm-deps";
             version = "1.0.0";
             src = ./.;
@@ -65,7 +53,19 @@
               mkdir -p $out
               cp -r node_modules $out/
             '';
-          };
+        };
+
+        # Build du site Astro
+        site = pkgs.stdenv.mkDerivation {
+          pname = "j12zdotcom";
+          version = "1.0.0";
+          src = ./.;
+
+          nativeBuildInputs = buildInputs;
+
+          # Variables d'environnement pour le build
+          NODE_ENV = "production";
+          SHARP_IGNORE_GLOBAL_LIBVIPS = "1";
 
           buildPhase = ''
             export HOME=$TMPDIR
