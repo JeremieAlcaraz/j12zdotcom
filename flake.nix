@@ -48,15 +48,20 @@
 
             installPhase = ''
               export HOME=$TMPDIR
-              export STORE_PATH=$TMPDIR/pnpm-store
-              mkdir -p $STORE_PATH
+              export STORE_PATH=$(mktemp -d)
 
-              # On est déjà dans un répertoire writable ($TMPDIR/build)
-              # Les sources ont été automatiquement copiées ici par Nix
+              # Créer un répertoire de travail temporaire avec permissions d'écriture
+              WORK_DIR=$(mktemp -d)
+              echo "Copying source to temporary directory: $WORK_DIR"
+              cp -r $src/. $WORK_DIR/
+              cd $WORK_DIR
+              chmod -R +w .
 
+              # Installer les dépendances
               pnpm config set store-dir $STORE_PATH
               pnpm install --frozen-lockfile --offline false
 
+              # Copier le résultat
               mkdir -p $out
               cp -r node_modules $out/
             '';
