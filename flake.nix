@@ -29,7 +29,7 @@
           version = "1.0.0";
           src = ./.;
           # ← Laisse vide, on le remplit après un 1er build (Nix affichera "got: sha256-...")
-          hash = "sha256-jPZ4HTmlyefTKXRZBIIoKxoGuswxo0vbtL6UoUa/7RE=";
+          hash = "sha256-VoMuC3ETP90K9H5b0xDT4OGG0CmLpfDln5EF12gz5S0=";
         };
 
         # Build du site Astro
