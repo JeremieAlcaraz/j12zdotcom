@@ -44,9 +44,6 @@
               export STORE_PATH=$TMPDIR/pnpm-store
               export SSL_CERT_FILE=${pkgs.cacert}/etc/ssl/certs/ca-bundle.crt
 
-              # Copier les fichiers sources nécessaires
-              cp package.json pnpm-lock.yaml .
-
               # Installer les dépendances
               pnpm config set store-dir $STORE_PATH
               pnpm install --frozen-lockfile --no-optional
