@@ -28,28 +28,31 @@
         ];
 
         # Configuration de pnpm
-        pnpmDeps = pkgs.stdenv.mkDerivation {
+        pnpmDeps = pkgs.stdenvNoCC.mkDerivation {
             pname = "j12zdotcom-pnpm-deps";
             version = "1.0.0";
             src = ./.;
-            nativeBuildInputs = [ nodejs pkgs.pnpm_9 ];
+            nativeBuildInputs = [ nodejs pkgs.pnpm_9 pkgs.cacert ];
 
-            installPhase = ''
+            # Fixed-output derivation pour permettre l'accès réseau
+            outputHashMode = "recursive";
+            outputHashAlgo = "sha256";
+            outputHash = pkgs.lib.fakeHash;
+
+            buildPhase = ''
               export HOME=$TMPDIR
-              export STORE_PATH=$(mktemp -d)
+              export STORE_PATH=$TMPDIR/pnpm-store
+              export SSL_CERT_FILE=${pkgs.cacert}/etc/ssl/certs/ca-bundle.crt
 
-              # Créer un répertoire de travail temporaire avec permissions d'écriture
-              WORK_DIR=$(mktemp -d)
-              echo "Copying source to temporary directory: $WORK_DIR"
-              cp -r $src/. $WORK_DIR/
-              cd $WORK_DIR
-              chmod -R +w .
+              # Copier les fichiers sources nécessaires
+              cp package.json pnpm-lock.yaml .
 
               # Installer les dépendances
               pnpm config set store-dir $STORE_PATH
-              pnpm install --frozen-lockfile --offline false
+              pnpm install --frozen-lockfile --no-optional
+            '';
 
-              # Copier le résultat
+            installPhase = ''
               mkdir -p $out
               cp -r node_modules $out/
             '';
