@@ -32,7 +32,7 @@
           pname = "j12zdotcom";
           version = "1.0.0";
           src = ./.;
-          hash = "sha256-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=";
+          hash = "sha256-VoMuC3ETP90K9H5b0xDT4OGG0CmLpfDln5EF12gz5S0=";
         };
 
         # Build du site Astro
