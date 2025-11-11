@@ -32,7 +32,7 @@
           pname = "j12zdotcom";
           version = "1.0.0";
           src = ./.;
-          hash = "sha256-VoMuC3ETP90K9H5b0xDT4OGG0CmLpfDln5EF12gz5S0=";
+          hash = "sha256-jPZ4HTmlyefTKXRZBIIoKxoGuswxo0vbtL6UoUa/7RE=";
         };
 
         # Build du site Astro
@@ -52,7 +52,7 @@
             export PNPM_HOME=$TMPDIR/.pnpm-home
 
             # Configurer pnpm pour utiliser les dépendances fetchées
-            export PNPM_STORE_PATH=${pnpmDeps}
+            export PNPM_STORE_DIR=${pnpmDeps}
 
             # Installer les dépendances depuis le store offline
             pnpm install --offline --frozen-lockfile --ignore-scripts
