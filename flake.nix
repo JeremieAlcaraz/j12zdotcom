@@ -42,7 +42,6 @@
             buildPhase = ''
               export HOME=$TMPDIR
               export STORE_PATH=$TMPDIR/pnpm-store
-              export SSL_CERT_FILE=${pkgs.cacert}/etc/ssl/certs/ca-bundle.crt
 
               # Augmenter la limite de mémoire Node.js à 1.5 GB
               export NODE_OPTIONS="--max-old-space-size=1536"
