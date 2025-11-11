@@ -27,46 +27,12 @@
           vips  # Pour l'optimisation d'images (utilisé par sharp)
         ];
 
-        # Configuration de pnpm
-        pnpmDeps = pkgs.stdenvNoCC.mkDerivation {
-            pname = "j12zdotcom-pnpm-deps";
-            version = "1.0.0";
-            src = ./.;
-            nativeBuildInputs = [ nodejs pkgs.pnpm_9 pkgs.cacert ];
-
-            # Fixed-output derivation pour permettre l'accès réseau
-            outputHashMode = "recursive";
-            outputHashAlgo = "sha256";
-            outputHash = pkgs.lib.fakeHash;
-
-            buildPhase = ''
-              export HOME=$TMPDIR
-              export STORE_PATH=$TMPDIR/pnpm-store
-
-              # Augmenter la limite de mémoire Node.js à 1.5 GB
-              export NODE_OPTIONS="--max-old-space-size=1536"
-
-              # Configurer pnpm pour utiliser moins de mémoire
-              pnpm config set store-dir $STORE_PATH
-              pnpm config set network-concurrency 1
-              pnpm config set child-concurrency 1
-              pnpm config set fetch-retries 5
-              pnpm config set fetch-timeout 180000
-
-              # Utiliser shamefully-hoist pour réduire l'utilisation mémoire
-              pnpm config set shamefully-hoist true
-              pnpm config set strict-peer-dependencies false
-
-              # Installation en une seule étape optimisée
-              echo "Installing dependencies with memory-optimized settings..."
-              pnpm install --frozen-lockfile --no-optional --ignore-scripts --prefer-offline \
-                || pnpm install --no-frozen-lockfile --no-optional --ignore-scripts --prefer-offline
-            '';
-
-            installPhase = ''
-              mkdir -p $out
-              cp -r node_modules $out/
-            '';
+        # Configuration de pnpm - utiliser fetchDeps pour éviter les références au store
+        pnpmDeps = pkgs.pnpm_9.fetchDeps {
+          pname = "j12zdotcom";
+          version = "1.0.0";
+          src = ./.;
+          hash = "sha256-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=";
         };
 
         # Build du site Astro
@@ -83,16 +49,19 @@
 
           buildPhase = ''
             export HOME=$TMPDIR
+            export PNPM_HOME=$TMPDIR/.pnpm-home
 
-            # Copier les node_modules depuis pnpmDeps
-            cp -r ${pnpmDeps}/node_modules .
-            chmod -R +w node_modules
+            # Configurer pnpm pour utiliser les dépendances fetchées
+            export PNPM_STORE_PATH=${pnpmDeps}
+
+            # Installer les dépendances depuis le store offline
+            pnpm install --offline --frozen-lockfile --ignore-scripts
 
             # Créer les dossiers nécessaires pour les images
             mkdir -p src/assets/img_opt src/assets/img_raw
 
-            # Build du site (sans optimisation d'images pour éviter les erreurs)
-            pnpm build || pnpm exec astro build
+            # Build du site
+            pnpm build
           '';
 
           installPhase = ''
