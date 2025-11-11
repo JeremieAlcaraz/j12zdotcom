@@ -23,7 +23,7 @@
         # Dépendances pour le build
         buildInputs = with pkgs; [
           nodejs
-          nodePackages.pnpm
+          pnpm_9  # Utiliser pnpm 9.x compatible avec lockfileVersion 9.0
           vips  # Pour l'optimisation d'images (utilisé par sharp)
         ];
 
@@ -32,7 +32,7 @@
             pname = "j12zdotcom-pnpm-deps";
             version = "1.0.0";
             src = ./.;
-            nativeBuildInputs = [ nodejs pkgs.nodePackages.pnpm ];
+            nativeBuildInputs = [ nodejs pkgs.pnpm_9 ];
 
             installPhase = ''
               export HOME=$TMPDIR
