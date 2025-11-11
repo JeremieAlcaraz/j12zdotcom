@@ -44,9 +44,23 @@
               export STORE_PATH=$TMPDIR/pnpm-store
               export SSL_CERT_FILE=${pkgs.cacert}/etc/ssl/certs/ca-bundle.crt
 
-              # Installer les dépendances
+              # Limiter l'utilisation de mémoire par Node.js (768 MB max)
+              export NODE_OPTIONS="--max-old-space-size=768"
+
+              # Configurer pnpm pour utiliser moins de mémoire et de concurrence
               pnpm config set store-dir $STORE_PATH
-              pnpm install --frozen-lockfile --no-optional
+              pnpm config set network-concurrency 1
+              pnpm config set child-concurrency 1
+              pnpm config set fetch-retries 5
+              pnpm config set fetch-timeout 120000
+
+              # Fetch d'abord (plus léger que install)
+              echo "Fetching dependencies..."
+              pnpm fetch --frozen-lockfile || true
+
+              # Ensuite installer depuis le cache local
+              echo "Installing dependencies..."
+              pnpm install --frozen-lockfile --no-optional --prefer-offline --ignore-scripts
             '';
 
             installPhase = ''
