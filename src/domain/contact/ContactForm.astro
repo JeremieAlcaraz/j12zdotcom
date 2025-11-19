@@ -1,17 +1,14 @@
 ---
 // src/components/contact/ContactForm.astro
 // ------------------------------------------------------------------
-// Ce composant affiche un formulaire de contact entièrement statique :
-//  • pas de JS additionnel côté client (progressive enhancement) ;
-//  • stylé avec Tailwind CSS + Daisy UI ;
-//  • l’URL de soumission est centralisée dans le fichier `siteConfig.ts`.
-//
-// Bon à savoir :
-//  • Astro 5 autorise l’export de types directement depuis un composant `.astro`.
-//  • Les props `title` & `description` sont facultatives pour garder le composant flexible.
+// Ce composant affiche un formulaire de contact modernisé :
+//  • Layout split (animation + form)
+//  • Glassmorphism & styling premium
+//  • Animation Lottie pour le côté "fun"
 // ------------------------------------------------------------------
 
 import siteConfig from '@/config/siteConfig.ts'
+import LottiePlayer from '@/ui/atoms/LottiePlayer.astro'
 
 // Type Script : les pages peuvent importer ce type si besoin.
 export interface ContactFormProps {
@@ -27,83 +24,108 @@ const { title = 'Contactez-moi', description = 'Je réponds généralement sous 
   Astro.props as ContactFormProps
 ---
 
-<section id="contact" class="bg-base-200/30 py-16 md:py-24">
-  <div class="container mx-auto px-4">
-    <div class="mx-auto max-w-2xl text-center">
-      <h2 class="mb-4 text-3xl font-bold md:text-4xl">{title}</h2>
-      <p class="text-base-content/80 mb-8">
-        {description}
-      </p>
-    </div>
+<section id="contact" class="relative overflow-hidden py-16 md:py-24">
+  <!-- Background Elements for "Fancy" effect -->
+  <div class="absolute -top-24 -left-24 h-96 w-96 rounded-full bg-primary/20 blur-3xl"></div>
+  <div class="absolute -bottom-24 -right-24 h-96 w-96 rounded-full bg-secondary/20 blur-3xl"></div>
 
-    <div class="card bg-base-100 mx-auto max-w-2xl p-6 shadow-xl md:p-8">
-      <!--
-        ✉️  Formulaire :
-        - action : provient de votre config -> facile à changer depuis un seul endroit ;
-        - méthode POST pour une intégration rapide (n8n, Netlify Forms, etc.) ;
-        - champs basiques + honeypot anti-spam.
-      -->
-      <form action={contactFormAction} method="POST" class="grid gap-6">
-        <!-- Anti-spam : champ caché + sujet par défaut -->
-        <input type="hidden" name="_subject" value={`Nouveau message de ${title}`} />
-        <input type="text" name="_gotcha" class="hidden" />
-
-        <!-- Champ : Nom -->
-        <div class="form-control">
-          <label class="label" for="name">
-            <span class="label-text">Votre nom</span>
-          </label>
-          <input
-            id="name"
-            name="name"
-            type="text"
-            placeholder="John Doe"
-            class="input input-bordered w-full"
-            required
-            autocomplete="name"
-          />
+  <div class="container mx-auto px-4 relative z-10">
+    <div class="grid gap-12 lg:grid-cols-2 lg:items-center">
+      
+      <!-- Left Column: Fun & Animation -->
+      <div class="text-center lg:text-left space-y-6">
+        <div class="inline-block rounded-full bg-primary/10 px-4 py-1.5 text-sm font-medium text-primary">
+          👋 Discutons ensemble !
         </div>
-
-        <!-- Champ : Email -->
-        <div class="form-control">
-          <label class="label" for="email">
-            <span class="label-text">Votre e-mail</span>
-          </label>
-          <input
-            id="email"
-            name="email"
-            type="email"
-            placeholder="john.doe@example.com"
-            class="input input-bordered w-full"
-            required
-            autocomplete="email"
-          />
+        <h2 class="text-4xl font-extrabold tracking-tight sm:text-5xl bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">
+          {title}
+        </h2>
+        <p class="text-lg text-base-content/80 max-w-md mx-auto lg:mx-0">
+          {description}
+        </p>
+        
+        <!-- Lottie Animation Wrapper -->
+        <div class="relative mx-auto lg:mx-0 w-full max-w-[400px] h-[300px] flex items-center justify-center">
+           <LottiePlayer 
+             src="/animations/watermelon-simple.json" 
+             width="100%" 
+             height="100%" 
+             autoplay={true} 
+             loop={true} 
+           />
         </div>
+      </div>
 
-        <!-- Champ : Message -->
-        <div class="form-control">
-          <label class="label" for="message">
-            <span class="label-text">Votre message</span>
-          </label>
-          <textarea
-            id="message"
-            name="message"
-            rows="5"
-            placeholder="Bonjour, je vous contacte pour..."
-            class="textarea textarea-bordered w-full"
-            required></textarea>
-        </div>
+      <!-- Right Column: Glassmorphism Form -->
+      <div class="card bg-base-100/70 backdrop-blur-md border border-base-content/5 shadow-2xl p-6 md:p-8">
+        <form action={contactFormAction} method="POST" class="grid gap-5">
+          <!-- Anti-spam -->
+          <input type="hidden" name="_subject" value={`Nouveau message de ${title}`} />
+          <input type="text" name="_gotcha" class="hidden" />
 
-        <!-- Bouton -->
-        <div class="mt-6 flex justify-center">
-          <button
-            type="submit"
-            class="btn btn-primary shadow-primary/40 hover:shadow-primary/60 shadow-lg transition-shadow duration-300"
-          >
-            Envoyer le message
-          </button>
-        </div>
-      </form>
+          <div class="grid gap-5 md:grid-cols-2">
+            <!-- Champ : Nom -->
+            <div class="form-control w-full">
+              <label class="label" for="name">
+                <span class="label-text font-medium">Votre nom</span>
+              </label>
+              <input
+                id="name"
+                name="name"
+                type="text"
+                placeholder="John Doe"
+                class="input input-bordered w-full bg-base-200/50 focus:bg-base-100 transition-colors"
+                required
+                autocomplete="name"
+              />
+            </div>
+
+            <!-- Champ : Email -->
+            <div class="form-control w-full">
+              <label class="label" for="email">
+                <span class="label-text font-medium">Votre e-mail</span>
+              </label>
+              <input
+                id="email"
+                name="email"
+                type="email"
+                placeholder="john@example.com"
+                class="input input-bordered w-full bg-base-200/50 focus:bg-base-100 transition-colors"
+                required
+                autocomplete="email"
+              />
+            </div>
+          </div>
+
+          <!-- Champ : Message -->
+          <div class="form-control">
+            <label class="label" for="message">
+              <span class="label-text font-medium">Votre message</span>
+            </label>
+            <textarea
+              id="message"
+              name="message"
+              rows="4"
+              placeholder="Dites-moi tout..."
+              class="textarea textarea-bordered w-full bg-base-200/50 focus:bg-base-100 transition-colors resize-none"
+              required></textarea>
+          </div>
+
+          <!-- Bouton -->
+          <div class="mt-4">
+            <button
+              type="submit"
+              class="btn btn-primary w-full text-lg font-bold shadow-lg shadow-primary/30 hover:shadow-primary/50 hover:-translate-y-1 transition-all duration-300"
+            >
+              Envoyer le message 🚀
+            </button>
+          </div>
+          
+          <p class="text-xs text-center text-base-content/50 mt-2">
+            Promis, pas de spam. Juste de l'amour. 💜
+          </p>
+        </form>
+      </div>
     </div>
   </div>
 </section>
