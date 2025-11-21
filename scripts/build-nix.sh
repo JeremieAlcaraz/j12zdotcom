@@ -92,10 +92,26 @@ elif echo "$BUILD_OUTPUT" | grep -q "ERR_PNPM_NO_OFFLINE_TARBALL"; then
         sed -i "s|hash = \"sha256-[A-Za-z0-9+/=]*\";|hash = \"$FAKE_HASH\";|g" flake.nix
     fi
 
-    log_info "Calcul du nouveau hash..."
+    log_info "Calcul du nouveau hash (avec logs en temps réel)..."
+    echo ""
 
-    # Relancer le build pour obtenir le vrai hash
-    HASH_OUTPUT=$(nix build "$TARGET" --no-link 2>&1 || true)
+    # Relancer le build pour obtenir le vrai hash (avec logs visibles)
+    # Utiliser tee pour copier stderr vers un fichier ET vers le terminal
+    HASH_ERROR_LOG=$(mktemp)
+    trap "rm -f $HASH_ERROR_LOG" EXIT
+
+    set +e
+    nix build "$TARGET" --no-link -L 2>&1 | tee "$HASH_ERROR_LOG" >&2
+    HASH_EXIT_CODE=${PIPESTATUS[0]}
+    set -e
+
+    # Le build doit échouer avec le hash mismatch
+    if [ $HASH_EXIT_CODE -eq 0 ]; then
+        log_error "Le build a réussi, mais il aurait dû échouer pour obtenir le hash."
+        exit 1
+    fi
+
+    HASH_OUTPUT=$(cat "$HASH_ERROR_LOG")
 
     if echo "$HASH_OUTPUT" | grep -q "got:.*sha256-"; then
         NEW_HASH=$(echo "$HASH_OUTPUT" | grep -oP 'got:\s+\K(sha256-[A-Za-z0-9+/=]+)' | head -n1)
@@ -105,11 +121,12 @@ elif echo "$BUILD_OUTPUT" | grep -q "ERR_PNPM_NO_OFFLINE_TARBALL"; then
             exit 1
         fi
 
+        echo ""
         log_warning "Nouveau hash pnpm : $NEW_HASH"
         echo ""
     else
         log_error "Impossible de calculer le nouveau hash."
-        echo "$HASH_OUTPUT"
+        cat "$HASH_ERROR_LOG"
         exit 1
     fi
 
