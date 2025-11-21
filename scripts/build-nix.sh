@@ -64,26 +64,63 @@ log_warning "Le build a échoué, analyse de l'erreur..."
 
 BUILD_OUTPUT=$(nix build "$TARGET" --no-link 2>&1 || true)
 
-# On cherche le message 'got: sha256-...'
-if ! echo "$BUILD_OUTPUT" | grep -q "got:.*sha256-"; then
+# Cas 1 : Erreur de hash mismatch classique (on a déjà le nouveau hash)
+if echo "$BUILD_OUTPUT" | grep -q "got:.*sha256-"; then
+    NEW_HASH=$(echo "$BUILD_OUTPUT" | grep -oP 'got:\s+\K(sha256-[A-Za-z0-9+/=]+)' | head -n1)
+
+    if [ -z "$NEW_HASH" ]; then
+        log_error "Impossible d'extraire le nouveau hash."
+        echo "$BUILD_OUTPUT"
+        exit 1
+    fi
+
+    log_warning "Nouveau hash pnpm détecté : $NEW_HASH"
+    echo ""
+
+# Cas 2 : Nouvelle dépendance ajoutée (pnpm ne trouve pas le package en offline)
+elif echo "$BUILD_OUTPUT" | grep -q "ERR_PNPM_NO_OFFLINE_TARBALL"; then
+    log_warning "Nouvelle dépendance détectée (pnpm-lock.yaml a changé)"
+    log_info "Régénération du hash pnpm nécessaire..."
+    echo ""
+
+    # Mettre un hash bidon pour forcer Nix à recalculer
+    FAKE_HASH="sha256-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA="
+
+    if [[ "$OSTYPE" == "darwin"* ]]; then
+        sed -i '' "s|hash = \"sha256-[A-Za-z0-9+/=]*\";|hash = \"$FAKE_HASH\";|g" flake.nix
+    else
+        sed -i "s|hash = \"sha256-[A-Za-z0-9+/=]*\";|hash = \"$FAKE_HASH\";|g" flake.nix
+    fi
+
+    log_info "Calcul du nouveau hash..."
+
+    # Relancer le build pour obtenir le vrai hash
+    HASH_OUTPUT=$(nix build "$TARGET" --no-link 2>&1 || true)
+
+    if echo "$HASH_OUTPUT" | grep -q "got:.*sha256-"; then
+        NEW_HASH=$(echo "$HASH_OUTPUT" | grep -oP 'got:\s+\K(sha256-[A-Za-z0-9+/=]+)' | head -n1)
+
+        if [ -z "$NEW_HASH" ]; then
+            log_error "Impossible d'extraire le nouveau hash."
+            exit 1
+        fi
+
+        log_warning "Nouveau hash pnpm : $NEW_HASH"
+        echo ""
+    else
+        log_error "Impossible de calculer le nouveau hash."
+        echo "$HASH_OUTPUT"
+        exit 1
+    fi
+
+# Cas 3 : Autre erreur
+else
     log_error "Build échoué, mais pas à cause du hash pnpm."
     echo ""
     echo "---- Erreur Nix ----"
     echo "$BUILD_OUTPUT"
     exit 1
 fi
-
-# On récupère le nouveau hash proposé par Nix
-NEW_HASH=$(echo "$BUILD_OUTPUT" | grep -oP 'got:\s+\K(sha256-[A-Za-z0-9+/=]+)' | head -n1)
-
-if [ -z "$NEW_HASH" ]; then
-    log_error "Impossible d'extraire le nouveau hash."
-    echo "$BUILD_OUTPUT"
-    exit 1
-fi
-
-log_warning "Nouveau hash pnpm détecté : $NEW_HASH"
-echo ""
 
 # Prompt interactif avec timeout 3 secondes
 echo -ne "${YELLOW}Mettre à jour le hash dans flake.nix ? [O/n] (auto O dans 3s) : ${NC}"
