@@ -9,7 +9,31 @@ Ce document explique comment utiliser la configuration Nix de ce projet pour :
 
 ## 🚀 Quick Start
 
-### Développement local
+> 💡 **Nouveau !** Des scripts automatiques sont disponibles dans `scripts/` pour simplifier le build et les tests.
+> Voir [scripts/README.md](./scripts/README.md) pour la documentation complète.
+
+### ⚡ Méthode recommandée (avec scripts automatiques)
+
+```bash
+# Build automatique avec gestion du hash pnpm
+./scripts/build-nix.sh
+
+# Servir le site en local (http://localhost:8080)
+./scripts/serve-local.sh
+
+# Ou tout-en-un : build + serve
+./scripts/dev-nix.sh
+```
+
+**Avantages :**
+- ✅ Mise à jour automatique du hash pnpm (plus besoin d'éditer `flake.nix` !)
+- ✅ Confirmation interactive avec timeout (3s → auto-accept)
+- ✅ Logs colorés et clairs
+- ✅ Serveur local automatique
+
+### 🔧 Méthode classique (commandes Nix directes)
+
+#### Développement local
 
 ```bash
 # Entrer dans le shell de développement
@@ -22,7 +46,7 @@ pnpm dev
 nix run .#dev
 ```
 
-### Build du site
+#### Build du site
 
 ```bash
 # Builder le site avec Nix
@@ -35,6 +59,9 @@ ls -la result/
 readlink result
 # → /nix/store/abc123-j12zdotcom/
 ```
+
+> ⚠️ **Note :** Si tu modifies les dépendances (pnpm add/update), tu devras mettre à jour manuellement le hash dans `flake.nix`.
+> Les scripts automatiques gèrent ça pour toi !
 
 ### Déploiement sur NixOS
 
@@ -281,7 +308,10 @@ pnpm dev
 ### 2. Tester le build Nix
 
 ```bash
-# Builder avec Nix
+# Méthode recommandée : avec script automatique (gère le hash)
+./scripts/build-nix.sh
+
+# Méthode classique : commande Nix directe
 nix build
 
 # Vérifier le résultat
@@ -319,6 +349,107 @@ nixos-rebuild switch --rollback
 # Ou choisir une génération spécifique
 nixos-rebuild list-generations
 nixos-rebuild switch --switch-generation 42
+```
+
+---
+
+## 🛠️ Scripts automatiques
+
+Le dossier `scripts/` contient des scripts pour **simplifier** et **automatiser** les tâches courantes.
+
+> 📖 **Documentation complète :** Voir [scripts/README.md](./scripts/README.md)
+
+### Scripts disponibles
+
+#### `build-nix.sh` - Build avec auto-update du hash
+
+**Le script le plus important** : build ton site et met à jour automatiquement le hash pnpm si nécessaire.
+
+```bash
+./scripts/build-nix.sh
+```
+
+**Fonctionnement :**
+1. Tente un build Nix
+2. Si le hash pnpm a changé (après `pnpm add`, `pnpm update`, etc.) :
+   - Détecte le nouveau hash automatiquement
+   - Demande confirmation avec **timeout de 3s** (auto-accept par défaut)
+   - Met à jour `flake.nix` automatiquement
+   - Relance le build
+
+**Avantages :**
+- ✅ Plus besoin d'éditer manuellement `flake.nix`
+- ✅ Rapide : timeout de 3s seulement
+- ✅ Logs colorés et clairs
+
+---
+
+#### `serve-local.sh` - Servir en local
+
+Sert le site buildé sur `http://localhost:8080`.
+
+```bash
+./scripts/serve-local.sh        # Port 8080 (défaut)
+./scripts/serve-local.sh 3000   # Port personnalisé
+```
+
+Détecte automatiquement le meilleur serveur disponible (serve, caddy, python).
+
+---
+
+#### `test-caddy-local.sh` - Tester avec Caddy
+
+Sert le site avec **Caddy** (comme en production) :
+- Gestion des erreurs 404
+- Compression (gzip, zstd)
+- Headers de sécurité
+- Logs propres
+
+```bash
+./scripts/test-caddy-local.sh
+```
+
+Parfait pour tester la configuration Caddy avant de déployer en production.
+
+---
+
+#### `dev-nix.sh` - All-in-one
+
+Build + serve en une seule commande.
+
+```bash
+./scripts/dev-nix.sh
+```
+
+Idéal pour un test rapide du build complet.
+
+---
+
+### Exemples de cas d'usage
+
+**Cas 1 : J'ai modifié du code Astro**
+```bash
+# Option A : Dev avec hot-reload
+nix develop
+pnpm dev
+
+# Option B : Tester le build final
+./scripts/dev-nix.sh
+```
+
+**Cas 2 : J'ai ajouté une dépendance**
+```bash
+pnpm add @tailwindcss/forms
+./scripts/build-nix.sh  # Le hash est mis à jour automatiquement
+```
+
+**Cas 3 : Je veux tester avant de push**
+```bash
+./scripts/build-nix.sh
+./scripts/serve-local.sh
+# → Ouvre http://localhost:8080
+# → Vérifie que tout est OK
+# → Commit et push
 ```
 
 ---
