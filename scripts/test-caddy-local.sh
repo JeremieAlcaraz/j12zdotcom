@@ -64,8 +64,8 @@ echo ""
 echo "Appuyez sur Ctrl+C pour arrêter"
 echo ""
 
-# Lancer Caddy via nix-shell
-nix shell nixpkgs#caddy --command caddy run --config "$CADDYFILE"
+# Lancer Caddy via nix-shell avec l'adapter Caddyfile
+nix shell nixpkgs#caddy --command caddy run --config "$CADDYFILE" --adapter caddyfile
 
 # Nettoyer le Caddyfile temporaire à la sortie
 rm -f "$CADDYFILE"
