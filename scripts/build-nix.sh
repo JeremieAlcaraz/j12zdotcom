@@ -41,28 +41,29 @@ log_error() {
 TARGET="${1:-.#default}"
 
 log_info "Tentative de build Nix ($TARGET)..."
+echo ""
 
-# On tente un build, mais on ne plante pas le script si ça échoue
-BUILD_OUTPUT=$(nix build "$TARGET" --no-link 2>&1 || true)
+# Créer un fichier temporaire pour capturer les erreurs
+ERROR_LOG=$(mktemp)
+trap "rm -f $ERROR_LOG" EXIT
 
-# Si le build a réussi, on s'arrête là
-if echo "$BUILD_OUTPUT" | grep -q "warning: Git tree.*is dirty" || ! echo "$BUILD_OUTPUT" | grep -q "error:"; then
+# On tente un build avec logs visibles en temps réel
+if nix build "$TARGET" -L 2> "$ERROR_LOG"; then
     log_success "Build réussi, aucun hash à mettre à jour."
-
-    # Créer le lien symbolique result
-    nix build "$TARGET" 2>/dev/null || true
-
     log_info "Résultat disponible dans ./result/"
     log_info "Pour servir le site : ./scripts/serve-local.sh"
     exit 0
 fi
+
+# Le build a échoué, on analyse l'erreur
+BUILD_OUTPUT=$(cat "$ERROR_LOG")
 
 # On cherche le message 'got: sha256-...'
 if ! echo "$BUILD_OUTPUT" | grep -q "got:.*sha256-"; then
     log_error "Build échoué, mais pas à cause du hash pnpm."
     echo ""
     echo "---- Logs Nix ----"
-    echo "$BUILD_OUTPUT"
+    cat "$ERROR_LOG"
     exit 1
 fi
 
@@ -71,7 +72,7 @@ NEW_HASH=$(echo "$BUILD_OUTPUT" | grep -oP 'got:\s+\K(sha256-[A-Za-z0-9+/=]+)' |
 
 if [ -z "$NEW_HASH" ]; then
     log_error "Impossible d'extraire le nouveau hash."
-    echo "$BUILD_OUTPUT"
+    cat "$ERROR_LOG"
     exit 1
 fi
 
