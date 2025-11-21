@@ -43,27 +43,33 @@ TARGET="${1:-.#default}"
 log_info "Tentative de build Nix ($TARGET)..."
 echo ""
 
-# Créer un fichier temporaire pour capturer les erreurs
-ERROR_LOG=$(mktemp)
-trap "rm -f $ERROR_LOG" EXIT
-
 # On tente un build avec logs visibles en temps réel
-if nix build "$TARGET" -L 2> "$ERROR_LOG"; then
+# Ne pas utiliser set -e ici car on veut gérer l'erreur nous-mêmes
+set +e
+nix build "$TARGET" -L
+BUILD_EXIT_CODE=$?
+set -e
+
+# Si le build a réussi, on s'arrête là
+if [ $BUILD_EXIT_CODE -eq 0 ]; then
     log_success "Build réussi, aucun hash à mettre à jour."
     log_info "Résultat disponible dans ./result/"
     log_info "Pour servir le site : ./scripts/serve-local.sh"
     exit 0
 fi
 
-# Le build a échoué, on analyse l'erreur
-BUILD_OUTPUT=$(cat "$ERROR_LOG")
+# Le build a échoué, on relance pour capturer l'erreur (sans -L pour éviter le bruit)
+echo ""
+log_warning "Le build a échoué, analyse de l'erreur..."
+
+BUILD_OUTPUT=$(nix build "$TARGET" --no-link 2>&1 || true)
 
 # On cherche le message 'got: sha256-...'
 if ! echo "$BUILD_OUTPUT" | grep -q "got:.*sha256-"; then
     log_error "Build échoué, mais pas à cause du hash pnpm."
     echo ""
-    echo "---- Logs Nix ----"
-    cat "$ERROR_LOG"
+    echo "---- Erreur Nix ----"
+    echo "$BUILD_OUTPUT"
     exit 1
 fi
 
@@ -72,7 +78,7 @@ NEW_HASH=$(echo "$BUILD_OUTPUT" | grep -oP 'got:\s+\K(sha256-[A-Za-z0-9+/=]+)' |
 
 if [ -z "$NEW_HASH" ]; then
     log_error "Impossible d'extraire le nouveau hash."
-    cat "$ERROR_LOG"
+    echo "$BUILD_OUTPUT"
     exit 1
 fi
 
