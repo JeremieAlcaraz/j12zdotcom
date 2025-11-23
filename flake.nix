@@ -121,5 +121,11 @@
           };
         };
       }
-    );
+    ) // {
+      # Export du module NixOS (défini séparément dans nixos/module.nix)
+      nixosModules = {
+        default = import ./nixos/module.nix;
+        j12z-webserver = import ./nixos/module.nix;
+      };
+    };
 }
