@@ -2,12 +2,27 @@
 
 Ce dossier contient le module NixOS pour déployer le site j12zdotcom en production.
 
-## Pourquoi séparé ?
+## 🎯 Pourquoi séparé ?
 
 Le `flake.nix` à la racine est responsable du **build** du site web (Astro).
 Ce module est responsable du **déploiement** sur un serveur NixOS.
 
 Séparation des responsabilités = code plus propre et maintenable.
+
+## 🚀 Quick Start
+
+**Tu utilises actuellement un script bash pour déployer ?** Lis [MIGRATION.md](./MIGRATION.md) pour remplacer ton script par une simple commande `nixos-rebuild`.
+
+**Tu veux créer une nouvelle infra ?** Lis [DEPLOYMENT.md](./DEPLOYMENT.md) pour le guide complet.
+
+## 📁 Fichiers
+
+- **`module.nix`** : Module NixOS (Caddy, firewall, Cloudflare Tunnel)
+- **`example-infra-flake.nix`** : Exemple générique de flake infrastructure
+- **`example-mimosa-flake.nix`** : Exemple spécifique pour le serveur mimosa
+- **`MIGRATION.md`** : Guide de migration depuis un script bash
+- **`DEPLOYMENT.md`** : Guide de déploiement complet
+- **`migrate.sh`** : Script automatique de migration
 
 ## Utilisation
 
