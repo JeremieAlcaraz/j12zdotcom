@@ -32,6 +32,10 @@
           hash = "sha256-VoMuC3ETP90K9H5b0xDT4OGG0CmLpfDln5EF12gz5S0=";
           # Certificats CA nécessaires pour HTTPS vers npm registry
           nativeBuildInputs = [ pkgs.cacert ];
+
+          # Pointer explicitement vers les certificats CA dans le store Nix
+          SSL_CERT_FILE = "${pkgs.cacert}/etc/ssl/certs/ca-bundle.crt";
+          NODE_EXTRA_CA_CERTS = "${pkgs.cacert}/etc/ssl/certs/ca-bundle.crt";
         };
 
         # Build du site Astro
