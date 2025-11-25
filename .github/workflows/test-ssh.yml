@@ -27,11 +27,18 @@ jobs:
           tailscale status
 
           echo ""
-          echo "📍 Ping Magnolia (${{ secrets.MAGNOLIA_HOST }}):"
+          echo "📍 Resolving Tailscale IPs:"
+          MAGNOLIA_IP=$(tailscale status --json | jq -r '.Peer[] | select(.HostName == "${{ secrets.MAGNOLIA_HOST }}") | .TailscaleIPs[0]')
+          MIMOSA_IP=$(tailscale status --json | jq -r '.Peer[] | select(.HostName == "${{ secrets.MIMOSA_HOST }}") | .TailscaleIPs[0]')
+          echo "Magnolia: $MAGNOLIA_IP"
+          echo "Mimosa: $MIMOSA_IP"
+
+          echo ""
+          echo "📍 Ping Magnolia (${{ secrets.MAGNOLIA_HOST }} → $MAGNOLIA_IP):"
           ping -c 3 ${{ secrets.MAGNOLIA_HOST }}
 
           echo ""
-          echo "📍 Ping Mimosa (${{ secrets.MIMOSA_HOST }}):"
+          echo "📍 Ping Mimosa (${{ secrets.MIMOSA_HOST }} → $MIMOSA_IP):"
           ping -c 3 ${{ secrets.MIMOSA_HOST }}
 
       - name: 🔑 Setup SSH key
