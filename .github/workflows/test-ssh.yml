@@ -1,0 +1,163 @@
+name: 🧪 Test SSH Connections
+
+on:
+  workflow_dispatch:  # Permet de lancer manuellement
+
+jobs:
+  test-connections:
+    name: Test Tailscale + SSH
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    
+    steps:
+      # ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+      # 1. CONNEXION AU RÉSEAU TAILSCALE
+      # ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+      - name: 🔐 Connect to Tailscale
+        uses: tailscale/github-action@v2
+        with:
+          oauth-client-id: ${{ secrets.TS_OAUTH_CLIENT_ID }}
+          oauth-secret: ${{ secrets.TS_OAUTH_SECRET }}
+          tags: tag:github-actions
+
+      # ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+      # 2. AFFICHER L'ÉTAT TAILSCALE
+      # ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+      - name: 📊 Show Tailscale status
+        run: |
+          echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+          echo "Tailscale Status:"
+          echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+          tailscale status
+          echo ""
+          echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+          echo "Our IP address:"
+          echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+          tailscale ip
+
+      # ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+      # 3. CONFIGURATION SSH
+      # ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+      - name: 🔑 Setup SSH keys
+        run: |
+          mkdir -p ~/.ssh
+          chmod 700 ~/.ssh
+          
+          # Clé pour Magnolia
+          echo "${{ secrets.MAGNOLIA_SSH_KEY }}" > ~/.ssh/magnolia_key
+          chmod 600 ~/.ssh/magnolia_key
+          
+          # Clé pour Mimosa
+          echo "${{ secrets.MIMOSA_SSH_KEY }}" > ~/.ssh/mimosa_key
+          chmod 600 ~/.ssh/mimosa_key
+          
+          # Configuration SSH
+          cat >> ~/.ssh/config << 'EOF'
+          Host magnolia
+            HostName ${{ secrets.MAGNOLIA_HOST }}
+            User jeremie
+            IdentityFile ~/.ssh/magnolia_key
+            StrictHostKeyChecking no
+            UserKnownHostsFile /dev/null
+            LogLevel ERROR
+          
+          Host mimosa
+            HostName ${{ secrets.MIMOSA_HOST }}
+            User jeremie
+            IdentityFile ~/.ssh/mimosa_key
+            StrictHostKeyChecking no
+            UserKnownHostsFile /dev/null
+            LogLevel ERROR
+          EOF
+          
+          chmod 600 ~/.ssh/config
+          
+          echo "✅ SSH configuration complete"
+
+      # ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+      # 4. TEST PING VIA TAILSCALE
+      # ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+      - name: 🏓 Ping servers
+        run: |
+          echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+          echo "Ping Magnolia..."
+          echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+          ping -c 3 ${{ secrets.MAGNOLIA_HOST }}
+          
+          echo ""
+          echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+          echo "Ping Mimosa..."
+          echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+          ping -c 3 ${{ secrets.MIMOSA_HOST }}
+
+      # ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+      # 5. TEST SSH MAGNOLIA
+      # ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+      - name: 🏗️ Test SSH to Magnolia
+        run: |
+          echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+          echo "Testing SSH to Magnolia..."
+          echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+          
+          ssh magnolia << 'ENDSSH'
+            echo "✅ Connected to Magnolia!"
+            echo ""
+            echo "Hostname: $(hostname)"
+            echo "User: $(whoami)"
+            echo "Uptime: $(uptime)"
+            echo "NixOS version: $(nixos-version)"
+          ENDSSH
+
+      # ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+      # 6. TEST SSH MIMOSA
+      # ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+      - name: 🌸 Test SSH to Mimosa
+        run: |
+          echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+          echo "Testing SSH to Mimosa..."
+          echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+          
+          ssh mimosa << 'ENDSSH'
+            echo "✅ Connected to Mimosa!"
+            echo ""
+            echo "Hostname: $(hostname)"
+            echo "User: $(whoami)"
+            echo "Uptime: $(uptime)"
+            echo "NixOS version: $(nixos-version)"
+          ENDSSH
+
+      # ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+      # 7. TEST SUDO SUR MIMOSA
+      # ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+      - name: 🔐 Test sudo on Mimosa
+        run: |
+          echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+          echo "Testing sudo on Mimosa..."
+          echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+          
+          ssh mimosa "sudo -n nixos-rebuild --version"
+          echo ""
+          echo "✅ Sudo works without password!"
+
+      # ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+      # 8. RÉSUMÉ
+      # ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+      - name: ✅ Success summary
+        if: success()
+        run: |
+          echo ""
+          echo "╔═══════════════════════════════════════════════╗"
+          echo "║                                               ║"
+          echo "║   🎉 ALL TESTS PASSED SUCCESSFULLY! 🎉       ║"
+          echo "║                                               ║"
+          echo "╚═══════════════════════════════════════════════╝"
+          echo ""
+          echo "✅ Tailscale connection: OK"
+          echo "✅ Ping Magnolia: OK"
+          echo "✅ Ping Mimosa: OK"
+          echo "✅ SSH to Magnolia: OK"
+          echo "✅ SSH to Mimosa: OK"
+          echo "✅ Sudo on Mimosa: OK"
+          echo ""
+          echo "🚀 Ready for automated deployments!"
+
