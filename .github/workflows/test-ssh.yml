@@ -1,14 +1,14 @@
 name: 🧪 Test SSH Connections
 
 on:
-  workflow_dispatch:  # Permet de lancer manuellement
+  workflow_dispatch: # Permet de lancer manuellement
 
 jobs:
   test-connections:
     name: Test Tailscale + SSH
     runs-on: ubuntu-latest
     timeout-minutes: 5
-    
+
     steps:
       # ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
       # 1. CONNEXION AU RÉSEAU TAILSCALE
@@ -42,15 +42,15 @@ jobs:
         run: |
           mkdir -p ~/.ssh
           chmod 700 ~/.ssh
-          
+
           # Clé pour Magnolia
           echo "${{ secrets.MAGNOLIA_SSH_KEY }}" > ~/.ssh/magnolia_key
           chmod 600 ~/.ssh/magnolia_key
-          
+
           # Clé pour Mimosa
           echo "${{ secrets.MIMOSA_SSH_KEY }}" > ~/.ssh/mimosa_key
           chmod 600 ~/.ssh/mimosa_key
-          
+
           # Configuration SSH
           cat >> ~/.ssh/config << 'EOF'
           Host magnolia
@@ -60,7 +60,7 @@ jobs:
             StrictHostKeyChecking no
             UserKnownHostsFile /dev/null
             LogLevel ERROR
-          
+
           Host mimosa
             HostName ${{ secrets.MIMOSA_HOST }}
             User jeremie
@@ -69,9 +69,9 @@ jobs:
             UserKnownHostsFile /dev/null
             LogLevel ERROR
           EOF
-          
+
           chmod 600 ~/.ssh/config
-          
+
           echo "✅ SSH configuration complete"
 
       # ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
@@ -83,7 +83,7 @@ jobs:
           echo "Ping Magnolia..."
           echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
           ping -c 3 ${{ secrets.MAGNOLIA_HOST }}
-          
+
           echo ""
           echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
           echo "Ping Mimosa..."
@@ -98,7 +98,12 @@ jobs:
           echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
           echo "Testing SSH to Magnolia..."
           echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
-          
+
+          # Vérifier que la clé existe et a les bonnes permissions
+          ls -la ~/.ssh/magnolia_key
+
+          # Test SSH avec verbose
+          ssh -vvv magnolia "echo 'Connection successful!'" 2>&1 | tail -50
           ssh magnolia << 'ENDSSH'
             echo "✅ Connected to Magnolia!"
             echo ""
@@ -116,7 +121,7 @@ jobs:
           echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
           echo "Testing SSH to Mimosa..."
           echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
-          
+
           ssh mimosa << 'ENDSSH'
             echo "✅ Connected to Mimosa!"
             echo ""
@@ -134,7 +139,7 @@ jobs:
           echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
           echo "Testing sudo on Mimosa..."
           echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
-          
+
           ssh mimosa "sudo -n nixos-rebuild --version"
           echo ""
           echo "✅ Sudo works without password!"
@@ -160,4 +165,3 @@ jobs:
           echo "✅ Sudo on Mimosa: OK"
           echo ""
           echo "🚀 Ready for automated deployments!"
-
