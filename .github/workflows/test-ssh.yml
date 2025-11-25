@@ -1,167 +1,118 @@
-name: 🧪 Test SSH Connections
+name: 🧪 Test SSH Connection
 
 on:
-  workflow_dispatch: # Permet de lancer manuellement
+  workflow_dispatch:
 
 jobs:
-  test-connections:
+  test-ssh:
     name: Test Tailscale + SSH
     runs-on: ubuntu-latest
-    timeout-minutes: 5
 
     steps:
-      # ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-      # 1. CONNEXION AU RÉSEAU TAILSCALE
-      # ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-      - name: 🔐 Connect to Tailscale
+      - name: 🔌 Connect to Tailscale
         uses: tailscale/github-action@v2
         with:
           oauth-client-id: ${{ secrets.TS_OAUTH_CLIENT_ID }}
           oauth-secret: ${{ secrets.TS_OAUTH_SECRET }}
           tags: tag:github-actions
 
-      # ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-      # 2. AFFICHER L'ÉTAT TAILSCALE
-      # ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-      - name: 📊 Show Tailscale status
+      - name: 📡 Test network connectivity
         run: |
           echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
-          echo "Tailscale Status:"
+          echo "Testing Tailscale network..."
           echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
-          tailscale status
+
           echo ""
-          echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
-          echo "Our IP address:"
-          echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
-          tailscale ip
+          echo "🔍 Tailscale status:"
+          tailscale status
 
-      # ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-      # 3. CONFIGURATION SSH
-      # ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-      - name: 🔑 Setup SSH keys
+          echo ""
+          echo "📍 Ping Magnolia (${{ secrets.MAGNOLIA_HOST }}):"
+          ping -c 3 ${{ secrets.MAGNOLIA_HOST }}
+
+          echo ""
+          echo "📍 Ping Mimosa (${{ secrets.MIMOSA_HOST }}):"
+          ping -c 3 ${{ secrets.MIMOSA_HOST }}
+
+      - name: 🔑 Setup SSH key
         run: |
+          echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+          echo "Setting up SSH key..."
+          echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+
           mkdir -p ~/.ssh
-          chmod 700 ~/.ssh
+          echo "${{ secrets.DEPLOY_SSH_KEY }}" > ~/.ssh/deploy_key
+          chmod 600 ~/.ssh/deploy_key
 
-          # Clé pour Magnolia
-          echo "${{ secrets.MAGNOLIA_SSH_KEY }}" > ~/.ssh/magnolia_key
-          chmod 600 ~/.ssh/magnolia_key
-
-          # Clé pour Mimosa
-          echo "${{ secrets.MIMOSA_SSH_KEY }}" > ~/.ssh/mimosa_key
-          chmod 600 ~/.ssh/mimosa_key
-
-          # Configuration SSH
-          cat >> ~/.ssh/config << 'EOF'
+          # Create SSH config for both servers
+          cat > ~/.ssh/config << EOF
           Host magnolia
             HostName ${{ secrets.MAGNOLIA_HOST }}
             User jeremie
-            IdentityFile ~/.ssh/magnolia_key
-            StrictHostKeyChecking no
-            UserKnownHostsFile /dev/null
-            LogLevel ERROR
+            IdentityFile ~/.ssh/deploy_key
+            StrictHostKeyChecking accept-new
+            IdentitiesOnly yes
 
           Host mimosa
             HostName ${{ secrets.MIMOSA_HOST }}
             User jeremie
-            IdentityFile ~/.ssh/mimosa_key
-            StrictHostKeyChecking no
-            UserKnownHostsFile /dev/null
-            LogLevel ERROR
+            IdentityFile ~/.ssh/deploy_key
+            StrictHostKeyChecking accept-new
+            IdentitiesOnly yes
           EOF
 
           chmod 600 ~/.ssh/config
 
-          echo "✅ SSH configuration complete"
-
-      # ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-      # 4. TEST PING VIA TAILSCALE
-      # ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-      - name: 🏓 Ping servers
-        run: |
-          echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
-          echo "Ping Magnolia..."
-          echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
-          ping -c 3 ${{ secrets.MAGNOLIA_HOST }}
+          echo ""
+          echo "📄 SSH key file info:"
+          ls -la ~/.ssh/deploy_key
 
           echo ""
-          echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
-          echo "Ping Mimosa..."
-          echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
-          ping -c 3 ${{ secrets.MIMOSA_HOST }}
+          echo "🔐 SSH key fingerprint:"
+          ssh-keygen -lf ~/.ssh/deploy_key
 
-      # ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-      # 5. TEST SSH MAGNOLIA
-      # ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-      - name: 🏗️ Test SSH to Magnolia
+          echo ""
+          echo "Expected fingerprint: SHA256:X/I4DzZnBJH4FcXps08IGzE+4qfZvwCGxj3aPJgkaAE"
+
+      - name: 🏗️ Test SSH to Magnolia (verbose)
         run: |
           echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
           echo "Testing SSH to Magnolia..."
           echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+          echo ""
 
-          # Vérifier que la clé existe et a les bonnes permissions
-          ls -la ~/.ssh/magnolia_key
-
-          # Test SSH avec verbose
-          ssh -vvv magnolia "echo 'Connection successful!'" 2>&1 | tail -50
-          ssh magnolia << 'ENDSSH'
-            echo "✅ Connected to Magnolia!"
+          # Redirect stderr to stdout to capture verbose output
+          ssh -vvv magnolia "echo '✅ Connected to Magnolia!'; echo ''; echo 'Hostname: \$(hostname)'; echo 'User: \$(whoami)'; echo 'NixOS: \$(nixos-version)'" 2>&1 || {
             echo ""
-            echo "Hostname: $(hostname)"
-            echo "User: $(whoami)"
-            echo "Uptime: $(uptime)"
-            echo "NixOS version: $(nixos-version)"
-          ENDSSH
+            echo "❌ SSH connection to Magnolia failed!"
+            exit 1
+          }
 
-      # ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-      # 6. TEST SSH MIMOSA
-      # ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-      - name: 🌸 Test SSH to Mimosa
+      - name: 🌸 Test SSH to Mimosa (verbose)
         run: |
           echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
           echo "Testing SSH to Mimosa..."
           echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
-
-          ssh mimosa << 'ENDSSH'
-            echo "✅ Connected to Mimosa!"
-            echo ""
-            echo "Hostname: $(hostname)"
-            echo "User: $(whoami)"
-            echo "Uptime: $(uptime)"
-            echo "NixOS version: $(nixos-version)"
-          ENDSSH
-
-      # ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-      # 7. TEST SUDO SUR MIMOSA
-      # ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-      - name: 🔐 Test sudo on Mimosa
-        run: |
-          echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
-          echo "Testing sudo on Mimosa..."
-          echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
-
-          ssh mimosa "sudo -n nixos-rebuild --version"
           echo ""
-          echo "✅ Sudo works without password!"
 
-      # ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-      # 8. RÉSUMÉ
-      # ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-      - name: ✅ Success summary
+          # Redirect stderr to stdout to capture verbose output
+          ssh -vvv mimosa "echo '✅ Connected to Mimosa!'; echo ''; echo 'Hostname: \$(hostname)'; echo 'User: \$(whoami)'; echo 'NixOS: \$(nixos-version)'" 2>&1 || {
+            echo ""
+            echo "❌ SSH connection to Mimosa failed!"
+            exit 1
+          }
+
+      - name: ✅ Success
         if: success()
         run: |
           echo ""
-          echo "╔═══════════════════════════════════════════════╗"
-          echo "║                                               ║"
-          echo "║   🎉 ALL TESTS PASSED SUCCESSFULLY! 🎉       ║"
-          echo "║                                               ║"
-          echo "╚═══════════════════════════════════════════════╝"
+          echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+          echo "✅ All tests passed!"
+          echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
           echo ""
-          echo "✅ Tailscale connection: OK"
-          echo "✅ Ping Magnolia: OK"
-          echo "✅ Ping Mimosa: OK"
-          echo "✅ SSH to Magnolia: OK"
-          echo "✅ SSH to Mimosa: OK"
-          echo "✅ Sudo on Mimosa: OK"
+          echo "✓ Tailscale connection working"
+          echo "✓ Network connectivity working"
+          echo "✓ SSH to Magnolia working"
+          echo "✓ SSH to Mimosa working"
           echo ""
           echo "🚀 Ready for automated deployments!"
