@@ -1,4 +1,3 @@
-
 name: 🚀 Deploy jeremiealcaraz.com
 
 on:
@@ -25,7 +24,6 @@ jobs:
           mkdir -p ~/.ssh
           echo "${{ secrets.DEPLOY_SSH_KEY }}" > ~/.ssh/deploy_key
           chmod 600 ~/.ssh/deploy_key
-
           cat > ~/.ssh/config << EOF
           Host magnolia
             HostName ${{ secrets.MAGNOLIA_HOST }}
@@ -33,7 +31,6 @@ jobs:
             IdentityFile ~/.ssh/deploy_key
             StrictHostKeyChecking accept-new
             IdentitiesOnly yes
-
           Host mimosa
             HostName ${{ secrets.MIMOSA_HOST }}
             User jeremie
@@ -41,7 +38,6 @@ jobs:
             StrictHostKeyChecking accept-new
             IdentitiesOnly yes
           EOF
-
           chmod 600 ~/.ssh/config
 
       - name: 🏗️ Build on Magnolia and push flake.lock
@@ -50,47 +46,33 @@ jobs:
           echo "🏗️ Building jeremiealcaraz.com on Magnolia..."
           echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
           echo ""
-
           ssh magnolia bash << 'ENDSSH'
             set -e
-
             echo "📍 Current location: $(hostname)"
             echo "👤 Running as: $(whoami)"
             echo ""
-
             echo "🔄 Syncing config from GitHub..."
             cd /etc/nixos
             git fetch --all
             git reset --hard origin/main
-
             echo "📦 Updating j12z-site flake input..."
             nix flake update j12z-site
-
             echo ""
             echo "🏗️ Building Mimosa configuration (for binary cache)..."
             nix build .#nixosConfigurations.mimosa.config.system.build.toplevel
-
             echo ""
             echo "🔨 Building Magnolia configuration..."
             sudo nixos-rebuild switch --flake .#magnolia
-
             echo ""
             echo "📤 Committing and pushing flake.lock to GitHub..."
-
             if git diff --quiet flake.lock; then
               echo "ℹ️  No changes to flake.lock, skipping commit"
             else
               git add flake.lock
-              git commit -m "chore: update flake.lock after j12z-site build
-
-Automated commit from Magnolia after building j12z-site.
-GitHub Actions workflow: ${{ github.workflow }}
-Trigger commit: ${{ github.sha }}"
-
+              git commit -m "chore: update flake.lock after j12z-site build"
               git push origin main
               echo "✅ flake.lock pushed to GitHub"
             fi
-
             echo ""
             echo "✅ Build complete! Binary cache updated."
           ENDSSH
@@ -102,23 +84,18 @@ Trigger commit: ${{ github.sha }}"
           echo "🌸 Deploying to Mimosa..."
           echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
           echo ""
-
           ssh mimosa bash << 'ENDSSH'
             set -e
-
             echo "📍 Current location: $(hostname)"
             echo "👤 Running as: $(whoami)"
             echo ""
-
             echo "🔄 Syncing config from GitHub (hard reset)..."
             cd /etc/nixos
             git fetch --all
             git reset --hard origin/main
-
             echo ""
             echo "🚀 Deploying mimosa configuration..."
             sudo nixos-rebuild switch --flake .#mimosa
-
             echo ""
             echo "✅ Deployment complete!"
           ENDSSH
@@ -131,7 +108,6 @@ Trigger commit: ${{ github.sha }}"
           echo "🌐 Purging Cloudflare cache..."
           echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
           echo ""
-
           curl -X POST "https://api.cloudflare.com/client/v4/zones/${{ secrets.CLOUDFLARE_ZONE_ID }}/purge_cache" \
             -H "Authorization: Bearer ${{ secrets.CLOUDFLARE_API_TOKEN }}" \
             -H "Content-Type: application/json" \
@@ -139,7 +115,6 @@ Trigger commit: ${{ github.sha }}"
             --fail \
             --show-error \
             --silent | jq '.'
-
           echo ""
           echo "✅ Cloudflare cache purged!"
 
@@ -165,4 +140,3 @@ Trigger commit: ${{ github.sha }}"
           echo ""
           echo "Please check the logs above for details."
           exit 1
-
