@@ -62,8 +62,8 @@ jobs:
             git fetch --all
             git reset --hard origin/main
 
-            echo "📦 Updating j12zdotcom flake input..."
-            nix flake update j12zdotcom
+            echo "📦 Updating j12z-site flake input..."
+            nix flake update j12z-site
 
             echo ""
             echo "🔨 Building magnolia configuration..."
@@ -76,7 +76,7 @@ jobs:
               echo "ℹ️  No changes to flake.lock, skipping commit"
             else
               git add flake.lock
-              git commit -m "chore: update flake.lock after j12zdotcom build"
+              git commit -m "chore: update flake.lock after j12z-site build"
               git push origin main
               echo "✅ flake.lock pushed to GitHub"
             fi
