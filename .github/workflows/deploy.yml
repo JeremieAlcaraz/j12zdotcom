@@ -50,7 +50,7 @@ jobs:
           echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
           echo ""
 
-          ssh magnolia << 'ENDSSH'
+          ssh magnolia bash << 'ENDSSH'
             set -e
 
             echo "📍 Current location: $(hostname)"
@@ -93,7 +93,7 @@ jobs:
           echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
           echo ""
 
-          ssh mimosa << 'ENDSSH'
+          ssh mimosa bash << 'ENDSSH'
             set -e
 
             echo "📍 Current location: $(hostname)"
