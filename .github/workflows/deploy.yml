@@ -1,0 +1,169 @@
+
+name: 🚀 Deploy jeremiealcaraz.com
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    name: Deploy to Production
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: 🔌 Connect to Tailscale
+        uses: tailscale/github-action@v2
+        with:
+          oauth-client-id: ${{ secrets.TS_OAUTH_CLIENT_ID }}
+          oauth-secret: ${{ secrets.TS_OAUTH_SECRET }}
+          tags: tag:github-actions
+
+      - name: 🔑 Setup SSH key
+        run: |
+          mkdir -p ~/.ssh
+          echo "${{ secrets.DEPLOY_SSH_KEY }}" > ~/.ssh/deploy_key
+          chmod 600 ~/.ssh/deploy_key
+
+          # Create SSH config
+          cat > ~/.ssh/config << EOF
+          Host magnolia
+            HostName ${{ secrets.MAGNOLIA_HOST }}
+            User jeremie
+            IdentityFile ~/.ssh/deploy_key
+            StrictHostKeyChecking accept-new
+            IdentitiesOnly yes
+
+          Host mimosa
+            HostName ${{ secrets.MIMOSA_HOST }}
+            User jeremie
+            IdentityFile ~/.ssh/deploy_key
+            StrictHostKeyChecking accept-new
+            IdentitiesOnly yes
+          EOF
+
+          chmod 600 ~/.ssh/config
+
+      - name: 🏗️ Build on Magnolia and push flake.lock
+        run: |
+          echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+          echo "🏗️ Building jeremiealcaraz.com on Magnolia..."
+          echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+          echo ""
+
+          ssh magnolia << 'ENDSSH'
+            set -e
+
+            echo "📍 Current location: $(hostname)"
+            echo "👤 Running as: $(whoami)"
+            echo ""
+
+            # Hard reset to GitHub (source of truth)
+            echo "🔄 Syncing config from GitHub..."
+            cd ~/nixos
+            git fetch --all
+            git reset --hard origin/main
+
+            # Update flake inputs to get latest j12zdotcom
+            echo "📦 Updating j12zdotcom flake input..."
+            nix flake update j12zdotcom
+
+            echo ""
+            echo "🔨 Building magnolia configuration..."
+            sudo nixos-rebuild switch --flake .#magnolia
+
+            echo ""
+            echo "📤 Committing and pushing flake.lock to GitHub..."
+
+            # Check if flake.lock changed
+            if git diff --quiet flake.lock; then
+              echo "ℹ️  No changes to flake.lock, skipping commit"
+            else
+              git add flake.lock
+              git commit -m "chore: update flake.lock after j12zdotcom build
+
+Automated commit from Magnolia after building j12zdotcom.
+GitHub Actions workflow: ${{ github.workflow }}
+Trigger commit: ${{ github.sha }}"
+
+              git push origin main
+              echo "✅ flake.lock pushed to GitHub"
+            fi
+
+            echo ""
+            echo "✅ Build complete! Binary cache updated."
+          ENDSSH
+
+      - name: 🌸 Deploy on Mimosa
+        run: |
+          echo ""
+          echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+          echo "🌸 Deploying to Mimosa..."
+          echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+          echo ""
+
+          ssh mimosa << 'ENDSSH'
+            set -e
+
+            echo "📍 Current location: $(hostname)"
+            echo "👤 Running as: $(whoami)"
+            echo ""
+
+            # Hard reset to GitHub (source of truth)
+            echo "🔄 Syncing config from GitHub (hard reset)..."
+            cd ~/nixos
+            git fetch --all
+            git reset --hard origin/main
+
+            echo ""
+            echo "🚀 Deploying mimosa configuration..."
+            sudo nixos-rebuild switch --flake .#mimosa
+
+            echo ""
+            echo "✅ Deployment complete!"
+          ENDSSH
+
+      - name: 🌐 Purge Cloudflare cache
+        if: success()
+        run: |
+          echo ""
+          echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+          echo "🌐 Purging Cloudflare cache..."
+          echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+          echo ""
+
+          curl -X POST "https://api.cloudflare.com/client/v4/zones/${{ secrets.CLOUDFLARE_ZONE_ID }}/purge_cache" \
+            -H "Authorization: Bearer ${{ secrets.CLOUDFLARE_API_TOKEN }}" \
+            -H "Content-Type: application/json" \
+            --data '{"purge_everything":true}' \
+            --fail \
+            --show-error \
+            --silent | jq '.'
+
+          echo ""
+          echo "✅ Cloudflare cache purged!"
+
+      - name: ✅ Deployment successful
+        if: success()
+        run: |
+          echo ""
+          echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+          echo "✅ Deployment successful!"
+          echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+          echo ""
+          echo "🎉 jeremiealcaraz.com has been updated!"
+          echo "🌐 Visit: https://jeremiealcaraz.com"
+          echo ""
+
+      - name: ❌ Deployment failed
+        if: failure()
+        run: |
+          echo ""
+          echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+          echo "❌ Deployment failed!"
+          echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+          echo ""
+          echo "Please check the logs above for details."
+          exit 1
+
