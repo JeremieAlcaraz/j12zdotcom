@@ -1,4 +1,3 @@
-
 name: 🚀 Deploy jeremiealcaraz.com
 
 on:
@@ -26,7 +25,6 @@ jobs:
           echo "${{ secrets.DEPLOY_SSH_KEY }}" > ~/.ssh/deploy_key
           chmod 600 ~/.ssh/deploy_key
 
-          # Create SSH config
           cat > ~/.ssh/config << EOF
           Host magnolia
             HostName ${{ secrets.MAGNOLIA_HOST }}
@@ -59,13 +57,11 @@ jobs:
             echo "👤 Running as: $(whoami)"
             echo ""
 
-            # Hard reset to GitHub (source of truth)
             echo "🔄 Syncing config from GitHub..."
             cd ~/nixos
             git fetch --all
             git reset --hard origin/main
 
-            # Update flake inputs to get latest j12zdotcom
             echo "📦 Updating j12zdotcom flake input..."
             nix flake update j12zdotcom
 
@@ -76,15 +72,11 @@ jobs:
             echo ""
             echo "📤 Committing and pushing flake.lock to GitHub..."
 
-            # Check if flake.lock changed
             if git diff --quiet flake.lock; then
               echo "ℹ️  No changes to flake.lock, skipping commit"
             else
               git add flake.lock
-              git commit -m "chore: update flake.lock after j12zdotcom build
-
-Automated commit from Magnolia after building j12zdotcom."
-
+              git commit -m "chore: update flake.lock after j12zdotcom build"
               git push origin main
               echo "✅ flake.lock pushed to GitHub"
             fi
@@ -108,7 +100,6 @@ Automated commit from Magnolia after building j12zdotcom."
             echo "👤 Running as: $(whoami)"
             echo ""
 
-            # Hard reset to GitHub (source of truth)
             echo "🔄 Syncing config from GitHub (hard reset)..."
             cd ~/nixos
             git fetch --all
@@ -164,4 +155,3 @@ Automated commit from Magnolia after building j12zdotcom."
           echo ""
           echo "Please check the logs above for details."
           exit 1
-
