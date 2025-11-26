@@ -1,3 +1,4 @@
+
 name: 🚀 Deploy jeremiealcaraz.com
 
 on:
@@ -66,7 +67,11 @@ jobs:
             nix flake update j12z-site
 
             echo ""
-            echo "🔨 Building magnolia configuration..."
+            echo "🏗️ Building Mimosa configuration (for binary cache)..."
+            nix build .#nixosConfigurations.mimosa.config.system.build.toplevel
+
+            echo ""
+            echo "🔨 Building Magnolia configuration..."
             sudo nixos-rebuild switch --flake .#magnolia
 
             echo ""
@@ -76,7 +81,12 @@ jobs:
               echo "ℹ️  No changes to flake.lock, skipping commit"
             else
               git add flake.lock
-              git commit -m "chore: update flake.lock after j12z-site build"
+              git commit -m "chore: update flake.lock after j12z-site build
+
+Automated commit from Magnolia after building j12z-site.
+GitHub Actions workflow: ${{ github.workflow }}
+Trigger commit: ${{ github.sha }}"
+
               git push origin main
               echo "✅ flake.lock pushed to GitHub"
             fi
@@ -155,3 +165,4 @@ jobs:
           echo ""
           echo "Please check the logs above for details."
           exit 1
+
