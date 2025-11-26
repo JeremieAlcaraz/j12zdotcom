@@ -83,9 +83,7 @@ jobs:
               git add flake.lock
               git commit -m "chore: update flake.lock after j12zdotcom build
 
-Automated commit from Magnolia after building j12zdotcom.
-GitHub Actions workflow: ${{ github.workflow }}
-Trigger commit: ${{ github.sha }}"
+Automated commit from Magnolia after building j12zdotcom."
 
               git push origin main
               echo "✅ flake.lock pushed to GitHub"
