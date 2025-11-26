@@ -58,7 +58,7 @@ jobs:
             echo ""
 
             echo "🔄 Syncing config from GitHub..."
-            cd ~/nixos
+            cd /etc/nixos
             git fetch --all
             git reset --hard origin/main
 
@@ -101,7 +101,7 @@ jobs:
             echo ""
 
             echo "🔄 Syncing config from GitHub (hard reset)..."
-            cd ~/nixos
+            cd /etc/nixos
             git fetch --all
             git reset --hard origin/main
 
