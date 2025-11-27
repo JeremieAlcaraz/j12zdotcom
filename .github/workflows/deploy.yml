@@ -19,11 +19,16 @@ jobs:
           oauth-secret: ${{ secrets.TS_OAUTH_SECRET }}
           tags: tag:github-actions
 
-      - name: 🔑 Setup SSH key
+      - name: 🔑 Setup SSH key (Base64 method)
         run: |
           mkdir -p ~/.ssh
-          echo "${{ secrets.DEPLOY_SSH_KEY }}" > ~/.ssh/deploy_key
+          # On décode le Base64 pour recréer le fichier original parfait
+          echo "${{ secrets.DEPLOY_SSH_KEY }}" | base64 -d > ~/.ssh/deploy_key
+
+          # Permissions strictes obligatoires
           chmod 600 ~/.ssh/deploy_key
+
+          # Configuration SSH
           cat > ~/.ssh/config << EOF
           Host magnolia
             HostName ${{ secrets.MAGNOLIA_HOST }}
@@ -39,6 +44,7 @@ jobs:
             IdentitiesOnly yes
           EOF
           chmod 600 ~/.ssh/config
+
       - name: 🕵️ Debug SSH Key Format
         run: |
           echo "📊 Nombre de lignes dans la clé (devrait être > 1) :"
