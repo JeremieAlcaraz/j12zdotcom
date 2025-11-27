@@ -8,7 +8,7 @@
 // ------------------------------------------------------------------
 
 import siteConfig from '@/config/siteConfig.ts'
-import LottiePlayer from '@/ui/atoms/LottiePlayer.astro'
+import AnimatedCat from '@/ui/atoms/AnimatedCat.astro'
 
 // Type Script : les pages peuvent importer ce type si besoin.
 export interface ContactFormProps {
@@ -44,15 +44,9 @@ const { title = 'Contactez-moi', description = 'Je réponds généralement sous 
           {description}
         </p>
         
-        <!-- Lottie Animation Wrapper -->
-        <div class="relative mx-auto lg:mx-0 w-full max-w-[400px] h-[300px] flex items-center justify-center">
-           <LottiePlayer 
-             src="/animations/watermelon-simple.json" 
-             width="100%" 
-             height="100%" 
-             autoplay={true} 
-             loop={true} 
-           />
+        <!-- Animated Cat -->
+        <div class="relative mx-auto lg:mx-0 w-full max-w-[400px] h-[300px]">
+           <AnimatedCat />
         </div>
       </div>
 
