@@ -24,6 +24,7 @@ export interface Settings {
 
 export interface Params {
   contactFormAction: string
+  contactSuccessUrl: string
 }
 
 export interface NavigationButton {
@@ -83,7 +84,8 @@ export const siteConfig: SiteConfig = {
   },
   params: {
     contactFormAction:
-      'https://n8n.jeremiealcaraz.com/webhook-test/5f0abd46-180d-4a51-9f27-93ef7c7b8224',
+      'https://n8n.jeremiealcaraz.com/webhook/5f0abd46-180d-4a51-9f27-93ef7c7b8224',
+    contactSuccessUrl: '/contact-success',
   },
   navigationButton: {
     enable: true,

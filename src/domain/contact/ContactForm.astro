@@ -18,7 +18,7 @@ export interface ContactFormProps {
   description?: string
 }
 
-const { contactFormAction } = siteConfig.params
+const { contactFormAction, contactSuccessUrl } = siteConfig.params
 
 const { title = 'Contactez-moi', description = 'Je réponds généralement sous 24 h.' } =
   Astro.props as ContactFormProps
@@ -58,43 +58,60 @@ const { title = 'Contactez-moi', description = 'Je réponds généralement sous 
 
       <!-- Right Column: Glassmorphism Form -->
       <div class="card bg-base-100/70 backdrop-blur-md border border-base-content/5 shadow-2xl p-6 md:p-8">
-        <form action={contactFormAction} method="POST" class="grid gap-5">
+        <form id="contact-form" action={contactFormAction} method="POST" class="grid gap-5">
           <!-- Anti-spam -->
           <input type="hidden" name="_subject" value={`Nouveau message de ${title}`} />
+          <input type="hidden" name="_next" value={`${siteConfig.site.baseUrl}${contactSuccessUrl}`} />
           <input type="text" name="_gotcha" class="hidden" />
 
           <div class="grid gap-5 md:grid-cols-2">
-            <!-- Champ : Nom -->
+            <!-- Champ : Prénom -->
             <div class="form-control w-full">
-              <label class="label" for="name">
-                <span class="label-text font-medium">Votre nom</span>
+              <label class="label" for="firstname">
+                <span class="label-text font-medium">Votre prénom</span>
               </label>
               <input
-                id="name"
-                name="name"
+                id="firstname"
+                name="firstname"
                 type="text"
-                placeholder="John Doe"
+                placeholder="John"
                 class="input input-bordered w-full bg-base-200/50 focus:bg-base-100 transition-colors"
                 required
-                autocomplete="name"
+                autocomplete="given-name"
               />
             </div>
 
-            <!-- Champ : Email -->
+            <!-- Champ : Nom -->
             <div class="form-control w-full">
-              <label class="label" for="email">
-                <span class="label-text font-medium">Votre e-mail</span>
+              <label class="label" for="lastname">
+                <span class="label-text font-medium">Votre nom</span>
               </label>
               <input
-                id="email"
-                name="email"
-                type="email"
-                placeholder="john@example.com"
+                id="lastname"
+                name="lastname"
+                type="text"
+                placeholder="Doe"
                 class="input input-bordered w-full bg-base-200/50 focus:bg-base-100 transition-colors"
                 required
-                autocomplete="email"
+                autocomplete="family-name"
               />
             </div>
+          </div>
+
+          <!-- Champ : Email (pleine largeur) -->
+          <div class="form-control w-full">
+            <label class="label" for="email">
+              <span class="label-text font-medium">Votre e-mail</span>
+            </label>
+            <input
+              id="email"
+              name="email"
+              type="email"
+              placeholder="john.doe@example.com"
+              class="input input-bordered w-full bg-base-200/50 focus:bg-base-100 transition-colors"
+              required
+              autocomplete="email"
+            />
           </div>
 
           <!-- Champ : Message -->
@@ -129,3 +146,60 @@ const { title = 'Contactez-moi', description = 'Je réponds généralement sous 
     </div>
   </div>
 </section>
+
+<script>
+  // Messages de validation en français
+  document.addEventListener('DOMContentLoaded', () => {
+    const form = document.getElementById('contact-form') as HTMLFormElement
+    if (!form) return
+
+    const firstname = form.querySelector('#firstname') as HTMLInputElement
+    const lastname = form.querySelector('#lastname') as HTMLInputElement
+    const email = form.querySelector('#email') as HTMLInputElement
+    const message = form.querySelector('#message') as HTMLTextAreaElement
+
+    // Prénom
+    if (firstname) {
+      firstname.addEventListener('invalid', (e) => {
+        firstname.setCustomValidity('Veuillez renseigner votre prénom.')
+      })
+      firstname.addEventListener('input', () => {
+        firstname.setCustomValidity('')
+      })
+    }
+
+    // Nom
+    if (lastname) {
+      lastname.addEventListener('invalid', (e) => {
+        lastname.setCustomValidity('Veuillez renseigner votre nom.')
+      })
+      lastname.addEventListener('input', () => {
+        lastname.setCustomValidity('')
+      })
+    }
+
+    // Email
+    if (email) {
+      email.addEventListener('invalid', (e) => {
+        if (email.validity.valueMissing) {
+          email.setCustomValidity('Veuillez renseigner votre e-mail.')
+        } else if (email.validity.typeMismatch) {
+          email.setCustomValidity('Veuillez entrer une adresse e-mail valide.')
+        }
+      })
+      email.addEventListener('input', () => {
+        email.setCustomValidity('')
+      })
+    }
+
+    // Message
+    if (message) {
+      message.addEventListener('invalid', (e) => {
+        message.setCustomValidity('Veuillez écrire votre message.')
+      })
+      message.addEventListener('input', () => {
+        message.setCustomValidity('')
+      })
+    }
+  })
+</script>
