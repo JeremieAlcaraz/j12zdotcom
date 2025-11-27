@@ -6,11 +6,13 @@ import FluidCursor from '@/ui/atoms/FluidCursor.astro'
 ---
 
 <BaseLayout title="Accueil – Mon Site">
-  <!-- Overlay fluide (home uniquement) -->
-  <FluidCursor container="#hero-container" scoped slot="hero" />
+  <div slot="hero">
+    <!-- Hero utilise le slot hero pour être full-width -->
+    <Hero />
 
-  <!-- Hero utilise le slot hero pour être full-width -->
-  <Hero slot="hero" />
+    <!-- Overlay fluide (home uniquement) - utilise le parent direct -->
+    <FluidCursor scoped />
+  </div>
   <!-- <Section> -->
   <!--   <Testimonial testimonial={testimonial} /> -->
   <!-- </Section> -->

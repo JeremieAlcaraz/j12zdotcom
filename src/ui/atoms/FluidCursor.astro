@@ -13,7 +13,7 @@ const props = Astro.props;
       const root = this.attachShadow({ mode: 'open' });
       const wrap = document.createElement('div');
       wrap.style.cssText = `
-        position: fixed; inset: 0; pointer-events: none; z-index: 40;
+        position: fixed; inset: 0; pointer-events: none; z-index: 50;
         width: 100%; height: 100%;
       `;
       const canvas = document.createElement('canvas');
@@ -49,7 +49,7 @@ const props = Astro.props;
         // Adapter le style pour couvrir uniquement le container
         // 1) Le host occupe tout le container
         const style = document.createElement('style');
-        style.textContent = `:host{position:absolute;inset:0;display:block;pointer-events:none;}`;
+        style.textContent = `:host{position:absolute;inset:0;display:block;pointer-events:none;z-index:50;}`;
         this.shadowRoot && this.shadowRoot.appendChild(style);
         // 2) Le wrap et le canvas prennent 100% de l'espace du host
         this._wrap.style.position = 'absolute';
