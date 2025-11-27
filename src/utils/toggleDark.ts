@@ -132,7 +132,7 @@ const toggleTheme = (event: MouseEvent) => {
     const clipPath = [`circle(0px at ${x}px ${y}px)`, `circle(${endRadius}px at ${x}px ${y}px)`]
 
     // LANCE l'animation sur la nouvelle vue qui apparaît
-    const animation = document.documentElement.animate(
+    document.documentElement.animate(
       {
         clipPath: clipPath, // Animation du cercle qui s'agrandit
       },

@@ -189,7 +189,7 @@ import logo from '@/assets/logos/logo.svg'
       return
     }
 
-    const wrapper = document.querySelector('.wrapper-cat-loading')
+    const wrapper = document.querySelector('.wrapper-cat-loading') as HTMLElement | null
     if (!wrapper) return
 
     const cat = wrapper.querySelector('.cat')
@@ -364,7 +364,7 @@ import logo from '@/assets/logos/logo.svg'
         opacity: 0,
         delay: 1,
         onComplete: () => {
-          wrapper.style.display = 'none'
+          if (wrapper) wrapper.style.display = 'none'
         },
       })
     }
