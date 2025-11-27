@@ -5,6 +5,8 @@ import Footer from '@/layouts/partials/Footer.astro'
 import TwSizeIndicator from '@/domain/dev/TwSizeIndicator.astro'
 import { ClientRouter } from 'astro:transitions'
 import FocusModeController from '@/domain/shared/controllers/FocusModeController.astro'
+import CatLoading from '@/ui/atoms/CatLoading.astro'
+
 const { title = 'Mon Site', meta_title, description, image } = Astro.props
 const pageTitle = meta_title || title
 ---
@@ -24,6 +26,24 @@ const pageTitle = meta_title || title
     {description && <meta name="twitter:description" content={description} />}
     {image && <meta name="twitter:image" content={image} />}
     <ClientRouter />
+
+    <script is:inline>
+      // Immédiatement vérifier si l'animation a été vue pour éviter le FOUC
+      const hasSeenAnimation = localStorage.getItem('catAnimationSeen')
+      if (hasSeenAnimation === 'true') {
+        document.documentElement.classList.add('cat-seen')
+      }
+      
+      // Re-vérifier à chaque navigation (pour les View Transitions)
+      document.addEventListener('astro:after-swap', () => {
+        const hasSeenAnimation = localStorage.getItem('catAnimationSeen')
+        if (hasSeenAnimation === 'true') {
+          document.documentElement.classList.add('cat-seen')
+        } else {
+          document.documentElement.classList.remove('cat-seen')
+        }
+      })
+    </script>
 
     <script is:inline>
       function initTheme() {
@@ -192,6 +212,7 @@ const pageTitle = meta_title || title
   </head>
 
   <body class="min-h-screen">
+    <CatLoading />
     <!-- Global controller: resets focus-mode on navigation; only active on posts -->
     <FocusModeController />
     <!-- Layout principal avec Grid Tailwind -->
