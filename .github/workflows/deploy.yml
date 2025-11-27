@@ -39,6 +39,12 @@ jobs:
             IdentitiesOnly yes
           EOF
           chmod 600 ~/.ssh/config
+      - name: 🕵️ Debug SSH Key Format
+        run: |
+          echo "📊 Nombre de lignes dans la clé (devrait être > 1) :"
+          wc -l ~/.ssh/deploy_key
+          echo "🧐 Première ligne (devrait être -----BEGIN...) :"
+          head -n 1 ~/.ssh/deploy_key
 
       - name: 🏗️ Build on Magnolia and push flake.lock
         run: |
