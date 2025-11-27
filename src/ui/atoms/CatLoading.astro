@@ -96,16 +96,6 @@ import logo from '@/assets/logos/logo.svg'
     display: none !important;
   }
 
-  /* Transition douce pour l'apparition du contenu */
-  :global(html.cat-seen body > *:not(.wrapper-cat-loading)) {
-    animation: fade-in-content 1s ease-out forwards;
-  }
-
-  @keyframes fade-in-content {
-    from { opacity: 0; }
-    to { opacity: 1; }
-  }
-
   .animation-wrapper {
     display: flex;
   }
