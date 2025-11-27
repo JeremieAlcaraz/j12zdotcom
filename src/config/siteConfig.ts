@@ -24,7 +24,6 @@ export interface Settings {
 
 export interface Params {
   contactFormAction: string
-  copyright: string
 }
 
 export interface NavigationButton {
@@ -85,7 +84,6 @@ export const siteConfig: SiteConfig = {
   params: {
     contactFormAction:
       'https://n8n.jeremiealcaraz.com/webhook-test/5f0abd46-180d-4a51-9f27-93ef7c7b8224',
-    copyright: 'Designed And Developed by Jeremie Alcaraz with 💜',
   },
   navigationButton: {
     enable: true,
@@ -104,7 +102,8 @@ export const siteConfig: SiteConfig = {
   metadata: {
     author: 'Jeremie Alcaraz',
     image: '/images/og-image.png',
-    description: 'Portfolio et blog de Jeremie Alcaraz - Formations et services en développement web avec Astro, React et Svelte',
+    description:
+      'Portfolio et blog de Jeremie Alcaraz - Formations et services en développement web avec Astro, React et Svelte',
   },
 } as const // « as const » fige les valeurs littérales
 
