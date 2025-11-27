@@ -20,8 +20,10 @@ export interface ContactFormProps {
 
 const { contactFormAction, contactSuccessUrl } = siteConfig.params
 
-const { title = 'Contactez-moi', description = 'Je réponds généralement sous 24 h.' } =
-  Astro.props as ContactFormProps
+const {
+  title = 'Fais-moi signe !',
+  description = 'Besoin d\'un coup de patte ? Écris-moi tout ici, mon cha-cteur me l\'apportera en toute douceur ! Et je reviens vers toi aussi rapidement que possible !',
+} = Astro.props as ContactFormProps
 ---
 
 <section id="contact" class="relative overflow-hidden py-16 md:py-24">
@@ -40,7 +42,7 @@ const { title = 'Contactez-moi', description = 'Je réponds généralement sous 
         <h2 class="text-4xl font-extrabold tracking-tight sm:text-5xl bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">
           {title}
         </h2>
-        <p class="text-lg text-base-content/80 max-w-md mx-auto lg:mx-0">
+        <p class="text-lg md:text-xl font-medium text-base-content/90 max-w-lg mx-auto lg:mx-0 leading-relaxed">
           {description}
         </p>
         
