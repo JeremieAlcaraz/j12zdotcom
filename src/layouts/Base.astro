@@ -1,5 +1,5 @@
 ---
-import '@styles/index.css'
+import '@/styles/index.css'
 import Header from '@/layouts/partials/Header.astro'
 import Footer from '@/layouts/partials/Footer.astro'
 import TwSizeIndicator from '@/domain/dev/TwSizeIndicator.astro'
@@ -26,6 +26,18 @@ const pageTitle = meta_title || title
     {description && <meta name="twitter:description" content={description} />}
     {image && <meta name="twitter:image" content={image} />}
     <ClientRouter />
+
+    <!-- Transition: désactiver le swap des feuilles de style pour éviter le flash -->
+    <script>
+      document.addEventListener('astro:before-swap', (ev) => {
+        // Préserver toutes les feuilles de style lors des transitions
+        const existingStyles = [...document.querySelectorAll('link[rel="stylesheet"], style')];
+        existingStyles.forEach(style => {
+          const clone = style.cloneNode(true);
+          ev.newDocument.head.appendChild(clone);
+        });
+      });
+    </script>
 
     <script is:inline>
       // Immédiatement vérifier si l'animation a été vue pour éviter le FOUC
