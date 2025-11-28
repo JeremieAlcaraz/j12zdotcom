@@ -54,7 +54,7 @@ const {
 
       <!-- Right Column: Glassmorphism Form -->
       <div class="card bg-base-100/70 backdrop-blur-md border border-base-content/5 shadow-2xl p-6 md:p-8">
-        <form id="contact-form" class="grid gap-5">
+        <form id="contact-form" class="grid gap-5" data-webhook-url={contactFormAction}>
           <!-- Anti-spam -->
           <input type="hidden" name="_subject" value={`Nouveau message de ${title}`} />
           <input type="text" name="_gotcha" class="hidden" />
@@ -142,22 +142,27 @@ const {
   </div>
 </section>
 
-<script>
-  import siteConfig from '@/config/siteConfig.ts'
-
-  // Messages de validation en français
-  document.addEventListener('DOMContentLoaded', () => {
-    const form = document.getElementById('contact-form') as HTMLFormElement
+<script is:inline>
+  // Fonction d'initialisation du formulaire
+  function initContactForm() {
+    const form = document.getElementById('contact-form')
     if (!form) {
       console.error('Formulaire non trouvé')
       return
     }
 
-    const firstname = form.querySelector('#firstname') as HTMLInputElement
-    const lastname = form.querySelector('#lastname') as HTMLInputElement
-    const email = form.querySelector('#email') as HTMLInputElement
-    const message = form.querySelector('#message') as HTMLTextAreaElement
-    const submitButton = form.querySelector('button[type="submit"]') as HTMLButtonElement
+    // Éviter de réattacher les listeners si déjà initialisé
+    if (form.dataset.initialized === 'true') {
+      console.log('Form already initialized, skipping')
+      return
+    }
+    form.dataset.initialized = 'true'
+
+    const firstname = form.querySelector('#firstname')
+    const lastname = form.querySelector('#lastname')
+    const email = form.querySelector('#email')
+    const message = form.querySelector('#message')
+    const submitButton = form.querySelector('button[type="submit"]')
 
     if (!submitButton) {
       console.error('Bouton submit non trouvé')
@@ -233,7 +238,8 @@ const {
 
         console.log('Envoi au webhook...')
         // Envoyer au webhook n8n
-        const response = await fetch(siteConfig.params.contactFormAction, {
+        const webhookUrl = form.dataset.webhookUrl
+        const response = await fetch(webhookUrl, {
           method: 'POST',
           body: formData,
         })
@@ -249,5 +255,16 @@ const {
         window.location.href = '/contact-success/'
       }
     })
-  })
+  }
+
+  // Initialisation au chargement initial
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initContactForm)
+  } else {
+    initContactForm()
+  }
+
+  // Réinitialisation après chaque navigation ViewTransition
+  document.addEventListener('astro:page-load', initContactForm)
+  document.addEventListener('astro:after-swap', initContactForm)
 </script>
