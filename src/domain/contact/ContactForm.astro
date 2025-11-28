@@ -54,10 +54,9 @@ const {
 
       <!-- Right Column: Glassmorphism Form -->
       <div class="card bg-base-100/70 backdrop-blur-md border border-base-content/5 shadow-2xl p-6 md:p-8">
-        <form id="contact-form" action={contactFormAction} method="POST" class="grid gap-5">
+        <form id="contact-form" class="grid gap-5">
           <!-- Anti-spam -->
           <input type="hidden" name="_subject" value={`Nouveau message de ${title}`} />
-          <input type="hidden" name="_next" value={`${siteConfig.site.baseUrl}${contactSuccessUrl}`} />
           <input type="text" name="_gotcha" class="hidden" />
 
           <div class="grid gap-5 md:grid-cols-2">
@@ -144,15 +143,28 @@ const {
 </section>
 
 <script>
+  import siteConfig from '@/config/siteConfig.ts'
+
   // Messages de validation en français
   document.addEventListener('DOMContentLoaded', () => {
     const form = document.getElementById('contact-form') as HTMLFormElement
-    if (!form) return
+    if (!form) {
+      console.error('Formulaire non trouvé')
+      return
+    }
 
     const firstname = form.querySelector('#firstname') as HTMLInputElement
     const lastname = form.querySelector('#lastname') as HTMLInputElement
     const email = form.querySelector('#email') as HTMLInputElement
     const message = form.querySelector('#message') as HTMLTextAreaElement
+    const submitButton = form.querySelector('button[type="submit"]') as HTMLButtonElement
+
+    if (!submitButton) {
+      console.error('Bouton submit non trouvé')
+      return
+    }
+
+    console.log('Form handler initialized')
 
     // Prénom
     if (firstname) {
@@ -197,5 +209,45 @@ const {
         message.setCustomValidity('')
       })
     }
+
+    // Interception de la soumission du formulaire
+    form.addEventListener('submit', async (e) => {
+      console.log('Submit event triggered')
+      e.preventDefault()
+      console.log('Default prevented')
+
+      // Vérifier si le formulaire est valide
+      if (!form.checkValidity()) {
+        form.reportValidity()
+        return
+      }
+
+      // Désactiver le bouton pendant l'envoi
+      const originalText = submitButton.textContent
+      submitButton.disabled = true
+      submitButton.textContent = 'Envoi en cours...'
+
+      try {
+        // Récupérer les données du formulaire
+        const formData = new FormData(form)
+
+        console.log('Envoi au webhook...')
+        // Envoyer au webhook n8n
+        const response = await fetch(siteConfig.params.contactFormAction, {
+          method: 'POST',
+          body: formData,
+        })
+        console.log('Réponse reçue:', response.status)
+
+        // Rediriger vers la page de succès quoi qu'il arrive
+        // (même en cas d'erreur, pour ne pas exposer l'URL du webhook)
+        console.log('Redirection vers /contact-success/')
+        window.location.href = '/contact-success/'
+      } catch (error) {
+        // En cas d'erreur réseau, rediriger quand même vers la page de succès
+        console.error('Erreur lors de l\'envoi:', error)
+        window.location.href = '/contact-success/'
+      }
+    })
   })
 </script>
