@@ -2,8 +2,124 @@
 // src/pages/contact-success.astro
 
 import BaseLayout from '@/layouts/Base.astro'
+import SkateCat from '@/ui/atoms/SkateCat.astro'
 ---
 
 <BaseLayout title="Message envoyé">
-  <div class="min-h-[60vh]"></div>
+  <div class="success-container">
+    <div class="success-message">
+      <h1 class="success-title">
+        Merci pour ton <span class="highlight">message</span> ! 🌸
+      </h1>
+      <p class="success-text">
+        Ton message a bien été envoyé. Je te répondrai avec douceur dans les <strong class="text-primary">plus brefs délais</strong>.
+      </p>
+
+      <div class="success-card">
+        <p class="text-base text-base-content/80 leading-relaxed">
+          En attendant, profite de cette petite animation pour te détendre 🫶
+        </p>
+      </div>
+    </div>
+
+    <div class="animation-wrapper">
+      <SkateCat />
+    </div>
+  </div>
 </BaseLayout>
+
+<style>
+  .success-container {
+    min-height: 70vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem;
+    gap: 2rem;
+    margin-top: 50px;
+  }
+
+  .success-message {
+    text-align: center;
+    max-width: 650px;
+    animation: fadeInDown 0.8s ease-out;
+  }
+
+  .success-title {
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: var(--color-base-content);
+    margin-bottom: 1.5rem;
+    line-height: 1.2;
+  }
+
+  .highlight {
+    background: linear-gradient(120deg, var(--color-primary) 0%, var(--color-secondary) 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    position: relative;
+  }
+
+  .success-text {
+    font-size: 1.25rem;
+    color: var(--color-base-content);
+    opacity: 0.8;
+    line-height: 1.6;
+    margin-bottom: 1.5rem;
+  }
+
+  .success-card {
+    margin-top: 1.5rem;
+    padding: 1.5rem;
+    border-radius: 1rem;
+    background: linear-gradient(135deg,
+      color-mix(in oklch, var(--color-primary), transparent 95%) 0%,
+      color-mix(in oklch, var(--color-secondary), transparent 95%) 100%);
+    border: 1px solid color-mix(in oklch, var(--color-primary), transparent 90%);
+  }
+
+  .animation-wrapper {
+    width: 100%;
+    max-width: 400px;
+    animation: fadeInUp 1s ease-out 0.3s both;
+  }
+
+  @keyframes fadeInDown {
+    from {
+      opacity: 0;
+      transform: translateY(-30px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  @keyframes fadeInUp {
+    from {
+      opacity: 0;
+      transform: translateY(30px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  @media (max-width: 768px) {
+    .success-title {
+      font-size: 2rem;
+    }
+
+    .success-text {
+      font-size: 1rem;
+    }
+
+    .success-container {
+      gap: 2rem;
+      padding: 1rem;
+    }
+  }
+</style>
