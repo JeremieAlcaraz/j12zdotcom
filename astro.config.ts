@@ -51,18 +51,13 @@ export default defineConfig({
         overlay: true,
       },
     },
-    // Configuration CSS pour éviter les problèmes avec Tailwind v4 et View Transitions
+    // Configuration CSS pour le debug
     css: {
       devSourcemap: true,
     },
-    // Optimisation : ne pas pré-bundler Tailwind en dev
-    optimizeDeps: {
-      exclude: ['@tailwindcss/vite'],
-    },
     plugins: [
-      // Tailwind en premier pour éviter les conflits de traitement CSS
-      tailwindcss(),
       tsconfigPaths(),
+      tailwindcss(),
       Icons({
         compiler: 'astro',
         autoInstall: true,

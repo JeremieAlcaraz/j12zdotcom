@@ -27,14 +27,19 @@ const pageTitle = meta_title || title
     {image && <meta name="twitter:image" content={image} />}
     <ClientRouter />
 
-    <!-- Transition: désactiver le swap des feuilles de style pour éviter le flash -->
+    <!-- Transition: préserver uniquement les link CSS lors des transitions -->
     <script>
       document.addEventListener('astro:before-swap', (ev) => {
-        // Préserver toutes les feuilles de style lors des transitions
-        const existingStyles = [...document.querySelectorAll('link[rel="stylesheet"], style')];
-        existingStyles.forEach(style => {
-          const clone = style.cloneNode(true);
-          ev.newDocument.head.appendChild(clone);
+        // Préserver uniquement les <link> stylesheets externes
+        // Les <style> inline et scripts sont gérés par Astro
+        const existingStyleLinks = [...document.querySelectorAll('link[rel="stylesheet"]')];
+
+        existingStyleLinks.forEach(link => {
+          // Ne cloner que si le lien n'existe pas déjà dans le nouveau document
+          const href = link.getAttribute('href');
+          if (href && !ev.newDocument.querySelector(`link[href="${href}"]`)) {
+            ev.newDocument.head.appendChild(link.cloneNode(true));
+          }
         });
       });
     </script>
