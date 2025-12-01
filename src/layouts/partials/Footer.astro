@@ -4,16 +4,13 @@
 import siteConfig from '@/config/siteConfig.ts'
 ---
 
-<footer class="footer footer-horizontal footer-center bg-base-300 text-base-content rounded p-10">
-  <nav class="grid grid-flow-col gap-4">
-    {import.meta.env.DEV && (
+<footer class="footer footer-horizontal footer-center bg-base-300 text-base-content rounded p-10 relative">
+  {import.meta.env.DEV && (
+    <div class="absolute bottom-4 left-4 flex items-center gap-2 text-xs opacity-50 hover:opacity-100 transition-opacity">
+      <span class="font-mono font-bold">DEV MODE:</span>
       <a class="link link-hover" href="/style-guide">UI</a>
-    )}
-    <a class="link link-hover">About us</a>
-    <a class="link link-hover">Contact</a>
-    <a class="link link-hover">Jobs</a>
-    <a class="link link-hover">Press kit</a>
-  </nav>
+    </div>
+  )}
   <nav>
     <div class="grid grid-flow-col gap-4">
       <a>
