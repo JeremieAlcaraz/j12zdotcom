@@ -1,0 +1,77 @@
+---
+/**
+ * Quote - Composant pour afficher une citation stylisée
+ *
+ * Affiche une citation avec son auteur dans un format élégant
+ * avec un guillemet décoratif optionnel
+ *
+ * @example
+ * ```astro
+ * <Quote
+ *   quote="La vraie productivité, c'est avoir l'esprit libre pour créer ce qui compte vraiment."
+ *   author="Ma philosophie en une phrase"
+ *   emoji="✨"
+ * />
+ * ```
+ */
+import BaseCard from '@/ui/atoms/BaseCard.astro'
+import Typography from '@/ui/atoms/Typography.astro'
+
+interface Props {
+  /** Le texte de la citation */
+  quote: string
+  /** L'auteur de la citation */
+  author: string
+  /** Emoji ou icône optionnel après l'auteur */
+  emoji?: string
+  /** Style de la carte */
+  variant?: 'default' | 'elevated' | 'subtle'
+  /** Afficher le guillemet décoratif */
+  showQuoteMark?: boolean
+}
+
+const {
+  quote,
+  author,
+  emoji,
+  variant = 'default',
+  showQuoteMark = true
+} = Astro.props
+
+// Configuration des variants
+const variantConfig = {
+  default: {
+    shadow: 'lg' as const,
+    border: 'none' as const,
+    background: 'base-100' as const,
+  },
+  elevated: {
+    shadow: 'xl' as const,
+    border: 'none' as const,
+    background: 'base-100' as const,
+  },
+  subtle: {
+    shadow: 'md' as const,
+    border: 'default' as const,
+    background: 'base-200' as const,
+  }
+}
+
+const config = variantConfig[variant]
+---
+
+<div class="relative group">
+  <!-- Hover Effect -->
+  <div class="absolute -inset-0.5 bg-gradient-to-r from-primary/20 to-secondary/20 rounded-2xl blur opacity-0 group-hover:opacity-100 transition duration-500"></div>
+  
+  <!-- Content (Old Style) -->
+  <div class="relative bg-base-200/50 rounded-2xl p-6 backdrop-blur-sm border-l-4 border-primary h-full flex flex-col justify-center">
+    <blockquote class="text-base italic text-base-content/80">
+      "{quote}"
+    </blockquote>
+    <footer class="mt-3 text-sm text-base-content/60 flex items-center gap-2">
+      — {author}
+      {emoji && <span>{emoji}</span>}
+    </footer>
+  </div>
+</div>

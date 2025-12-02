@@ -1,0 +1,84 @@
+---
+/**
+ * TestimonialCardV2 - Composant pour afficher un témoignage
+ *
+ * Affiche un témoignage client avec étoiles, contenu et informations
+ * sur l'auteur du témoignage
+ *
+ * @example
+ * ```astro
+ * <TestimonialCardV2
+ *   rating={5}
+ *   content="Enfin quelqu'un qui comprend que productivité ≠ stress !"
+ *   author="Sarah"
+ *   role="entrepreneure"
+ * />
+ * ```
+ */
+import BaseCard from '@/ui/atoms/BaseCard.astro'
+import Typography from '@/ui/atoms/Typography.astro'
+
+interface Props {
+  /** Nombre d'étoiles (1-5) */
+  rating?: number
+  /** Contenu du témoignage */
+  content: string
+  /** Nom de l'auteur */
+  author: string
+  /** Rôle/fonction de l'auteur */
+  role?: string
+  /** Style de la carte */
+  variant?: 'default' | 'elevated' | 'subtle'
+}
+
+const {
+  rating = 5,
+  content,
+  author,
+  role,
+  variant = 'default'
+} = Astro.props
+
+// Configuration des variants
+const variantConfig = {
+  default: {
+    shadow: 'lg' as const,
+    border: 'none' as const,
+    background: 'base-100' as const,
+    hover: true
+  },
+  elevated: {
+    shadow: 'xl' as const,
+    border: 'none' as const,
+    background: 'base-100' as const,
+    hover: true
+  },
+  subtle: {
+    shadow: 'md' as const,
+    border: 'default' as const,
+    background: 'base-200' as const,
+    hover: false
+  }
+}
+
+const config = variantConfig[variant]
+
+// Génération des étoiles (limité entre 1 et 5)
+const stars = Math.max(1, Math.min(5, rating))
+---
+
+<div class="bg-base-200/50 rounded-2xl p-6 backdrop-blur-sm border border-base-300/50">
+  <p class="text-base italic text-base-content/80 mb-3">
+    "{content}"
+  </p>
+  <div class="flex items-center justify-between">
+    <footer class="text-sm text-base-content/60">
+      — {author}{role && `, ${role}`}
+    </footer>
+    <div class="flex space-x-1">
+      {Array.from({ length: stars }).map(() => (
+        <span class="text-yellow-400">⭐</span>
+      ))}
+    </div>
+  </div>
+</div>
