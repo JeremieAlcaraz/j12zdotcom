@@ -1,12 +1,11 @@
 ---
-import { Image } from 'astro:assets'
-import logo from '@/assets/logos/logo.svg'
+import Logo from '@/ui/atoms/Logo.astro'
 ---
 
 <div class="wrapper-cat-loading" id="cat-loading-wrapper">
   <!-- Logo fixe qui apparaît après l'animation -->
   <div class="logo-fixed">
-    <Image src={logo} alt="Logo" class="logo-image" />
+    <Logo height="2.5rem" class="logo-image" />
     <span class="logo-text">Jeremie Alcaraz</span>
   </div>
 
@@ -65,7 +64,7 @@ import logo from '@/assets/logos/logo.svg'
       </svg>
     </div>
     <div class="logoani">
-      <Image src={logo} alt="Logo" class="logo-image-ani" />
+      <Logo height="2.5rem" class="logo-image-ani" />
       <span class="logo-text">Jeremie Alcaraz</span>
     </div>
   </div>

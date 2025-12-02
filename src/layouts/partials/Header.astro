@@ -1,15 +1,15 @@
 ---
 import type { NavLink } from '@/types/navigation'
 import Icon from '@/ui/atoms/Icon.astro'
-import { defaultLogo, defaultLogoDark, defaultLinks } from '@/config/navigation' // Valeurs par défaut pour logo et liens
+import Logo from '@/ui/atoms/Logo.astro'
+import { defaultLinks } from '@/config/navigation' // Valeurs par défaut pour les liens
 
 interface Props {
-  logo?: string
   links?: NavLink[]
 }
 
 // ✅ DESTRUCTURATION DES PROPS avec valeurs par défaut
-const { logo = defaultLogo, links = defaultLinks } = Astro.props
+const { links = defaultLinks } = Astro.props
 ---
 
 <!-- ==========================================
@@ -20,15 +20,8 @@ const { logo = defaultLogo, links = defaultLinks } = Astro.props
   <div class="navbar-start">
     <!-- LIEN LOGO - Retour à l'accueil -->
     <a href="/" class="btn btn-ghost normal-case flex items-center gap-3">
-      <!-- IMAGE DU LOGO -->
-      <img
-        id="main-logo"
-        src={logo}
-        data-logo-light={logo}
-        data-logo-dark={defaultLogoDark}
-        alt="Logo"
-        class="h-12 w-auto"
-      />
+      <!-- LOGO INLINE SVG -->
+      <Logo height="3rem" />
       <span class="font-illustration text-2xl leading-none">Jeremie Alcaraz</span>
     </a>
   </div>

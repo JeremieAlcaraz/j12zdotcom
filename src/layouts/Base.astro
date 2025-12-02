@@ -62,10 +62,10 @@ const pageTitle = meta_title || title
         const THEME_STORAGE_KEY = 'theme'
         const savedTheme = localStorage.getItem(THEME_STORAGE_KEY)
         const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches
-        const initialThemeIsDark = savedTheme ? savedTheme === 'dark' : prefersDark
+        const initialThemeIsDark = savedTheme ? savedTheme === 'douceurDark' : prefersDark
         document.documentElement.setAttribute(
           'data-theme',
-          initialThemeIsDark ? 'dark' : 'douceurLight'
+          initialThemeIsDark ? 'douceurDark' : 'douceurLight'
         )
       }
 

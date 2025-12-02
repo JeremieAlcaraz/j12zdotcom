@@ -7,7 +7,7 @@ const THEME_STORAGE_KEY = 'theme'
 
 // FONCTION UTILITAIRE : vérifie si le thème actuel est sombre
 // Lit l'attribut 'data-theme' sur l'élément <html>
-const isDark = () => document.documentElement.getAttribute('data-theme') === 'dark'
+const isDark = () => document.documentElement.getAttribute('data-theme') === 'douceurDark'
 
 // ==========================================
 // FONCTION DE MISE À JOUR DU THÈME
@@ -16,8 +16,8 @@ const isDark = () => document.documentElement.getAttribute('data-theme') === 'da
 // APPLIQUE le thème (sombre ou clair) à la page
 const updateTheme = (isDarkValue: boolean) => {
   // CHANGE l'attribut data-theme sur <html> pour appliquer le thème
-  // 'dark' ou 'douceurLight' (thème personnalisé clair)
-  document.documentElement.setAttribute('data-theme', isDarkValue ? 'dark' : 'douceurLight')
+  // 'douceurDark' ou 'douceurLight' (thèmes personnalisés)
+  document.documentElement.setAttribute('data-theme', isDarkValue ? 'douceurDark' : 'douceurLight')
 
   // RÉCUPÈRE les éléments des icônes soleil et lune
   const sunIcon = document.getElementById('sun-icon')
@@ -85,7 +85,7 @@ const toggleTheme = (event: MouseEvent) => {
     const newThemeIsDark = !isDark() // Inverse le thème actuel
     updateTheme(newThemeIsDark) // Applique le nouveau thème
     // SAUVEGARDE dans localStorage pour persistance
-    localStorage.setItem(THEME_STORAGE_KEY, newThemeIsDark ? 'dark' : 'douceurLight')
+    localStorage.setItem(THEME_STORAGE_KEY, newThemeIsDark ? 'douceurDark' : 'douceurLight')
     return
   }
 
@@ -122,7 +122,7 @@ const toggleTheme = (event: MouseEvent) => {
     const newThemeIsDark = !isDark() // Inverse le thème
     updateTheme(newThemeIsDark) // Applique le changement
     // SAUVEGARDE le nouveau thème
-    localStorage.setItem(THEME_STORAGE_KEY, newThemeIsDark ? 'dark' : 'douceurLight')
+    localStorage.setItem(THEME_STORAGE_KEY, newThemeIsDark ? 'douceurDark' : 'douceurLight')
   })
 
   // ANIME la transition une fois qu'elle est prête
@@ -175,7 +175,7 @@ function initThemeButton() {
   // Force une vérification du localStorage au cas où
   const savedTheme = localStorage.getItem(THEME_STORAGE_KEY)
   if (savedTheme) {
-    const shouldBeDark = savedTheme === 'dark'
+    const shouldBeDark = savedTheme === 'douceurDark'
     const currentIsDark = isDark()
 
     // Si le thème sauvegardé ne correspond pas au thème actuel, on corrige
