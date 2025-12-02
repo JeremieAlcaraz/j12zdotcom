@@ -2,6 +2,8 @@
 // CONSTANTES ET UTILITAIRES
 // ==========================================
 
+import { keyboardShortcuts } from './keyboardShortcuts'
+
 // CLÉ pour stocker le thème dans localStorage du navigateur
 const THEME_STORAGE_KEY = 'theme'
 
@@ -71,8 +73,8 @@ const setupIcons = () => {
 // FONCTION DE BASCULEMENT DU THÈME
 // ==========================================
 
-// GÈRE le clic sur le bouton de changement de thème
-const toggleTheme = (event: MouseEvent) => {
+// GÈRE le basculement du thème (clic bouton, raccourci clavier, ou appel programmatique)
+export const toggleTheme = (event?: MouseEvent | KeyboardEvent) => {
   // VÉRIFIE si les transitions visuelles sont supportées et activées
   // document.startViewTransition = API expérimentale pour les transitions
   // prefers-reduced-motion = préférence utilisateur pour réduire les animations
@@ -93,9 +95,9 @@ const toggleTheme = (event: MouseEvent) => {
   // TRANSITION ANIMÉE (cercle qui s'agrandit)
   // ==========================================
 
-  // RÉCUPÈRE les coordonnées du clic de souris
-  const x = event.clientX
-  const y = event.clientY
+  // RÉCUPÈRE les coordonnées du clic de souris (centre de l'écran si pas de clic)
+  const x = event && 'clientX' in event ? event.clientX : window.innerWidth / 2
+  const y = event && 'clientY' in event ? event.clientY : window.innerHeight / 2
 
   // CALCULE le rayon nécessaire pour couvrir tout l'écran
   // Math.hypot = calcule la distance euclidienne
@@ -209,3 +211,17 @@ if (document.readyState === 'loading') {
   // DOM déjà chargé, on initialise tout de suite
   initThemeButton()
 }
+
+// ==========================================
+// ENREGISTREMENT DU RACCOURCI CLAVIER GLOBAL
+// ==========================================
+
+// Enregistre le raccourci Cmd+Shift+L (ou Ctrl+Shift+L sur Windows/Linux)
+keyboardShortcuts.register({
+  key: 'l',
+  meta: true,
+  shift: true,
+  context: 'global',
+  handler: () => toggleTheme(),
+  description: 'Toggle dark/light mode',
+})
