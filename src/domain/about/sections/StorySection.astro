@@ -2,6 +2,7 @@
 import ImageMod from '@/ui/atoms/ImageMod.astro'
 import Badge from '@/ui/atoms/Badge.astro'
 import Checkbox from '@/ui/atoms/Checkbox.astro'
+import Quote from '@/ui/molecules/Quote.astro'
 import { markdownify } from '@/utils/textConverter'
 import { getEntry } from 'astro:content'
 
@@ -92,15 +93,12 @@ const { story } = aboutEntry.data
         </div>
 
         <!-- Citation inspirante -->
-        <div class="relative">
-          <div class="bg-base-200/50 rounded-2xl p-6 backdrop-blur-sm border-l-4 border-primary">
-            <blockquote class="text-base italic text-base-content/80">
-              "{story.quote.text}"
-            </blockquote>
-            <footer class="mt-3 text-sm text-base-content/60">
-              — {story.quote.author}
-            </footer>
-          </div>
+        <div class="relative mt-8">
+          <Quote
+            quote={story.quote.text}
+            author={story.quote.author}
+            emoji="💡"
+          />
         </div>
       </div>
     </div>

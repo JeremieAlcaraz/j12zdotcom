@@ -27,6 +27,14 @@ const embedUrl = `https://luma.com/embed/calendar/${calendarId}/events`
     aria-hidden="false"
     tabindex="0"
   ></iframe>
+
+  <!-- Coins décoratifs avec emojis -->
+  <div class="corner-decoration top-right" aria-hidden="true">
+    ✨
+  </div>
+  <div class="corner-decoration bottom-left" aria-hidden="true">
+    🎨
+  </div>
 </div>
 
 <style>
@@ -36,10 +44,40 @@ const embedUrl = `https://luma.com/embed/calendar/${calendarId}/events`
     display: flex;
     flex-direction: column;
     min-height: 0; /* Important pour le comportement flexbox */
+    position: relative; /* Pour permettre le positionnement absolu des overlays */
   }
 
   iframe {
     flex: 1;
     min-height: 0; /* Important pour flexbox */
+  }
+
+  /* Coins décoratifs */
+  .corner-decoration {
+    position: absolute;
+    font-size: 4rem; /* Gros emojis */
+    pointer-events: none; /* Ne bloque pas les clics sur l'iframe */
+    user-select: none; /* Non sélectionnable */
+    z-index: 10; /* Au-dessus de l'iframe */
+    opacity: 0.8;
+    transition: all 0.3s ease;
+  }
+
+  /* Position coin haut-droite */
+  .corner-decoration.top-right {
+    top: 1rem;
+    right: 1rem;
+  }
+
+  /* Position coin bas-gauche */
+  .corner-decoration.bottom-left {
+    bottom: 1rem;
+    left: 1rem;
+  }
+
+  /* Effet hover léger */
+  .luma-calendar-wrapper:hover .corner-decoration {
+    opacity: 1;
+    transform: scale(1.1);
   }
 </style>

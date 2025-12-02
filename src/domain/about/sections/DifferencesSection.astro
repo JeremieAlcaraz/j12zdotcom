@@ -2,6 +2,7 @@
 import ImageMod from '@/ui/atoms/ImageMod.astro'
 import Badge from '@/ui/atoms/Badge.astro'
 import Checkbox from '@/ui/atoms/Checkbox.astro'
+import TestimonialCardV2 from '@/ui/molecules/TestimonialCardV2.astro'
 import { markdownify } from '@/utils/textConverter'
 import { getEntry } from 'astro:content'
 
@@ -56,28 +57,13 @@ const { differences } = aboutEntry.data
           </div>
         </div>
 
-        <!-- Témoignage subtil -->
-        <div class="relative">
-          <div class="bg-base-200/50 rounded-2xl p-6 backdrop-blur-sm">
-            <p class="text-base italic text-base-content/80 mb-3">
-              "{differences.testimonial.quote}"
-            </p>
-            <div class="flex items-center justify-between">
-              <footer class="text-sm text-base-content/60">
-                — {differences.testimonial.author}
-              </footer>
-              <div class="flex space-x-1">
-                {Array.from({ length: differences.testimonial.stars }, () => (
-                  <span class="text-yellow-400">⭐</span>
-                ))}
-              </div>
-            </div>
-          </div>
-        </div>
+
       </div>
 
+
+
       <!-- Image avec badges flottants -->
-      <div class="order-1 flex justify-center lg:order-1 lg:justify-start">
+      <div class="order-1 flex flex-col items-center lg:items-start gap-8 lg:order-1 lg:justify-start">
         <div class="relative">
           <div
             class="mask mask-diamond h-80 w-80 overflow-hidden shadow-xl transition-all duration-300 hover:scale-105 hover:shadow-2xl md:h-96 md:w-96 lg:h-[400px] lg:w-[400px]"
@@ -108,6 +94,15 @@ const { differences } = aboutEntry.data
           <div class="absolute top-1/2 -right-8 -translate-y-1/2">
             <Badge label="🤝 Bienveillant" variant="neutral" />
           </div>
+        </div>
+
+        <!-- Témoignage subtil (Déplacé ici) -->
+        <div class="relative w-full max-w-md">
+          <TestimonialCardV2
+            rating={differences.testimonial.stars}
+            content={differences.testimonial.quote}
+            author={differences.testimonial.author}
+          />
         </div>
       </div>
     </div>
