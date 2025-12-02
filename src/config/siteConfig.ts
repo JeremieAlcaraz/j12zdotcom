@@ -5,11 +5,6 @@ export interface Site {
   basePath: string
   trailingSlash: boolean
   favicon: string
-  logo: string
-  logoDarkmode: string
-  logoWidth: number
-  logoHeight: number
-  logoText: string
 }
 
 export interface Settings {
@@ -67,11 +62,6 @@ export const siteConfig: SiteConfig = {
     basePath: '/',
     trailingSlash: false,
     favicon: '/images/favicon.png',
-    logo: '/images/logo.png',
-    logoDarkmode: '/images/logo-darkmode.png',
-    logoWidth: 150,
-    logoHeight: 30,
-    logoText: 'j12zdotcom',
   },
   settings: {
     search: true,
