@@ -8,7 +8,7 @@
 -------------------------------------------------------------------- */
 
 import type { NavLink } from '@/types/navigation'
-import mainLogo from '@assets/logos/logo-main.svg'
+import mainLogo from '@assets/logos/logo.svg'
 
 /** Logo par défaut pour le thème clair */
 export const defaultLogo: string = mainLogo.src
