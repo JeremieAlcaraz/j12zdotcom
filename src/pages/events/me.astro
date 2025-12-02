@@ -1,0 +1,51 @@
+---
+import BaseLayout from '@/layouts/Base.astro'
+import LumaCalendar from '@/components/LumaCalendar.astro'
+
+const title = 'Mes Events'
+const description = 'Mes événements et formations à venir'
+---
+
+<BaseLayout title={title} description={description}>
+  <div class="calendar-fullpage">
+    <LumaCalendar calendarId="cal-Ocr3w6Nc4xGsrHH" title={title} />
+  </div>
+</BaseLayout>
+
+<style>
+  /* Override des styles du layout pour affichage pleine page */
+  :global(main:has(.calendar-fullpage)) {
+    /* Garder le padding-top pour le header fixe + 60px d'espace supplémentaire */
+    padding: calc(4rem + 60px) 0 0 0 !important;
+  }
+
+  /* Background selon le thème pour correspondre à l'iframe Luma - UNIQUEMENT sur les pages events */
+  :global([data-theme='douceurLight'] main:has(.calendar-fullpage)) {
+    background: #F7F8F9 !important;
+  }
+
+  :global([data-theme='douceurDark'] main:has(.calendar-fullpage)) {
+    background: #202325 !important;
+  }
+
+  :global(main > div:last-child) {
+    max-width: 100% !important;
+    padding: 0 !important;
+    margin: 0 !important;
+  }
+
+  .calendar-fullpage {
+    width: 100%;
+    /* Hauteur = 100vh - header - espace supplémentaire */
+    height: calc(100vh - 4rem - 60px);
+    min-height: 600px;
+    overflow: hidden;
+  }
+
+  /* Responsive : ajustement mobile */
+  @media (max-width: 768px) {
+    .calendar-fullpage {
+      min-height: 500px;
+    }
+  }
+</style>

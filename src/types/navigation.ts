@@ -1,4 +1,5 @@
 export type NavLink = {
-  href: string
+  href?: string
   label: string
+  children?: NavLink[]
 }

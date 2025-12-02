@@ -32,13 +32,35 @@ const { links = defaultLinks } = Astro.props
     <ul class="menu menu-horizontal overflow-visible px-1">
       {
         /* BOUCLE JAVASCRIPT pour générer les liens de navigation */
-        links.map(({ href, label }: NavLink) => (
-          <li>
-            <a href={href} class="hover:bg-primary hover:text-primary-content rounded-lg">
-              {label}
-            </a>
-          </li>
-        ))
+        links.map((link: NavLink) => {
+          // Si le lien a des enfants, créer un dropdown
+          if (link.children && link.children.length > 0) {
+            return (
+              <li>
+                <details class="dropdown">
+                  <summary class="hover:bg-primary hover:text-primary-content rounded-lg">
+                    {link.label}
+                  </summary>
+                  <ul class="menu dropdown-content bg-base-100 rounded-box z-[1] w-52 p-2 shadow">
+                    {link.children.map((child: NavLink) => (
+                      <li>
+                        <a href={child.href}>{child.label}</a>
+                      </li>
+                    ))}
+                  </ul>
+                </details>
+              </li>
+            )
+          }
+          // Sinon, créer un lien simple
+          return (
+            <li>
+              <a href={link.href} class="hover:bg-primary hover:text-primary-content rounded-lg">
+                {link.label}
+              </a>
+            </li>
+          )
+        })
       }
     </ul>
   </div>
@@ -87,12 +109,32 @@ const { links = defaultLinks } = Astro.props
         class="menu menu-sm dropdown-content bg-base-100 rounded-box z-[1] mt-3 w-52 p-2 shadow"
       >
         {
-          /* MÊME BOUCLE que pour le menu desktop mais sans styling hover spécial */
-          links.map(({ href, label }: NavLink) => (
-            <li>
-              <a href={href}>{label}</a>
-            </li>
-          ))
+          /* MÊME BOUCLE que pour le menu desktop mais adapté pour mobile */
+          links.map((link: NavLink) => {
+            // Si le lien a des enfants, créer un sous-menu
+            if (link.children && link.children.length > 0) {
+              return (
+                <li>
+                  <details>
+                    <summary>{link.label}</summary>
+                    <ul>
+                      {link.children.map((child: NavLink) => (
+                        <li>
+                          <a href={child.href}>{child.label}</a>
+                        </li>
+                      ))}
+                    </ul>
+                  </details>
+                </li>
+              )
+            }
+            // Sinon, créer un lien simple
+            return (
+              <li>
+                <a href={link.href}>{link.label}</a>
+              </li>
+            )
+          })
         }
       </ul>
     </div>
