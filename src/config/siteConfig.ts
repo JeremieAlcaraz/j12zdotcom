@@ -61,7 +61,7 @@ export const siteConfig: SiteConfig = {
     baseUrl: 'https://j12zdotcom.com',
     basePath: '/',
     trailingSlash: false,
-    favicon: '/images/favicon.png',
+    favicon: '/favicon-192x192.png',
   },
   settings: {
     search: true,
