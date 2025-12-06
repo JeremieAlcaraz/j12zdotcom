@@ -61,7 +61,7 @@ export const siteConfig: SiteConfig = {
     baseUrl: 'https://jeremiealcaraz.com',
     basePath: '/',
     trailingSlash: false,
-    favicon: '/favicon.png',
+    favicon: '/favicon-192x192.png',
   },
   settings: {
     search: true,
