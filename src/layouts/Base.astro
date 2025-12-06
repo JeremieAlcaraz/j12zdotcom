@@ -6,9 +6,20 @@ import TwSizeIndicator from '@/domain/dev/TwSizeIndicator.astro'
 import { ClientRouter } from 'astro:transitions'
 import FocusModeController from '@/domain/shared/controllers/FocusModeController.astro'
 import CatLoading from '@/ui/atoms/CatLoading.astro'
+import { siteConfig } from '@/config/siteConfig'
 
 const { title = 'Mon Site', meta_title, description, image } = Astro.props
 const pageTitle = meta_title || title
+
+// Valeurs par défaut depuis siteConfig
+const pageDescription = description || siteConfig.metadata.description
+const pageImage = image || siteConfig.metadata.image
+
+// URL canonique - essentielle pour Google
+const canonicalURL = new URL(Astro.url.pathname, Astro.site || siteConfig.site.baseUrl)
+
+// Image Open Graph complète (URL absolue)
+const ogImageURL = new URL(pageImage, Astro.site || siteConfig.site.baseUrl).href
 ---
 
 <!doctype html>
@@ -25,13 +36,25 @@ const pageTitle = meta_title || title
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
     <title>{pageTitle}</title>
-    {description && <meta name="description" content={description} />}
-    {image && <meta property="og:image" content={image} />}
+    <meta name="description" content={pageDescription} />
+    <meta name="author" content={siteConfig.metadata.author} />
+
+    <!-- Open Graph - Pour Facebook, LinkedIn, etc. -->
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content={siteConfig.site.title} />
+    <meta property="og:url" content={canonicalURL.href} />
     <meta property="og:title" content={pageTitle} />
-    {description && <meta property="og:description" content={description} />}
+    <meta property="og:description" content={pageDescription} />
+    <meta property="og:image" content={ogImageURL} />
+    <meta property="og:locale" content="fr_FR" />
+
+    <!-- Twitter Card - Pour Twitter/X -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:site" content={siteConfig.site.title} />
     <meta name="twitter:title" content={pageTitle} />
-    {description && <meta name="twitter:description" content={description} />}
-    {image && <meta name="twitter:image" content={image} />}
+    <meta name="twitter:description" content={pageDescription} />
+    <meta name="twitter:image" content={ogImageURL} />
+
     <ClientRouter />
 
     <!-- Transition: désactiver le swap des feuilles de style pour éviter le flash -->
