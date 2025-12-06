@@ -58,10 +58,10 @@ export interface SiteConfig {
 export const siteConfig: SiteConfig = {
   site: {
     title: 'j12zdotcom - Portfolio Jeremie Alcaraz',
-    baseUrl: 'https://j12zdotcom.com',
+    baseUrl: 'https://jeremiealcaraz.com',
     basePath: '/',
     trailingSlash: false,
-    favicon: '/images/favicon.png',
+    favicon: '/favicon.png',
   },
   settings: {
     search: true,
@@ -93,7 +93,7 @@ export const siteConfig: SiteConfig = {
   },
   metadata: {
     author: 'Jeremie Alcaraz',
-    image: '/images/og-image.png',
+    image: '/og-image.png',
     description:
       'Portfolio et blog de Jeremie Alcaraz - Formations et services en développement web avec Astro, React et Svelte',
   },

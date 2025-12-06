@@ -2,10 +2,16 @@
 import BaseLayout from '@/layouts/Base.astro'
 import Hero from '@/domain/shared/sections/HeroSection.astro'
 import FluidCursor from '@/ui/atoms/FluidCursor.astro'
+import { siteConfig } from '@/config/siteConfig'
 
 ---
 
-<BaseLayout title="Accueil – Mon Site">
+<BaseLayout
+  title="Accueil"
+  meta_title={siteConfig.site.title}
+  description={siteConfig.metadata.description}
+  image={siteConfig.metadata.image}
+>
   <div slot="hero">
     <!-- Hero utilise le slot hero pour être full-width -->
     <Hero />
