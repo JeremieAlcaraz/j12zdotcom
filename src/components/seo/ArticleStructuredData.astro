@@ -1,0 +1,79 @@
+---
+/**
+ * ArticleStructuredData - Composant pour les données structurées JSON-LD
+ * Aide Google à mieux comprendre et indexer les articles de blog
+ * @see https://developers.google.com/search/docs/appearance/structured-data/article
+ */
+
+import { siteConfig } from '@/config/siteConfig'
+
+export interface Props {
+  title: string
+  description: string
+  author: string
+  datePublished: Date | string
+  dateModified?: Date | string
+  image: string
+  url: string
+  tags?: string[]
+}
+
+const {
+  title,
+  description,
+  author,
+  datePublished,
+  dateModified,
+  image,
+  url,
+  tags = []
+} = Astro.props
+
+// Convertir les dates en format ISO
+const publishedISO = datePublished instanceof Date
+  ? datePublished.toISOString()
+  : new Date(datePublished).toISOString()
+
+const modifiedISO = dateModified
+  ? (dateModified instanceof Date
+      ? dateModified.toISOString()
+      : new Date(dateModified).toISOString())
+  : publishedISO
+
+// Construire l'URL complète de l'image
+const imageUrl = new URL(image, siteConfig.site.baseUrl).href
+
+// Données structurées au format JSON-LD
+const structuredData = {
+  '@context': 'https://schema.org',
+  '@type': 'BlogPosting',
+  headline: title,
+  description: description,
+  author: {
+    '@type': 'Person',
+    name: author,
+    url: siteConfig.site.baseUrl
+  },
+  publisher: {
+    '@type': 'Organization',
+    name: siteConfig.site.title,
+    logo: {
+      '@type': 'ImageObject',
+      url: new URL(siteConfig.metadata.image, siteConfig.site.baseUrl).href
+    }
+  },
+  datePublished: publishedISO,
+  dateModified: modifiedISO,
+  mainEntityOfPage: {
+    '@type': 'WebPage',
+    '@id': url
+  },
+  image: {
+    '@type': 'ImageObject',
+    url: imageUrl
+  },
+  keywords: tags.join(', ')
+}
+---
+
+<script type="application/ld+json" set:html={JSON.stringify(structuredData)} />
