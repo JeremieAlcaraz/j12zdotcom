@@ -8,7 +8,16 @@ import FocusModeController from '@/domain/shared/controllers/FocusModeController
 import CatLoading from '@/ui/atoms/CatLoading.astro'
 import { siteConfig } from '@/config/siteConfig'
 
-const { title = 'Mon Site', meta_title, description, image } = Astro.props
+const {
+  title = 'Mon Site',
+  meta_title,
+  description,
+  image,
+  contentType = 'website',
+  publishedTime,
+  modifiedTime,
+  author
+} = Astro.props
 const pageTitle = meta_title || title
 
 // Valeurs par défaut depuis siteConfig
@@ -35,19 +44,32 @@ const ogImageURL = new URL(pageImage, Astro.site || siteConfig.site.baseUrl).hre
     <link rel="icon" type="image/png" sizes="512x512" href="/favicon-512x512.png" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+
+    <!-- Canonical URL - Essential for Google indexing -->
+    <link rel="canonical" href={canonicalURL.href} />
+
     <title>{pageTitle}</title>
     <link rel="canonical" href={canonicalURL.href} />
     <meta name="description" content={pageDescription} />
     <meta name="author" content={siteConfig.metadata.author} />
 
     <!-- Open Graph - Pour Facebook, LinkedIn, etc. -->
-    <meta property="og:type" content="website" />
+    <meta property="og:type" content={contentType} />
     <meta property="og:site_name" content={siteConfig.site.title} />
     <meta property="og:url" content={canonicalURL.href} />
     <meta property="og:title" content={pageTitle} />
     <meta property="og:description" content={pageDescription} />
     <meta property="og:image" content={ogImageURL} />
     <meta property="og:locale" content="fr_FR" />
+    {contentType === 'article' && publishedTime && (
+      <meta property="article:published_time" content={publishedTime} />
+    )}
+    {contentType === 'article' && modifiedTime && (
+      <meta property="article:modified_time" content={modifiedTime} />
+    )}
+    {contentType === 'article' && author && (
+      <meta property="article:author" content={author} />
+    )}
 
     <!-- Twitter Card - Pour Twitter/X -->
     <meta name="twitter:card" content="summary_large_image" />

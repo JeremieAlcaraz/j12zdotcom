@@ -18,9 +18,21 @@ export async function getStaticPaths() {
 }
 
 const { post } = Astro.props
-const { title, meta_title, description, image } = post.data
+const { title, meta_title, description, image, date, author } = post.data
+
+// Préparer les dates pour Open Graph
+const publishedTime = date instanceof Date ? date.toISOString() : new Date(date).toISOString()
 ---
 
-<BaseLayout title={title} meta_title={meta_title} description={description} image={image}>
+<BaseLayout
+  title={title}
+  meta_title={meta_title}
+  description={description}
+  image={image}
+  contentType="article"
+  publishedTime={publishedTime}
+  modifiedTime={publishedTime}
+  author={author}
+>
   <PostSingle post={post} />
 </BaseLayout>
