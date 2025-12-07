@@ -8,6 +8,23 @@ import CredentialsSection from '@/domain/about/sections/CredentialsSection.astro
 
 <BaseLayout title="À propos – Mon Site">
   <section class="space-y-24 py-16">
+    <!-- Message d'avertissement doux -->
+    <div class="container">
+      <div class="mx-auto max-w-4xl">
+        <div class="rounded-2xl bg-gradient-to-r from-warning/10 via-warning/5 to-warning/10 border-2 border-warning/30 px-6 py-5 backdrop-blur-sm">
+          <div class="flex items-start gap-4">
+            <div class="text-3xl shrink-0">🚧</div>
+            <div class="space-y-2">
+              <h3 class="text-lg font-semibold text-warning">Page en cours de travaux</h3>
+              <p class="text-base-content/70 leading-relaxed">
+                Les informations présentées sur cette page peuvent ne pas être définitives ni vérifiées. Merci de votre compréhension ! 💜
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
     <PresentationSection />
     <StorySection />
     <DifferencesSection />
