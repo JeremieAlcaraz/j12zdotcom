@@ -179,29 +179,14 @@ nixos-rebuild switch \
 
 #### Configuration NixOS
 
-Sur votre serveur NixOS, utilisez la flake du projet :
+La flake build le site et fournit un package. Pour le déployer :
 
-```nix
-{
-  inputs.j12z-site.url = "github:JeremieAlcaraz/j12zdotcom";
+```bash
+# Builder le site
+nix build github:JeremieAlcaraz/j12zdotcom
 
-  outputs = { j12z-site, ... }: {
-    nixosConfigurations.jeremie-web = {
-      modules = [
-        j12z-site.nixosModules.j12z-webserver
-        {
-          services.j12z-webserver = {
-            enable = true;
-            domain = "jeremiealcaraz.com";
-            email = "hello@jeremiealcaraz.com";
-            enableCloudflaredTunnel = true;
-            cloudflaredTokenFile = "/run/secrets/cloudflare-tunnel-token";
-          };
-        }
-      ];
-    };
-  };
-}
+# Le résultat est dans ./result (fichiers statiques)
+# Servez-le avec votre serveur web préféré (Caddy, nginx, etc.)
 ```
 
 #### Avantages de NixOS
