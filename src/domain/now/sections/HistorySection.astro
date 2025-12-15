@@ -1,0 +1,103 @@
+---
+import { getCollection } from 'astro:content'
+import Typography from '@/ui/atoms/Typography.astro'
+
+// Get all archived Now entries
+const archives = await getCollection('now', ({ data }) => {
+  return data.status === 'archived'
+})
+
+// Sort by date (most recent first)
+const sortedArchives = archives.sort((a, b) =>
+  new Date(b.data.lastUpdate).getTime() - new Date(a.data.lastUpdate).getTime()
+)
+
+// Format date
+const formatDate = (date: Date) => {
+  return new Date(date).toLocaleDateString('fr-FR', {
+    month: 'long',
+    year: 'numeric'
+  })
+}
+
+// Don't render if no archives
+if (sortedArchives.length === 0) {
+  return null
+}
+---
+
+<section class="pt-4 pb-16">
+  <div class="container max-w-4xl">
+    <!-- Header -->
+    <div class="mb-12">
+      <Typography variant="h2" class="mb-3">
+        📜 Archives
+      </Typography>
+      <Typography class="text-base-content/60">
+        Les versions précédentes de cette page
+      </Typography>
+    </div>
+
+    <!-- Timeline -->
+    <div class="space-y-6">
+      {sortedArchives.map((archive) => (
+        <details class="group cursor-pointer rounded-2xl border border-base-content/10 bg-base-100 p-6 transition-all hover:border-primary/30 hover:shadow-lg">
+          <summary class="flex items-center gap-3 text-lg font-semibold text-base-content/90 transition-colors list-none">
+            <svg
+              class="size-5 shrink-0 transition-transform group-open:rotate-90"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+            </svg>
+            <span class="hover:text-primary">{formatDate(archive.data.lastUpdate)}</span>
+          </summary>
+
+          <div class="mt-8 space-y-6 pl-8">
+            <!-- Focus -->
+            <div>
+              <p class="leading-relaxed text-base-content/80">
+                <span class="font-semibold text-primary">Vie quotidienne :</span> {archive.data.focus.description}
+              </p>
+            </div>
+
+            <!-- Location -->
+            <div>
+              <p class="leading-relaxed text-base-content/80">
+                <span class="font-semibold text-secondary">Création :</span> {archive.data.location.description}
+              </p>
+            </div>
+
+            <!-- Learning -->
+            {archive.data.learning && archive.data.learning.length > 0 && (
+              <div>
+                <p class="mb-3 font-semibold text-base-content/90">Apprentissages</p>
+                <div class="space-y-2 border-l-2 border-primary/20 pl-4">
+                  {archive.data.learning.map((item) => (
+                    <p class="text-base-content/70">{item.description}</p>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            <!-- Listening -->
+            {archive.data.listening && archive.data.listening.length > 0 && (
+              <div>
+                <p class="mb-3 font-semibold text-base-content/90">En écoute</p>
+                <div class="space-y-2 border-l-2 border-accent/20 pl-4">
+                  {archive.data.listening.map((item) => (
+                    <p class="text-base-content/70">
+                      {item.title}
+                      {item.artist && ` par ${item.artist}`}
+                    </p>
+                  ))}
+                </div>
+              </div>
+            )}
+          </div>
+        </details>
+      ))}
+    </div>
+  </div>
+</section>

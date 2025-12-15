@@ -1,0 +1,107 @@
+---
+import BaseCard from '@/ui/atoms/BaseCard.astro'
+import Typography from '@/ui/atoms/Typography.astro'
+
+interface Props {
+  /** Song/Album title */
+  title: string
+  /** Artist name */
+  artist?: string
+  /** Embed type */
+  embedType: 'spotify' | 'soundcloud' | 'youtube' | 'custom'
+  /** Embed URL */
+  embedUrl: string
+  /** Optional description */
+  description?: string
+}
+
+const {
+  title,
+  artist,
+  embedType,
+  embedUrl,
+  description
+} = Astro.props
+
+// Get iframe attributes based on embed type
+const getEmbedAttributes = (type: string) => {
+  switch (type) {
+    case 'spotify':
+      return {
+        width: '100%',
+        height: '152',
+        frameBorder: '0',
+        allow: 'autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture',
+        loading: 'lazy'
+      }
+    case 'youtube':
+      return {
+        width: '100%',
+        height: '200',
+        frameBorder: '0',
+        allow: 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture',
+        allowFullscreen: true,
+        loading: 'lazy'
+      }
+    case 'soundcloud':
+      return {
+        width: '100%',
+        height: '166',
+        frameBorder: '0',
+        allow: 'autoplay',
+        loading: 'lazy'
+      }
+    default:
+      return {
+        width: '100%',
+        height: '200',
+        frameBorder: '0',
+        loading: 'lazy'
+      }
+  }
+}
+
+const embedAttrs = getEmbedAttributes(embedType)
+---
+
+<BaseCard
+  shadow="lg"
+  border="accent"
+  background="base-100"
+  hover={true}
+  padding="lg"
+  class="transition-all duration-300 bg-accent/5"
+>
+  <div>
+    <!-- Header -->
+    <div class="mb-4">
+      <div class="flex items-center gap-2 mb-1">
+        <span class="text-2xl">🎧</span>
+        <Typography variant="h3" class="!mb-0">
+          {title}
+        </Typography>
+      </div>
+      {artist && (
+        <Typography variant="small" class="text-base-content/60">
+          Par {artist}
+        </Typography>
+      )}
+    </div>
+
+    <!-- Embed -->
+    <div class="rounded-lg overflow-hidden mb-3">
+      <iframe
+        src={embedUrl}
+        {...embedAttrs}
+        class="w-full"
+      />
+    </div>
+
+    <!-- Description -->
+    {description && (
+      <Typography variant="small" class="text-base-content/70 italic">
+        {description}
+      </Typography>
+    )}
+  </div>
+</BaseCard>

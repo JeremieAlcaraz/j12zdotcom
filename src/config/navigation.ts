@@ -20,6 +20,7 @@ export const defaultLogoDark: string = mainLogo.src
 export const defaultLinks: NavLink[] = [
   { href: '/', label: 'Accueil' },
   { href: '/blog', label: 'Blog' },
+  { href: '/now', label: 'Now' },
   {
     label: 'Events',
     children: [

@@ -1,0 +1,164 @@
+---
+import { getEntry } from 'astro:content'
+import Typography from '@/ui/atoms/Typography.astro'
+import Badge from '@/ui/atoms/Badge.astro'
+
+const currentEntry = await getEntry('now', 'current')
+if (!currentEntry) {
+  throw new Error('Current Now entry not found! Check src/content/now/current.mdx')
+}
+
+const { lastUpdate, focus, location, learning, listening, personal, limits } = currentEntry.data
+
+// Format date
+const formatDate = (date: Date) => {
+  return new Date(date).toLocaleDateString('fr-FR', {
+    day: 'numeric',
+    month: 'long',
+    year: 'numeric'
+  })
+}
+---
+
+<section class="section-sm">
+  <div class="container max-w-4xl">
+    <!-- Header avec style -->
+    <div class="relative mb-20 overflow-hidden rounded-3xl bg-gradient-to-br from-primary/10 via-secondary/5 to-accent/10 px-8 py-12 md:px-12">
+      <!-- Accent background subtil -->
+      <div class="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(var(--color-primary),0.1),transparent_50%)]"></div>
+
+      <div class="relative">
+        <div class="mb-6 flex flex-wrap items-center justify-between gap-4">
+          <Typography variant="h1" class="!mb-0">
+            Now
+          </Typography>
+          <a href="https://nownownow.com/about" target="_blank" rel="noopener noreferrer" class="transition-transform hover:scale-105">
+            <Badge label="NOW?" variant="neutral" />
+          </a>
+        </div>
+
+        <div class="flex items-center gap-2 text-base-content/60">
+          <svg xmlns="http://www.w3.org/2000/svg" class="size-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+          </svg>
+          <span>Dernière mise à jour : <time datetime={lastUpdate.toISOString()} class="font-medium">{formatDate(lastUpdate)}</time></span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Living & Creating Grid avec style -->
+    <div class="mb-20 grid grid-cols-1 gap-16 md:grid-cols-2">
+      <!-- Living -->
+      <div>
+        <Typography variant="h2" class="mb-6">
+          Vie quotidienne
+        </Typography>
+        <p class="text-lg leading-relaxed text-base-content/90">
+          <span class="text-3xl">{focus.emoji}</span> {focus.description}
+        </p>
+      </div>
+
+      <!-- Creating -->
+      <div>
+        <Typography variant="h2" class="mb-6">
+          Création
+        </Typography>
+        <p class="text-lg leading-relaxed text-base-content/90">
+          <span class="text-3xl">{location.emoji}</span> {location.description}
+        </p>
+      </div>
+    </div>
+
+    <!-- Learning Section avec style -->
+    {learning && learning.length > 0 && (
+      <div class="mb-20">
+        <Typography variant="h2" class="mb-8">
+          Apprentissages
+        </Typography>
+        <div class="space-y-4 border-l-4 border-primary/30 pl-8">
+          {learning.map((item) => (
+            <p class="text-lg leading-relaxed text-base-content/80">
+              <span class="font-medium text-primary">•</span> {item.description}
+            </p>
+          ))}
+        </div>
+      </div>
+    )}
+
+    <!-- Listening Section avec style -->
+    {listening && listening.length > 0 && (
+      <div class="mb-20">
+        <Typography variant="h2" class="mb-4">
+          🎧 En écoute
+        </Typography>
+        <p class="mb-8 text-base-content/60">
+          Retrouvez tous mes morceaux et mixes sur ma <a href="/music" class="text-primary underline decoration-primary/30 underline-offset-4 transition-colors hover:decoration-primary">page Music</a>.
+        </p>
+
+        <div class="space-y-6">
+          {listening.map((item) => {
+            // Get iframe height based on embed type
+            const getHeight = (type: string) => {
+              switch (type) {
+                case 'spotify':
+                  return '152'
+                case 'youtube':
+                  return '200'
+                case 'soundcloud':
+                  return '166'
+                default:
+                  return '200'
+              }
+            }
+
+            return (
+              <div class="overflow-hidden rounded-2xl shadow-lg ring-1 ring-base-content/5 transition-shadow hover:shadow-xl">
+                <iframe
+                  src={item.embedUrl}
+                  width="100%"
+                  height={getHeight(item.embedType)}
+                  frameBorder="0"
+                  allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
+                  loading="lazy"
+                  class="w-full"
+                />
+              </div>
+            )
+          })}
+        </div>
+      </div>
+    )}
+
+    <!-- Personal Section avec style -->
+    {personal && personal.length > 0 && (
+      <div class="mb-20">
+        <Typography variant="h2" class="mb-8">
+          Vie personnelle
+        </Typography>
+        <div class="space-y-4 border-l-4 border-secondary/30 pl-8">
+          {personal.map((item) => (
+            <p class="text-lg leading-relaxed text-base-content/80">
+              <span class="font-medium text-secondary">•</span> {item.emoji} {item.description}
+            </p>
+          ))}
+        </div>
+      </div>
+    )}
+
+    <!-- Limits Section avec style doux -->
+    {limits && limits.length > 0 && (
+      <div class="mb-0 rounded-2xl bg-warning/5 px-8 py-10 ring-1 ring-warning/10">
+        <Typography variant="h2" class="mb-8">
+          ⛔ Ce que je ne fais pas
+        </Typography>
+        <div class="space-y-4 border-l-4 border-warning/40 pl-8">
+          {limits.map((item) => (
+            <p class="text-lg leading-relaxed text-base-content/80">
+              <span class="font-medium text-warning">•</span> {item.description}
+            </p>
+          ))}
+        </div>
+      </div>
+    )}
+  </div>
+</section>
