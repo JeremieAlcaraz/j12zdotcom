@@ -13,11 +13,13 @@ import Youtube from '@/shortcodes/generic/Youtube.shortcode.astro'
 import FabSpeedDial from '@/ui/molecules/FabSpeedDial.astro'
 import MusicPlayer from '@/ui/organisms/MusicPlayer.astro'
 import FocusEscapeHint from '@/ui/molecules/FocusEscapeHint.astro'
+import ArticleStructuredData from '@/components/seo/ArticleStructuredData.astro'
+import { siteConfig } from '@/config/siteConfig'
 
 const { post } = Astro.props
 const { Content } = await render(post)
 const components = { Accordion, Button, Notice, PodcastPlayer, Video, Youtube }
-const { title, author, date, tags } = post.data
+const { title, description, author, date, tags, image } = post.data
 
 const formattedAuthor = humanize(author)
 const readingTimeDisplay = '4 min read'
@@ -26,7 +28,22 @@ const isoDate = date
     ? date.toISOString()
     : new Date(date).toISOString()
   : undefined
+
+// Construire l'URL complète de l'article pour les données structurées
+const articleUrl = new URL(Astro.url.pathname, siteConfig.site.baseUrl).href
 ---
+
+<!-- Données structurées pour Google -->
+<ArticleStructuredData
+  title={title}
+  description={description}
+  author={formattedAuthor}
+  datePublished={date}
+  dateModified={date}
+  image={image}
+  url={articleUrl}
+  tags={tags || []}
+/>
 
 <section class="py-8">
   <article class="prose prose-lg dark:prose-invert mx-auto max-w-3xl">
