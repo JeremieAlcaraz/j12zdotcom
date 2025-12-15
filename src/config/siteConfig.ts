@@ -57,7 +57,7 @@ export interface SiteConfig {
 
 export const siteConfig: SiteConfig = {
   site: {
-    title: 'j12zdotcom - Portfolio Jeremie Alcaraz',
+    title: 'Jérémie Alcaraz | Formateur en Productivité Douce',
     baseUrl: 'https://jeremiealcaraz.com',
     basePath: '/',
     trailingSlash: false,
