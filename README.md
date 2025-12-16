@@ -34,27 +34,19 @@ pnpm img:opt      # Optimiser les images
 
 ## 🚀 Déploiement
 
-Deux options disponibles :
+Déploiement avec NixOS :
 
-### Docker Compose (recommandé)
-```bash
-cp .env.example .env
-docker compose --profile prod up -d
-```
-
-### NixOS
 ```bash
 nix build
 nixos-rebuild switch --flake .#jeremie-web
 ```
 
-Voir [DEPLOYMENT.md](./docs/DEPLOYMENT.md) et [NIX.md](./NIX.md) pour les détails.
+Voir [NIX.md](./NIX.md) pour les détails.
 
 ## 📚 Documentation
 
 - **[ARCHITECTURE.md](./docs/ARCHITECTURE.md)** - Architecture et principes du code
-- **[DEPLOYMENT.md](./docs/DEPLOYMENT.md)** - Guide de déploiement Docker
-- **[NIX.md](./NIX.md)** - Guide NixOS complet
+- **[NIX.md](./NIX.md)** - Guide NixOS et déploiement
 - **[AGENTS.md](./docs/AGENTS.md)** - Guide pour les agents IA
 
 ## 📄 Licence
