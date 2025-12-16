@@ -14,13 +14,24 @@ interface Shortcut {
   description: string
 }
 
+interface SequenceShortcut {
+  sequence: string // Séquence de touches (ex: 'gc', 'gg')
+  maxDelay?: number // Délai max entre les touches en ms (défaut: 500ms)
+  context?: 'global' | 'focus-mode' | string
+  handler: () => void
+  description: string
+}
+
 // ==========================================
 // GESTIONNAIRE DE RACCOURCIS CLAVIER
 // ==========================================
 
 class KeyboardShortcutManager {
   private shortcuts: Map<string, Shortcut> = new Map()
+  private sequences: Map<string, SequenceShortcut> = new Map()
   private isInitialized = false
+  private sequenceBuffer: string[] = []
+  private sequenceTimer: number | null = null
 
   /**
    * Génère une clé unique pour identifier un raccourci
@@ -59,11 +70,42 @@ class KeyboardShortcutManager {
   }
 
   /**
+   * Enregistre une séquence de touches
+   */
+  registerSequence(sequence: SequenceShortcut): void {
+    const key = sequence.sequence.toLowerCase()
+
+    // Prévention des conflits
+    if (this.sequences.has(key)) {
+      console.warn(`⚠️ Sequence conflict: ${key} is already registered. Overwriting...`)
+    }
+
+    this.sequences.set(key, sequence)
+
+    // Initialise le listener si ce n'est pas encore fait
+    if (!this.isInitialized) {
+      this.init()
+    }
+
+    console.log(`✅ Registered sequence: ${key} - ${sequence.description}`)
+  }
+
+  /**
    * Désenregistre un raccourci
    */
   unregister(key: string): void {
     if (this.shortcuts.delete(key)) {
       console.log(`🗑️ Unregistered shortcut: ${key}`)
+    }
+  }
+
+  /**
+   * Désenregistre une séquence
+   */
+  unregisterSequence(sequence: string): void {
+    const key = sequence.toLowerCase()
+    if (this.sequences.delete(key)) {
+      console.log(`🗑️ Unregistered sequence: ${key}`)
     }
   }
 
@@ -96,6 +138,17 @@ class KeyboardShortcutManager {
   }
 
   /**
+   * Réinitialise le buffer de séquence
+   */
+  private resetSequenceBuffer(): void {
+    this.sequenceBuffer = []
+    if (this.sequenceTimer !== null) {
+      window.clearTimeout(this.sequenceTimer)
+      this.sequenceTimer = null
+    }
+  }
+
+  /**
    * Gestionnaire principal des événements clavier
    */
   private handleKeyDown = (event: KeyboardEvent): void => {
@@ -106,6 +159,54 @@ class KeyboardShortcutManager {
 
     // Construit la clé du raccourci pressé
     const key = event.key.toLowerCase()
+    const hasModifiers = event.metaKey || event.ctrlKey || event.shiftKey || event.altKey
+
+    // Gestion des séquences (seulement si pas de modificateurs)
+    if (!hasModifiers && this.sequences.size > 0) {
+      this.sequenceBuffer.push(key)
+      const currentSequence = this.sequenceBuffer.join('')
+
+      // Cherche une séquence correspondante
+      const matchingSequence = this.sequences.get(currentSequence)
+
+      if (matchingSequence) {
+        // Séquence trouvée
+        if (this.matchesContext(matchingSequence.context)) {
+          event.preventDefault()
+          console.log(`🎯 Sequence triggered: ${currentSequence} - ${matchingSequence.description}`)
+          matchingSequence.handler()
+          this.resetSequenceBuffer()
+          return
+        }
+      }
+
+      // Cherche si le début correspond à une séquence potentielle
+      const hasPotentialMatch = Array.from(this.sequences.keys()).some((seq) =>
+        seq.startsWith(currentSequence)
+      )
+
+      if (hasPotentialMatch) {
+        // Continue à attendre la suite de la séquence
+        const maxDelay = matchingSequence?.maxDelay ?? 500
+
+        // Clear le timer précédent
+        if (this.sequenceTimer !== null) {
+          window.clearTimeout(this.sequenceTimer)
+        }
+
+        // Reset après le délai
+        this.sequenceTimer = window.setTimeout(() => {
+          this.resetSequenceBuffer()
+        }, maxDelay)
+
+        return
+      } else {
+        // Pas de correspondance, reset
+        this.resetSequenceBuffer()
+      }
+    }
+
+    // Gestion des raccourcis classiques
     const modifiers = [
       event.metaKey || event.ctrlKey ? 'meta' : '',
       event.shiftKey ? 'shift' : '',
@@ -146,6 +247,8 @@ class KeyboardShortcutManager {
   destroy(): void {
     document.removeEventListener('keydown', this.handleKeyDown)
     this.shortcuts.clear()
+    this.sequences.clear()
+    this.resetSequenceBuffer()
     this.isInitialized = false
     console.log('🧹 Keyboard Shortcut Manager destroyed')
   }
@@ -153,12 +256,22 @@ class KeyboardShortcutManager {
   /**
    * Liste tous les raccourcis enregistrés
    */
-  list(): Array<{ key: string; description: string; context?: string }> {
-    return Array.from(this.shortcuts.entries()).map(([key, shortcut]) => ({
+  list(): Array<{ key: string; description: string; context?: string; type: 'shortcut' | 'sequence' }> {
+    const shortcuts = Array.from(this.shortcuts.entries()).map(([key, shortcut]) => ({
       key,
       description: shortcut.description,
       context: shortcut.context,
+      type: 'shortcut' as const,
     }))
+
+    const sequences = Array.from(this.sequences.entries()).map(([key, sequence]) => ({
+      key,
+      description: sequence.description,
+      context: sequence.context,
+      type: 'sequence' as const,
+    }))
+
+    return [...shortcuts, ...sequences]
   }
 }
 
@@ -184,4 +297,4 @@ if (import.meta.env.DEV) {
 // ==========================================
 
 export { keyboardShortcuts }
-export type { Shortcut, ShortcutHandler }
+export type { Shortcut, ShortcutHandler, SequenceShortcut }
