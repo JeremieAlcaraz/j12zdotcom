@@ -1,0 +1,11 @@
+# Configuration SOPS pour le chiffrement des secrets
+# Documentation: https://github.com/getsops/sops
+
+creation_rules:
+  # Règle par défaut pour tous les fichiers secrets
+  - path_regex: \.enc\.(env|yaml|yml|json)$
+    age: age1nt3ly627s6eqcv97zyw3n489gh7nt2jlrq6mfhucct8wq4lgku6saynhhw
+
+  # Pour les fichiers dans un dossier secrets/
+  - path_regex: secrets/.*\.(env|yaml|yml|json)$
+    age: age1nt3ly627s6eqcv97zyw3n489gh7nt2jlrq6mfhucct8wq4lgku6saynhhw
