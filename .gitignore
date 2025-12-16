@@ -13,11 +13,18 @@ yarn-debug.log*
 yarn-error.log*
 pnpm-debug.log*
 
-# environment variables
+# environment variables (non chiffrés - NE PAS VERSIONNER)
 .env
 .env.production
 .env.local
 .env.*.local
+*.env
+!*.enc.env
+
+# secrets/ - Les fichiers .enc.env sont chiffrés donc versionnés
+# mais on ignore les versions déchiffrées
+secrets/*.env
+!secrets/*.enc.env
 
 # macOS-specific files
 .DS_Store
