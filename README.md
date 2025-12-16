@@ -1,13 +1,13 @@
 # j12zdotcom
 
-Site personnel de Jérémie Alcaraz - Portfolio et blog sur le développement web et la productivité douce.
+Site personnel de Jérémie Alcaraz - Portfolio et blog sur la productivité et l'organisation douce 🫶🌸
 
 ## 🚀 Tech Stack
 
 - **Framework**: Astro 5.7.8 (SSG)
 - **UI**: React 19 + Svelte 5 + Tailwind CSS 4
 - **Content**: MDX
-- **Deployment**: Cloudflare Tunnel + Caddy
+- **Deployment**: Cloudflare Tunnel + Caddy + Serveur Maison
 
 ## 🛠️ Installation
 
