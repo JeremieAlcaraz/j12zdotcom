@@ -38,15 +38,16 @@ Déploiement avec NixOS :
 
 ```bash
 nix build
-nixos-rebuild switch --flake .#jeremie-web
+sudo nixos-rebuild switch --flake .#jeremie-web
 ```
 
-Voir [NIX.md](./NIX.md) pour les détails.
+Voir [DEPLOYMENT.md](./docs/DEPLOYMENT.md) et [INFRASTRUCTURE.md](./docs/INFRASTRUCTURE.md) pour les détails.
 
 ## 📚 Documentation
 
 - **[ARCHITECTURE.md](./docs/ARCHITECTURE.md)** - Architecture et principes du code
-- **[NIX.md](./NIX.md)** - Guide NixOS et déploiement
+- **[DEPLOYMENT.md](./docs/DEPLOYMENT.md)** - Guide de déploiement NixOS
+- **[INFRASTRUCTURE.md](./docs/INFRASTRUCTURE.md)** - Infrastructure et stack technique
 - **[AGENTS.md](./docs/AGENTS.md)** - Guide pour les agents IA
 
 ## 📄 Licence
