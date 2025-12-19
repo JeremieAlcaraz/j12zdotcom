@@ -15,7 +15,7 @@
         pkgs = import nixpkgs { inherit system; };
 
         # Toolchain
-        nodejs = pkgs.nodejs_20;
+        nodejs = pkgs.nodejs_22;
 
         buildInputs = with pkgs; [
           nodejs
