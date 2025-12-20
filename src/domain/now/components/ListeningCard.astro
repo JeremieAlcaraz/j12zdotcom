@@ -1,6 +1,7 @@
 ---
 import BaseCard from '@/ui/atoms/BaseCard.astro'
 import Typography from '@/ui/atoms/Typography.astro'
+import type { JSX } from 'astro/jsx-runtime'
 
 interface Props {
   /** Song/Album title */
@@ -24,13 +25,12 @@ const {
 } = Astro.props
 
 // Get iframe attributes based on embed type
-const getEmbedAttributes = (type: string) => {
+const getEmbedAttributes = (type: string): JSX.IframeHTMLAttributes => {
   switch (type) {
     case 'spotify':
       return {
         width: '100%',
         height: '152',
-        frameBorder: '0',
         allow: 'autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture',
         loading: 'lazy'
       }
@@ -38,16 +38,14 @@ const getEmbedAttributes = (type: string) => {
       return {
         width: '100%',
         height: '200',
-        frameBorder: '0',
         allow: 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture',
-        allowFullscreen: true,
+        allowfullscreen: true,
         loading: 'lazy'
       }
     case 'soundcloud':
       return {
         width: '100%',
         height: '166',
-        frameBorder: '0',
         allow: 'autoplay',
         loading: 'lazy'
       }
@@ -55,7 +53,6 @@ const getEmbedAttributes = (type: string) => {
       return {
         width: '100%',
         height: '200',
-        frameBorder: '0',
         loading: 'lazy'
       }
   }
@@ -93,7 +90,7 @@ const embedAttrs = getEmbedAttributes(embedType)
       <iframe
         src={embedUrl}
         {...embedAttrs}
-        class="w-full"
+        class="w-full border-0"
       />
     </div>
 

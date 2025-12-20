@@ -9,19 +9,21 @@ import type { PageObjectResponse } from '@notionhq/client/build/src/api-endpoint
  * Structure de la database Notion "Now"
  * Colonnes: nom, created_time, creating, date, focus, learning, listening, living, location, statut
  */
-export interface NotionNowPage extends PageObjectResponse {
-  properties: {
-    nom: { type: 'title'; title: Array<{ plain_text: string }> }
-    created_time: { type: 'created_time'; created_time: string }
-    creating: { type: 'rich_text'; rich_text: Array<{ plain_text: string }> }
-    date: { type: 'date'; date: { start: string } | null }
-    focus: { type: 'rich_text'; rich_text: Array<{ plain_text: string }> }
-    learning: { type: 'rich_text'; rich_text: Array<{ plain_text: string }> }
-    listening: { type: 'rich_text'; rich_text: Array<{ plain_text: string }> }
-    living: { type: 'rich_text'; rich_text: Array<{ plain_text: string }> }
-    location: { type: 'rich_text'; rich_text: Array<{ plain_text: string }> }
-    statut: { type: 'select'; select: { name: string } | null }
-  }
+type NotionNowPageProperties = {
+  nom: { type: 'title'; title: Array<{ plain_text: string }> }
+  created_time: { type: 'created_time'; created_time: string }
+  creating: { type: 'rich_text'; rich_text: Array<{ plain_text: string }> }
+  date: { type: 'date'; date: { start: string } | null }
+  focus: { type: 'rich_text'; rich_text: Array<{ plain_text: string }> }
+  learning: { type: 'rich_text'; rich_text: Array<{ plain_text: string }> }
+  listening: { type: 'rich_text'; rich_text: Array<{ plain_text: string }> }
+  living: { type: 'rich_text'; rich_text: Array<{ plain_text: string }> }
+  location: { type: 'rich_text'; rich_text: Array<{ plain_text: string }> }
+  statut: { type: 'select'; select: { name: string } | null }
+}
+
+export type NotionNowPage = Omit<PageObjectResponse, 'properties'> & {
+  properties: NotionNowPageProperties
 }
 
 /**
