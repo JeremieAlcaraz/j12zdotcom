@@ -1,23 +1,27 @@
 ---
 interface Props {
+  text?: string
   label?: string
   position?: 'top' | 'bottom' | 'left' | 'right'
-  open?: boolean
   class?: string
   style?: string
   id?: string
+  open?: boolean
   dataAttributes?: Record<string, string | number | boolean | null | undefined>
 }
 
 const {
-  label = '',
+  text,
+  label,
   position = 'top',
-  open = false,
   class: className = '',
   style = '',
   id,
+  open = false,
   dataAttributes = {},
 } = Astro.props as Props
+
+const tooltipText = text || label || ''
 
 const dataset = Object.entries(dataAttributes).reduce<Record<string, string>>((acc, [key, value]) => {
   if (value === undefined || value === null) return acc
@@ -32,15 +36,176 @@ const dataset = Object.entries(dataAttributes).reduce<Record<string, string>>((a
 
 <div
   id={id}
-  class:list={{
-    tooltip: true,
-    [`tooltip-${position}`]: Boolean(position),
-    'tooltip-open': open,
-    [className]: Boolean(className),
-  }}
-  data-tip={label}
+  class:list={['tooltip-wrapper', position, className]}
   style={style}
   {...dataset}
 >
   <slot />
+  <div class:list={['tooltip-bubble', { 'is-open': open }]}>
+    {tooltipText}
+  </div>
 </div>
+
+<style>
+  .tooltip-wrapper {
+    position: relative;
+    display: inline-flex;
+  }
+
+  .tooltip-wrapper > :first-child {
+    position: relative;
+  }
+
+  .tooltip-bubble {
+    visibility: hidden;
+    opacity: 0;
+    z-index: 50;
+
+    width: max-content;
+    max-width: 200px;
+    padding: 8px 16px;
+
+    background: #333;
+    color: #e086d3;
+
+    position: absolute;
+    bottom: calc(100% + 8px);
+    left: 50%;
+    transform: translateX(-50%) translateY(4px);
+
+    border-radius: 8px;
+    font-size: 14px;
+    line-height: 1.4;
+
+    transition: all 0.3s ease-in-out;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    pointer-events: none;
+  }
+
+  .tooltip-bubble::after {
+    content: '';
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+
+    width: 0;
+    height: 0;
+    border-style: solid;
+    border-width: 6px 6px 0 6px;
+    border-color: #333 transparent transparent transparent;
+  }
+
+  /* Show on hover or when forced open */
+  .tooltip-wrapper > :first-child:hover ~ .tooltip-bubble,
+  .tooltip-wrapper:hover .tooltip-bubble,
+  .tooltip-bubble.is-open {
+    visibility: visible;
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+    animation: float-top 1s ease-in-out infinite alternate;
+  }
+
+  @keyframes float-top {
+    0% {
+      transform: translateX(-50%) translateY(0);
+    }
+    100% {
+      transform: translateX(-50%) translateY(-4px);
+    }
+  }
+
+  /* Bottom position */
+  .bottom .tooltip-bubble {
+    top: calc(100% + 8px);
+    bottom: auto;
+    transform: translateX(-50%) translateY(-4px);
+  }
+
+  .bottom .tooltip-bubble::after {
+    top: auto;
+    bottom: 100%;
+    border-width: 0 6px 6px 6px;
+    border-color: transparent transparent #333 transparent;
+  }
+
+  .bottom:hover .tooltip-bubble,
+  .bottom .tooltip-bubble.is-open {
+    transform: translateX(-50%) translateY(0);
+    animation: float-bottom 1s ease-in-out infinite alternate;
+  }
+
+  @keyframes float-bottom {
+    0% {
+      transform: translateX(-50%) translateY(0);
+    }
+    100% {
+      transform: translateX(-50%) translateY(4px);
+    }
+  }
+
+  /* Left position */
+  .left .tooltip-bubble {
+    top: 50%;
+    bottom: auto;
+    left: auto;
+    right: calc(100% + 8px);
+    transform: translateY(-50%) translateX(-4px);
+  }
+
+  .left .tooltip-bubble::after {
+    top: 50%;
+    left: 100%;
+    right: auto;
+    transform: translateY(-50%);
+    border-width: 6px 0 6px 6px;
+    border-color: transparent transparent transparent #333;
+  }
+
+  .left:hover .tooltip-bubble,
+  .left .tooltip-bubble.is-open {
+    transform: translateY(-50%) translateX(0);
+    animation: float-left 1s ease-in-out infinite alternate;
+  }
+
+  @keyframes float-left {
+    0% {
+      transform: translateY(-50%) translateX(0);
+    }
+    100% {
+      transform: translateY(-50%) translateX(-4px);
+    }
+  }
+
+  /* Right position */
+  .right .tooltip-bubble {
+    top: 50%;
+    bottom: auto;
+    left: calc(100% + 8px);
+    transform: translateY(-50%) translateX(4px);
+  }
+
+  .right .tooltip-bubble::after {
+    top: 50%;
+    left: auto;
+    right: 100%;
+    transform: translateY(-50%);
+    border-width: 6px 6px 6px 0;
+    border-color: transparent #333 transparent transparent;
+  }
+
+  .right:hover .tooltip-bubble,
+  .right .tooltip-bubble.is-open {
+    transform: translateY(-50%) translateX(0);
+    animation: float-right 1s ease-in-out infinite alternate;
+  }
+
+  @keyframes float-right {
+    0% {
+      transform: translateY(-50%) translateX(0);
+    }
+    100% {
+      transform: translateY(-50%) translateX(4px);
+    }
+  }
+</style>

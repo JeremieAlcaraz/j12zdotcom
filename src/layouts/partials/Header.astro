@@ -44,7 +44,19 @@ const { links = defaultLinks } = Astro.props
                   <ul class="menu dropdown-content bg-base-100 rounded-box z-[1] w-52 p-2 shadow">
                     {link.children.map((child: NavLink) => (
                       <li>
-                        <a href={child.href}>{child.label}</a>
+                        <a
+                          href={child.href}
+                          class="nav-link-with-tooltip"
+                          data-tooltip={child.tooltip}
+                          data-tooltip-position="right"
+                        >
+                          {child.label}
+                          {child.tooltip && (
+                            <span class="tooltip-bubble" data-position="right">
+                              {child.tooltip}
+                            </span>
+                          )}
+                        </a>
                       </li>
                     ))}
                   </ul>
@@ -55,8 +67,18 @@ const { links = defaultLinks } = Astro.props
           // Sinon, créer un lien simple
           return (
             <li>
-              <a href={link.href} class="hover:bg-primary hover:text-primary-content rounded-lg">
+              <a
+                href={link.href}
+                class="hover:bg-primary hover:text-primary-content rounded-lg nav-link-with-tooltip"
+                data-tooltip={link.tooltip}
+                data-tooltip-position="bottom"
+              >
                 {link.label}
+                {link.tooltip && (
+                  <span class="tooltip-bubble" data-position="bottom">
+                    {link.tooltip}
+                  </span>
+                )}
               </a>
             </li>
           )
@@ -120,7 +142,19 @@ const { links = defaultLinks } = Astro.props
                     <ul>
                       {link.children.map((child: NavLink) => (
                         <li>
-                          <a href={child.href}>{child.label}</a>
+                          <a
+                            href={child.href}
+                            class="nav-link-with-tooltip"
+                            data-tooltip={child.tooltip}
+                            data-tooltip-position="right"
+                          >
+                            {child.label}
+                            {child.tooltip && (
+                              <span class="tooltip-bubble" data-position="right">
+                                {child.tooltip}
+                              </span>
+                            )}
+                          </a>
                         </li>
                       ))}
                     </ul>
@@ -131,7 +165,19 @@ const { links = defaultLinks } = Astro.props
             // Sinon, créer un lien simple
             return (
               <li>
-                <a href={link.href}>{link.label}</a>
+                <a
+                  href={link.href}
+                  class="nav-link-with-tooltip"
+                  data-tooltip={link.tooltip}
+                  data-tooltip-position="right"
+                >
+                  {link.label}
+                  {link.tooltip && (
+                    <span class="tooltip-bubble" data-position="right">
+                      {link.tooltip}
+                    </span>
+                  )}
+                </a>
               </li>
             )
           })
@@ -148,3 +194,129 @@ const { links = defaultLinks } = Astro.props
   import '@/utils/toggleDark'
   import '@/utils/navigationShortcuts'
 </script>
+
+<script>
+  // Fermer les dropdowns quand on clique à l'extérieur
+  document.addEventListener('click', (event) => {
+    const dropdowns = document.querySelectorAll('.navbar details.dropdown')
+
+    dropdowns.forEach((dropdown) => {
+      // Si le clic est en dehors du dropdown, le fermer
+      if (!dropdown.contains(event.target as Node)) {
+        dropdown.removeAttribute('open')
+      }
+    })
+  })
+
+  // Fermer les dropdowns quand on appuie sur ESC
+  document.addEventListener('keydown', (event) => {
+    if (event.key === 'Escape') {
+      const dropdowns = document.querySelectorAll('.navbar details.dropdown[open]')
+      dropdowns.forEach((dropdown) => {
+        dropdown.removeAttribute('open')
+      })
+    }
+  })
+</script>
+
+<style>
+  .nav-link-with-tooltip {
+    position: relative;
+  }
+
+  .tooltip-bubble {
+    visibility: hidden;
+    opacity: 0;
+    z-index: 50;
+
+    width: max-content;
+    max-width: 200px;
+    padding: 8px 16px;
+
+    background: #333;
+    color: #e086d3;
+
+    position: absolute;
+    border-radius: 8px;
+    font-size: 14px;
+    line-height: 1.4;
+
+    transition: all 0.3s ease-in-out;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    pointer-events: none;
+  }
+
+  /* Position bottom (default) */
+  .tooltip-bubble[data-position='bottom'] {
+    top: calc(100% + 8px);
+    left: 50%;
+    transform: translateX(-50%) translateY(-4px);
+  }
+
+  .tooltip-bubble[data-position='bottom']::after {
+    content: '';
+    position: absolute;
+    bottom: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 0;
+    height: 0;
+    border-style: solid;
+    border-width: 0 6px 6px 6px;
+    border-color: transparent transparent #333 transparent;
+  }
+
+  /* Position right */
+  .tooltip-bubble[data-position='right'] {
+    top: 50%;
+    left: calc(100% + 8px);
+    transform: translateY(-50%) translateX(-4px);
+  }
+
+  .tooltip-bubble[data-position='right']::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    right: 100%;
+    transform: translateY(-50%);
+    width: 0;
+    height: 0;
+    border-style: solid;
+    border-width: 6px 6px 6px 0;
+    border-color: transparent #333 transparent transparent;
+  }
+
+  /* Show on hover */
+  .nav-link-with-tooltip:hover .tooltip-bubble {
+    visibility: visible;
+    opacity: 1;
+  }
+
+  .nav-link-with-tooltip:hover .tooltip-bubble[data-position='bottom'] {
+    transform: translateX(-50%) translateY(0);
+    animation: float-bottom 1s ease-in-out infinite alternate;
+  }
+
+  .nav-link-with-tooltip:hover .tooltip-bubble[data-position='right'] {
+    transform: translateY(-50%) translateX(0);
+    animation: float-right 1s ease-in-out infinite alternate;
+  }
+
+  @keyframes float-bottom {
+    0% {
+      transform: translateX(-50%) translateY(0);
+    }
+    100% {
+      transform: translateX(-50%) translateY(4px);
+    }
+  }
+
+  @keyframes float-right {
+    0% {
+      transform: translateY(-50%) translateX(0);
+    }
+    100% {
+      transform: translateY(-50%) translateX(4px);
+    }
+  }
+</style>
