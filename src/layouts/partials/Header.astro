@@ -44,7 +44,19 @@ const { links = defaultLinks } = Astro.props
                   <ul class="menu dropdown-content bg-base-100 rounded-box z-[1] w-52 p-2 shadow">
                     {link.children.map((child: NavLink) => (
                       <li>
-                        <a href={child.href}>{child.label}</a>
+                        <a
+                          href={child.href}
+                          class="nav-link-with-tooltip"
+                          data-tooltip={child.tooltip}
+                          data-tooltip-position="right"
+                        >
+                          {child.label}
+                          {child.tooltip && (
+                            <span class="tooltip-bubble" data-position="right">
+                              {child.tooltip}
+                            </span>
+                          )}
+                        </a>
                       </li>
                     ))}
                   </ul>
@@ -130,7 +142,19 @@ const { links = defaultLinks } = Astro.props
                     <ul>
                       {link.children.map((child: NavLink) => (
                         <li>
-                          <a href={child.href}>{child.label}</a>
+                          <a
+                            href={child.href}
+                            class="nav-link-with-tooltip"
+                            data-tooltip={child.tooltip}
+                            data-tooltip-position="right"
+                          >
+                            {child.label}
+                            {child.tooltip && (
+                              <span class="tooltip-bubble" data-position="right">
+                                {child.tooltip}
+                              </span>
+                            )}
+                          </a>
                         </li>
                       ))}
                     </ul>
@@ -169,6 +193,30 @@ const { links = defaultLinks } = Astro.props
 <script>
   import '@/utils/toggleDark'
   import '@/utils/navigationShortcuts'
+</script>
+
+<script>
+  // Fermer les dropdowns quand on clique à l'extérieur
+  document.addEventListener('click', (event) => {
+    const dropdowns = document.querySelectorAll('.navbar details.dropdown')
+
+    dropdowns.forEach((dropdown) => {
+      // Si le clic est en dehors du dropdown, le fermer
+      if (!dropdown.contains(event.target as Node)) {
+        dropdown.removeAttribute('open')
+      }
+    })
+  })
+
+  // Fermer les dropdowns quand on appuie sur ESC
+  document.addEventListener('keydown', (event) => {
+    if (event.key === 'Escape') {
+      const dropdowns = document.querySelectorAll('.navbar details.dropdown[open]')
+      dropdowns.forEach((dropdown) => {
+        dropdown.removeAttribute('open')
+      })
+    }
+  })
 </script>
 
 <style>

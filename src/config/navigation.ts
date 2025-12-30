@@ -18,20 +18,45 @@ export const defaultLogoDark: string = mainLogo.src
 
 /** Liens par défaut – peuvent être overridés via la prop `links` */
 export const defaultLinks: NavLink[] = [
-  { href: '/', label: 'Accueil' },
-  { href: '/blog', label: 'Blog' },
+  {
+    href: '/',
+    label: 'Accueil',
+    tooltip: "Votre point de départ vers une productivité plus douce ✨",
+  },
+  {
+    href: '/blog',
+    label: 'Blog',
+    tooltip: "Découvrez des réflexions et astuces pour avancer en douceur 📝",
+  },
   {
     label: 'Events',
+    tooltip: "Des moments pour se retrouver et grandir ensemble 🌱",
     children: [
-      { href: '/events/me', label: 'Mes Events' },
-      { href: '/events/community', label: 'Événements Communautaires' },
+      {
+        href: '/events/me',
+        label: 'Mes Events',
+        tooltip: "Les événements que j'organise avec soin 💫",
+      },
+      {
+        href: '/events/community',
+        label: 'Événements Communautaires',
+        tooltip: "Rejoignez notre communauté bienveillante 🤝",
+      },
     ],
   },
   {
     href: '/s-equiper',
     label: "S'équiper",
-    tooltip: 'Mes meilleurs outils et systèmes pour gagner du temps en douceur 🫶🌸',
+    tooltip: "Mes meilleurs outils et systèmes pour gagner du temps en douceur 🫶🌸",
   },
-  { href: '/about', label: 'À propos' },
-  { href: '/contact', label: 'Contact' },
+  {
+    href: '/about',
+    label: 'À propos',
+    tooltip: "Apprenez à me connaître et découvrez mon parcours 💜",
+  },
+  {
+    href: '/contact',
+    label: 'Contact',
+    tooltip: "Envie d'échanger ? Je serais ravi de vous lire 💌",
+  },
 ] satisfies NavLink[]
