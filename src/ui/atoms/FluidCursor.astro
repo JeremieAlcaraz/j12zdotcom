@@ -50,7 +50,9 @@ const props = Astro.props;
         // 1) Le host occupe tout le container
         const style = document.createElement('style');
         style.textContent = `:host{position:absolute;inset:0;display:block;pointer-events:none;z-index:50;}`;
-        this.shadowRoot && this.shadowRoot.appendChild(style);
+        if (this.shadowRoot) {
+          this.shadowRoot.appendChild(style);
+        }
         // 2) Le wrap et le canvas prennent 100% de l'espace du host
         this._wrap.style.position = 'absolute';
         this._wrap.style.inset = '0';
@@ -79,24 +81,24 @@ const props = Astro.props;
       const scoped = this._scoped;
       const containerEl = this._containerEl;
       // ---- Config par défaut ----
-      let pointers = [pointerPrototype()];
-      let config = {
-        SIM_RESOLUTION: 128,
-        DYE_RESOLUTION: 1440,
-        CAPTURE_RESOLUTION: 512,
-        DENSITY_DISSIPATION: 3.5,
-        VELOCITY_DISSIPATION: 2,
-        PRESSURE: 0.1,
-        PRESSURE_ITERATIONS: 20,
-        CURL: 3,
-        SPLAT_RADIUS: 0.2,
-        SPLAT_FORCE: 6000,
-        SHADING: true,
-        COLOR_UPDATE_SPEED: 10,
-        PAUSED: false,
-        BACK_COLOR: { r: 0.5, g: 0, b: 0 },
-        TRANSPARENT: true,
-      };
+      const pointers = [pointerPrototype()];
+      const config = {
+      SIM_RESOLUTION: 128,
+      DYE_RESOLUTION: 1440,
+      CAPTURE_RESOLUTION: 512,
+      DENSITY_DISSIPATION: 3.5,
+      VELOCITY_DISSIPATION: 2,
+      PRESSURE: 0.1,
+      PRESSURE_ITERATIONS: 20,
+      CURL: 3,
+      SPLAT_RADIUS: 0.2,
+      SPLAT_FORCE: 6000,
+      SHADING: true,
+      COLOR_UPDATE_SPEED: 10,
+      PAUSED: false,
+      BACK_COLOR: { r: 0.5, g: 0, b: 0 },
+      TRANSPARENT: true,
+    };
 
       // ---- Utilitaires / structures ----
       function pointerPrototype() {
@@ -602,7 +604,7 @@ const props = Astro.props;
       function getResolution(res) {
         const w = gl.drawingBufferWidth, h = gl.drawingBufferHeight;
         const aspectRatio = w / h;
-        let aspect = aspectRatio < 1 ? 1 / aspectRatio : aspectRatio;
+        const aspect = aspectRatio < 1 ? 1 / aspectRatio : aspectRatio;
         const min = Math.round(res), max = Math.round(res * aspect);
         return w > h ? { width: max, height: min } : { width: min, height: max };
       }

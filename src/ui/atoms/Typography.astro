@@ -12,7 +12,7 @@ type Variant =
 type Font = 'sans' | 'heading' | 'illustration'
 
 type Props = {
-  as?: keyof HTMLElementTagNameMap
+  as?: keyof HTMLElementTagNameMap // eslint-disable-line no-undef
   variant?: Variant
   font?: Font
   align?: 'left' | 'center' | 'right' | 'justify'
@@ -91,7 +91,7 @@ const className = [
   .filter(Boolean)
   .join(' ')
 
-const Tag = (as ?? 'p') as keyof HTMLElementTagNameMap
+const Tag = (as ?? 'p') as keyof HTMLElementTagNameMap // eslint-disable-line no-undef
 ---
 
 <Tag class={className}>
