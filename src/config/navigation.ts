@@ -27,7 +27,11 @@ export const defaultLinks: NavLink[] = [
       { href: '/events/community', label: 'Événements Communautaires' },
     ],
   },
-  { href: '/s-equiper', label: "S'équiper" },
+  {
+    href: '/s-equiper',
+    label: "S'équiper",
+    tooltip: 'Mes meilleurs outils et systèmes pour gagner du temps en douceur 🫶🌸',
+  },
   { href: '/about', label: 'À propos' },
   { href: '/contact', label: 'Contact' },
 ] satisfies NavLink[]

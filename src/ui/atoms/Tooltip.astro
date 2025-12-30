@@ -49,7 +49,11 @@ const dataset = Object.entries(dataAttributes).reduce<Record<string, string>>((a
 <style>
   .tooltip-wrapper {
     position: relative;
-    display: inline-block;
+    display: inline-flex;
+  }
+
+  .tooltip-wrapper > :first-child {
+    position: relative;
   }
 
   .tooltip-bubble {
@@ -93,6 +97,7 @@ const dataset = Object.entries(dataAttributes).reduce<Record<string, string>>((a
   }
 
   /* Show on hover or when forced open */
+  .tooltip-wrapper > :first-child:hover ~ .tooltip-bubble,
   .tooltip-wrapper:hover .tooltip-bubble,
   .tooltip-bubble.is-open {
     visibility: visible;
