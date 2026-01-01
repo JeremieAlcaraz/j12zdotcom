@@ -1,13 +1,15 @@
 ---
 interface Props {
   variant?: 'default' | 'neutral' | 'primary' | 'secondary' | 'accent' | 'success' | 'warning' | 'info' | 'error'
+  style?: 'solid' | 'gradient'
+  opacity?: 'light' | 'normal' | 'strong'
   label?: string
 }
 
-const { variant = 'default', label, ...attrs } = Astro.props as Props & Record<string, unknown>
+const { variant = 'default', style = 'solid', opacity = 'normal', label, ...attrs } = Astro.props as Props & Record<string, unknown>
 
-const base = 'divider'
-const variants = {
+// Solid style (DaisyUI classes)
+const solidVariants = {
   default: '',
   neutral: 'divider-neutral',
   primary: 'divider-primary',
@@ -18,8 +20,61 @@ const variants = {
   info: 'divider-info',
   error: 'divider-error',
 }
+
+// Gradient style (custom classes)
+const gradientVariants: Record<string, Record<string, string>> = {
+  default: {
+    light: 'via-neutral/20',
+    normal: 'via-neutral/30',
+    strong: 'via-neutral/50',
+  },
+  neutral: {
+    light: 'via-neutral/20',
+    normal: 'via-neutral/30',
+    strong: 'via-neutral/50',
+  },
+  primary: {
+    light: 'via-primary/20',
+    normal: 'via-primary/30',
+    strong: 'via-primary/50',
+  },
+  secondary: {
+    light: 'via-secondary/20',
+    normal: 'via-secondary/30',
+    strong: 'via-secondary/50',
+  },
+  accent: {
+    light: 'via-accent/20',
+    normal: 'via-accent/30',
+    strong: 'via-accent/50',
+  },
+  success: {
+    light: 'via-success/20',
+    normal: 'via-success/30',
+    strong: 'via-success/50',
+  },
+  warning: {
+    light: 'via-warning/20',
+    normal: 'via-warning/30',
+    strong: 'via-warning/50',
+  },
+  info: {
+    light: 'via-info/20',
+    normal: 'via-info/30',
+    strong: 'via-info/50',
+  },
+  error: {
+    light: 'via-error/20',
+    normal: 'via-error/30',
+    strong: 'via-error/50',
+  },
+}
+
+const classes = style === 'gradient'
+  ? `h-px w-full bg-gradient-to-r from-transparent to-transparent ${gradientVariants[variant][opacity]}`
+  : `divider ${solidVariants[variant]}`
 ---
 
-<div class={`${base} ${variants[variant]}`} {...attrs}>
+<div class={classes} {...attrs}>
   {label && <span>{label}</span>}
 </div>

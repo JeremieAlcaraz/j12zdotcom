@@ -8,7 +8,26 @@ type Props = {
 
 const { size, color, class: className, ...rest } = Astro.props
 
-const classes = ['checkbox', size && `checkbox-${size}`, color && `checkbox-${color}`, className]
+const sizeClasses: Record<string, string> = {
+  xs: 'checkbox-xs',
+  sm: 'checkbox-sm',
+  md: 'checkbox-md',
+  lg: 'checkbox-lg',
+  xl: 'checkbox-xl',
+}
+
+const colorClasses: Record<string, string> = {
+  primary: 'checkbox-primary',
+  secondary: 'checkbox-secondary',
+  accent: 'checkbox-accent',
+  neutral: 'checkbox-neutral',
+  success: 'checkbox-success',
+  warning: 'checkbox-warning',
+  info: 'checkbox-info',
+  error: 'checkbox-error',
+}
+
+const classes = ['checkbox', size && sizeClasses[size], color && colorClasses[color], className]
   .filter(Boolean)
   .join(' ')
 ---

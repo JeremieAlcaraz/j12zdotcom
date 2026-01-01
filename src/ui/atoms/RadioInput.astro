@@ -1,0 +1,34 @@
+---
+import type { JSX } from 'astro/jsx-runtime'
+
+type Props = {
+  size?: 'xs' | 'sm' | 'md' | 'lg'
+  color?: 'primary' | 'secondary' | 'accent' | 'neutral' | 'success' | 'warning' | 'info' | 'error'
+} & JSX.InputHTMLAttributes
+
+const { size, color, class: className, ...rest } = Astro.props
+
+const sizeClasses: Record<string, string> = {
+  xs: 'radio-xs',
+  sm: 'radio-sm',
+  md: 'radio-md',
+  lg: 'radio-lg',
+}
+
+const colorClasses: Record<string, string> = {
+  primary: 'radio-primary',
+  secondary: 'radio-secondary',
+  accent: 'radio-accent',
+  neutral: 'radio-neutral',
+  success: 'radio-success',
+  warning: 'radio-warning',
+  info: 'radio-info',
+  error: 'radio-error',
+}
+
+const classes = ['radio', size && sizeClasses[size], color && colorClasses[color], className]
+  .filter(Boolean)
+  .join(' ')
+---
+
+<input type="radio" class={classes} {...rest} />

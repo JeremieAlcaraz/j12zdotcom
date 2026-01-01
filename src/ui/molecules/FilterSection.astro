@@ -1,0 +1,32 @@
+---
+import Icon from '@/ui/atoms/Icon.astro'
+
+interface Props {
+  title: string
+  icon?: string
+  iconSize?: number
+  iconColor?: string
+  spacing?: 'compact' | 'normal' | 'relaxed'
+  class?: string
+}
+
+const { title, icon, iconSize = 18, iconColor, spacing = 'normal', class: className } = Astro.props
+
+const spacingClasses = {
+  compact: 'space-y-2',
+  normal: 'space-y-3',
+  relaxed: 'space-y-4',
+}
+
+const contentClasses = spacingClasses[spacing]
+---
+
+<section class={className}>
+  <h3 class="mb-4 flex items-center gap-2 text-lg font-semibold text-base-content">
+    {icon && <Icon name={icon} size={iconSize} class={iconColor} />}
+    {title}
+  </h3>
+  <div class={contentClasses}>
+    <slot />
+  </div>
+</section>

@@ -1,5 +1,11 @@
 ---
 import Icon from '@/ui/atoms/Icon.astro'
+import RadioInput from '@/ui/atoms/RadioInput.astro'
+import RadioLabel from '@/ui/atoms/RadioLabel.astro'
+import Checkbox from '@/ui/atoms/Checkbox.astro'
+import CheckboxLabel from '@/ui/atoms/CheckboxLabel.astro'
+import Divider from '@/ui/atoms/Divider.astro'
+import FilterSection from '@/ui/molecules/FilterSection.astro'
 import type { ShopFiltersView } from '@/domain/shop/types'
 
 interface Props {
@@ -9,9 +15,13 @@ interface Props {
   class?: string
 }
 
-const { filters, id = `shop-filters-${Math.random().toString(36).slice(2, 8)}`, title = 'Filtres', class: className } =
-  Astro.props as Props
-const { sortOptions, defaultSortId, categories, price } = filters
+const {
+  filters,
+  id = `shop-filters-${Math.random().toString(36).slice(2, 8)}`,
+  title = 'Filtres',
+  class: className,
+} = Astro.props as Props
+const { sortOptions, defaultSortId, categories } = filters
 const defaultSort = defaultSortId ?? sortOptions[0]?.id
 const radioName = `${id}-sort`
 
@@ -43,58 +53,47 @@ const sidebarClasses = [
     </div>
 
     <div class="space-y-8">
-      <section>
-        <h3 class="mb-4 flex items-center gap-2 text-lg font-semibold text-base-content">
-          <Icon name="lucide:sliders-horizontal" size={18} class="text-primary" />
-          Trier par
-        </h3>
-        <div class="space-y-2">
-          {
-            sortOptions.map((option) => (
-              <label class="flex cursor-pointer items-center gap-3 rounded-2xl border border-transparent px-3 py-2 transition-colors hover:border-primary/20 hover:bg-base-200/60">
-                <input
-                  type="radio"
-                  name={radioName}
-                  value={option.id}
-                  checked={option.id === defaultSort}
-                  class="radio radio-primary"
-                />
-                <span class="text-sm text-base-content/80">{option.label}</span>
-              </label>
-            ))
-          }
-        </div>
-      </section>
+      <FilterSection
+        title="Trier par"
+        icon="lucide:sliders-horizontal"
+        iconSize={18}
+        iconColor="text-primary"
+        spacing="compact"
+      >
+        {
+          sortOptions.map((option) => (
+            <RadioLabel variant="default">
+              <RadioInput
+                name={radioName}
+                value={option.id}
+                checked={option.id === defaultSort}
+                color="primary"
+              />
+              <span class="text-sm text-base-content/80">{option.label}</span>
+            </RadioLabel>
+          ))
+        }
+      </FilterSection>
 
-      <div class="h-px w-full bg-gradient-to-r from-transparent via-primary/30 to-transparent"></div>
+      <Divider variant="primary" style="gradient" />
 
-      <section>
-        <h3 class="mb-4 text-lg font-semibold text-base-content">Catégories</h3>
-        <div class="space-y-2">
-          {
-            categories.map((category) => (
-              <label class="flex cursor-pointer items-center justify-between gap-3 rounded-xl px-2 py-1.5 transition-colors hover:bg-base-200/60">
-                <span class="flex items-center gap-3">
-                  <input
-                    type="checkbox"
-                    value={category.id}
-                    checked={category.checked}
-                    class="checkbox checkbox-primary"
-                  />
-                  <span class="text-sm text-base-content/80">{category.label}</span>
-                </span>
-                {
-                  typeof category.count === 'number' && (
-                    <span class="text-xs text-base-content/50">{category.count}</span>
-                  )
-                }
-              </label>
-            ))
-          }
-        </div>
-      </section>
+      <FilterSection title="Catégories" spacing="compact">
+        {
+          categories.map((category) => (
+            <CheckboxLabel variant="default">
+              <span class="flex items-center gap-3">
+                <Checkbox value={category.id} checked={category.checked} color="primary" />
+                <span class="text-sm text-base-content/80">{category.label}</span>
+              </span>
+              {typeof category.count === 'number' && (
+                <span class="text-xs text-base-content/50">{category.count}</span>
+              )}
+            </CheckboxLabel>
+          ))
+        }
+      </FilterSection>
 
-      <div class="h-px w-full bg-gradient-to-r from-transparent via-primary/30 to-transparent"></div>
+      <Divider variant="primary" style="gradient" />
 
       <!-- Prix (désactivé pour l'instant) -->
       <!--
@@ -125,7 +124,7 @@ const sidebarClasses = [
   </aside>
 </div>
 
-<script define:vars={{ sidebarId: id }}>
+<script define:vars={{ sidebarId: id }} is:inline>
   const root = document.querySelector(`[data-shop-sidebar-root="${sidebarId}"]`)
 
   if (root && !root.hasAttribute('data-shop-sidebar-initialized')) {

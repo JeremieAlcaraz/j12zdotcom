@@ -1,0 +1,27 @@
+---
+import type { JSX } from 'astro/jsx-runtime'
+
+type Props = {
+  variant?: 'default' | 'compact'
+} & JSX.LabelHTMLAttributes
+
+const { variant = 'default', class: className, ...rest } = Astro.props
+
+const variantClasses = {
+  default: 'gap-3',
+  compact: 'gap-2',
+}
+
+const classes = [
+  'flex cursor-pointer items-center justify-between rounded-xl px-2 py-1.5 transition-colors',
+  'hover:bg-base-200/60',
+  variantClasses[variant],
+  className,
+]
+  .filter(Boolean)
+  .join(' ')
+---
+
+<label class={classes} {...rest}>
+  <slot />
+</label>
