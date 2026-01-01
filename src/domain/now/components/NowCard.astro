@@ -1,0 +1,67 @@
+---
+import BaseCard from '@/ui/atoms/BaseCard.astro'
+import Typography from '@/ui/atoms/Typography.astro'
+
+interface Props {
+  /** Emoji icon */
+  emoji: string
+  /** Card title */
+  title: string
+  /** Card description */
+  description: string
+  /** Card variant style */
+  variant?: 'default' | 'focus' | 'limit'
+  /** Enable hover effect */
+  hover?: boolean
+}
+
+const {
+  emoji,
+  title,
+  description,
+  variant = 'default',
+  hover = true
+} = Astro.props
+
+// Map variant to BaseCard props
+const variantProps = {
+  default: {
+    shadow: 'md' as const,
+    border: 'none' as const,
+    background: 'base-100' as const,
+  },
+  focus: {
+    shadow: 'xl' as const,
+    border: 'primary' as const,
+    background: 'base-100' as const,
+  },
+  limit: {
+    shadow: 'md' as const,
+    border: 'warning' as const,
+    background: 'base-100' as const,
+  }
+}
+
+const cardProps = variantProps[variant]
+---
+
+<BaseCard
+  {...cardProps}
+  hover={hover}
+  padding="lg"
+  class={`transition-all duration-300 ${variant === 'focus' ? 'bg-primary/5' : ''} ${variant === 'limit' ? 'bg-warning/5' : ''}`}
+>
+  <div class={variant === 'focus' ? 'text-center' : ''}>
+    <div class={`mb-3 ${variant === 'focus' ? 'text-6xl' : 'text-4xl'}`}>
+      {emoji}
+    </div>
+
+    <Typography variant={variant === 'focus' ? 'h2' : 'h3'} class="mb-2">
+      {title}
+    </Typography>
+
+    <Typography class="text-base-content/70 leading-relaxed">
+      {description}
+    </Typography>
+  </div>
+</BaseCard>

@@ -27,7 +27,7 @@
 import type { JSX } from 'astro/jsx-runtime'
 
 const SHADOWS = ['none', 'sm', 'md', 'lg', 'xl', '2xl'] as const
-const BORDERS = ['none', 'default', 'primary', 'secondary', 'accent', 'neutral'] as const
+const BORDERS = ['none', 'default', 'primary', 'secondary', 'accent', 'neutral', 'warning'] as const
 const ROUNDINGS = ['none', 'sm', 'md', 'lg', 'xl', '2xl', 'full'] as const
 const BACKGROUNDS = [
   'base-100',
@@ -89,6 +89,7 @@ const borderClasses: Record<Border, string> = {
   secondary: 'border border-secondary',
   accent: 'border border-accent',
   neutral: 'border border-neutral',
+  warning: 'border border-warning',
 }
 
 const roundingClasses: Record<Rounding, string> = {

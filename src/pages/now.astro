@@ -1,0 +1,15 @@
+---
+import BaseLayout from '@/layouts/Base.astro'
+import CurrentNowSection from '@/domain/now/sections/CurrentNowSection.astro'
+import HistorySection from '@/domain/now/sections/HistorySection.astro'
+---
+
+<BaseLayout
+  title="Now – Ce que je fais en ce moment"
+  description="Découvrez ce sur quoi je travaille en ce moment, ce que j'apprends, ce que j'écoute et mes priorités actuelles."
+>
+  <section class="space-y-24 py-16">
+    <CurrentNowSection />
+    <HistorySection />
+  </section>
+</BaseLayout>

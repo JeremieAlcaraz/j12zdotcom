@@ -240,12 +240,74 @@ const aboutCollection = defineCollection({
   }),
 })
 
+// Now collection schema
+const nowCollection = defineCollection({
+  loader: glob({ pattern: '**/*.{md,mdx}', base: 'src/content/now' }),
+  schema: z.object({
+    lastUpdate: z.date(),
+    status: z.enum(['current', 'archived']),
+
+    // Focus principal (Le Gros Rocher)
+    focus: z.object({
+      emoji: z.string(),
+      title: z.string(),
+      description: z.string(),
+    }),
+
+    // Localisation
+    location: z.object({
+      emoji: z.string(),
+      city: z.string(),
+      description: z.string(),
+    }),
+
+    // Apprentissages
+    learning: z.array(
+      z.object({
+        emoji: z.string(),
+        title: z.string(),
+        description: z.string(),
+      })
+    ).optional(),
+
+    // Ce que j'écoute (avec embeds)
+    listening: z.array(
+      z.object({
+        title: z.string(),
+        artist: z.string().optional(),
+        embedType: z.enum(['spotify', 'soundcloud', 'youtube', 'custom']),
+        embedUrl: z.string(),
+        description: z.string().optional(),
+      })
+    ).optional(),
+
+    // Vie personnelle
+    personal: z.array(
+      z.object({
+        emoji: z.string(),
+        title: z.string(),
+        description: z.string(),
+      })
+    ).optional(),
+
+    // Limites (Ce que je ne fais PAS)
+    limits: z.array(
+      z.object({
+        emoji: z.string(),
+        title: z.string(),
+        description: z.string(),
+      })
+    ).optional(),
+  }),
+})
+
 // Export all collections
 export const collections = {
   //pages
   homepage: homepageCollection,
   blog: blogCollection,
   about: aboutCollection,
+  now: nowCollection,
 
   //sections
   testimonialSection: testimonialSectionCollection,

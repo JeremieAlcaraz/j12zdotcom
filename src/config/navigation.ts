@@ -29,6 +29,11 @@ export const defaultLinks: NavLink[] = [
     tooltip: "Découvrez des réflexions et astuces pour avancer en douceur 📝",
   },
   {
+    href: '/now',
+    label: 'Now',
+    tooltip: "Ce qui m'occupe en ce moment 🌿",
+  },
+  {
     label: 'Events',
     tooltip: "Des moments pour se retrouver et grandir ensemble 🌱",
     children: [
