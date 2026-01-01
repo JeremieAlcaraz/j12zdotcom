@@ -13,7 +13,7 @@ import Icons from 'unplugin-icons/vite'
 import { FileSystemIconLoader } from 'unplugin-icons/loaders'
 import astroIcon from 'astro-icon'
 import remarkDirective from 'remark-directive'
-import remarkHighlight from './src/remark/remarkHighlight.js'
+import remarkHighlight from './src/utils/remarkHighlight.js'
 
 export default defineConfig({
   // Configuration Astro - Site statique
