@@ -1,0 +1,38 @@
+---
+import BaseLayout from '@/layouts/Base.astro'
+import ShopFiltersSidebar from '@/domain/shop/components/ShopFiltersSidebar.astro'
+import { SHOP_FILTERS } from '@/domain/shop/filters'
+import Icon from '@/ui/atoms/Icon.astro'
+
+const sidebarId = 'shop-filters'
+---
+
+<BaseLayout title="S'équiper">
+  <section class="py-8 sm:py-12">
+    <div class="space-y-6">
+      <div class="flex items-center justify-between lg:hidden">
+        <h1 class="text-2xl font-semibold text-base-content">S'équiper</h1>
+        <button
+          type="button"
+          class="btn btn-primary btn-sm gap-2"
+          data-shop-sidebar-open={sidebarId}
+          aria-controls={sidebarId}
+          aria-expanded="false"
+        >
+          <Icon name="lucide:sliders-horizontal" size={16} />
+          Filtres
+        </button>
+      </div>
+
+      <div class="flex flex-col gap-8 lg:flex-row">
+        <ShopFiltersSidebar id={sidebarId} filters={SHOP_FILTERS} />
+
+        <div class="flex-1">
+          <div class="rounded-2xl border border-dashed border-base-300 bg-base-100/60 p-10 text-center text-base-content/70">
+            Catalogue en préparation. La suite arrive bientôt.
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</BaseLayout>

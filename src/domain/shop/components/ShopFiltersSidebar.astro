@@ -1,0 +1,181 @@
+---
+import Icon from '@/ui/atoms/Icon.astro'
+import type { ShopFiltersView } from '@/domain/shop/types'
+
+interface Props {
+  filters: ShopFiltersView
+  id?: string
+  title?: string
+  class?: string
+}
+
+const { filters, id = `shop-filters-${Math.random().toString(36).slice(2, 8)}`, title = 'Filtres', class: className } =
+  Astro.props as Props
+const { sortOptions, defaultSortId, categories, price } = filters
+const defaultSort = defaultSortId ?? sortOptions[0]?.id
+const radioName = `${id}-sort`
+
+const sidebarClasses = [
+  'fixed left-0 top-0 z-50 flex h-full w-80 max-w-[85vw] -translate-x-full flex-col gap-6 overflow-y-auto border-r border-base-200 bg-base-100/95 p-6 shadow-xl transition-transform duration-300 lg:sticky lg:top-24 lg:h-[calc(100vh-6rem)] lg:w-72 lg:max-w-none lg:translate-x-0 lg:rounded-3xl lg:border lg:bg-base-100/70 lg:shadow-none',
+  className,
+]
+  .filter(Boolean)
+  .join(' ')
+---
+
+<div data-shop-sidebar-root={id}>
+  <div
+    class="fixed inset-0 z-40 bg-black/20 opacity-0 pointer-events-none backdrop-blur-sm transition-opacity duration-300 lg:hidden"
+    data-shop-sidebar-overlay
+  ></div>
+
+  <aside class={sidebarClasses} data-shop-sidebar-panel id={id} aria-label={title} aria-hidden="false">
+    <div class="flex items-center justify-between lg:hidden">
+      <h2 class="text-lg font-semibold text-base-content">{title}</h2>
+      <button
+        type="button"
+        class="btn btn-ghost btn-circle"
+        data-shop-sidebar-close
+        aria-label="Fermer les filtres"
+      >
+        <Icon name="lucide:x" size={20} />
+      </button>
+    </div>
+
+    <div class="space-y-8">
+      <section>
+        <h3 class="mb-4 flex items-center gap-2 text-lg font-semibold text-base-content">
+          <Icon name="lucide:sliders-horizontal" size={18} class="text-primary" />
+          Trier par
+        </h3>
+        <div class="space-y-2">
+          {
+            sortOptions.map((option) => (
+              <label class="flex cursor-pointer items-center gap-3 rounded-2xl border border-transparent px-3 py-2 transition-colors hover:border-primary/20 hover:bg-base-200/60">
+                <input
+                  type="radio"
+                  name={radioName}
+                  value={option.id}
+                  checked={option.id === defaultSort}
+                  class="radio radio-primary"
+                />
+                <span class="text-sm text-base-content/80">{option.label}</span>
+              </label>
+            ))
+          }
+        </div>
+      </section>
+
+      <div class="h-px w-full bg-gradient-to-r from-transparent via-primary/30 to-transparent"></div>
+
+      <section>
+        <h3 class="mb-4 text-lg font-semibold text-base-content">Catégories</h3>
+        <div class="space-y-2">
+          {
+            categories.map((category) => (
+              <label class="flex cursor-pointer items-center justify-between gap-3 rounded-xl px-2 py-1.5 transition-colors hover:bg-base-200/60">
+                <span class="flex items-center gap-3">
+                  <input
+                    type="checkbox"
+                    value={category.id}
+                    checked={category.checked}
+                    class="checkbox checkbox-primary"
+                  />
+                  <span class="text-sm text-base-content/80">{category.label}</span>
+                </span>
+                {
+                  typeof category.count === 'number' && (
+                    <span class="text-xs text-base-content/50">{category.count}</span>
+                  )
+                }
+              </label>
+            ))
+          }
+        </div>
+      </section>
+
+      <div class="h-px w-full bg-gradient-to-r from-transparent via-primary/30 to-transparent"></div>
+
+      <section>
+        <h3 class="mb-4 text-lg font-semibold text-base-content">Prix</h3>
+        <div class="space-y-3 px-2">
+          <input
+            type="range"
+            min={price.min}
+            max={price.max}
+            step={price.step ?? 1}
+            value={price.value ?? price.max}
+            class="range range-primary"
+            aria-label="Filtrer par prix"
+          />
+          <div class="flex items-center justify-between rounded-xl bg-base-200/70 px-3 py-2 text-sm font-medium text-base-content/70">
+            <span>
+              {price.min} {price.unit ?? '€'}
+            </span>
+            <span>
+              {price.max} {price.unit ?? '€'}
+            </span>
+          </div>
+        </div>
+      </section>
+    </div>
+  </aside>
+</div>
+
+<script define:vars={{ sidebarId: id }}>
+  const root = document.querySelector(`[data-shop-sidebar-root="${sidebarId}"]`)
+
+  if (root && !root.hasAttribute('data-shop-sidebar-initialized')) {
+    root.setAttribute('data-shop-sidebar-initialized', 'true')
+
+    const panel = root.querySelector('[data-shop-sidebar-panel]')
+    const overlay = root.querySelector('[data-shop-sidebar-overlay]')
+    const openButtons = document.querySelectorAll(`[data-shop-sidebar-open="${sidebarId}"]`)
+    const closeButtons = root.querySelectorAll('[data-shop-sidebar-close]')
+
+    if (panel && overlay) {
+      let isOpen = false
+
+      const isDesktop = () => window.matchMedia('(min-width: 1024px)').matches
+
+      const applyState = () => {
+        const shouldOpen = isOpen || isDesktop()
+        panel.classList.toggle('translate-x-0', shouldOpen)
+        panel.classList.toggle('-translate-x-full', !shouldOpen)
+        panel.setAttribute('aria-hidden', shouldOpen ? 'false' : 'true')
+
+        const showOverlay = isOpen && !isDesktop()
+        overlay.classList.toggle('opacity-100', showOverlay)
+        overlay.classList.toggle('opacity-0', !showOverlay)
+        overlay.classList.toggle('pointer-events-none', !showOverlay)
+
+        openButtons.forEach((button) => {
+          button.setAttribute('aria-expanded', showOverlay ? 'true' : 'false')
+        })
+      }
+
+      const open = () => {
+        isOpen = true
+        applyState()
+      }
+
+      const close = () => {
+        isOpen = false
+        applyState()
+      }
+
+      applyState()
+
+      openButtons.forEach((button) => button.addEventListener('click', open))
+      closeButtons.forEach((button) => button.addEventListener('click', close))
+      overlay.addEventListener('click', close)
+
+      window.addEventListener('resize', applyState)
+      document.addEventListener('keydown', (event) => {
+        if (event.key === 'Escape' && isOpen) close()
+      })
+
+      document.addEventListener('astro:page-load', applyState)
+    }
+  }
+</script>

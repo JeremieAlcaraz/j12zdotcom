@@ -48,6 +48,9 @@ result
 result-*
 .direnv/
 
+# Local design sandbox
+inspiration/
+
 # Secrets
 /run/secrets/
 secrets.yaml
