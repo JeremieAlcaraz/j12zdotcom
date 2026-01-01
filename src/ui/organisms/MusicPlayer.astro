@@ -63,7 +63,6 @@
       progressClass="w-full"
       tooltip={{
         label: '0:00',
-        open: true,
         class: 'top-2 before:text-xs',
         style: 'inset-inline-start:0%;',
       }}
@@ -129,12 +128,12 @@
       this.volumeBtn = root.querySelector('[data-action="volume"]')
       this.repeatBtn = root.querySelector('[data-action="repeat"]')
       this.shuffleBtn = root.querySelector('[data-action="shuffle"]')
-      this.progressBar = root.querySelector('.progress')
-      const progressEl = root.querySelector('.progress')
-      this.progressContainer = progressEl ? progressEl.parentElement : null
+      this.progressBar = root.querySelector('[data-progress-bar]')
+      this.progressContainer = root.querySelector('[data-progress-root]')
       this.currentTimeEl = root.querySelector('[data-time="current"]')
       this.durationEl = root.querySelector('[data-time="duration"]')
-      this.tooltip = root.querySelector('.tooltip')
+      this.tooltip = root.querySelector('[data-progress-tooltip]')
+      this.tooltipBubble = this.tooltip?.querySelector('.tooltip-bubble')
 
       this.isPlaying = false
       this.isMuted = false
@@ -162,8 +161,11 @@
         this.progressBar.value = 0
       }
       if (this.tooltip) {
-        this.tooltip.style.left = '0%'
-        this.tooltip.setAttribute('data-tip', this.formatTime(0))
+        this.tooltip.style.setProperty('inset-inline-start', '0%')
+      }
+      if (this.tooltipBubble) {
+        this.tooltipBubble.textContent = this.formatTime(0)
+        this.tooltipBubble.classList.remove('is-open')
       }
       if (this.currentTimeEl) {
         this.currentTimeEl.textContent = this.formatTime(0)
@@ -198,6 +200,8 @@
       // Barre de progression
       if (this.progressContainer) {
         this.progressContainer.addEventListener('click', e => this.seek(e))
+        this.progressContainer.addEventListener('mousemove', e => this.handleTimelineHover(e))
+        this.progressContainer.addEventListener('mouseleave', () => this.hideTooltip())
       }
 
       // Événements audio
@@ -267,11 +271,16 @@
     }
 
     seek(e) {
-      if (!this.progressContainer) return
+      if (!this.progressBar) return
       if (!this.audio || !isFinite(this.audio.duration) || this.audio.duration <= 0) return
-      const rect = this.progressContainer.getBoundingClientRect()
-      const percent = (e.clientX - rect.left) / rect.width
+      const rect = this.progressBar.getBoundingClientRect()
+      if (!rect || rect.width === 0) return
+      const clientX = typeof e.clientX === 'number' ? e.clientX : null
+      if (clientX === null) return
+      const rawPercent = (clientX - rect.left) / rect.width
+      const percent = Math.min(Math.max(rawPercent, 0), 1)
       this.audio.currentTime = percent * this.audio.duration
+      this.updateProgress()
     }
 
     updateProgress() {
@@ -282,16 +291,49 @@
         this.progressBar.value = percent
       }
 
-      // Mettre à jour le tooltip
-      if (this.tooltip) {
-        const tooltipPercent = percent
-        this.tooltip.style.left = `${tooltipPercent}%`
-        this.tooltip.setAttribute('data-tip', this.formatTime(this.audio.currentTime))
-      }
-
       // Mettre à jour le temps actuel
       if (this.currentTimeEl) {
         this.currentTimeEl.textContent = this.formatTime(this.audio.currentTime)
+      }
+    }
+
+    handleTimelineHover(e) {
+      if (!this.progressContainer) return
+      const containerRect = this.progressContainer.getBoundingClientRect()
+      const trackRect = this.progressBar
+        ? this.progressBar.getBoundingClientRect()
+        : containerRect
+      if (!trackRect || trackRect.width === 0) return
+      const clientX = typeof e.clientX === 'number' ? e.clientX : null
+      if (clientX === null) return
+
+      const clampedX = Math.min(Math.max(clientX, trackRect.left), trackRect.right)
+      const relativeX = clampedX - trackRect.left
+      const percent = Math.min(Math.max(relativeX / trackRect.width, 0), 1)
+      const duration = isFinite(this.audio.duration) ? this.audio.duration : this.defaultDurationSec
+      const hoverTime = duration * percent
+
+      if (this.tooltipBubble) {
+        this.tooltipBubble.textContent = this.formatTime(hoverTime)
+        this.tooltipBubble.classList.add('is-open')
+      }
+      if (this.tooltip) {
+        const leftPx = clampedX - containerRect.left
+        this.tooltip.style.setProperty('inset-inline-start', `${leftPx}px`)
+        if (this.tooltipBubble) {
+          const bubbleRect = this.tooltipBubble.getBoundingClientRect()
+          const bubbleCenterX = bubbleRect.left + bubbleRect.width / 2
+          const delta = clampedX - bubbleCenterX
+          if (Math.abs(delta) > 0.5) {
+            this.tooltip.style.setProperty('inset-inline-start', `${leftPx + delta}px`)
+          }
+        }
+      }
+    }
+
+    hideTooltip() {
+      if (this.tooltipBubble) {
+        this.tooltipBubble.classList.remove('is-open')
       }
     }
 
