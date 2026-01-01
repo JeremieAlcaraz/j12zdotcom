@@ -2,19 +2,18 @@ import type { ShopFiltersView } from '@/domain/shop/types'
 
 export const SHOP_FILTERS: ShopFiltersView = {
   sortOptions: [
-    { id: 'popular', label: 'Populaires' },
-    { id: 'price-asc', label: 'Prix croissant' },
+    { id: 'free', label: 'Gratuits' },
     { id: 'new', label: 'Nouveautés' },
+    { id: 'popular', label: 'Populaires' },
   ],
-  defaultSortId: 'popular',
+  defaultSortId: 'free',
   categories: [
-    { id: 'deco', label: 'Déco', checked: true },
-    { id: 'cuisine', label: 'Cuisine', checked: true },
-    { id: 'chambre', label: 'Chambre' },
-    { id: 'lumiere', label: 'Lumière' },
-    { id: 'papeterie', label: 'Papeterie' },
-    { id: 'bien-etre', label: 'Bien-être' },
-    { id: 'digital', label: 'Digital' },
+    { id: 'productivite-douce', label: 'Productivité douce', checked: true },
+    { id: 'organisation-douce', label: 'Organisation douce', checked: true },
+    { id: 'sante-notion', label: 'Santé & Notion' },
+    { id: 'automatisations', label: 'Automatisations' },
+    { id: 'apprendre', label: 'Apprendre' },
+    { id: 'ressources', label: 'Ressources' },
   ],
   price: {
     min: 10,
