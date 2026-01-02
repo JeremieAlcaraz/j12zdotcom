@@ -45,6 +45,12 @@ const ogImageURL = new URL(pageImage, Astro.site || siteConfig.site.baseUrl).hre
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
 
+    <!-- Atom Feeds -->
+    <link rel="alternate" type="application/atom+xml" title="Tout le contenu - Jérémie Alcaraz" href="/atom/everything" />
+    <link rel="alternate" type="application/atom+xml" title="Articles - Jérémie Alcaraz" href="/atom/article" />
+    <link rel="alternate" type="application/atom+xml" title="Now - Jérémie Alcaraz" href="/atom/now" />
+    <link rel="alternate" type="application/atom+xml" title="TIL - Jérémie Alcaraz" href="/atom/til" />
+
     <!-- Canonical URL - Essential for Google indexing -->
     <link rel="canonical" href={canonicalURL.href} />
 

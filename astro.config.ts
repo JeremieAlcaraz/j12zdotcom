@@ -19,6 +19,15 @@ export default defineConfig({
   // Configuration Astro - Site statique
   site: 'https://jeremiealcaraz.com',
 
+  // Redirections pour les URLs communes de flux RSS/Atom
+  redirects: {
+    '/rss': '/atom/everything',
+    '/rss.xml': '/atom/everything',
+    '/feed': '/atom/everything',
+    '/feed.xml': '/atom/everything',
+    '/atom.xml': '/atom/everything',
+  },
+
   integrations: [
     react(),
     svelte(),
