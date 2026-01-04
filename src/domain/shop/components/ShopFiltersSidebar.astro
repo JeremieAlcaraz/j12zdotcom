@@ -2,11 +2,8 @@
 import Icon from '@/ui/atoms/Icon.astro'
 import RadioInput from '@/ui/atoms/RadioInput.astro'
 import RadioLabel from '@/ui/atoms/RadioLabel.astro'
-import Checkbox from '@/ui/atoms/Checkbox.astro'
-import CheckboxLabel from '@/ui/atoms/CheckboxLabel.astro'
 import Divider from '@/ui/atoms/Divider.astro'
-import FilterSection from '@/ui/molecules/FilterSection.astro'
-import type { ShopFiltersView } from '@/domain/shop/types'
+import type { ShopFilterOption, ShopFiltersView } from '@/domain/shop/types'
 
 interface Props {
   filters: ShopFiltersView
@@ -21,9 +18,29 @@ const {
   title = 'Filtres',
   class: className,
 } = Astro.props as Props
-const { sortOptions, defaultSortId, categories } = filters
-const defaultSort = defaultSortId ?? sortOptions[0]?.id
-const radioName = `${id}-sort`
+const {
+  quickFilters,
+  defaultQuickFilterId,
+  offerTypes,
+  defaultOfferTypeId,
+  productTypes,
+  serviceTypes,
+  categories,
+  defaultCategoryId,
+} = filters
+
+const getDefaultId = (options: ShopFilterOption[], explicitId?: string) =>
+  explicitId ?? options.find((option) => option.checked)?.id ?? options[0]?.id
+
+const defaultQuickFilter = getDefaultId(quickFilters, defaultQuickFilterId)
+const defaultOfferType = getDefaultId(offerTypes, defaultOfferTypeId)
+const defaultCategory = getDefaultId(categories, defaultCategoryId)
+
+const quickFiltersName = `${id}-quick`
+const offerTypesName = `${id}-offers`
+const productTypesName = `${id}-products`
+const serviceTypesName = `${id}-services`
+const categoriesName = `${id}-categories`
 
 const sidebarClasses = [
   'fixed left-0 top-0 z-50 flex h-full w-80 max-w-[85vw] -translate-x-full flex-col gap-6 overflow-y-auto border-r border-base-200 bg-base-100/95 p-6 shadow-xl transition-transform duration-300 lg:sticky lg:top-24 lg:h-[calc(100vh-6rem)] lg:w-72 lg:max-w-none lg:translate-x-0 lg:rounded-3xl lg:border lg:bg-base-100/70 lg:shadow-none',
@@ -31,9 +48,13 @@ const sidebarClasses = [
 ]
   .filter(Boolean)
   .join(' ')
+
+const sectionLabelClasses = 'text-xs font-semibold text-base-content/60'
+const sectionStackClasses = 'mt-3 space-y-2'
+const optionTextClasses = 'text-sm text-base-content/80'
 ---
 
-<div data-shop-sidebar-root={id}>
+<div data-shop-sidebar-root={id} data-shop-type-default={defaultOfferType}>
   <div
     class="fixed inset-0 z-40 bg-black/20 opacity-0 pointer-events-none backdrop-blur-sm transition-opacity duration-300 lg:hidden"
     data-shop-sidebar-overlay
@@ -52,74 +73,131 @@ const sidebarClasses = [
       </button>
     </div>
 
-    <div class="space-y-8">
-      <FilterSection
-        title="Trier par"
-        icon="lucide:sliders-horizontal"
-        iconSize={18}
-        iconColor="text-primary"
-        spacing="compact"
-      >
-        {
-          sortOptions.map((option) => (
-            <RadioLabel variant="default">
-              <RadioInput
-                name={radioName}
-                value={option.id}
-                checked={option.id === defaultSort}
-                color="primary"
-              />
-              <span class="text-sm text-base-content/80">{option.label}</span>
-            </RadioLabel>
-          ))
-        }
-      </FilterSection>
-
-      <Divider variant="primary" style="gradient" />
-
-      <FilterSection title="Catégories" spacing="compact">
-        {
-          categories.map((category) => (
-            <CheckboxLabel variant="default">
-              <span class="flex items-center gap-3">
-                <Checkbox value={category.id} checked={category.checked} color="primary" />
-                <span class="text-sm text-base-content/80">{category.label}</span>
-              </span>
-              {typeof category.count === 'number' && (
-                <span class="text-xs text-base-content/50">{category.count}</span>
-              )}
-            </CheckboxLabel>
-          ))
-        }
-      </FilterSection>
-
-      <Divider variant="primary" style="gradient" />
-
-      <!-- Prix (désactivé pour l'instant) -->
-      <!--
+    <div class="space-y-4">
       <section>
-        <h3 class="mb-4 text-lg font-semibold text-base-content">Prix</h3>
-        <div class="space-y-3 px-2">
-          <input
-            type="range"
-            min={price.min}
-            max={price.max}
-            step={price.step ?? 1}
-            value={price.value ?? price.max}
-            class="range range-primary"
-            aria-label="Filtrer par prix"
-          />
-          <div class="flex items-center justify-between rounded-xl bg-base-200/70 px-3 py-2 text-sm font-medium text-base-content/70">
-            <span>
-              {price.min} {price.unit ?? '€'}
-            </span>
-            <span>
-              {price.max} {price.unit ?? '€'}
-            </span>
-          </div>
+        <p class={sectionLabelClasses}>Default</p>
+        <div class={sectionStackClasses}>
+          {
+            quickFilters.map((option) => (
+              <RadioLabel variant="default" class="px-2 py-1.5">
+                <RadioInput
+                  name={quickFiltersName}
+                  value={option.id}
+                  checked={option.id === defaultQuickFilter}
+                  color="primary"
+                  size="sm"
+                />
+                <span class={optionTextClasses}>{option.label}</span>
+              </RadioLabel>
+            ))
+          }
         </div>
       </section>
-      -->
+
+      <Divider variant="primary" style="gradient" />
+
+      <section data-shop-type-view="main">
+        <p class={sectionLabelClasses}>Type</p>
+        <div class={sectionStackClasses}>
+          {
+            offerTypes.map((option) => (
+              <RadioLabel variant="default" class="px-2 py-1.5">
+                <RadioInput
+                  name={offerTypesName}
+                  value={option.id}
+                  checked={option.id === defaultOfferType}
+                  color="primary"
+                  size="sm"
+                  data-shop-type-input
+                />
+                <span class={optionTextClasses}>{option.label}</span>
+              </RadioLabel>
+            ))
+          }
+        </div>
+      </section>
+
+      <section class="hidden" data-shop-type-view="products" aria-hidden="true">
+        <div class="flex items-center gap-2">
+          <button
+            type="button"
+            class="btn btn-ghost btn-xs h-7 min-h-7 w-7 p-0"
+            data-shop-type-back
+            aria-label="Retour aux types"
+          >
+            <Icon name="lucide:arrow-left" size={14} />
+          </button>
+          <p class={sectionLabelClasses}>Produits</p>
+        </div>
+        <div class={sectionStackClasses}>
+          {
+            productTypes.map((option) => (
+              <RadioLabel variant="default" class="px-2 py-1.5">
+                <RadioInput
+                  name={productTypesName}
+                  value={option.id}
+                  checked={option.checked}
+                  color="primary"
+                  size="sm"
+                />
+                <span class={optionTextClasses}>{option.label}</span>
+              </RadioLabel>
+            ))
+          }
+        </div>
+      </section>
+
+      <section class="hidden" data-shop-type-view="services" aria-hidden="true">
+        <div class="flex items-center gap-2">
+          <button
+            type="button"
+            class="btn btn-ghost btn-xs h-7 min-h-7 w-7 p-0"
+            data-shop-type-back
+            aria-label="Retour aux types"
+          >
+            <Icon name="lucide:arrow-left" size={14} />
+          </button>
+          <p class={sectionLabelClasses}>Services</p>
+        </div>
+        <div class={sectionStackClasses}>
+          {
+            serviceTypes.map((option) => (
+              <RadioLabel variant="default" class="px-2 py-1.5">
+                <RadioInput
+                  name={serviceTypesName}
+                  value={option.id}
+                  checked={option.checked}
+                  color="primary"
+                  size="sm"
+                />
+                <span class={optionTextClasses}>{option.label}</span>
+              </RadioLabel>
+            ))
+          }
+        </div>
+      </section>
+
+      <Divider variant="primary" style="gradient" />
+
+      <section>
+        <p class={sectionLabelClasses}>Categories</p>
+        <div class={sectionStackClasses}>
+          {
+            categories.map((category) => (
+              <RadioLabel variant="default" class="px-2 py-1.5">
+                <RadioInput
+                  name={categoriesName}
+                  value={category.id}
+                  checked={category.id === defaultCategory}
+                  color="primary"
+                  size="sm"
+                />
+                <span class={optionTextClasses}>{category.label}</span>
+              </RadioLabel>
+            ))
+          }
+        </div>
+      </section>
     </div>
   </aside>
 </div>
@@ -179,5 +257,42 @@ const sidebarClasses = [
 
       document.addEventListener('astro:page-load', applyState)
     }
+
+    const setupTypeViews = () => {
+      const typeInputs = root.querySelectorAll('[data-shop-type-input]')
+      const typeViews = root.querySelectorAll('[data-shop-type-view]')
+      const backButtons = root.querySelectorAll('[data-shop-type-back]')
+      const defaultType = root.getAttribute('data-shop-type-default') || 'all'
+
+      if (!typeInputs.length || !typeViews.length) return
+
+      const updateTypeViews = () => {
+        const selected = root.querySelector('[data-shop-type-input]:checked')?.value ?? defaultType
+        const currentView = selected === 'products' || selected === 'services' ? selected : 'main'
+
+        typeViews.forEach((section) => {
+          const view = section.getAttribute('data-shop-type-view')
+          const shouldShow = view === currentView
+          section.classList.toggle('hidden', !shouldShow)
+          section.setAttribute('aria-hidden', shouldShow ? 'false' : 'true')
+        })
+      }
+
+      const resetToDefault = () => {
+        const fallbackInput = root.querySelector(`[data-shop-type-input][value="${defaultType}"]`)
+        if (fallbackInput) {
+          fallbackInput.checked = true
+        }
+        updateTypeViews()
+      }
+
+      typeInputs.forEach((input) => input.addEventListener('change', updateTypeViews))
+      backButtons.forEach((button) => button.addEventListener('click', resetToDefault))
+      updateTypeViews()
+
+      document.addEventListener('astro:page-load', updateTypeViews)
+    }
+
+    setupTypeViews()
   }
 </script>

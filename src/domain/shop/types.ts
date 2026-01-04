@@ -1,9 +1,4 @@
-export type ShopSortOption = {
-  id: string
-  label: string
-}
-
-export type ShopCategoryOption = {
+export type ShopFilterOption = {
   id: string
   label: string
   count?: number
@@ -19,8 +14,13 @@ export type ShopPriceFilter = {
 }
 
 export type ShopFiltersView = {
-  sortOptions: ShopSortOption[]
-  defaultSortId?: string
-  categories: ShopCategoryOption[]
-  price: ShopPriceFilter
+  quickFilters: ShopFilterOption[]
+  defaultQuickFilterId?: string
+  offerTypes: ShopFilterOption[]
+  defaultOfferTypeId?: string
+  productTypes: ShopFilterOption[]
+  serviceTypes: ShopFilterOption[]
+  categories: ShopFilterOption[]
+  defaultCategoryId?: string
+  price?: ShopPriceFilter
 }

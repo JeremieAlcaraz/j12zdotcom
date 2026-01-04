@@ -1,25 +1,32 @@
 import type { ShopFiltersView } from '@/domain/shop/types'
 
 export const SHOP_FILTERS: ShopFiltersView = {
-  sortOptions: [
-    { id: 'free', label: 'Gratuits' },
+  quickFilters: [
+    { id: 'free', label: 'Gratuit', checked: true },
     { id: 'new', label: 'Nouveautés' },
-    { id: 'popular', label: 'Populaires' },
   ],
-  defaultSortId: 'free',
+  offerTypes: [
+    { id: 'all', label: 'All', checked: true },
+    { id: 'products', label: 'Produits' },
+    { id: 'services', label: 'Services' },
+  ],
+  productTypes: [
+    { id: 'templates-notion', label: 'Templates Notion' },
+    { id: 'musiques', label: 'Musiques' },
+    { id: 'prompts', label: 'Prompts' },
+    { id: 'divers', label: 'Divers' },
+  ],
+  serviceTypes: [
+    { id: 'formation', label: 'Formation' },
+    { id: 'coaching', label: 'Coaching' },
+    { id: 'ateliers', label: 'Ateliers' },
+  ],
   categories: [
-    { id: 'productivite-douce', label: 'Productivité douce', checked: true },
-    { id: 'organisation-douce', label: 'Organisation douce', checked: true },
-    { id: 'sante-notion', label: 'Santé & Notion' },
-    { id: 'automatisations', label: 'Automatisations' },
-    { id: 'apprendre', label: 'Apprendre' },
-    { id: 'ressources', label: 'Ressources' },
+    { id: 'all', label: 'All', checked: true },
+    { id: 'notion', label: 'Notion' },
+    { id: 'automatisation', label: 'Automatisation' },
+    { id: 'ai', label: 'AI' },
+    { id: 'sante', label: 'Santé' },
+    { id: 'prendre-soin', label: 'Prendre soin' },
   ],
-  price: {
-    min: 10,
-    max: 150,
-    value: 100,
-    step: 5,
-    unit: '€',
-  },
 }
