@@ -44,12 +44,19 @@ const gridClasses = [
 </section>
 
 <style>
-  [data-shop-item] {
-    transition: opacity 160ms ease;
+  [data-shop-item].shop-card-enter {
+    animation: shopCardEnter 180ms ease;
   }
-  [data-shop-item].shop-card-hidden {
-    opacity: 0;
-    pointer-events: none;
+
+  @keyframes shopCardEnter {
+    0% {
+      opacity: 0;
+      transform: translateY(6px);
+    }
+    100% {
+      opacity: 1;
+      transform: translateY(0);
+    }
   }
 </style>
 
@@ -81,24 +88,21 @@ const gridClasses = [
       const showCard = (card) => {
         card.dataset.shopVisible = 'true'
         card.classList.remove('hidden')
-        card.classList.remove('shop-card-hidden')
+        if (prefersReducedMotion) {
+          card.classList.remove('shop-card-enter')
+          return
+        }
+        card.classList.remove('shop-card-enter')
+        // Restart animation for quick successive changes.
+        void card.offsetWidth
+        card.classList.add('shop-card-enter')
       }
 
       const hideCard = (card) => {
         card.dataset.shopVisible = 'false'
         if (card.classList.contains('hidden')) return
-        if (prefersReducedMotion) {
-          card.classList.add('hidden')
-          card.classList.add('shop-card-hidden')
-          return
-        }
-        card.classList.add('shop-card-hidden')
-        const finalize = () => {
-          if (card.dataset.shopVisible === 'true') return
-          card.classList.add('hidden')
-        }
-        card.addEventListener('transitionend', finalize, { once: true })
-        setTimeout(finalize, 260)
+        card.classList.add('hidden')
+        card.classList.remove('shop-card-enter')
       }
 
       const matchesQuickFilter = (quick, price, isNew) => {
