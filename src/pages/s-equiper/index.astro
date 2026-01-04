@@ -1,10 +1,13 @@
 ---
 import BaseLayout from '@/layouts/Base.astro'
 import ShopFiltersSidebar from '@/domain/shop/components/ShopFiltersSidebar.astro'
+import ShopGrid from '@/domain/shop/components/ShopGrid.astro'
 import { SHOP_FILTERS } from '@/domain/shop/filters'
 import Icon from '@/ui/atoms/Icon.astro'
+import { getCollection } from 'astro:content'
 
 const sidebarId = 'shop-filters'
+const shopItems = (await getCollection('shop')).filter((item) => !item.data.draft)
 ---
 
 <BaseLayout title="S'équiper">
@@ -24,13 +27,11 @@ const sidebarId = 'shop-filters'
         </button>
       </div>
 
-      <div class="flex flex-col gap-8 lg:flex-row">
+      <div class="flex flex-col gap-8 lg:flex-row lg:items-start">
         <ShopFiltersSidebar id={sidebarId} filters={SHOP_FILTERS} />
 
         <div class="flex-1">
-          <div class="rounded-2xl border border-dashed border-base-300 bg-base-100/60 p-10 text-center text-base-content/70">
-            Catalogue en préparation. La suite arrive bientôt.
-          </div>
+          <ShopGrid items={shopItems} sidebarId={sidebarId} />
         </div>
       </div>
     </div>

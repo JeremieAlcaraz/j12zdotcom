@@ -60,7 +60,14 @@ const optionTextClasses = 'text-sm text-base-content/80'
     data-shop-sidebar-overlay
   ></div>
 
-  <aside class={sidebarClasses} data-shop-sidebar-panel id={id} aria-label={title} aria-hidden="false">
+  <aside
+    class={sidebarClasses}
+    data-shop-sidebar-panel
+    id={id}
+    aria-label={title}
+    aria-hidden="false"
+    style="scrollbar-gutter: stable;"
+  >
     <div class="flex items-center justify-between lg:hidden">
       <h2 class="text-lg font-semibold text-base-content">{title}</h2>
       <button
@@ -75,7 +82,7 @@ const optionTextClasses = 'text-sm text-base-content/80'
 
     <div class="space-y-4">
       <section>
-        <p class={sectionLabelClasses}>Default</p>
+        <p class={sectionLabelClasses}>Essentiels</p>
         <div class={sectionStackClasses}>
           {
             quickFilters.map((option) => (
@@ -261,12 +268,22 @@ const optionTextClasses = 'text-sm text-base-content/80'
     const setupTypeViews = () => {
       const typeInputs = root.querySelectorAll('[data-shop-type-input]')
       const typeViews = root.querySelectorAll('[data-shop-type-view]')
-      const backButtons = root.querySelectorAll('[data-shop-type-back]')
       const defaultType = root.getAttribute('data-shop-type-default') || 'all'
 
       if (!typeInputs.length || !typeViews.length) return
 
+      const ensureDefaultType = () => {
+        const selected = root.querySelector('[data-shop-type-input]:checked')
+        if (!selected) {
+          const fallbackInput = root.querySelector(`[data-shop-type-input][value="${defaultType}"]`)
+          if (fallbackInput) {
+            fallbackInput.checked = true
+          }
+        }
+      }
+
       const updateTypeViews = () => {
+        ensureDefaultType()
         const selected = root.querySelector('[data-shop-type-input]:checked')?.value ?? defaultType
         const currentView = selected === 'products' || selected === 'services' ? selected : 'main'
 
@@ -286,8 +303,24 @@ const optionTextClasses = 'text-sm text-base-content/80'
         updateTypeViews()
       }
 
-      typeInputs.forEach((input) => input.addEventListener('change', updateTypeViews))
-      backButtons.forEach((button) => button.addEventListener('click', resetToDefault))
+      typeInputs.forEach((input) => {
+        input.addEventListener('change', updateTypeViews)
+        input.addEventListener('input', updateTypeViews)
+      })
+
+      root.addEventListener('click', (event) => {
+        const backButton = event.target?.closest?.('[data-shop-type-back]')
+        if (backButton) {
+          resetToDefault()
+          return
+        }
+
+        const label = event.target?.closest?.('label')
+        if (label && label.querySelector('[data-shop-type-input]')) {
+          requestAnimationFrame(updateTypeViews)
+        }
+      })
+
       updateTypeViews()
 
       document.addEventListener('astro:page-load', updateTypeViews)

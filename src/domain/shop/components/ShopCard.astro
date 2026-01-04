@@ -1,0 +1,104 @@
+---
+import Card from '@/ui/organisms/Card.astro'
+import ShopImage from '@/domain/shop/components/ShopImage.astro'
+import type { CollectionEntry } from 'astro:content'
+
+interface Props {
+  item: CollectionEntry<'shop'>
+}
+
+const { item } = Astro.props as Props
+const {
+  title,
+  description,
+  summary,
+  cover,
+  price,
+  currency,
+  type,
+  productType,
+  serviceType,
+  categories = [],
+  isNew,
+} = item.data
+
+const href = `/s-equiper/${item.id}`
+const isFree = price === 0
+const priceLabel = isFree ? 'Gratuit' : `${price} ${currency ?? 'EUR'}`
+const typeLabel = type === 'product' ? 'Produit' : 'Service'
+const subtype = productType ?? serviceType ?? ''
+
+const categoryLabels: Record<string, string> = {
+  notion: 'Notion',
+  automatisation: 'Automatisation',
+  ai: 'AI',
+  sante: 'Sante',
+  'prendre-soin': 'Prendre soin',
+}
+
+const subtypeLabels: Record<string, string> = {
+  'templates-notion': 'Templates Notion',
+  musiques: 'Musiques',
+  prompts: 'Prompts',
+  divers: 'Divers',
+  formation: 'Formation',
+  coaching: 'Coaching',
+  ateliers: 'Ateliers',
+}
+
+const displayCategories = categories.map((category) => categoryLabels[category] ?? category)
+const subtypeLabel = subtype ? subtypeLabels[subtype] ?? subtype : ''
+const dataType = type === 'product' ? 'products' : 'services'
+const dataCategories = categories.join('|')
+---
+
+<article
+  class="shop-card"
+  data-shop-item
+  data-type={dataType}
+  data-subtype={subtype}
+  data-categories={dataCategories}
+  data-price={price}
+  data-is-new={isNew ? 'true' : 'false'}
+>
+  <Card class="flex h-full flex-col" base={100} shadow="sm" hover>
+    {
+      cover && (
+        <ShopImage
+          slot="image"
+          class="h-44 w-full object-cover"
+          src={cover}
+          alt={title}
+          width={640}
+          height={420}
+          format="webp"
+        />
+      )
+    }
+    <div class="flex flex-wrap items-center gap-2 text-xs">
+      <span class="badge badge-outline">{typeLabel}</span>
+      {subtypeLabel && <span class="badge badge-ghost">{subtypeLabel}</span>}
+      {isNew && <span class="badge badge-primary">Nouveau</span>}
+      {isFree && <span class="badge badge-secondary">Gratuit</span>}
+    </div>
+    <a slot="title" href={href} class="link link-hover line-clamp-2">
+      {title}
+    </a>
+    <p class="text-sm text-base-content/70 line-clamp-3">
+      {summary || description}
+    </p>
+    {
+      displayCategories.length > 0 && (
+        <div class="mt-3 flex flex-wrap gap-2 text-xs text-base-content/60">
+          {displayCategories.map((label) => (
+            <span class="badge badge-ghost">{label}</span>
+          ))}
+        </div>
+      )
+    }
+    <div class="mt-4 flex items-center justify-between">
+      <span class="text-sm font-semibold text-base-content">{priceLabel}</span>
+      <a href={href} class="btn btn-primary btn-sm">Voir</a>
+    </div>
+  </Card>
+</article>

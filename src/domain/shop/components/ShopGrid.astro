@@ -1,0 +1,168 @@
+---
+import type { CollectionEntry } from 'astro:content'
+import ShopCard from '@/domain/shop/components/ShopCard.astro'
+
+interface Props {
+  items: CollectionEntry<'shop'>[]
+  sidebarId: string
+  id?: string
+  class?: string
+}
+
+const {
+  items,
+  sidebarId,
+  id = `shop-grid-${Math.random().toString(36).slice(2, 8)}`,
+  class: className,
+} = Astro.props as Props
+
+const gridClasses = [
+  'space-y-6 rounded-2xl border border-base-200 bg-base-100/70 p-6',
+  className,
+]
+  .filter(Boolean)
+  .join(' ')
+---
+
+<section class={gridClasses} data-shop-grid-root={id} data-shop-grid-sidebar={sidebarId}>
+  <div class="flex flex-wrap items-center justify-between gap-3">
+    <h2 class="text-lg font-semibold text-base-content">Resultats</h2>
+    <p class="text-sm text-base-content/60">
+      <span data-shop-count>{items.length}</span> resultats
+    </p>
+  </div>
+
+  <div class="grid grid-cols-1 gap-4 md:grid-cols-2" data-shop-grid>
+    {items.map((item) => (
+      <ShopCard item={item} />
+    ))}
+  </div>
+
+  <p class="hidden text-sm text-base-content/60" data-shop-empty>
+    Aucun resultat pour ces filtres.
+  </p>
+</section>
+
+<style>
+  [data-shop-item] {
+    transition: opacity 160ms ease;
+  }
+  [data-shop-item].shop-card-hidden {
+    opacity: 0;
+    pointer-events: none;
+  }
+</style>
+
+<script define:vars={{ gridId: id, sidebarId }} is:inline>
+  const gridRoot = document.querySelector(`[data-shop-grid-root="${gridId}"]`)
+
+  if (gridRoot && !gridRoot.hasAttribute('data-shop-grid-initialized')) {
+    gridRoot.setAttribute('data-shop-grid-initialized', 'true')
+
+    const sidebarRoot = document.querySelector(`[data-shop-sidebar-root="${sidebarId}"]`)
+    const items = Array.from(gridRoot.querySelectorAll('[data-shop-item]'))
+    const countEl = gridRoot.querySelector('[data-shop-count]')
+    const emptyEl = gridRoot.querySelector('[data-shop-empty]')
+
+    if (!sidebarRoot || items.length === 0) {
+      if (emptyEl) emptyEl.classList.remove('hidden')
+    } else {
+      const quickName = `${sidebarId}-quick`
+      const offerName = `${sidebarId}-offers`
+      const productName = `${sidebarId}-products`
+      const serviceName = `${sidebarId}-services`
+      const categoryName = `${sidebarId}-categories`
+
+      const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches
+
+      const getSelectedValue = (name) =>
+        sidebarRoot.querySelector(`input[name="${name}"]:checked`)?.value
+
+      const showCard = (card) => {
+        card.dataset.shopVisible = 'true'
+        card.classList.remove('hidden')
+        card.classList.remove('shop-card-hidden')
+      }
+
+      const hideCard = (card) => {
+        card.dataset.shopVisible = 'false'
+        if (card.classList.contains('hidden')) return
+        if (prefersReducedMotion) {
+          card.classList.add('hidden')
+          card.classList.add('shop-card-hidden')
+          return
+        }
+        card.classList.add('shop-card-hidden')
+        const finalize = () => {
+          if (card.dataset.shopVisible === 'true') return
+          card.classList.add('hidden')
+        }
+        card.addEventListener('transitionend', finalize, { once: true })
+        setTimeout(finalize, 260)
+      }
+
+      const matchesQuickFilter = (quick, price, isNew) => {
+        if (!quick || quick === 'all') return true
+        if (quick === 'free') return price === 0
+        if (quick === 'new') return isNew
+        return true
+      }
+
+      const runFilters = () => {
+        const quick = getSelectedValue(quickName) || 'all'
+        const offer = getSelectedValue(offerName) || 'all'
+        const productSubtype = getSelectedValue(productName)
+        const serviceSubtype = getSelectedValue(serviceName)
+        const category = getSelectedValue(categoryName) || 'all'
+
+        let visibleCount = 0
+
+        items.forEach((card) => {
+          const type = card.dataset.type
+          const subtype = card.dataset.subtype
+          const categories = (card.dataset.categories || '').split('|').filter(Boolean)
+          const price = Number(card.dataset.price || 0)
+          const isNew = card.dataset.isNew === 'true'
+
+          let visible = matchesQuickFilter(quick, price, isNew)
+
+          if (visible && offer !== 'all') {
+            visible = type === offer
+          }
+
+          if (visible && offer === 'products' && productSubtype) {
+            visible = subtype === productSubtype
+          }
+
+          if (visible && offer === 'services' && serviceSubtype) {
+            visible = subtype === serviceSubtype
+          }
+
+          if (visible && category !== 'all') {
+            visible = categories.includes(category)
+          }
+
+          if (visible) {
+            if (card.classList.contains('hidden') || card.dataset.shopVisible !== 'true') {
+              showCard(card)
+            }
+            visibleCount += 1
+          } else if (!card.classList.contains('hidden') || card.dataset.shopVisible !== 'false') {
+            hideCard(card)
+          }
+        })
+
+        if (countEl) countEl.textContent = String(visibleCount)
+        if (emptyEl) emptyEl.classList.toggle('hidden', visibleCount !== 0)
+      }
+
+      const applyFilters = (animate = true) => {
+        runFilters()
+      }
+
+      sidebarRoot.addEventListener('change', () => applyFilters(true))
+      document.addEventListener('astro:page-load', () => applyFilters(false))
+      applyFilters(false)
+    }
+  }
+</script>
