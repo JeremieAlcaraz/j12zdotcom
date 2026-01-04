@@ -2,7 +2,8 @@ import type { ShopFiltersView } from '@/domain/shop/types'
 
 export const SHOP_FILTERS: ShopFiltersView = {
   quickFilters: [
-    { id: 'free', label: 'Gratuit', checked: true },
+    { id: 'all', label: 'All', checked: true },
+    { id: 'free', label: 'Gratuit' },
     { id: 'new', label: 'Nouveautés' },
   ],
   offerTypes: [
