@@ -210,122 +210,162 @@ const optionTextClasses = 'text-sm text-base-content/80'
 </div>
 
 <script define:vars={{ sidebarId: id }} is:inline>
-  const root = document.querySelector(`[data-shop-sidebar-root="${sidebarId}"]`)
+  ;(() => {
+    let cleanupFn = null
 
-  if (root && !root.hasAttribute('data-shop-sidebar-initialized')) {
-    root.setAttribute('data-shop-sidebar-initialized', 'true')
+    const initShopSidebar = () => {
+      if (cleanupFn) {
+        cleanupFn()
+        cleanupFn = null
+      }
 
-    const panel = root.querySelector('[data-shop-sidebar-panel]')
-    const overlay = root.querySelector('[data-shop-sidebar-overlay]')
-    const openButtons = document.querySelectorAll(`[data-shop-sidebar-open="${sidebarId}"]`)
-    const closeButtons = root.querySelectorAll('[data-shop-sidebar-close]')
+      const root = document.querySelector(`[data-shop-sidebar-root="${sidebarId}"]`)
+      if (!root) return
 
-    if (panel && overlay) {
-      let isOpen = false
+      const panel = root.querySelector('[data-shop-sidebar-panel]')
+      const overlay = root.querySelector('[data-shop-sidebar-overlay]')
+      const openButtons = document.querySelectorAll(`[data-shop-sidebar-open="${sidebarId}"]`)
+      const closeButtons = root.querySelectorAll('[data-shop-sidebar-close]')
 
-      const isDesktop = () => window.matchMedia('(min-width: 1024px)').matches
+      const listeners = []
 
-      const applyState = () => {
-        const shouldOpen = isOpen || isDesktop()
-        panel.classList.toggle('translate-x-0', shouldOpen)
-        panel.classList.toggle('-translate-x-full', !shouldOpen)
-        panel.setAttribute('aria-hidden', shouldOpen ? 'false' : 'true')
+      if (panel && overlay) {
+        let isOpen = false
 
-        const showOverlay = isOpen && !isDesktop()
-        overlay.classList.toggle('opacity-100', showOverlay)
-        overlay.classList.toggle('opacity-0', !showOverlay)
-        overlay.classList.toggle('pointer-events-none', !showOverlay)
+        const isDesktop = () => window.matchMedia('(min-width: 1024px)').matches
+
+        const applyState = () => {
+          const shouldOpen = isOpen || isDesktop()
+          panel.classList.toggle('translate-x-0', shouldOpen)
+          panel.classList.toggle('-translate-x-full', !shouldOpen)
+          panel.setAttribute('aria-hidden', shouldOpen ? 'false' : 'true')
+
+          const showOverlay = isOpen && !isDesktop()
+          overlay.classList.toggle('opacity-100', showOverlay)
+          overlay.classList.toggle('opacity-0', !showOverlay)
+          overlay.classList.toggle('pointer-events-none', !showOverlay)
+
+          openButtons.forEach((button) => {
+            button.setAttribute('aria-expanded', showOverlay ? 'true' : 'false')
+          })
+        }
+
+        const open = () => {
+          isOpen = true
+          applyState()
+        }
+
+        const close = () => {
+          isOpen = false
+          applyState()
+        }
+
+        applyState()
 
         openButtons.forEach((button) => {
-          button.setAttribute('aria-expanded', showOverlay ? 'true' : 'false')
+          button.addEventListener('click', open)
+          listeners.push(() => button.removeEventListener('click', open))
         })
+
+        closeButtons.forEach((button) => {
+          button.addEventListener('click', close)
+          listeners.push(() => button.removeEventListener('click', close))
+        })
+
+        overlay.addEventListener('click', close)
+        listeners.push(() => overlay.removeEventListener('click', close))
+
+        const handleResize = () => applyState()
+        const handleKeydown = (event) => {
+          if (event.key === 'Escape' && isOpen) close()
+        }
+
+        window.addEventListener('resize', handleResize)
+        document.addEventListener('keydown', handleKeydown)
+
+        listeners.push(() => window.removeEventListener('resize', handleResize))
+        listeners.push(() => document.removeEventListener('keydown', handleKeydown))
       }
 
-      const open = () => {
-        isOpen = true
-        applyState()
-      }
+      const setupTypeViews = () => {
+        const typeInputs = root.querySelectorAll('[data-shop-type-input]')
+        const typeViews = root.querySelectorAll('[data-shop-type-view]')
+        const defaultType = root.getAttribute('data-shop-type-default') || 'all'
 
-      const close = () => {
-        isOpen = false
-        applyState()
-      }
+        if (!typeInputs.length || !typeViews.length) return
 
-      applyState()
+        const ensureDefaultType = () => {
+          const selected = root.querySelector('[data-shop-type-input]:checked')
+          if (!selected) {
+            const fallbackInput = root.querySelector(`[data-shop-type-input][value="${defaultType}"]`)
+            if (fallbackInput) {
+              fallbackInput.checked = true
+            }
+          }
+        }
 
-      openButtons.forEach((button) => button.addEventListener('click', open))
-      closeButtons.forEach((button) => button.addEventListener('click', close))
-      overlay.addEventListener('click', close)
+        const updateTypeViews = () => {
+          ensureDefaultType()
+          const selected = root.querySelector('[data-shop-type-input]:checked')?.value ?? defaultType
+          const currentView = selected === 'products' || selected === 'services' ? selected : 'main'
 
-      window.addEventListener('resize', applyState)
-      document.addEventListener('keydown', (event) => {
-        if (event.key === 'Escape' && isOpen) close()
-      })
+          typeViews.forEach((section) => {
+            const view = section.getAttribute('data-shop-type-view')
+            const shouldShow = view === currentView
+            section.classList.toggle('hidden', !shouldShow)
+            section.setAttribute('aria-hidden', shouldShow ? 'false' : 'true')
+          })
+        }
 
-      document.addEventListener('astro:page-load', applyState)
-    }
-
-    const setupTypeViews = () => {
-      const typeInputs = root.querySelectorAll('[data-shop-type-input]')
-      const typeViews = root.querySelectorAll('[data-shop-type-view]')
-      const defaultType = root.getAttribute('data-shop-type-default') || 'all'
-
-      if (!typeInputs.length || !typeViews.length) return
-
-      const ensureDefaultType = () => {
-        const selected = root.querySelector('[data-shop-type-input]:checked')
-        if (!selected) {
+        const resetToDefault = () => {
           const fallbackInput = root.querySelector(`[data-shop-type-input][value="${defaultType}"]`)
           if (fallbackInput) {
             fallbackInput.checked = true
+            fallbackInput.dispatchEvent(new Event('change', { bubbles: true }))
+          }
+          updateTypeViews()
+        }
+
+        const handleInputChange = (event) => {
+          updateTypeViews()
+        }
+
+        typeInputs.forEach((input) => {
+          input.addEventListener('change', handleInputChange)
+          input.addEventListener('input', handleInputChange)
+          listeners.push(() => {
+            input.removeEventListener('change', handleInputChange)
+            input.removeEventListener('input', handleInputChange)
+          })
+        })
+
+        const handleRootClick = (event) => {
+          const backButton = event.target?.closest?.('[data-shop-type-back]')
+          if (backButton) {
+            resetToDefault()
+            return
+          }
+
+          const label = event.target?.closest?.('label')
+          if (label && label.querySelector('[data-shop-type-input]')) {
+            requestAnimationFrame(updateTypeViews)
           }
         }
-      }
 
-      const updateTypeViews = () => {
-        ensureDefaultType()
-        const selected = root.querySelector('[data-shop-type-input]:checked')?.value ?? defaultType
-        const currentView = selected === 'products' || selected === 'services' ? selected : 'main'
+        root.addEventListener('click', handleRootClick)
+        listeners.push(() => root.removeEventListener('click', handleRootClick))
 
-        typeViews.forEach((section) => {
-          const view = section.getAttribute('data-shop-type-view')
-          const shouldShow = view === currentView
-          section.classList.toggle('hidden', !shouldShow)
-          section.setAttribute('aria-hidden', shouldShow ? 'false' : 'true')
-        })
-      }
-
-      const resetToDefault = () => {
-        const fallbackInput = root.querySelector(`[data-shop-type-input][value="${defaultType}"]`)
-        if (fallbackInput) {
-          fallbackInput.checked = true
-        }
         updateTypeViews()
       }
 
-      typeInputs.forEach((input) => {
-        input.addEventListener('change', updateTypeViews)
-        input.addEventListener('input', updateTypeViews)
-      })
+      setupTypeViews()
 
-      root.addEventListener('click', (event) => {
-        const backButton = event.target?.closest?.('[data-shop-type-back]')
-        if (backButton) {
-          resetToDefault()
-          return
-        }
-
-        const label = event.target?.closest?.('label')
-        if (label && label.querySelector('[data-shop-type-input]')) {
-          requestAnimationFrame(updateTypeViews)
-        }
-      })
-
-      updateTypeViews()
-
-      document.addEventListener('astro:page-load', updateTypeViews)
+      cleanupFn = () => {
+        listeners.forEach((cleanup) => cleanup())
+      }
     }
 
-    setupTypeViews()
-  }
+    initShopSidebar()
+    document.addEventListener('astro:page-load', initShopSidebar)
+  })()
 </script>

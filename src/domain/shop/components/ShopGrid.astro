@@ -61,19 +61,30 @@ const gridClasses = [
 </style>
 
 <script define:vars={{ gridId: id, sidebarId }} is:inline>
-  const gridRoot = document.querySelector(`[data-shop-grid-root="${gridId}"]`)
+  ;(() => {
+    let cleanupFn = null
 
-  if (gridRoot && !gridRoot.hasAttribute('data-shop-grid-initialized')) {
-    gridRoot.setAttribute('data-shop-grid-initialized', 'true')
+    const initShopGrid = () => {
+      if (cleanupFn) {
+        cleanupFn()
+        cleanupFn = null
+      }
 
-    const sidebarRoot = document.querySelector(`[data-shop-sidebar-root="${sidebarId}"]`)
-    const items = Array.from(gridRoot.querySelectorAll('[data-shop-item]'))
-    const countEl = gridRoot.querySelector('[data-shop-count]')
-    const emptyEl = gridRoot.querySelector('[data-shop-empty]')
+      const gridRoot = document.querySelector(`[data-shop-grid-root="${gridId}"]`)
+      if (!gridRoot) return
 
-    if (!sidebarRoot || items.length === 0) {
-      if (emptyEl) emptyEl.classList.remove('hidden')
-    } else {
+      const sidebarRoot = document.querySelector(`[data-shop-sidebar-root="${sidebarId}"]`)
+      const items = Array.from(gridRoot.querySelectorAll('[data-shop-item]'))
+      const countEl = gridRoot.querySelector('[data-shop-count]')
+      const emptyEl = gridRoot.querySelector('[data-shop-empty]')
+
+      if (!sidebarRoot || items.length === 0) {
+        if (emptyEl) emptyEl.classList.remove('hidden')
+        return
+      }
+
+      const listeners = []
+
       const quickName = `${sidebarId}-quick`
       const offerName = `${sidebarId}-offers`
       const productName = `${sidebarId}-products`
@@ -164,9 +175,19 @@ const gridClasses = [
         runFilters()
       }
 
-      sidebarRoot.addEventListener('change', () => applyFilters(true))
-      document.addEventListener('astro:page-load', () => applyFilters(false))
+      const handleChange = () => applyFilters(true)
+
+      sidebarRoot.addEventListener('change', handleChange)
+      listeners.push(() => sidebarRoot.removeEventListener('change', handleChange))
+
       applyFilters(false)
+
+      cleanupFn = () => {
+        listeners.forEach((cleanup) => cleanup())
+      }
     }
-  }
+
+    initShopGrid()
+    document.addEventListener('astro:page-load', initShopGrid)
+  })()
 </script>
