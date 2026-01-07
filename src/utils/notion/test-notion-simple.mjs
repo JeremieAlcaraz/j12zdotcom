@@ -22,12 +22,6 @@ for (const method of Object.keys(notion.databases)) {
   console.log(`  - databases.${method}()`)
 }
 
-// Explorer dataSources
-console.log('\ndataSources:')
-for (const method of Object.keys(notion.dataSources)) {
-  console.log(`  - dataSources.${method}()`)
-}
-
 // Explorer pages
 console.log('\npages:')
 for (const method of Object.keys(notion.pages)) {
@@ -46,6 +40,6 @@ if (typeof notion.search === 'function') {
 }
 
 console.log('\n💡 Pour query une database, essayer:')
-console.log('   - notion.dataSources.query({ data_source_id: "..." })')
+console.log('   - notion.databases.query({ database_id: "..." })')
 console.log('   ou')
 console.log('   - notion.search({ ... })')

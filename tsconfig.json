@@ -44,6 +44,7 @@
   ],
   "exclude": [
     "eslint.config.ts",
+    "inspiration",
     "node_modules",
     "dist"
   ]

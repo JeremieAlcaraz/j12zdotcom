@@ -14,6 +14,7 @@ import { FileSystemIconLoader } from 'unplugin-icons/loaders'
 import astroIcon from 'astro-icon'
 import remarkDirective from 'remark-directive'
 import remarkHighlight from './src/utils/remarkHighlight.js'
+import node from '@astrojs/node'
 
 export default defineConfig({
   // Configuration Astro - Site statique
@@ -84,8 +85,10 @@ export default defineConfig({
     ],
   },
 
-  // Sortie statique uniquement (SSG)
+  // Sortie statique (SSR ponctuel via prerender = false)
   output: 'static',
+  adapter: node({ mode: 'standalone' }),
+  server: { host: '127.0.0.1', port: 4321 },
 
   // Service d'images : Sharp (optimisation au build)
   image: {

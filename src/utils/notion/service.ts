@@ -7,12 +7,17 @@ import { createNotionClient, handleNotionRequest } from './client'
 import { mapNotionPageToNowData, findCurrentPage } from './mappers'
 import { NotionError } from './types'
 import type { NotionConfig, NotionNowData, NotionNowPage } from './types'
+import type { QueryDatabaseResponse } from '@notionhq/client/build/src/api-endpoints'
+
+function isNotionNowPage(result: unknown): result is NotionNowPage {
+  return !!result && typeof result === 'object' && 'properties' in result
+}
 
 /**
  * Service principal pour interagir avec Notion
  */
 export class NotionNowService {
-  private client
+  private client: ReturnType<typeof createNotionClient>
   private databaseId: string
 
   constructor(config: NotionConfig) {
@@ -26,11 +31,11 @@ export class NotionNowService {
    */
   async getCurrentNow(): Promise<NotionNowData | undefined> {
     try {
-      // Requête à la database Notion (v5 utilise dataSources.query)
-      const response = await handleNotionRequest(
+      // Requête à la database Notion
+      const response = await handleNotionRequest<QueryDatabaseResponse>(
         () =>
-          this.client.dataSources.query({
-            data_source_id: this.databaseId,
+          this.client.databases.query({
+            database_id: this.databaseId,
             // Trier par date de création (le plus récent en premier)
             sorts: [
               {
@@ -51,9 +56,7 @@ export class NotionNowService {
       }
 
       // Filtrer les pages (type guard)
-      const pages = response.results.filter(
-        (result): result is NotionNowPage => 'properties' in result
-      )
+      const pages = response.results.filter(isNotionNowPage)
 
       if (pages.length === 0) {
         console.warn('⚠️ Aucune page valide trouvée dans la database')

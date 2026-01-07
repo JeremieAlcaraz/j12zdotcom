@@ -301,6 +301,19 @@ const nowCollection = defineCollection({
   }),
 })
 
+// TIL collection schema
+const tilCollection = defineCollection({
+  loader: glob({ pattern: '**/*.{md,mdx}', base: 'src/content/til' }),
+  schema: z.object({
+    title: z.string(),
+    date: z.date(),
+    description: z.string().optional(),
+    author: z.string().optional(),
+    tags: z.array(z.string()).optional(),
+    draft: z.boolean().optional(),
+  }),
+})
+
 // Export all collections
 export const collections = {
   //pages
@@ -308,6 +321,7 @@ export const collections = {
   blog: blogCollection,
   about: aboutCollection,
   now: nowCollection,
+  til: tilCollection,
 
   //sections
   testimonialSection: testimonialSectionCollection,

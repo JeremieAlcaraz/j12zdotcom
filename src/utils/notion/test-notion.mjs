@@ -46,8 +46,8 @@ for (const key of Object.keys(notion)) {
 try {
   console.log('📡 Connexion à la database Notion...')
 
-  const response = await notion.dataSources.query({
-    data_source_id: NOTION_NOW_DATABASE_ID,
+  const response = await notion.databases.query({
+    database_id: NOTION_NOW_DATABASE_ID,
     sorts: [
       {
         property: 'created_time',
