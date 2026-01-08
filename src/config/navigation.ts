@@ -21,12 +21,12 @@ export const defaultLinks: NavLink[] = [
   {
     href: '/',
     label: 'Accueil',
-    tooltip: "Votre point de départ vers une productivité plus douce ✨",
+    tooltip: "Ton point de départ vers une productivité plus douce ✨",
   },
   {
     href: '/blog',
     label: 'Blog',
-    tooltip: "Découvrez des réflexions et astuces pour avancer en douceur 📝",
+    tooltip: "Découvre des réflexions et astuces pour avancer en douceur 📝",
   },
   {
     href: '/now',
@@ -45,7 +45,7 @@ export const defaultLinks: NavLink[] = [
       {
         href: '/events/community',
         label: 'Événements Communautaires',
-        tooltip: "Rejoignez notre communauté bienveillante 🤝",
+        tooltip: "Rejoins notre communauté bienveillante 🤝",
       },
     ],
   },
@@ -57,11 +57,11 @@ export const defaultLinks: NavLink[] = [
   {
     href: '/about',
     label: 'À propos',
-    tooltip: "Apprenez à me connaître et découvrez mon parcours 💜",
+    tooltip: "Apprends à me connaître et découvre mon parcours 💜",
   },
   {
     href: '/contact',
     label: 'Contact',
-    tooltip: "Envie d'échanger ? Je serais ravi de vous lire 💌",
+    tooltip: "Envie d'échanger ? Je serais ravi de te lire 💌",
   },
 ] satisfies NavLink[]
