@@ -53,7 +53,7 @@ export const defaultLinks: NavLink[] = [
     label: 'À propos',
     children: [
       {
-        href: '/qui-suis-je',
+        href: '/about',
         label: 'Qui suis-je ?',
         tooltip: "Apprends à me connaître et découvre mon parcours 💜",
       },
