@@ -16,10 +16,7 @@ const {
   class: className,
 } = Astro.props as Props
 
-const gridClasses = [
-  'space-y-6 rounded-2xl border border-base-200 bg-base-100/70 p-6',
-  className,
-]
+const gridClasses = ['space-y-6 rounded-2xl bg-base-100/70 p-6', className]
   .filter(Boolean)
   .join(' ')
 ---
