@@ -1,6 +1,7 @@
 ---
 import Card from '@/ui/organisms/Card.astro'
 import ShopImage from '@/domain/shop/components/ShopImage.astro'
+import PriceTag from '@/domain/shop/components/PriceTag.astro'
 import type { CollectionEntry } from 'astro:content'
 
 interface Props {
@@ -85,34 +86,9 @@ const dataCategories = categories.join('|')
       {summary || description}
     </p>
     <div class="mt-4 flex items-center justify-between">
-      <span class="price-tag text-sm font-semibold text-base-content">{priceLabel}</span>
+      <PriceTag price={price} currency={currency} isFree={isFree} />
       <a href={href} class="btn btn-primary btn-sm">Voir</a>
     </div>
   </Card>
 </article>
 
-<style>
-  .price-tag {
-    position: relative;
-    display: inline-flex;
-    align-items: center;
-    padding: 0.25rem 0.8rem 0.25rem 0.6rem;
-    background: color-mix(in oklch, var(--color-primary) 22%, transparent);
-    border: 1px solid color-mix(in oklch, var(--color-primary) 55%, transparent);
-    border-radius: 0.5rem;
-  }
-
-  .price-tag::after {
-    content: '';
-    position: absolute;
-    right: -0.45rem;
-    top: 50%;
-    width: 0.9rem;
-    height: 0.9rem;
-    transform: translateY(-50%) rotate(45deg);
-    background: color-mix(in oklch, var(--color-primary) 22%, transparent);
-    border-top: 1px solid color-mix(in oklch, var(--color-primary) 55%, transparent);
-    border-right: 1px solid color-mix(in oklch, var(--color-primary) 55%, transparent);
-    border-radius: 0.2rem;
-  }
-</style>
