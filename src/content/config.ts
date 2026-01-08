@@ -24,6 +24,29 @@ const blogCollection = defineCollection({
     draft: z.boolean().optional(),
   }),
 })
+
+const shopCollection = defineCollection({
+  loader: glob({ pattern: '**/*.{md,mdx}', base: 'src/content/shop' }),
+  schema: z.object({
+    title: z.string(),
+    description: z.string(),
+    summary: z.string().optional(),
+    type: z.enum(['product', 'service']),
+    productType: z.enum(['templates-notion', 'musiques', 'prompts', 'divers']).optional(),
+    serviceType: z.enum(['formation', 'coaching', 'ateliers']).optional(),
+    categories: z
+      .array(z.enum(['notion', 'automatisation', 'ai', 'sante', 'prendre-soin']))
+      .default([]),
+    price: z.number().nonnegative().default(0),
+    currency: z.string().default('€'),
+    isNew: z.boolean().default(false),
+    cover: z.string(),
+    gallery: z.array(z.string()).default([]),
+    ctaLabel: z.string().optional(),
+    ctaUrl: z.string().optional(),
+    draft: z.boolean().optional(),
+  }),
+})
 const testimonialSectionCollection = defineCollection({
   loader: glob({
     pattern: 'testimonial.{md,mdx}',
@@ -319,6 +342,7 @@ export const collections = {
   //pages
   homepage: homepageCollection,
   blog: blogCollection,
+  shop: shopCollection,
   about: aboutCollection,
   now: nowCollection,
   til: tilCollection,
