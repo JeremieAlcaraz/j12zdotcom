@@ -64,15 +64,16 @@ const dataCategories = categories.join('|')
   <Card class="flex h-full flex-col" base={100} shadow="sm" hover>
     {
       cover && (
-        <ShopImage
-          slot="image"
-          class="h-44 w-full object-cover"
-          src={cover}
-          alt={title}
-          width={640}
-          height={420}
-          format="webp"
-        />
+        <div slot="image" class="aspect-square w-full overflow-hidden">
+          <ShopImage
+            class="h-full w-full object-cover"
+            src={cover}
+            alt={title}
+            width={640}
+            height={640}
+            format="webp"
+          />
+        </div>
       )
     }
     <div class="flex flex-wrap items-center gap-2 text-xs">
@@ -80,6 +81,12 @@ const dataCategories = categories.join('|')
       {subtypeLabel && <span class="badge badge-ghost">{subtypeLabel}</span>}
       {isNew && <span class="badge badge-primary">Nouveau</span>}
       {isFree && <span class="badge badge-secondary">Gratuit</span>}
+      {
+        displayCategories.length > 0 &&
+          displayCategories.map((label) => (
+            <span class="badge badge-ghost text-base-content/60">{label}</span>
+          ))
+      }
     </div>
     <a slot="title" href={href} class="link link-hover line-clamp-2">
       {title}
@@ -87,18 +94,35 @@ const dataCategories = categories.join('|')
     <p class="text-sm text-base-content/70 line-clamp-3">
       {summary || description}
     </p>
-    {
-      displayCategories.length > 0 && (
-        <div class="mt-3 flex flex-wrap gap-2 text-xs text-base-content/60">
-          {displayCategories.map((label) => (
-            <span class="badge badge-ghost">{label}</span>
-          ))}
-        </div>
-      )
-    }
     <div class="mt-4 flex items-center justify-between">
-      <span class="text-sm font-semibold text-base-content">{priceLabel}</span>
+      <span class="price-tag text-sm font-semibold text-base-content">{priceLabel}</span>
       <a href={href} class="btn btn-primary btn-sm">Voir</a>
     </div>
   </Card>
 </article>
+
+<style>
+  .price-tag {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    padding: 0.25rem 0.8rem 0.25rem 0.6rem;
+    background: color-mix(in oklch, var(--color-primary) 22%, transparent);
+    border: 1px solid color-mix(in oklch, var(--color-primary) 55%, transparent);
+    border-radius: 0.5rem;
+  }
+
+  .price-tag::after {
+    content: '';
+    position: absolute;
+    right: -0.45rem;
+    top: 50%;
+    width: 0.9rem;
+    height: 0.9rem;
+    transform: translateY(-50%) rotate(45deg);
+    background: color-mix(in oklch, var(--color-primary) 22%, transparent);
+    border-top: 1px solid color-mix(in oklch, var(--color-primary) 55%, transparent);
+    border-right: 1px solid color-mix(in oklch, var(--color-primary) 55%, transparent);
+    border-radius: 0.2rem;
+  }
+</style>
