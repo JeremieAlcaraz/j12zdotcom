@@ -65,14 +65,16 @@ const dataCategories = categories.join('|')
     {
       cover && (
         <div slot="image" class="aspect-square w-full overflow-hidden">
-          <ShopImage
-            class="h-full w-full object-cover"
-            src={cover}
-            alt={title}
-            width={640}
-            height={640}
-            format="webp"
-          />
+          <a href={href} class="block" aria-label={`Voir ${title}`}>
+            <ShopImage
+              class="h-full w-full object-cover"
+              src={cover}
+              alt={title}
+              width={640}
+              height={640}
+              format="webp"
+            />
+          </a>
         </div>
       )
     }
