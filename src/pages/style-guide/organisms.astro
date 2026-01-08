@@ -10,7 +10,7 @@ import CardBlogGallery from '@/domain/dev/CardBlogGallery.astro'
 import CardPricingGallery from '@/domain/dev/CardPricingGallery.astro'
 // eslint-disable-next-line import/no-restricted-paths
 import MusicPlayerGallery from '@/domain/dev/MusicPlayerGallery.astro'
-import ShopFiltersSidebarGallery from '@/domain/dev/ShopFiltersSidebarGallery.astro'
+import EquipmentFiltersSidebarGallery from '@/domain/dev/EquipmentFiltersSidebarGallery.astro'
 import PodcastPlayer from '@/ui/organisms/PodcastPlayer.astro'
 import { getSinglePage } from '@/utils/contentParser'
 import { sortByDate } from '@/utils/sortFunctions'
@@ -47,11 +47,11 @@ const currentPosts = sortedPosts.slice(0, 3)
   </Section>
 
   <Section>
-    <div id="shopfilterssidebar" class="scroll-mt-[5rem]">
-      <Divider variant="default" label="ShopFiltersSidebar" />
+    <div id="equipmentfilterssidebar" class="scroll-mt-[5rem]">
+      <Divider variant="default" label="EquipmentFiltersSidebar" />
     </div>
-    <h2 class="sr-only">ShopFiltersSidebar</h2>
-    <ShopFiltersSidebarGallery />
+    <h2 class="sr-only">EquipmentFiltersSidebar</h2>
+    <EquipmentFiltersSidebarGallery />
   </Section>
 
   <!-- MusicPlayer -->

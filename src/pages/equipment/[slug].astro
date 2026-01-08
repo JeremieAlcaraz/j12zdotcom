@@ -1,0 +1,25 @@
+---
+import BaseLayout from '@/layouts/Base.astro'
+import EquipmentSingle from '@/domain/equipment/layouts/EquipmentSingle.astro'
+import { getCollection } from 'astro:content'
+
+export async function getStaticPaths() {
+  const items = await getCollection('shop')
+
+  const paths = items
+    .filter((item) => !item.data.draft)
+    .map((item) => ({
+      params: { slug: item.id },
+      props: { item },
+    }))
+
+  return paths
+}
+
+const { item } = Astro.props
+const { title, description, cover } = item.data
+---
+
+<BaseLayout title={title} description={description} image={cover} contentType="article">
+  <EquipmentSingle item={item} />
+</BaseLayout>

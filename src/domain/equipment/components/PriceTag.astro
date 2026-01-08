@@ -1,0 +1,41 @@
+---
+interface Props {
+  price: number
+  currency?: string
+  isFree?: boolean
+}
+
+const { price, currency = 'EUR', isFree = false } = Astro.props
+const priceLabel = isFree ? 'Gratuit' : `${price}${currency}`
+---
+
+<div class="price-tag">
+  <span class="price-tag-content">{priceLabel}</span>
+</div>
+
+<style>
+  .price-tag {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    background: color-mix(in oklch, var(--color-primary) 22%, transparent);
+    color: var(--color-primary);
+    font-weight: 700;
+    padding: 0.25rem 0.65rem;
+    box-shadow: 0 2px 4px -1px rgb(0 0 0 / 0.08);
+    clip-path: polygon(
+      3px 0%,
+      calc(100% - 7px) 0%,
+      100% 50%,
+      calc(100% - 7px) 100%,
+      3px 100%,
+      0% calc(100% - 3px),
+      0% 3px
+    );
+  }
+
+  .price-tag-content {
+    font-size: 0.875rem;
+    line-height: 1.25;
+  }
+</style>

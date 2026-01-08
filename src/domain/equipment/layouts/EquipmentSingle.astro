@@ -1,0 +1,138 @@
+---
+import { render } from 'astro:content'
+import EquipmentImage from '@/domain/equipment/components/EquipmentImage.astro'
+import Icon from '@/ui/atoms/Icon.astro'
+import Divider from '@/ui/atoms/Divider.astro'
+import type { CollectionEntry } from 'astro:content'
+
+interface Props {
+  item: CollectionEntry<'shop'>
+}
+
+const { item } = Astro.props as Props
+const { Content } = await render(item)
+const {
+  title,
+  description,
+  summary,
+  cover,
+  gallery = [],
+  price,
+  currency,
+  type,
+  productType,
+  serviceType,
+  categories = [],
+  isNew,
+  ctaLabel,
+  ctaUrl,
+} = item.data
+
+const isFree = price === 0
+const priceLabel = isFree ? 'Gratuit' : `${price} ${currency ?? 'EUR'}`
+const typeLabel = type === 'product' ? 'Produit' : 'Service'
+const subtype = productType ?? serviceType ?? ''
+const primaryCtaLabel = ctaLabel ?? (isFree ? 'Telecharger' : 'Commander')
+const primaryCtaUrl = ctaUrl ?? '#'
+
+const categoryLabels: Record<string, string> = {
+  notion: 'Notion',
+  automatisation: 'Automatisation',
+  ai: 'AI',
+  sante: 'Sante',
+  'prendre-soin': 'Prendre soin',
+}
+
+const subtypeLabels: Record<string, string> = {
+  'templates-notion': 'Templates Notion',
+  musiques: 'Musiques',
+  prompts: 'Prompts',
+  divers: 'Divers',
+  formation: 'Formation',
+  coaching: 'Coaching',
+  ateliers: 'Ateliers',
+}
+
+const displayCategories = categories.map((category) => categoryLabels[category] ?? category)
+const subtypeLabel = subtype ? subtypeLabels[subtype] ?? subtype : ''
+---
+
+<section class="py-8 sm:py-12">
+  <article class="prose prose-lg dark:prose-invert mx-auto max-w-3xl">
+    <div class="not-prose space-y-10">
+      {cover && (
+        <div class="aspect-[16/9] w-full overflow-hidden rounded-3xl border border-base-200 bg-base-100/80">
+            <EquipmentImage
+            class="h-full w-full object-cover"
+            src={cover}
+            alt={title}
+            width={1280}
+            height={720}
+            loading="eager"
+            format="webp"
+          />
+        </div>
+      )}
+
+      <a href="/equipment" class="btn btn-ghost btn-sm gap-2">
+        <Icon name="lucide:arrow-left" size={16} />
+        Retour a la liste
+      </a>
+
+      <div class="space-y-6">
+        <div class="flex flex-wrap items-center gap-2 text-xs">
+          <span class="badge badge-outline">{typeLabel}</span>
+          {subtypeLabel && <span class="badge badge-ghost">{subtypeLabel}</span>}
+          {isNew && <span class="badge badge-primary">Nouveau</span>}
+          {isFree && <span class="badge badge-secondary">Gratuit</span>}
+        </div>
+
+        <h1 class="text-3xl font-semibold text-base-content sm:text-4xl">{title}</h1>
+        <p class="text-base-content/70">{summary || description}</p>
+
+        {
+          displayCategories.length > 0 && (
+            <div class="flex flex-wrap gap-2 text-xs text-base-content/60">
+              {displayCategories.map((label) => (
+                <span class="badge badge-ghost">{label}</span>
+              ))}
+            </div>
+          )
+        }
+
+        <div class="flex flex-wrap items-center gap-4">
+          <span class="text-2xl font-semibold text-base-content">{priceLabel}</span>
+          <a href={primaryCtaUrl} class="btn btn-primary">
+            {primaryCtaLabel}
+          </a>
+        </div>
+      </div>
+
+      {gallery.length > 0 && (
+        <div class="space-y-4">
+          <h2 class="text-lg font-semibold text-base-content">Galerie</h2>
+          <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
+            {gallery.map((image) => (
+              <div class="overflow-hidden rounded-2xl border border-base-200 bg-base-100/80">
+                <EquipmentImage
+                  class="h-48 w-full object-cover"
+                  src={image}
+                  alt={title}
+                  width={640}
+                  height={420}
+                  format="webp"
+                />
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+
+      <Divider variant="primary" style="gradient" />
+    </div>
+
+    <div class="mt-10">
+      <Content />
+    </div>
+  </article>
+</section>

@@ -45,7 +45,7 @@ export const defaultLinks: NavLink[] = [
     ],
   },
   {
-    href: '/s-equiper',
+    href: '/equipment',
     label: "S'équiper",
     tooltip: "Mes meilleurs outils et systèmes pour gagner du temps en douceur 🫶🌸",
   },
