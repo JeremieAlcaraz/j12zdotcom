@@ -22,11 +22,12 @@ export default defineConfig({
 
   // Redirections pour les URLs communes de flux RSS/Atom
   redirects: {
-    '/rss': '/atom/everything',
-    '/rss.xml': '/atom/everything',
-    '/feed': '/atom/everything',
-    '/feed.xml': '/atom/everything',
-    '/atom.xml': '/atom/everything',
+    '/atom': '/atom/index.xml',
+    '/rss': '/atom/index.xml',
+    '/rss.xml': '/atom/index.xml',
+    '/feed': '/atom/index.xml',
+    '/feed.xml': '/atom/index.xml',
+    '/atom.xml': '/atom/index.xml',
   },
 
   integrations: [

@@ -70,7 +70,7 @@ export const GET: APIRoute = async ({ site }) => {
       title: 'Tout le contenu - Jérémie Alcaraz',
       subtitle: 'Articles, mises à jour "now", TIL et plus encore',
       siteUrl: siteUrl.replace(/\/$/, ''),
-      feedPath: '/atom',
+      feedPath: '/atom/index.xml',
       author: {
         name: 'Jérémie Alcaraz',
         uri: siteUrl.replace(/\/$/, ''),
