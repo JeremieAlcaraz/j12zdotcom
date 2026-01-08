@@ -76,18 +76,6 @@ const dataCategories = categories.join('|')
         </div>
       )
     }
-    <div class="flex flex-wrap items-center gap-2 text-xs">
-      <span class="badge badge-outline">{typeLabel}</span>
-      {subtypeLabel && <span class="badge badge-ghost">{subtypeLabel}</span>}
-      {isNew && <span class="badge badge-primary">Nouveau</span>}
-      {isFree && <span class="badge badge-secondary">Gratuit</span>}
-      {
-        displayCategories.length > 0 &&
-          displayCategories.map((label) => (
-            <span class="badge badge-ghost text-base-content/60">{label}</span>
-          ))
-      }
-    </div>
     <a slot="title" href={href} class="link link-hover line-clamp-2">
       {title}
     </a>
