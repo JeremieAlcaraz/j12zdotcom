@@ -29,11 +29,6 @@ export const defaultLinks: NavLink[] = [
     tooltip: "Découvre des réflexions et astuces pour avancer en douceur 📝",
   },
   {
-    href: '/now',
-    label: 'Now',
-    tooltip: "Ce qui m'occupe en ce moment 🌿",
-  },
-  {
     label: 'Events',
     tooltip: "Des moments pour se retrouver et grandir ensemble 🌱",
     children: [
@@ -55,9 +50,19 @@ export const defaultLinks: NavLink[] = [
     tooltip: "Mes meilleurs outils et systèmes pour gagner du temps en douceur 🫶🌸",
   },
   {
-    href: '/about',
     label: 'À propos',
-    tooltip: "Apprends à me connaître et découvre mon parcours 💜",
+    children: [
+      {
+        href: '/qui-suis-je',
+        label: 'Qui suis-je ?',
+        tooltip: "Apprends à me connaître et découvre mon parcours 💜",
+      },
+      {
+        href: '/now',
+        label: 'Now',
+        tooltip: "Ce qui m'occupe en ce moment 🌿",
+      },
+    ],
   },
   {
     href: '/contact',
