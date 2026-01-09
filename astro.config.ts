@@ -93,6 +93,9 @@ export default defineConfig({
 
   // Service d'images : Sharp (optimisation au build)
   image: {
+    endpoint: {
+      entrypoint: 'astro/assets/endpoint/node',
+    },
     service: {
       entrypoint: 'astro/assets/services/sharp',
       // config: { ... } // (optionnel) réglages Sharp si besoin

@@ -1,6 +1,7 @@
 // src/ui/icons/icon-registry.ts
 
 // --- Lucide (5 exemples) ---
+import LucideArrowLeft from '~icons/lucide/arrow-left'
 import LucidePlay from '~icons/lucide/play'
 import LucidePause from '~icons/lucide/pause'
 import LucideHeart from '~icons/lucide/heart'
@@ -32,6 +33,7 @@ export const PREFIX_ALIASES: Record<string, string> = {
  */
 export const ICONS: Record<string, IconComponent> = {
   // Lucide
+  'lucide:arrow-left': LucideArrowLeft,
   'lucide:play': LucidePlay,
   'lucide:pause': LucidePause,
   'lucide:heart': LucideHeart,
