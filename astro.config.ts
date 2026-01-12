@@ -94,6 +94,7 @@ export default defineConfig({
   // Service d'images : Sharp (optimisation au build)
   image: {
     endpoint: {
+      route: '/_image',
       entrypoint: 'astro/assets/endpoint/node',
     },
     service: {
