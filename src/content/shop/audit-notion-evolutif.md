@@ -9,6 +9,7 @@ categories:
 price: 180
 currency: "EUR"
 isNew: false
+draft: true
 cover: "https://picsum.photos/id/366/400/400"
 gallery:
   - "https://picsum.photos/id/104/400/400"
