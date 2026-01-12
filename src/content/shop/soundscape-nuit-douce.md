@@ -7,7 +7,7 @@ productType: "musiques"
 categories:
   - "prendre-soin"
 price: 12
-currency: "EUR"
+currency: "€"
 isNew: false
 draft: true
 cover: "https://picsum.photos/id/104/400/400"

@@ -8,7 +8,7 @@ categories:
   - "sante"
   - "notion"
 price: 49
-currency: "EUR"
+currency: "€"
 isNew: false
 draft: true
 cover: "https://picsum.photos/id/119/400/400"

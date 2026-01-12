@@ -7,7 +7,7 @@ productType: "divers"
 categories:
   - "automatisation"
 price: 39
-currency: "EUR"
+currency: "€"
 isNew: false
 draft: true
 cover: "https://picsum.photos/id/360/400/400"

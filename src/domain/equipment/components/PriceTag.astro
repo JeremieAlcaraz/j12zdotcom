@@ -3,10 +3,16 @@ interface Props {
   price: number
   currency?: string
   isFree?: boolean
+  priceType?: 'from'
 }
 
-const { price, currency = 'EUR', isFree = false } = Astro.props
-const priceLabel = isFree ? 'Gratuit' : `${price}${currency}`
+const { price, currency = '€', isFree = false, priceType } = Astro.props
+const formattedPrice = `${price} ${currency}`
+const priceLabel = isFree
+  ? 'Gratuit'
+  : priceType === 'from'
+    ? `A partir de ${formattedPrice}`
+    : formattedPrice
 ---
 
 <div class="price-tag">

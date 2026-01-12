@@ -7,7 +7,7 @@ serviceType: "coaching"
 categories:
   - "notion"
 price: 260
-currency: "EUR"
+currency: "€"
 isNew: false
 cover: "https://picsum.photos/id/145/400/400"
 gallery:

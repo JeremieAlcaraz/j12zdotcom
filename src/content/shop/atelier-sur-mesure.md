@@ -7,7 +7,7 @@ serviceType: "ateliers"
 categories:
   - "automatisation"
 price: 180
-currency: "EUR"
+currency: "€"
 isNew: false
 cover: "https://picsum.photos/id/163/400/400"
 gallery:

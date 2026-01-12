@@ -8,7 +8,7 @@ categories:
   - "notion"
   - "prendre-soin"
 price: 120
-currency: "EUR"
+currency: "€"
 isNew: false
 draft: true
 cover: "https://picsum.photos/id/250/400/400"

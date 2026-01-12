@@ -6,8 +6,9 @@ type: "service"
 serviceType: "formation"
 categories:
   - "notion"
-price: 320
-currency: "EUR"
+price: 600
+priceType: "from"
+currency: "€"
 isNew: false
 cover: "https://picsum.photos/id/148/400/400"
 gallery:

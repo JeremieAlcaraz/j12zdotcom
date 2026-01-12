@@ -6,8 +6,9 @@ type: "service"
 serviceType: "formation"
 categories:
   - "automatisation"
-price: 380
-currency: "EUR"
+price: 600
+priceType: "from"
+currency: "€"
 isNew: false
 cover: "https://picsum.photos/id/151/400/400"
 gallery:

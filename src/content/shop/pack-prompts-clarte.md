@@ -7,7 +7,7 @@ productType: "prompts"
 categories:
   - "ai"
 price: 19
-currency: "EUR"
+currency: "€"
 isNew: true
 draft: true
 cover: "https://picsum.photos/id/20/400/400"

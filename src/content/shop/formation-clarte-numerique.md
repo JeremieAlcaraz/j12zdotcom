@@ -6,8 +6,9 @@ type: "service"
 serviceType: "formation"
 categories:
   - "prendre-soin"
-price: 300
-currency: "EUR"
+price: 600
+priceType: "from"
+currency: "€"
 isNew: false
 cover: "https://picsum.photos/id/160/400/400"
 gallery:

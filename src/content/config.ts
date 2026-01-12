@@ -38,6 +38,7 @@ const shopCollection = defineCollection({
       .array(z.enum(['notion', 'automatisation', 'ai', 'sante', 'prendre-soin']))
       .default([]),
     price: z.number().nonnegative().default(0),
+    priceType: z.enum(['from']).optional(),
     currency: z.string().default('€'),
     isNew: z.boolean().default(false),
     cover: z.string(),

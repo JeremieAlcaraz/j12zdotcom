@@ -18,6 +18,7 @@ const {
   cover,
   gallery = [],
   price,
+  priceType,
   currency,
   type,
   productType,
@@ -29,7 +30,12 @@ const {
 } = item.data
 
 const isFree = price === 0
-const priceLabel = isFree ? 'Gratuit' : `${price} ${currency ?? 'EUR'}`
+const formattedPrice = `${price} ${currency ?? '€'}`
+const priceLabel = isFree
+  ? 'Gratuit'
+  : priceType === 'from'
+    ? `A partir de ${formattedPrice}`
+    : formattedPrice
 const typeLabel = type === 'product' ? 'Produit' : 'Service'
 const subtype = productType ?? serviceType ?? ''
 const primaryCtaLabel = ctaLabel ?? (isFree ? 'Telecharger' : 'Commander')

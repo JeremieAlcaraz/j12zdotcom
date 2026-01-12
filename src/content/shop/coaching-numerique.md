@@ -7,7 +7,7 @@ serviceType: "coaching"
 categories:
   - "prendre-soin"
 price: 240
-currency: "EUR"
+currency: "€"
 isNew: false
 cover: "https://picsum.photos/id/157/400/400"
 gallery:

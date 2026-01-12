@@ -15,6 +15,7 @@ const {
   summary,
   cover,
   price,
+  priceType,
   currency,
   type,
   productType,
@@ -25,7 +26,6 @@ const {
 
 const href = `/equipment/${item.id}`
 const isFree = price === 0
-const priceLabel = isFree ? 'Gratuit' : `${price} ${currency ?? 'EUR'}`
 const typeLabel = type === 'product' ? 'Produit' : 'Service'
 const subtype = productType ?? serviceType ?? ''
 
@@ -86,7 +86,7 @@ const dataCategories = categories.join('|')
       {summary || description}
     </p>
     <div class="mt-4 flex items-center justify-between">
-      <PriceTag price={price} currency={currency} isFree={isFree} />
+      <PriceTag price={price} priceType={priceType} currency={currency} isFree={isFree} />
       <a href={href} class="btn btn-primary btn-sm">Voir</a>
     </div>
   </Card>

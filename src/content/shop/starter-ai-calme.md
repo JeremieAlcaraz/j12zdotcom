@@ -8,7 +8,7 @@ categories:
   - "ai"
   - "prendre-soin"
 price: 0
-currency: "EUR"
+currency: "€"
 isNew: false
 draft: true
 cover: "https://picsum.photos/id/30/400/400"
