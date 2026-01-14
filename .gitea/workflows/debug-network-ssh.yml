@@ -1,0 +1,49 @@
+name: "🛠️ Debug Network & SSH"
+run-name: "Test de connexion vers Magnolia et Mimosa"
+
+on:
+  workflow_dispatch: # Permet de lancer manuellement via un bouton "Run"
+  push:
+    branches:
+      - dev
+
+jobs:
+  connectivity-check:
+    runs-on: ubuntu-latest
+    steps:
+      # 1. Vérification basique du réseau (Ping)
+      - name: "📡 Ping Hosts"
+        run: |
+          echo "Testing connectivity to Magnolia..."
+          ping -c 3 magnolia || echo "⚠️ Ping Magnolia failed (may be blocked by firewall)"
+
+          echo ""
+          echo "Testing connectivity to Mimosa..."
+          ping -c 3 mimosa || echo "⚠️ Ping Mimosa failed (may be blocked by firewall)"
+
+      # 2. Préparation de la clé SSH (Méthode temporaire simple)
+      - name: "🔑 Setup Temp SSH Key"
+        run: |
+          mkdir -p ~/.ssh
+          # On suppose que votre secret est en Base64 comme dans votre script précédent
+          echo "${{ secrets.DEPLOY_SSH_KEY }}" | base64 -d > ~/.ssh/id_rsa
+          chmod 600 ~/.ssh/id_rsa
+
+      # 3. Test de connexion réelle SSH
+      - name: "🔌 Test SSH Connection"
+        run: |
+          # Option -o StrictHostKeyChecking=no juste pour ce test de debug pour éviter les erreurs "Host unknown"
+
+          echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+          echo "Testing SSH to MAGNOLIA..."
+          ssh -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa -p 22 jeremie@magnolia "echo '✅ Success: Connected to Magnolia as $(whoami)'"
+
+          echo ""
+          echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+          echo "Testing SSH to MIMOSA..."
+          ssh -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa -p 22 jeremie@mimosa "echo '✅ Success: Connected to Mimosa as $(whoami)'"
+
+      # 4. Nettoyage (Bonne pratique même pour un test)
+      - name: "🧹 Cleanup Keys"
+        if: always() # S'exécute même si ça plante avant
+        run: rm -f ~/.ssh/id_rsa
