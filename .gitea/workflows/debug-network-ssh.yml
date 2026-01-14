@@ -11,9 +11,24 @@ jobs:
   connectivity-check:
     runs-on: ubuntu-latest
     steps:
+      - name: "🧰 Install ping"
+        run: |
+          if command -v ping >/dev/null 2>&1; then
+            echo "ping already available"
+            exit 0
+          fi
+
+          sudo apt-get update
+          sudo apt-get install -y iputils-ping
+
       # 1. Vérification basique du réseau (Ping)
       - name: "📡 Ping Hosts"
         run: |
+          if ! command -v ping >/dev/null 2>&1; then
+            echo "⚠️ ping not available on runner; skipping ICMP checks."
+            exit 0
+          fi
+
           echo "Testing connectivity to Magnolia..."
           ping -c 3 magnolia || echo "⚠️ Ping Magnolia failed (may be blocked by firewall)"
 
@@ -24,9 +39,19 @@ jobs:
       # 2. Préparation de la clé SSH (Méthode temporaire simple)
       - name: "🔑 Setup Temp SSH Key"
         run: |
+          if [ -z "${{ secrets.DEPLOY_SSH_KEY }}" ]; then
+            echo "❌ DEPLOY_SSH_KEY is empty"
+            exit 1
+          fi
+
           mkdir -p ~/.ssh
-          # On suppose que votre secret est en Base64 comme dans votre script précédent
-          echo "${{ secrets.DEPLOY_SSH_KEY }}" | base64 -d > ~/.ssh/id_rsa
+          # Accepte une clé en base64 OU une clé brute (multi-ligne)
+          if printf '%s' "${{ secrets.DEPLOY_SSH_KEY }}" | base64 -d > ~/.ssh/id_rsa 2>/dev/null; then
+            echo "✅ SSH key decoded from base64"
+          else
+            printf '%s' "${{ secrets.DEPLOY_SSH_KEY }}" > ~/.ssh/id_rsa
+            echo "✅ SSH key stored as raw value"
+          fi
           chmod 600 ~/.ssh/id_rsa
 
       # 3. Test de connexion réelle SSH
